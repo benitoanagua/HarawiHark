@@ -1,6 +1,7 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"hello_world": "¡Hola, {name} desde es!",
+	"check_poem": "Comprobar poema",
 	"language_switcher": "Idioma",
 	"nav_intro": "Intro",
 	"nav_forms": "Formularios",
