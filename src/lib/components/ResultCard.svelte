@@ -1,6 +1,6 @@
 <script lang="ts">
-	export let lines: { text: string; count: number; expected: number }[];
 	export let ok: boolean;
+	export let lines: { text: string; count: number; expected: number }[];
 </script>
 
 <div

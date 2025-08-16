@@ -1,6 +1,6 @@
 <script lang="ts">
-	export let lines: string[] = [];
-	export let form: string = 'haiku';
+	export let lines: string;
+	export let form: string;
 </script>
 
 <textarea
