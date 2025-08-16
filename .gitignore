@@ -1,0 +1,40 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+.svelte-kit
+build
+.output
+.vercel
+.netlify
+.wrangler
+
+# Test / coverage
+test-results
+playwright-report
+coverage
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.*.timestamp-*
+
+# Paraglide generated
+src/lib/paraglide
+
+# Storybook
+storybook-static
+*storybook.log
+
+# Inlang cache (safe to ignore)
+project.inlang/cache
+project.inlang/cache/**/*
