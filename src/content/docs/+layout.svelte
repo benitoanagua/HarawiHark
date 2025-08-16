@@ -2,28 +2,21 @@
 	import { m } from '$lib/paraglide/messages.js';
 </script>
 
-<aside>
-	<nav>
-		<a href="/docs">{m.nav_intro()}</a>
-		<a href="/docs/forms">{m.nav_forms()}</a>
-		<a href="/docs/api/check">{m.nav_api()}</a>
-		<a href="/docs/guides">{m.nav_guides()}</a>
-		<a href="/docs/faq">{m.nav_faq()}</a>
-	</nav>
-</aside>
+<div class="flex min-h-screen">
+	<aside class="w-48 bg-gray-50 dark:bg-gray-800 p-4 space-y-3">
+		<nav class="space-y-2">
+			{#each [{ href: '/docs', label: m.nav_intro() }, { href: '/docs/forms', label: m.nav_forms() }, { href: '/docs/api/check', label: m.nav_api() }, { href: '/docs/guides', label: m.nav_guides() }, { href: '/docs/faq', label: m.nav_faq() }] as { href, label }}
+				<a
+					{href}
+					class="block text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+				>
+					{label}
+				</a>
+			{/each}
+		</nav>
+	</aside>
 
-<main>
-	<slot />
-</main>
-
-<style>
-	aside {
-		width: 12rem;
-		background: #f3f4f6;
-		padding: 1rem;
-	}
-	main {
-		flex: 1;
-		padding: 2rem;
-	}
-</style>
+	<main class="flex-1 p-4 md:p-6 max-w-4xl">
+		<slot />
+	</main>
+</div>
