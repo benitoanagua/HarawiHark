@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { countEs, countEn } from 'simi-syllable';
 
 const PATTERNS: Record<string, number[]> = {
 	haiku: [5, 7, 5],
@@ -15,22 +16,36 @@ const PATTERNS: Record<string, number[]> = {
 };
 
 function countSyllables(text: string, locale: string): number {
-	// placeholder rápido
-	return text.trim().split(/\s+/).filter(Boolean).length;
+	if (!text.trim()) return 0;
+
+	try {
+		if (locale === 'es') {
+			return countEs(text);
+		} else {
+			return countEn(text);
+		}
+	} catch (error) {
+		console.error('Error counting syllables:', error);
+		// Fallback: contar palabras como aproximación
+		return text.trim().split(/\s+/).filter(Boolean).length;
+	}
 }
 
 export const POST: RequestHandler = async ({ request }) => {
-	const { form, locale, lines } = await request.json();
+	const { form, locale = 'en', lines } = await request.json();
 	const pattern = PATTERNS[form] || [];
+
+	const syllableCounts = lines.map((line: string) => countSyllables(line, locale));
+
 	const ok =
 		pattern.length === lines.length &&
-		pattern.every((p, i) => p === 0 || countSyllables(lines[i] || '', locale) === p);
+		pattern.every((expected, i) => expected === 0 || syllableCounts[i] === expected);
 
 	return json({
 		ok,
-		lines: lines.map((t: string, i: number) => ({
-			text: t,
-			count: countSyllables(t, locale),
+		lines: lines.map((text: string, i: number) => ({
+			text,
+			count: syllableCounts[i],
 			expected: pattern[i] ?? 0
 		}))
 	});

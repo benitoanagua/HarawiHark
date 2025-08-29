@@ -1,6 +1,13 @@
 # HarawiHark
 
-A lightweight, bilingual syllable-meter checker for poetic forms, powered by SvelteKit.
+A lightweight, bilingual syllable-meter checker for poetic forms, powered by SvelteKit and **simi-syllable**.
+
+## Features
+
+- **Advanced syllable counting** using the simi-syllable library
+- **Dual language support** with specialized algorithms for English and Spanish
+- **Phonetic accuracy** beyond simple vowel counting
+- **11+ poetic forms** with precise pattern matching
 
 ## What it does
 
