@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { SIMPLE_PATTERNS, getFormDescription, getExample } from '$lib/patterns';
+	import { SIMPLE_PATTERNS, getFormDescription, getFormName, getExample } from '$lib/patterns';
+	import { m } from '$lib/paraglide/messages.js';
+	import { getLocale } from '$lib/paraglide/runtime'; // Cambiado de Locale a getLocale
 
 	export let lines: string;
 	export let form: string;
@@ -8,112 +10,121 @@
 	$: pattern = SIMPLE_PATTERNS[form] || [];
 	$: expectedLines = pattern.length;
 	$: actualLines = currentLines.length;
+	$: currentLocale = getLocale(); // Cambiado de Locale() a getLocale()
 
-	// Obtener ejemplo para el formulario actual
 	function loadExample() {
-		const locale = document.documentElement.lang || 'en';
-		const example = getExample(form, locale as 'en' | 'es');
+		const example = getExample(form, currentLocale);
 		if (example.length > 0) {
 			lines = example.join('\n');
 		}
 	}
 
-	// Limpiar textarea
 	function clearText() {
 		lines = '';
 	}
+
+	// Placeholder dinámico según el idioma y forma
+	$: placeholderText =
+		currentLocale === 'es'
+			? `Escribe cada verso en una línea nueva...\n\n${getExample(form, 'es').slice(0, 3).join('\n') || 'Por ejemplo:\nViejo estanque\nUna rana salta al agua'}`
+			: `Write each line on a new line...\n\n${getExample(form, 'en').slice(0, 3).join('\n') || 'For example:\nAn old silent pond\nA frog jumps into the pond—'}`;
 </script>
 
 <div class="space-y-3">
-	<!-- Selector de forma -->
+	<!-- Selector de forma mejorado -->
 	<div>
 		<label
 			for="form-select"
 			class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
 		>
-			Poetry Form
+			{m.poetry_form()}
 		</label>
 		<select
 			id="form-select"
 			class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm"
 			bind:value={form}
 		>
-			<option value="haiku">Haiku (5-7-5)</option>
-			<option value="tanka">Tanka (5-7-5-7-7)</option>
-			<option value="cinquain">Cinquain (2-4-6-8-2)</option>
-			<option value="limerick">Limerick (8-8-5-5-8)</option>
-			<option value="redondilla">Redondilla (8-8-8-8)</option>
-			<option value="lanterne">Lanterne (1-2-3-4-1)</option>
-			<option value="diamante">Diamante (1-2-3-4-3-2-1)</option>
-			<option value="fib">Fibonacci (1-1-2-3-5-8)</option>
+			{#each Object.keys(SIMPLE_PATTERNS) as formKey}
+				<option value={formKey}>
+					{getFormName(formKey)} ({SIMPLE_PATTERNS[formKey].join('-')})
+				</option>
+			{/each}
 		</select>
 	</div>
 
-	<!-- Información del patrón -->
+	<!-- Información del patrón mejorada -->
 	{#if pattern.length > 0}
 		<div
 			class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-md border border-blue-200 dark:border-blue-800"
 		>
 			<div class="flex items-center justify-between mb-1">
-				<h3 class="font-medium text-blue-900 dark:text-blue-100 capitalize">{form}</h3>
+				<h3 class="font-medium text-blue-900 dark:text-blue-100">
+					{getFormName(form)}
+				</h3>
 				<span class="text-xs text-blue-700 dark:text-blue-300">
-					{actualLines}/{expectedLines} lines
+					{m.lines_count({ count: actualLines })}/{expectedLines}
 				</span>
 			</div>
 			<p class="text-sm text-blue-800 dark:text-blue-200 mb-2">
-				Pattern: {pattern.join('-')} syllables
+				{currentLocale === 'es' ? 'Patrón' : 'Pattern'}: {pattern.join('-')}
+				{currentLocale === 'es' ? 'sílabas' : 'syllables'}
 			</p>
 			<p class="text-xs text-blue-700 dark:text-blue-300">
-				{getFormDescription(form, 'en')}
+				{getFormDescription(form)}
 			</p>
 		</div>
 	{/if}
 
-	<!-- Textarea principal -->
+	<!-- Textarea principal mejorado -->
 	<div class="relative">
 		<label for="poem-text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-			Your Poem
+			{m.your_poem()}
 		</label>
 		<textarea
 			id="poem-text"
 			class="w-full h-40 p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm resize-none font-mono"
 			bind:value={lines}
-			placeholder="Write each line on a new line...&#10;&#10;For example:&#10;An old silent pond&#10;A frog jumps into the pond—&#10;Splash! Silence again."
+			placeholder={placeholderText}
 		></textarea>
 
-		<!-- Contador de líneas en vivo -->
+		<!-- Contador de líneas mejorado -->
 		<div class="absolute bottom-2 right-2 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
 			<span
 				class:text-green-600={actualLines === expectedLines}
 				class:text-red-600={actualLines !== expectedLines}
 				class:text-gray-600={actualLines === 0}
 			>
-				{actualLines} lines
+				{m.lines_count({ count: actualLines })}
 			</span>
 		</div>
 	</div>
 
-	<!-- Botones de utilidad -->
+	<!-- Botones de utilidad mejorados -->
 	<div class="flex gap-2">
 		<button
 			type="button"
 			class="btn-secondary text-xs"
 			onclick={loadExample}
-			title="Load example poem"
+			title={currentLocale === 'es' ? 'Cargar poema de ejemplo' : 'Load example poem'}
 		>
-			📝 Example
+			📝 {m.load_example()}
 		</button>
 
-		<button type="button" class="btn-secondary text-xs" onclick={clearText} title="Clear text">
-			🗑️ Clear
+		<button
+			type="button"
+			class="btn-secondary text-xs"
+			onclick={clearText}
+			title={currentLocale === 'es' ? 'Limpiar texto' : 'Clear text'}
+		>
+			🗑️ {m.clear_text()}
 		</button>
 
 		<div class="flex-1"></div>
 
-		<!-- Info de patrones por línea -->
+		<!-- Info de patrones por línea mejorada -->
 		{#if currentLines.length > 0 && pattern.length > 0}
 			<div class="text-xs text-gray-500 dark:text-gray-400 flex items-center">
-				Expected:
+				{m.expected_pattern()}:
 				{#each pattern.slice(0, Math.max(currentLines.length, pattern.length)) as syllables, i}
 					<span
 						class="ml-1 px-1 py-0.5 rounded bg-gray-200 dark:bg-gray-600"
