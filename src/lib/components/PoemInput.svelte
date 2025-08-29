@@ -43,7 +43,7 @@
 			<option value="cinquain">Cinquain (2-4-6-8-2)</option>
 			<option value="limerick">Limerick (8-8-5-5-8)</option>
 			<option value="redondilla">Redondilla (8-8-8-8)</option>
-			<option value="romance">Romance (8×8)</option>
+			<option value="lanterne">Lanterne (1-2-3-4-1)</option>
 			<option value="diamante">Diamante (1-2-3-4-3-2-1)</option>
 			<option value="fib">Fibonacci (1-1-2-3-5-8)</option>
 		</select>

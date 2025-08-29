@@ -102,32 +102,14 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 		}
 	},
 
-	romance: {
-		name: 'Romance',
-		pattern: [8, 8, 8, 8, 8, 8, 8, 8], // 8 líneas como ejemplo
-		description: 'Spanish narrative octosyllabic form',
-		lines: 8,
+	lanterne: {
+		name: 'Lanterne',
+		pattern: [1, 2, 3, 4, 1],
+		description: 'Japanese-inspired lantern-shaped poem',
+		lines: 5,
 		examples: {
-			en: [
-				'In ancient times of old Spain',
-				'Where knights rode through wind and rain',
-				'A story lived in every stone',
-				'Of battles fought and kingdoms grown',
-				'The castle stands upon the hill',
-				'Its towers silent, proud, and still',
-				'While echoes of the past remain',
-				'In every street and mountain chain'
-			],
-			es: [
-				'En tierras de Castilla fría',
-				'Donde el viento silba y gría',
-				'Un romance antiguo se cuenta',
-				'De amor que nunca se ausenta',
-				'La dama espera en su torre',
-				'Que su caballero retorne',
-				'Con la luna por testigo',
-				'De un amor que es su abrigo'
-			]
+			en: ['Light', 'glows soft', 'in the darkness', 'casting gentle shadows', 'peace'],
+			es: ['Luz', 'brilla', 'en la noche', 'creando sombras suaves', 'calma']
 		}
 	},
 
@@ -193,7 +175,7 @@ export const SIMPLE_PATTERNS: Record<string, number[]> = {
 	cinquain: [2, 4, 6, 8, 2],
 	limerick: [8, 8, 5, 5, 8],
 	redondilla: [8, 8, 8, 8],
-	romance: [8, 8, 8, 8, 8, 8, 8, 8],
+	lanterne: [1, 2, 3, 4, 1],
 	diamante: [1, 2, 3, 4, 3, 2, 1],
 	fib: [1, 1, 2, 3, 5, 8]
 };
@@ -209,7 +191,7 @@ export function getFormDescription(form: string, locale: 'en' | 'es' = 'en'): st
 		cinquain: 'Forma imagista americana con forma crescendo',
 		limerick: 'Forma humorística de cinco líneas',
 		redondilla: 'Cuarteta octosílaba española',
-		romance: 'Forma narrativa octosílaba española',
+		lanterne: 'Poema en forma de linterna japonesa',
 		diamante: 'Poema silábico en forma de diamante',
 		fib: 'Basado en la secuencia de Fibonacci'
 	};

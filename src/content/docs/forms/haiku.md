@@ -7,14 +7,23 @@ title: 'Haiku'
 **Pattern**: 5-7-5 syllables over **3 lines**.
 
 - Traditionally about nature or seasons.
-- Senryū uses the same pattern but focuses on human nature/irony.
+- Captures a moment in time with vivid imagery.
+- Often includes a seasonal word (kigo).
 
 ### Example
 
 ```
-Snow melts in the sun
-Rivulets sing down the cliff
-Spring’s first melody
+An old silent pond
+A frog jumps into the pond—
+Splash! Silence again.
+```
+
+### Spanish Example
+
+```
+Viejo estanque
+Una rana salta al agua
+Sonido del agua
 ```
 
 ### Quick Check
