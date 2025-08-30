@@ -4,7 +4,6 @@ import type { Locale } from '$lib/paraglide/runtime';
 export interface PoetryForm {
 	name: string;
 	pattern: number[];
-	lines: number;
 	examples: {
 		en: string[];
 		es: string[];
@@ -15,7 +14,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 	haiku: {
 		name: 'haiku',
 		pattern: [5, 7, 5],
-		lines: 3,
 		examples: {
 			en: ['An old silent pond', 'A frog jumps into the pond—', 'Splash! Silence again.'],
 			es: ['Viejo estanque', 'Una rana salta al agua', 'Sonido del agua']
@@ -25,7 +23,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 	tanka: {
 		name: 'tanka',
 		pattern: [5, 7, 5, 7, 7],
-		lines: 5,
 		examples: {
 			en: [
 				'Spring rain whispers',
@@ -47,7 +44,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 	cinquain: {
 		name: 'cinquain',
 		pattern: [2, 4, 6, 8, 2],
-		lines: 5,
 		examples: {
 			en: ['Night', 'windswept', 'darkness hums', 'a silent chorus', 'hush'],
 			es: ['Luz', 'dorada', 'el sol desciende', 'entre nubes de colores', 'paz']
@@ -57,7 +53,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 	limerick: {
 		name: 'limerick',
 		pattern: [8, 8, 5, 5, 8],
-		lines: 5,
 		examples: {
 			en: [
 				'There once was a cat from Peru',
@@ -79,7 +74,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 	redondilla: {
 		name: 'redondilla',
 		pattern: [8, 8, 8, 8],
-		lines: 4,
 		examples: {
 			en: [
 				'In gardens where roses bloom',
@@ -99,7 +93,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 	lanterne: {
 		name: 'lanterne',
 		pattern: [1, 2, 3, 4, 1],
-		lines: 5,
 		examples: {
 			en: ['Light', 'glows soft', 'in the darkness', 'casting gentle shadows', 'peace'],
 			es: ['Luz', 'brilla', 'en la noche', 'creando sombras suaves', 'calma']
@@ -109,7 +102,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 	diamante: {
 		name: 'diamante',
 		pattern: [1, 2, 3, 4, 3, 2, 1],
-		lines: 7,
 		examples: {
 			en: [
 				'Sun',
@@ -135,7 +127,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 	fib: {
 		name: 'fib',
 		pattern: [1, 1, 2, 3, 5, 8],
-		lines: 6,
 		examples: {
 			en: [
 				'I',
@@ -157,43 +148,30 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 	}
 };
 
-export const SIMPLE_PATTERNS: Record<string, number[]> = {
-	haiku: [5, 7, 5],
-	tanka: [5, 7, 5, 7, 7],
-	cinquain: [2, 4, 6, 8, 2],
-	limerick: [8, 8, 5, 5, 8],
-	redondilla: [8, 8, 8, 8],
-	lanterne: [1, 2, 3, 4, 1],
-	diamante: [1, 2, 3, 4, 3, 2, 1],
-	fib: [1, 1, 2, 3, 5, 8]
-};
+// Generar patrones simples automáticamente
+export const SIMPLE_PATTERNS: Record<string, number[]> = Object.fromEntries(
+	Object.entries(POETRY_FORMS).map(([key, form]) => [key, form.pattern])
+);
 
-// Tipo para mensajes de formulario que no requieren parámetros
-type FormMessage = () => string;
-
-// Función mejorada para obtener la descripción usando i18n
+// Funciones simplificadas
 export function getFormDescription(form: string): string {
 	const key = `form_${form}_desc` as keyof typeof m;
-	// Cast a función que no requiere parámetros específicos
-	const messageFn = m[key] as FormMessage;
-	return messageFn?.() || POETRY_FORMS[form]?.name || '';
+	const messageFn = m[key] as () => string;
+	return messageFn?.() || form;
 }
 
-// Función mejorada para obtener el nombre usando i18n
 export function getFormName(form: string): string {
 	const key = `form_${form}` as keyof typeof m;
-	// Cast a función que no requiere parámetros específicos
-	const messageFn = m[key] as FormMessage;
+	const messageFn = m[key] as () => string;
 	return messageFn?.() || form;
 }
 
 export function isValidForm(form: string): boolean {
-	return form in SIMPLE_PATTERNS;
+	return form in POETRY_FORMS;
 }
 
 export function getExample(form: string, locale: Locale = 'en'): string[] {
 	const poetryForm = POETRY_FORMS[form];
-	// Asegurar que locale sea una clave válida del objeto examples
 	if (poetryForm && (locale === 'en' || locale === 'es')) {
 		return poetryForm.examples[locale] || [];
 	}
