@@ -23,55 +23,68 @@
 	const clearText = () => (lines = '');
 </script>
 
-<div class="space-y-3">
+<div class="space-y-4">
 	<!-- Form Selector -->
 	<div>
-		<label for="form-select" class="block text-sm font-medium text-onSurface mb-1">
+		<label for="form-select" class="block text-sm font-medium text-onSurface mb-2">
 			{m.poetry_form()}
 		</label>
-		<select
-			id="form-select"
-			class="w-full p-2 border border-outline rounded-md bg-surfaceContainer text-onSurface text-sm"
-			bind:value={form}
-		>
+		<select id="form-select" class="input-outlined w-full" bind:value={form}>
 			{#each Object.keys(POETRY_FORMS) as formKey}
 				<option value={formKey}>{getFormName(formKey)}</option>
 			{/each}
 		</select>
 	</div>
 
-	<!-- Pattern Info -->
+	<!-- Pattern Info - Con mejor visual pero estructura simple -->
 	{#if pattern.length > 0}
-		<div class="bg-primaryContainer p-3 rounded-md border border-outlineVariant">
-			<h3 class="font-medium text-onPrimaryContainer">{getFormName(form)}</h3>
+		<div class="bg-primaryContainer p-4 rounded-xl border border-outlineVariant">
+			<div class="flex items-center gap-2 mb-2">
+				<div class="w-2 h-2 bg-primary rounded-full"></div>
+				<h3 class="font-medium text-onPrimaryContainer">{getFormName(form)}</h3>
+			</div>
 			<p class="text-sm text-onPrimaryContainer mb-1">
-				Pattern: {pattern.join('-')} syllables
+				<span class="font-medium">Pattern:</span>
+				<span class="bg-primary/20 px-2 py-1 rounded text-xs font-mono ml-1">
+					{pattern.join('-')} syllables
+				</span>
 			</p>
-			<p class="text-xs text-onPrimaryContainer/80">{getFormDescription(form)}</p>
+			<p class="text-xs text-onPrimaryContainer/80 leading-relaxed">{getFormDescription(form)}</p>
 		</div>
 	{/if}
 
-	<!-- Poem Input -->
+	<!-- Poem Input - Mejorado pero sin complicar -->
 	<div>
-		<label for="poem-text" class="block text-sm font-medium text-onSurface mb-1">
+		<label for="poem-text" class="block text-sm font-medium text-onSurface mb-2">
 			{m.your_poem()}
 		</label>
 		<textarea
 			id="poem-text"
-			class="w-full h-40 p-3 border border-outline rounded-md bg-surfaceContainer text-onSurface text-sm resize-none font-mono"
+			class="w-full h-40 p-4 border border-outline rounded-xl bg-surfaceContainer
+				   text-onSurface text-sm resize-none font-mono leading-relaxed
+				   focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20
+				   placeholder:text-onSurfaceVariant transition-all duration-200"
 			bind:value={lines}
 			placeholder={currentLocale === 'es'
-				? 'Escribe cada verso en una línea nueva...'
-				: 'Write each line on a new line...'}
+				? 'Escribe cada verso en una línea nueva...\n\nEjemplo:\nFlores de cerezo\nDanzan en la brisa tibia\nPrimavera llega'
+				: 'Write each line on a new line...\n\nExample:\nCherry blossoms fall\nDancing in the gentle breeze\nSpring has finally come'}
 		></textarea>
+
+		<!-- Pequeño contador útil -->
+		<div class="flex justify-between text-xs text-onSurfaceVariant mt-1">
+			<span>{currentLines.length} lines</span>
+			<span>{lines.length} characters</span>
+		</div>
 	</div>
 
-	<!-- Action Buttons -->
-	<div class="flex gap-2">
-		<button type="button" class="btn-secondary text-xs" onclick={loadExample}>
+	<!-- Action Buttons - Con iconos pero simple -->
+	<div class="flex gap-3">
+		<button type="button" class="btn-secondary flex items-center gap-2" onclick={loadExample}>
+			<span class="text-sm">📝</span>
 			{m.load_example()}
 		</button>
-		<button type="button" class="btn-secondary text-xs" onclick={clearText}>
+		<button type="button" class="btn-text flex items-center gap-2" onclick={clearText}>
+			<span class="text-sm">🗑️</span>
 			{m.clear_text()}
 		</button>
 	</div>

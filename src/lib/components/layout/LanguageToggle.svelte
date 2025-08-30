@@ -20,30 +20,40 @@
 	}
 </script>
 
-<div class="flex items-center gap-2">
-	<div class="flex rounded-md overflow-hidden border border-outlineVariant">
-		<button
-			class="px-3 py-1 text-xs font-medium transition-colors"
-			class:bg-primary={getLocale() === 'es'}
-			class:text-onPrimary={getLocale() === 'es'}
-			class:bg-surfaceContainer={getLocale() !== 'es'}
-			class:text-onSurfaceVariant={getLocale() !== 'es'}
-			onclick={() => switchLanguage('es')}
-			title="Español"
-		>
-			🇪🇸 ES
-		</button>
+<div class="flex items-center">
+	<div class="bg-surfaceContainer rounded-full border border-outlineVariant overflow-hidden">
+		<div class="flex">
+			<button
+				class="px-4 py-2 text-xs font-medium transition-all duration-200 ease-out
+					   flex items-center gap-2 min-w-[60px] justify-center"
+				class:bg-secondaryContainer={getLocale() === 'es'}
+				class:text-onSecondaryContainer={getLocale() === 'es'}
+				class:text-onSurfaceVariant={getLocale() !== 'es'}
+				class:hover:bg-secondaryContainer={getLocale() !== 'es'}
+				class:hover:text-onSecondaryContainer={getLocale() !== 'es'}
+				onclick={() => switchLanguage('es')}
+				title="Español"
+			>
+				<span class="text-sm">🇪🇸</span>
+				ES
+			</button>
 
-		<button
-			class="px-3 py-1 text-xs font-medium transition-colors"
-			class:bg-primary={getLocale() === 'en'}
-			class:text-onPrimary={getLocale() === 'en'}
-			class:bg-surfaceContainer={getLocale() !== 'en'}
-			class:text-onSurfaceVariant={getLocale() !== 'en'}
-			onclick={() => switchLanguage('en')}
-			title="English"
-		>
-			🇺🇸 EN
-		</button>
+			<div class="w-px bg-outlineVariant"></div>
+
+			<button
+				class="px-4 py-2 text-xs font-medium transition-all duration-200 ease-out
+					   flex items-center gap-2 min-w-[60px] justify-center"
+				class:bg-secondaryContainer={getLocale() === 'en'}
+				class:text-onSecondaryContainer={getLocale() === 'en'}
+				class:text-onSurfaceVariant={getLocale() !== 'en'}
+				class:hover:bg-secondaryContainer={getLocale() !== 'en'}
+				class:hover:text-onSecondaryContainer={getLocale() !== 'en'}
+				onclick={() => switchLanguage('en')}
+				title="English"
+			>
+				<span class="text-sm">🇺🇸</span>
+				EN
+			</button>
+		</div>
 	</div>
 </div>

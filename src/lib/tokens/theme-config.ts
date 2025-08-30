@@ -22,7 +22,7 @@ export interface ThemeConfig {
 
 export const themeConfig: ThemeConfig = {
 	// Primary seed color - change this to generate new themes
-	seedColor: '#fff1dd',
+	seedColor: '#409D44',
 
 	// Contrast level (-1 = minimum, 0 = standard, 1 = maximum)
 	contrastLevel: -1,

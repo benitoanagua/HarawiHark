@@ -1,7 +1,5 @@
 @import './lib/tokens/themes.css';
 
-@layer defaults, theme, custom;
-
 @layer defaults {
 	:root {
 		color-scheme: light;
@@ -45,10 +43,120 @@
 	} */
 }
 
-/* añadir estilos al layer theme */
-@layer theme {
+/* Tailwind CSS Custom Classes */
+@layer utilities {
+	/* Shadow and Scrim */
+	.shadow-md3 {
+		box-shadow:
+			0px 1px 2px 0px rgba(var(--color-shadow), 0.3),
+			0px 1px 3px 1px rgba(var(--color-shadow), 0.15);
+	}
+
+	.shadow-md3-lg {
+		box-shadow:
+			0px 1px 2px 0px rgba(var(--color-shadow), 0.3),
+			0px 2px 6px 2px rgba(var(--color-shadow), 0.15);
+	}
+
+	.shadow-md3-xl {
+		box-shadow:
+			0px 4px 8px 3px rgba(var(--color-shadow), 0.15),
+			0px 1px 3px 0px rgba(var(--color-shadow), 0.3);
+	}
 }
 
-/* añadir estilos al layer pages */
-@layer custom {
+/* Component Specific Styles */
+@layer components {
+	/* Material Design Buttons */
+	.btn-primary {
+		--apply: bg-primary text-onPrimary px-6 py-3 rounded-full font-medium text-sm hover: shadow-md3
+			transition-all duration-200 ease-out focus: outline-none focus: ring-2 focus: ring-primary/20
+			active: scale-95 disabled: opacity-60 disabled: pointer-events-none;
+	}
+
+	.btn-secondary {
+		--apply: bg-secondary text-onSecondary px-6 py-3 rounded-full font-medium text-sm
+			hover: shadow-md3 transition-all duration-200 ease-out focus: outline-none focus: ring-2
+			focus: ring-secondary/20 active: scale-95 disabled: opacity-60 disabled: pointer-events-none;
+	}
+
+	.btn-outline {
+		--apply: border border-outline text-primary bg-transparent px-6 py-3 rounded-full font-medium
+			text-sm hover: bg-primary hover: text-onPrimary transition-all duration-200 ease-out
+			focus: outline-none focus: ring-2 focus: ring-primary/20 active: scale-95 disabled: opacity-60
+			disabled: pointer-events-none;
+	}
+
+	.btn-text {
+		--apply: text-primary bg-transparent px-4 py-2 rounded-full font-medium text-sm
+			hover: bg-primary/8 transition-all duration-200 ease-out focus: outline-none focus: ring-2
+			focus: ring-primary/20 active: scale-95 disabled: opacity-60 disabled: pointer-events-none;
+	}
+
+	.btn-fab {
+		--apply: bg-primaryContainer text-onPrimaryContainer w-14 h-14 rounded-full flex items-center
+			justify-center shadow-md3 hover: shadow-md3-lg transition-all duration-200 ease-out
+			focus: outline-none focus: ring-2 focus: ring-primary/20 active: scale-95 disabled: opacity-60
+			disabled: pointer-events-none;
+	}
+
+	/* Material Design Cards */
+	.card {
+		--apply: bg-surface border border-outlineVariant rounded-xl p-6 shadow-md3 hover: shadow-md3-lg
+			transition-all duration-200 ease-out;
+	}
+
+	.card-filled {
+		--apply: bg-surfaceContainerHighest rounded-xl p-6;
+	}
+
+	.card-elevated {
+		--apply: bg-surface rounded-xl p-6 shadow-md3-lg;
+	}
+
+	/* Material Design Input Fields */
+	.input-outlined {
+		--apply: bg-transparent border border-outline rounded text-onSurface px-4 py-3
+			focus: outline-none focus: border-primary focus: ring-2 focus: ring-primary/20
+			placeholder: text-onSurfaceVariant transition-all duration-200 ease-out;
+	}
+
+	.input-filled {
+		--apply: bg-surfaceContainerHighest border-0 border-b-2 border-outline rounded-t px-4 py-3
+			text-onSurface focus: outline-none focus: border-primary placeholder: text-onSurfaceVariant
+			transition-all duration-200 ease-out;
+	}
+
+	/* Material Design Navigation */
+	.nav-rail {
+		--apply: bg-surface border-r border-outlineVariant w-20 flex flex-col items-center py-4 gap-4;
+	}
+
+	.nav-drawer {
+		--apply: bg-surface border-r border-outlineVariant w-80 p-6;
+	}
+
+	.nav-item {
+		--apply: w-14 h-8 rounded-full flex items-center justify-center text-onSurfaceVariant
+			hover: bg-secondaryContainer hover: text-onSecondaryContainer transition-all duration-200
+			ease-out;
+	}
+
+	.nav-item.active {
+		--apply: bg-secondaryContainer text-onSecondaryContainer;
+	}
+
+	/* Material Design Lists */
+	.list-item {
+		--apply: px-4 py-3 hover: bg-surfaceContainerHigh rounded-lg transition-colors duration-200
+			ease-out cursor-pointer;
+	}
+
+	.list-item-leading {
+		--apply: flex items-center gap-4;
+	}
+
+	.list-item-trailing {
+		--apply: flex items-center justify-between;
+	}
 }
