@@ -42,8 +42,8 @@
 
 <main class="max-w-2xl mx-auto p-4 md:p-8">
 	<div class="text-center mb-8">
-		<h1 class="text-4xl font-bold mb-2 text-gray-900 dark:text-gray-100">{m.app_title()}</h1>
-		<p class="text-xl text-gray-600 dark:text-gray-400">{m.app_subtitle()}</p>
+		<h1 class="text-4xl font-bold mb-2 text-onSurface">{m.app_title()}</h1>
+		<p class="text-xl text-onSurfaceVariant">{m.app_subtitle()}</p>
 	</div>
 
 	<PoemEditor bind:lines={poemText} bind:form={selectedForm} />
@@ -55,10 +55,8 @@
 	</div>
 
 	{#if error}
-		<div
-			class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md mt-4"
-		>
-			<p class="text-sm text-red-600 dark:text-red-400">{error}</p>
+		<div class="p-4 bg-errorContainer border border-error rounded-md mt-4">
+			<p class="text-sm text-onErrorContainer">{error}</p>
 		</div>
 	{/if}
 

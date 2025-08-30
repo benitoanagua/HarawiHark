@@ -1,5 +1,7 @@
 @import './lib/tokens/themes.css';
 
+@layer defaults, theme, custom;
+
 @layer defaults {
 	:root {
 		color-scheme: light;
@@ -9,7 +11,12 @@
 		color-scheme: dark;
 	}
 
+	html {
+		--at-apply: scroll-smooth;
+	}
+
 	body {
+		/* --at-apply: font-serif bg-surface text-onSurface; */
 		font-family: var(--font-serif);
 		background-color: var(--color-background);
 		color: var(--color-onBackground);
@@ -17,4 +24,31 @@
 			background-color 0.3s ease,
 			color 0.3s ease;
 	}
+	/* ::-webkit-scrollbar {
+		--at-apply: w-2 h-2;
+	}
+	::-webkit-scrollbar-track {
+		--at-apply: bg-outlineVariant;
+	}
+	::-webkit-scrollbar-thumb {
+		--at-apply: bg-inverseSurface;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		--at-apply: bg-onSurfaceVariant;
+	}
+
+	::-moz-selection {
+		--at-apply: text-onTertiaryContainer bg-tertiaryContainer;
+	}
+	::selection {
+		--at-apply: text-onTertiaryContainer bg-tertiaryContainer;
+	} */
+}
+
+/* añadir estilos al layer theme */
+@layer theme {
+}
+
+/* añadir estilos al layer pages */
+@layer custom {
 }

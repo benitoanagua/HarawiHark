@@ -22,10 +22,10 @@ export interface ThemeConfig {
 
 export const themeConfig: ThemeConfig = {
 	// Primary seed color - change this to generate new themes
-	seedColor: '#311735',
+	seedColor: '#fff1dd',
 
 	// Contrast level (-1 = minimum, 0 = standard, 1 = maximum)
-	contrastLevel: 0,
+	contrastLevel: -1,
 
 	// Variant of Material Design 3 scheme (use numeric values)
 	variant: 2 // TONAL_SPOT

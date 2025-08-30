@@ -21,13 +21,13 @@
 </script>
 
 <div class="flex items-center gap-2">
-	<div class="flex rounded-md overflow-hidden border border-gray-300 dark:border-gray-600">
+	<div class="flex rounded-md overflow-hidden border border-outlineVariant">
 		<button
 			class="px-3 py-1 text-xs font-medium transition-colors"
-			class:bg-blue-500={getLocale() === 'es'}
-			class:text-white={getLocale() === 'es'}
-			class:bg-gray-100={getLocale() !== 'es'}
-			class:dark:bg-gray-700={getLocale() !== 'es'}
+			class:bg-primary={getLocale() === 'es'}
+			class:text-onPrimary={getLocale() === 'es'}
+			class:bg-surfaceContainer={getLocale() !== 'es'}
+			class:text-onSurfaceVariant={getLocale() !== 'es'}
 			onclick={() => switchLanguage('es')}
 			title="Español"
 		>
@@ -36,10 +36,10 @@
 
 		<button
 			class="px-3 py-1 text-xs font-medium transition-colors"
-			class:bg-blue-500={getLocale() === 'en'}
-			class:text-white={getLocale() === 'en'}
-			class:bg-gray-100={getLocale() !== 'en'}
-			class:dark:bg-gray-700={getLocale() !== 'en'}
+			class:bg-primary={getLocale() === 'en'}
+			class:text-onPrimary={getLocale() === 'en'}
+			class:bg-surfaceContainer={getLocale() !== 'en'}
+			class:text-onSurfaceVariant={getLocale() !== 'en'}
 			onclick={() => switchLanguage('en')}
 			title="English"
 		>

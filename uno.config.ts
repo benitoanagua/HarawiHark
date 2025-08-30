@@ -10,7 +10,7 @@ import colors from './src/lib/tokens/colors.json';
 
 export default defineConfig({
 	extractors: [extractorSvelte()],
-	presets: [presetWind4(), presetAttributify(), presetTypography(), presetIcons({ scale: 1.2 })],
+	presets: [presetWind4(), presetAttributify(), presetTypography(), presetIcons()],
 	theme: {
 		colors
 	},

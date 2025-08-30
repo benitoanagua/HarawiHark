@@ -1,4 +1,6 @@
-## title: 'Fib (Fibonacci Poem)'
+---
+title: 'Fib (Fibonacci Poem)'
+---
 
 # Fib (Fibonacci Poem)
 

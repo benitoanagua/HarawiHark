@@ -28,9 +28,9 @@
 >
 	{#if mounted}
 		{#if theme === 'light'}
-			<span class="i-teenyicons:sun-solid text-lg"></span>
+			<span class="i-carbon:sun"></span>
 		{:else}
-			<span class="i-teenyicons:moon-solid text-lg"></span>
+			<span class="i-carbon:moon"></span>
 		{/if}
 	{/if}
 </button>

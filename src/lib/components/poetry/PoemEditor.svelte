@@ -26,15 +26,12 @@
 <div class="space-y-3">
 	<!-- Form Selector -->
 	<div>
-		<label
-			for="form-select"
-			class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-		>
+		<label for="form-select" class="block text-sm font-medium text-onSurface mb-1">
 			{m.poetry_form()}
 		</label>
 		<select
 			id="form-select"
-			class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm"
+			class="w-full p-2 border border-outline rounded-md bg-surfaceContainer text-onSurface text-sm"
 			bind:value={form}
 		>
 			{#each Object.keys(POETRY_FORMS) as formKey}
@@ -45,25 +42,23 @@
 
 	<!-- Pattern Info -->
 	{#if pattern.length > 0}
-		<div
-			class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-md border border-blue-200 dark:border-blue-800"
-		>
-			<h3 class="font-medium text-blue-900 dark:text-blue-100">{getFormName(form)}</h3>
-			<p class="text-sm text-blue-800 dark:text-blue-200 mb-1">
+		<div class="bg-primaryContainer p-3 rounded-md border border-outlineVariant">
+			<h3 class="font-medium text-onPrimaryContainer">{getFormName(form)}</h3>
+			<p class="text-sm text-onPrimaryContainer mb-1">
 				Pattern: {pattern.join('-')} syllables
 			</p>
-			<p class="text-xs text-blue-700 dark:text-blue-300">{getFormDescription(form)}</p>
+			<p class="text-xs text-onPrimaryContainer/80">{getFormDescription(form)}</p>
 		</div>
 	{/if}
 
 	<!-- Poem Input -->
 	<div>
-		<label for="poem-text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+		<label for="poem-text" class="block text-sm font-medium text-onSurface mb-1">
 			{m.your_poem()}
 		</label>
 		<textarea
 			id="poem-text"
-			class="w-full h-40 p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm resize-none font-mono"
+			class="w-full h-40 p-3 border border-outline rounded-md bg-surfaceContainer text-onSurface text-sm resize-none font-mono"
 			bind:value={lines}
 			placeholder={currentLocale === 'es'
 				? 'Escribe cada verso en una línea nueva...'

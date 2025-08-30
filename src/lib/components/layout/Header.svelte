@@ -5,26 +5,20 @@
 </script>
 
 <header
-	class="sticky top-0 z-10 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 px-4 py-2"
+	class="sticky top-0 z-10 bg-surface/80 backdrop-blur-sm border-b border-outlineVariant px-4 py-2"
 >
 	<nav class="max-w-4xl mx-auto flex items-center justify-between">
 		<div class="flex items-center gap-4">
-			<a href="/" class="font-bold text-lg text-gray-900 dark:text-gray-100">
+			<a href="/" class="font-bold text-lg text-onSurface">
 				{m.app_title()}
 			</a>
 
 			<div class="hidden sm:flex items-center gap-2 text-sm">
-				<a
-					href="/docs"
-					class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-				>
+				<a href="/docs" class="text-onSurfaceVariant hover:text-onSurface transition-colors">
 					{m.nav_intro()}
 				</a>
-				<span class="text-gray-400">•</span>
-				<a
-					href="/api/check"
-					class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-				>
+				<span class="text-outline">•</span>
+				<a href="/api/check" class="text-onSurfaceVariant hover:text-onSurface transition-colors">
 					{m.nav_api()}
 				</a>
 			</div>

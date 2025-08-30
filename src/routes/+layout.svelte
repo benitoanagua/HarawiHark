@@ -1,5 +1,6 @@
 <script lang="ts">
 	import 'uno.css';
+	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import Header from '$lib/components/layout/Header.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
@@ -20,7 +21,7 @@
 
 <Header />
 
-<main class="min-h-screen bg-gray-50 dark:bg-gray-900">
+<main class="min-h-screen bg-background">
 	{@render children?.()}
 </main>
 
