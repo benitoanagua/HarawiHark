@@ -1,34 +1,17 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
-
+	// La lógica del theme se implementará posteriormente
 	let isDark = $state(false);
 
-	onMount(() => {
-		if (browser) {
-			isDark = document.documentElement.classList.contains('dark');
-		}
-	});
-
-	function toggle() {
-		if (!browser) return;
-
-		const root = document.documentElement;
+	function toggleTheme() {
 		isDark = !isDark;
-
-		if (isDark) {
-			root.classList.add('dark');
-			localStorage.theme = 'dark';
-		} else {
-			root.classList.remove('dark');
-			localStorage.theme = 'light';
-		}
+		// Aquí se agregará la lógica para cambiar el theme después
+		console.log('Theme toggled:', isDark ? 'dark' : 'light');
 	}
 </script>
 
 <button
 	class="p-2 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-	onclick={toggle}
+	onclick={toggleTheme}
 	aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
 	title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
 >

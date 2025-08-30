@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { m } from '$lib/paraglide/messages.js';
 	import LanguageToggle from './LanguageToggle.svelte';
+	import ThemeToggle from './ThemeToggle.svelte';
+	import { m } from '$lib/paraglide/messages.js';
 </script>
 
 <header
@@ -29,6 +30,9 @@
 			</div>
 		</div>
 
-		<LanguageToggle />
+		<div class="flex items-center gap-3">
+			<ThemeToggle />
+			<LanguageToggle />
+		</div>
 	</nav>
 </header>

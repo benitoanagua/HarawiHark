@@ -51,5 +51,53 @@
 	"form_diamante": "Diamante",
 	"form_diamante_desc": "Diamond-shaped syllabic poem",
 	"form_fib": "Fibonacci",
-	"form_fib_desc": "Based on Fibonacci sequence"
+	"form_fib_desc": "Based on Fibonacci sequence",
+
+	"example_haiku_line1": "An old silent pond",
+	"example_haiku_line2": "A frog jumps into the pond—",
+	"example_haiku_line3": "Splash! Silence again.",
+
+	"example_tanka_line1": "Spring rain whispers",
+	"example_tanka_line2": "Cherry petals drift downward",
+	"example_tanka_line3": "Pink snow on still water",
+	"example_tanka_line4": "Your laughter echoes softly",
+	"example_tanka_line5": "Across the mirrored sky",
+
+	"example_cinquain_line1": "Night",
+	"example_cinquain_line2": "windswept",
+	"example_cinquain_line3": "darkness hums",
+	"example_cinquain_line4": "a silent chorus",
+	"example_cinquain_line5": "hush",
+
+	"example_limerick_line1": "There once was a cat from Peru",
+	"example_limerick_line2": "Who dreamed of sailing canoe",
+	"example_limerick_line3": "It jumped in the boat",
+	"example_limerick_line4": "But couldn't float",
+	"example_limerick_line5": "And now it just mews 'I can't do!'",
+
+	"example_redondilla_line1": "In gardens where roses bloom",
+	"example_redondilla_line2": "The morning light breaks through gloom",
+	"example_redondilla_line3": "Each petal holds drops of dew",
+	"example_redondilla_line4": "As nature begins anew",
+
+	"example_lanterne_line1": "Light",
+	"example_lanterne_line2": "glows soft",
+	"example_lanterne_line3": "in the darkness",
+	"example_lanterne_line4": "casting gentle shadows",
+	"example_lanterne_line5": "peace",
+
+	"example_diamante_line1": "Sun",
+	"example_diamante_line2": "bright warm",
+	"example_diamante_line3": "golden rays shine",
+	"example_diamante_line4": "through morning clouds dancing",
+	"example_diamante_line5": "light filters down",
+	"example_diamante_line6": "gentle soft",
+	"example_diamante_line7": "peace",
+
+	"example_fib_line1": "I",
+	"example_fib_line2": "am",
+	"example_fib_line3": "watching",
+	"example_fib_line4": "raindrops race",
+	"example_fib_line5": "down the window slowly",
+	"example_fib_line6": "each one a tiny universe complete"
 }

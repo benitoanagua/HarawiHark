@@ -1,31 +1,22 @@
 import { getLocale } from '$lib/paraglide/runtime';
 import { m } from '$lib/paraglide/messages.js';
-import { POETRY_FORMS } from '$lib/data/poetry-forms.js';
+import { getFormExamples } from '$lib/data/poetry-forms.js';
 import type { Locale } from '$lib/models/poetry.js';
 
-export function getCurrentLocale(): Locale {
-	return getLocale() as Locale;
-}
+export const getCurrentLocale = (): Locale => getLocale() as Locale;
 
-export function getFormName(form: string): string {
+export const getFormName = (form: string): string => {
 	const key = `form_${form}` as keyof typeof m;
-	const messageFn = m[key] as () => string;
-	return messageFn?.() || form;
-}
+	const messageFn = m[key] as any;
+	return typeof messageFn === 'function' ? messageFn({}) : form;
+};
 
-export function getFormDescription(form: string): string {
+export const getFormDescription = (form: string): string => {
 	const key = `form_${form}_desc` as keyof typeof m;
-	const messageFn = m[key] as () => string;
-	return messageFn?.() || POETRY_FORMS[form]?.name || '';
-}
+	const messageFn = m[key] as any;
+	return typeof messageFn === 'function' ? messageFn({}) : '';
+};
 
-export function getFormExample(form: string, locale?: Locale): string[] {
-	const currentLocale = locale || getCurrentLocale();
-	const poetryForm = POETRY_FORMS[form];
-
-	if (poetryForm && poetryForm.examples[currentLocale]) {
-		return poetryForm.examples[currentLocale];
-	}
-
-	return poetryForm?.examples.en || [];
-}
+export const getFormExample = (form: string): string[] => {
+	return getFormExamples(form);
+};

@@ -13,25 +13,14 @@
 
 	$: currentLines = lines.split('\n').filter((line) => line.trim());
 	$: pattern = POETRY_FORMS[form]?.pattern || [];
-	$: expectedLines = pattern.length;
-	$: actualLines = currentLines.length;
 	$: currentLocale = getCurrentLocale();
 
-	function loadExample() {
+	const loadExample = () => {
 		const example = getFormExample(form);
-		if (example.length > 0) {
-			lines = example.join('\n');
-		}
-	}
+		if (example.length) lines = example.join('\n');
+	};
 
-	function clearText() {
-		lines = '';
-	}
-
-	$: placeholderText =
-		currentLocale === 'es'
-			? `Escribe cada verso en una línea nueva...\n\n${getFormExample(form, 'es').slice(0, 3).join('\n') || 'Por ejemplo:\nViejo estanque\nUna rana salta al agua'}`
-			: `Write each line on a new line...\n\n${getFormExample(form, 'en').slice(0, 3).join('\n') || 'For example:\nAn old silent pond\nA frog jumps into the pond—'}`;
+	const clearText = () => (lines = '');
 </script>
 
 <div class="space-y-3">
@@ -49,9 +38,7 @@
 			bind:value={form}
 		>
 			{#each Object.keys(POETRY_FORMS) as formKey}
-				<option value={formKey}>
-					{getFormName(formKey)} ({POETRY_FORMS[formKey].pattern.join('-')})
-				</option>
+				<option value={formKey}>{getFormName(formKey)}</option>
 			{/each}
 		</select>
 	</div>
@@ -61,26 +48,16 @@
 		<div
 			class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-md border border-blue-200 dark:border-blue-800"
 		>
-			<div class="flex items-center justify-between mb-1">
-				<h3 class="font-medium text-blue-900 dark:text-blue-100">
-					{getFormName(form)}
-				</h3>
-				<span class="text-xs text-blue-700 dark:text-blue-300">
-					{m.lines_count({ count: actualLines })}/{expectedLines}
-				</span>
-			</div>
-			<p class="text-sm text-blue-800 dark:text-blue-200 mb-2">
-				{currentLocale === 'es' ? 'Patrón' : 'Pattern'}: {pattern.join('-')}
-				{currentLocale === 'es' ? 'sílabas' : 'syllables'}
+			<h3 class="font-medium text-blue-900 dark:text-blue-100">{getFormName(form)}</h3>
+			<p class="text-sm text-blue-800 dark:text-blue-200 mb-1">
+				Pattern: {pattern.join('-')} syllables
 			</p>
-			<p class="text-xs text-blue-700 dark:text-blue-300">
-				{getFormDescription(form)}
-			</p>
+			<p class="text-xs text-blue-700 dark:text-blue-300">{getFormDescription(form)}</p>
 		</div>
 	{/if}
 
 	<!-- Poem Input -->
-	<div class="relative">
+	<div>
 		<label for="poem-text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
 			{m.your_poem()}
 		</label>
@@ -88,57 +65,19 @@
 			id="poem-text"
 			class="w-full h-40 p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm resize-none font-mono"
 			bind:value={lines}
-			placeholder={placeholderText}
+			placeholder={currentLocale === 'es'
+				? 'Escribe cada verso en una línea nueva...'
+				: 'Write each line on a new line...'}
 		></textarea>
-
-		<!-- Line Counter -->
-		<div class="absolute bottom-2 right-2 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
-			<span
-				class:text-green-600={actualLines === expectedLines}
-				class:text-red-600={actualLines !== expectedLines}
-				class:text-gray-600={actualLines === 0}
-			>
-				{m.lines_count({ count: actualLines })}
-			</span>
-		</div>
 	</div>
 
 	<!-- Action Buttons -->
 	<div class="flex gap-2">
-		<button
-			type="button"
-			class="btn-secondary text-xs"
-			onclick={loadExample}
-			title={currentLocale === 'es' ? 'Cargar poema de ejemplo' : 'Load example poem'}
-		>
+		<button type="button" class="btn-secondary text-xs" onclick={loadExample}>
 			{m.load_example()}
 		</button>
-
-		<button
-			type="button"
-			class="btn-secondary text-xs"
-			onclick={clearText}
-			title={currentLocale === 'es' ? 'Limpiar texto' : 'Clear text'}
-		>
+		<button type="button" class="btn-secondary text-xs" onclick={clearText}>
 			{m.clear_text()}
 		</button>
-
-		<div class="flex-1"></div>
-
-		<!-- Pattern Display -->
-		{#if currentLines.length > 0 && pattern.length > 0}
-			<div class="text-xs text-gray-500 dark:text-gray-400 flex items-center">
-				{m.expected_pattern()}:
-				{#each pattern.slice(0, Math.max(currentLines.length, pattern.length)) as syllables, i}
-					<span
-						class="ml-1 px-1 py-0.5 rounded bg-gray-200 dark:bg-gray-600"
-						class:bg-green-200={i < currentLines.length}
-						class:dark:bg-green-800={i < currentLines.length}
-					>
-						{syllables}
-					</span>
-				{/each}
-			</div>
-		{/if}
 	</div>
 </div>

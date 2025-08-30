@@ -51,5 +51,53 @@
 	"form_diamante": "Diamante",
 	"form_diamante_desc": "Poema silábico en forma de diamante",
 	"form_fib": "Fibonacci",
-	"form_fib_desc": "Basado en la secuencia de Fibonacci"
+	"form_fib_desc": "Basado en la secuencia de Fibonacci",
+
+	"example_haiku_line1": "Viejo estanque",
+	"example_haiku_line2": "Una rana salta al agua",
+	"example_haiku_line3": "Sonido del agua",
+
+	"example_tanka_line1": "Lluvia de abril",
+	"example_tanka_line2": "Los pétalos caen lentos",
+	"example_tanka_line3": "Nieve rosa en agua",
+	"example_tanka_line4": "Tu risa suena clara",
+	"example_tanka_line5": "Sobre el cielo reflejado",
+
+	"example_cinquain_line1": "Luz",
+	"example_cinquain_line2": "dorada",
+	"example_cinquain_line3": "el sol desciende",
+	"example_cinquain_line4": "entre nubes de colores",
+	"example_cinquain_line5": "paz",
+
+	"example_limerick_line1": "Había un gato en España",
+	"example_limerick_line2": "Que soñaba con ir a montaña",
+	"example_limerick_line3": "Subió muy alto",
+	"example_limerick_line4": "Pegó un salto",
+	"example_limerick_line5": "Y ahora vive en cabaña",
+
+	"example_redondilla_line1": "En jardines de colores",
+	"example_redondilla_line2": "Danzan libres mariposas",
+	"example_redondilla_line3": "Entre pétalos y flores",
+	"example_redondilla_line4": "Perfuman las dulces cosas",
+
+	"example_lanterne_line1": "Luz",
+	"example_lanterne_line2": "brilla",
+	"example_lanterne_line3": "en la noche",
+	"example_lanterne_line4": "creando sombras suaves",
+	"example_lanterne_line5": "calma",
+
+	"example_diamante_line1": "Mar",
+	"example_diamante_line2": "azul claro",
+	"example_diamante_line3": "olas van y vienen",
+	"example_diamante_line4": "espuma blanca en la orilla",
+	"example_diamante_line5": "arena tibia",
+	"example_diamante_line6": "suave brisa",
+	"example_diamante_line7": "calma",
+
+	"example_fib_line1": "Yo",
+	"example_fib_line2": "veo",
+	"example_fib_line3": "estrellas",
+	"example_fib_line4": "brillan arriba",
+	"example_fib_line5": "en la noche clara y fría",
+	"example_fib_line6": "susurran secretos antiguos del cosmos"
 }

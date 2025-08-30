@@ -11,6 +11,7 @@ export interface LineAnalysis {
 	count: number;
 	expected: number;
 	match: boolean;
+	syllables?: string[];
 }
 
 export interface PoetryAnalysisResult {
@@ -22,4 +23,14 @@ export interface PoetryAnalysisResult {
 	};
 	lines: LineAnalysis[];
 	summary?: string;
+}
+
+export interface CheckRequest {
+	form: string;
+	locale?: Locale;
+	lines: string[];
+}
+
+export interface CheckResponse extends Omit<PoetryAnalysisResult, 'lines'> {
+	lines: LineAnalysis[];
 }
