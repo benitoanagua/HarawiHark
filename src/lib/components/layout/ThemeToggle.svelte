@@ -1,23 +1,36 @@
 <script lang="ts">
-	// La lógica del theme se implementará posteriormente
-	let isDark = $state(false);
+	import { onMount } from 'svelte';
+
+	let theme: 'light' | 'dark' = 'light';
+	let mounted = false;
 
 	function toggleTheme() {
-		isDark = !isDark;
-		// Aquí se agregará la lógica para cambiar el theme después
-		console.log('Theme toggled:', isDark ? 'dark' : 'light');
+		theme = theme === 'light' ? 'dark' : 'light';
+		document.documentElement.setAttribute('data-theme', theme);
+		localStorage.setItem('theme', theme);
 	}
+
+	onMount(() => {
+		const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+		const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+			? 'dark'
+			: 'light';
+		theme = savedTheme || systemTheme;
+		document.documentElement.setAttribute('data-theme', theme);
+		mounted = true;
+	});
 </script>
 
 <button
-	class="p-2 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-	onclick={toggleTheme}
-	aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-	title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+	on:click={toggleTheme}
+	class="flex items-center gap-2 p-2 rounded-full bg-surfaceContainer text-onSurface hover:bg-surfaceContainerHigh transition-colors"
+	aria-label={theme === 'light' ? 'Cambiar a tema oscuro' : 'Cambiar a tema claro'}
 >
-	{#if isDark}
-		<span class="i-carbon-sun text-lg text-yellow-500"></span>
-	{:else}
-		<span class="i-carbon-moon text-lg text-gray-600"></span>
+	{#if mounted}
+		{#if theme === 'light'}
+			<span class="i-teenyicons:sun-solid text-lg"></span>
+		{:else}
+			<span class="i-teenyicons:moon-solid text-lg"></span>
+		{/if}
 	{/if}
 </button>

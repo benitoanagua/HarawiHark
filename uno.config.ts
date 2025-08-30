@@ -6,10 +6,14 @@ import {
 	presetIcons
 } from 'unocss';
 import extractorSvelte from '@unocss/extractor-svelte';
+import colors from './src/lib/tokens/colors.json';
 
 export default defineConfig({
 	extractors: [extractorSvelte()],
 	presets: [presetWind4(), presetAttributify(), presetTypography(), presetIcons({ scale: 1.2 })],
+	theme: {
+		colors
+	},
 	shortcuts: {
 		btn: 'inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition hover:opacity-90',
 		'btn-primary': 'btn bg-blue-600 text-white',
