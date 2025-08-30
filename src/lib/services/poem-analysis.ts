@@ -7,10 +7,28 @@ export function countSyllables(text: string, locale: Locale): number {
 	if (!text.trim()) return 0;
 
 	try {
-		return locale === 'es' ? countEs(text) : countEn(text);
+		// Dividir el texto en palabras y limpiar cada palabra
+		const words = text
+			.trim()
+			.split(/\s+/)
+			.map((word) => word.replace(/[^\w']/g, '')) // Remover puntuación pero mantener apostrofes
+			.filter((word) => word.length > 0);
+
+		// Sumar las sílabas de cada palabra
+		let totalSyllables = 0;
+
+		for (const word of words) {
+			if (locale === 'es') {
+				totalSyllables += countEs(word);
+			} else {
+				totalSyllables += countEn(word);
+			}
+		}
+
+		return totalSyllables;
 	} catch (error) {
 		console.error('Error counting syllables:', error);
-		// Fallback: count words as approximate syllables
+		// Fallback: contar palabras como aproximación de sílabas
 		return text.trim().split(/\s+/).filter(Boolean).length;
 	}
 }
@@ -24,11 +42,30 @@ export const getLineSyllables = (text: string, locale: Locale): string[] => {
 
 	words.forEach((word) => {
 		try {
-			const wordSyllables = locale === 'es' ? syllabifyEs(word) : syllabifyEn(word);
-			allSyllables.push(...wordSyllables);
+			// Limpiar la palabra pero preservar apostrofes para contracciones
+			const cleanWord = word.replace(/[^\w']/g, '');
+
+			if (!cleanWord) {
+				// Si la palabra es solo puntuación, omitirla
+				return;
+			}
+
+			const wordSyllables = locale === 'es' ? syllabifyEs(cleanWord) : syllabifyEn(cleanWord);
+
+			// Si la silabificación retorna resultados, agregarlos
+			if (wordSyllables.length > 0) {
+				allSyllables.push(...wordSyllables);
+			} else {
+				// Si falla la silabificación, usar la palabra original
+				allSyllables.push(cleanWord);
+			}
 		} catch (error) {
-			// Si hay error en la silabificación, usar la palabra completa
-			allSyllables.push(word);
+			console.warn(`Error syllabifying word "${word}":`, error);
+			// Si hay error en la silabificación, usar la palabra limpia
+			const cleanWord = word.replace(/[^\w']/g, '');
+			if (cleanWord) {
+				allSyllables.push(cleanWord);
+			}
 		}
 	});
 
