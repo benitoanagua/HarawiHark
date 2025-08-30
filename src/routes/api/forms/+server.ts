@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { POETRY_FORMS, SIMPLE_PATTERNS, getFormDescription } from '$lib/patterns';
+import { POETRY_FORMS, SIMPLE_PATTERNS } from '$lib/data/poetry-forms';
+import { getFormDescription } from '$lib/services/i18n';
 
 export const GET: RequestHandler = async ({ url }) => {
 	const locale = (url.searchParams.get('locale') as 'en' | 'es') || 'en';
@@ -9,7 +10,6 @@ export const GET: RequestHandler = async ({ url }) => {
 		key,
 		name: form.name,
 		pattern: form.pattern,
-		lines: form.lines,
 		examples: form.examples,
 		description: getFormDescription(key)
 	}));

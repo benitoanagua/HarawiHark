@@ -1,14 +1,4 @@
-import { m } from '$lib/paraglide/messages.js';
-import type { Locale } from '$lib/paraglide/runtime';
-
-export interface PoetryForm {
-	name: string;
-	pattern: number[];
-	examples: {
-		en: string[];
-		es: string[];
-	};
-}
+import type { PoetryForm } from '$lib/models/poetry.js';
 
 export const POETRY_FORMS: Record<string, PoetryForm> = {
 	haiku: {
@@ -19,7 +9,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 			es: ['Viejo estanque', 'Una rana salta al agua', 'Sonido del agua']
 		}
 	},
-
 	tanka: {
 		name: 'tanka',
 		pattern: [5, 7, 5, 7, 7],
@@ -40,7 +29,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 			]
 		}
 	},
-
 	cinquain: {
 		name: 'cinquain',
 		pattern: [2, 4, 6, 8, 2],
@@ -49,7 +37,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 			es: ['Luz', 'dorada', 'el sol desciende', 'entre nubes de colores', 'paz']
 		}
 	},
-
 	limerick: {
 		name: 'limerick',
 		pattern: [8, 8, 5, 5, 8],
@@ -70,7 +57,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 			]
 		}
 	},
-
 	redondilla: {
 		name: 'redondilla',
 		pattern: [8, 8, 8, 8],
@@ -89,7 +75,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 			]
 		}
 	},
-
 	lanterne: {
 		name: 'lanterne',
 		pattern: [1, 2, 3, 4, 1],
@@ -98,7 +83,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 			es: ['Luz', 'brilla', 'en la noche', 'creando sombras suaves', 'calma']
 		}
 	},
-
 	diamante: {
 		name: 'diamante',
 		pattern: [1, 2, 3, 4, 3, 2, 1],
@@ -123,7 +107,6 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 			]
 		}
 	},
-
 	fib: {
 		name: 'fib',
 		pattern: [1, 1, 2, 3, 5, 8],
@@ -148,32 +131,15 @@ export const POETRY_FORMS: Record<string, PoetryForm> = {
 	}
 };
 
-// Generar patrones simples automáticamente
-export const SIMPLE_PATTERNS: Record<string, number[]> = Object.fromEntries(
+// Patrón derivado automáticamente
+export const SIMPLE_PATTERNS = Object.fromEntries(
 	Object.entries(POETRY_FORMS).map(([key, form]) => [key, form.pattern])
 );
-
-// Funciones simplificadas
-export function getFormDescription(form: string): string {
-	const key = `form_${form}_desc` as keyof typeof m;
-	const messageFn = m[key] as () => string;
-	return messageFn?.() || form;
-}
-
-export function getFormName(form: string): string {
-	const key = `form_${form}` as keyof typeof m;
-	const messageFn = m[key] as () => string;
-	return messageFn?.() || form;
-}
 
 export function isValidForm(form: string): boolean {
 	return form in POETRY_FORMS;
 }
 
-export function getExample(form: string, locale: Locale = 'en'): string[] {
-	const poetryForm = POETRY_FORMS[form];
-	if (poetryForm && (locale === 'en' || locale === 'es')) {
-		return poetryForm.examples[locale] || [];
-	}
-	return [];
+export function getFormPattern(form: string): number[] {
+	return POETRY_FORMS[form]?.pattern || [];
 }

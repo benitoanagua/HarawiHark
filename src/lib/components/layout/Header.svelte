@@ -1,24 +1,7 @@
 <script lang="ts">
-	import 'uno.css';
-	import favicon from '$lib/assets/favicon.svg';
-	import { setLocale } from '$lib/paraglide/runtime';
 	import { m } from '$lib/paraglide/messages.js';
-	import { page } from '$app/state';
-	import LanguageToggle from '$lib/components/layout/LanguageToggle.svelte';
-
-	let { children } = $props();
+	import LanguageToggle from './LanguageToggle.svelte';
 </script>
-
-<svelte:head>
-	<script>
-		document.documentElement.classList.toggle(
-			'dark',
-			localStorage.theme === 'dark' ||
-				(!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-		);
-	</script>
-	<link rel="icon" href={favicon} />
-</svelte:head>
 
 <header
 	class="sticky top-0 z-10 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 px-4 py-2"
@@ -49,7 +32,3 @@
 		<LanguageToggle />
 	</nav>
 </header>
-
-<main class="min-h-screen bg-gray-50 dark:bg-gray-900">
-	{@render children?.()}
-</main>

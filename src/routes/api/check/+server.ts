@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { countEs, countEn } from 'simi-syllable';
-import { SIMPLE_PATTERNS, isValidForm } from '$lib/patterns';
+import { SIMPLE_PATTERNS, isValidForm } from '$lib/data/poetry-forms';
 
 interface CheckRequest {
 	form: string;
