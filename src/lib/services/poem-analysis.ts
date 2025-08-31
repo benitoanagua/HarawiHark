@@ -106,12 +106,12 @@ export const generateAnalysisSummary = (
 
 	if (locale === 'es') {
 		return ok
-			? `✅ Patrón perfecto: todas las ${total} líneas siguen el patrón.`
-			: `❌ ${mismatches} de ${total} líneas no coinciden con el patrón.`;
+			? `Patrón perfecto: todas las ${total} líneas siguen el patrón.`
+			: `${mismatches} de ${total} líneas no coinciden con el patrón.`;
 	} else {
 		return ok
-			? `✅ Perfect match: all ${total} lines follow the pattern.`
-			: `❌ ${mismatches} out of ${total} lines don't match the pattern.`;
+			? `Perfect match: all ${total} lines follow the pattern.`
+			: `${mismatches} out of ${total} lines don't match the pattern.`;
 	}
 };
 

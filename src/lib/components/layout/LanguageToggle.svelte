@@ -24,8 +24,7 @@
 	<div class="bg-surfaceContainer rounded-full border border-outlineVariant overflow-hidden">
 		<div class="flex">
 			<button
-				class="px-4 py-2 text-xs font-medium transition-all duration-200 ease-out
-					   flex items-center gap-2 min-w-[60px] justify-center"
+				class="px-4 py-2 text-xs font-medium transition-all duration-200 ease-out"
 				class:bg-secondaryContainer={getLocale() === 'es'}
 				class:text-onSecondaryContainer={getLocale() === 'es'}
 				class:text-onSurfaceVariant={getLocale() !== 'es'}
@@ -34,15 +33,13 @@
 				onclick={() => switchLanguage('es')}
 				title="Español"
 			>
-				<span class="text-sm">🇪🇸</span>
 				ES
 			</button>
 
 			<div class="w-px bg-outlineVariant"></div>
 
 			<button
-				class="px-4 py-2 text-xs font-medium transition-all duration-200 ease-out
-					   flex items-center gap-2 min-w-[60px] justify-center"
+				class="px-4 py-2 text-xs font-medium transition-all duration-200 ease-out"
 				class:bg-secondaryContainer={getLocale() === 'en'}
 				class:text-onSecondaryContainer={getLocale() === 'en'}
 				class:text-onSurfaceVariant={getLocale() !== 'en'}
@@ -51,7 +48,6 @@
 				onclick={() => switchLanguage('en')}
 				title="English"
 			>
-				<span class="text-sm">🇺🇸</span>
 				EN
 			</button>
 		</div>

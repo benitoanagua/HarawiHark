@@ -80,11 +80,11 @@
 	<!-- Action Buttons - Con iconos pero simple -->
 	<div class="flex gap-3">
 		<button type="button" class="btn-secondary flex items-center gap-2" onclick={loadExample}>
-			<span class="text-sm">📝</span>
+			<span class="i-carbon:document-download text-xl"></span>
 			{m.load_example()}
 		</button>
 		<button type="button" class="btn-text flex items-center gap-2" onclick={clearText}>
-			<span class="text-sm">🗑️</span>
+			<span class="i-carbon:clean text-xl"></span>
 			{m.clear_text()}
 		</button>
 	</div>

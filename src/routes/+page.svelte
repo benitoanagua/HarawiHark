@@ -46,7 +46,7 @@
 	<div class="text-center mb-8">
 		<div class="flex items-center justify-center gap-3 mb-4">
 			<div class="w-12 h-12 bg-primaryContainer rounded-full flex items-center justify-center">
-				<span class="text-2xl">📝</span>
+				<span class="i-carbon:pen-fountain text-3xl"></span>
 			</div>
 			<h1 class="text-4xl font-bold text-onSurface">{m.app_title()}</h1>
 		</div>
@@ -84,7 +84,7 @@
 				</span>
 			{:else}
 				<span class="flex items-center gap-2">
-					<span>✨</span>
+					<span class="i-carbon:send text-xl"></span>
 					{m.check_poem()}
 				</span>
 			{/if}

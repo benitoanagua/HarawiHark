@@ -19,9 +19,11 @@
 			class:bg-primary={result.ok}
 			class:bg-error={!result.ok}
 		>
-			<span class="text-lg">
-				{result.ok ? '✅' : '❌'}
-			</span>
+			{#if result.ok}
+				<div class="i-carbon:checkmark text-3xl"></div>
+			{:else}
+				<div class="i-carbon:close-large text-3xl"></div>
+			{/if}
 		</div>
 		<div class="flex-1 min-w-0">
 			<h3
