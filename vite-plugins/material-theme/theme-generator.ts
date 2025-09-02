@@ -6,8 +6,8 @@ import {
 } from '@material/material-color-utilities';
 import { writeFileSync, mkdirSync } from 'fs';
 import { dirname, resolve } from 'path';
-import type { ThemeConfig } from '../../src/lib/tokens/theme-config';
-import { themeConfig as sharedThemeConfig } from '../../src/lib/tokens/theme-config';
+import type { ThemeConfig } from '../../src/lib/tokens/theme-config.ts';
+import { themeConfig as sharedThemeConfig } from '../../src/lib/tokens/theme-config.js';
 
 export function getThemeConfig(): ThemeConfig {
 	// Usar directamente la configuración compartida
