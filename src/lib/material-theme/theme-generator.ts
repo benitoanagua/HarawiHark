@@ -5,6 +5,7 @@ import {
   hexFromArgb,
   MaterialDynamicColors,
   Hct,
+  DynamicScheme,
 } from '@material/material-color-utilities';
 import { SEED_COLOR, SCHEMES, SELECTED_SCHEME } from './theme.config';
 
@@ -47,11 +48,24 @@ const THEME_CSS_VARS = [
   'inversePrimary',
 ];
 
-function extractColors(scheme: any) {
+function getColorFromScheme(prop: string, scheme: DynamicScheme): number {
+  const materialColors = MaterialDynamicColors as unknown as Record<
+    string,
+    { getArgb: (scheme: DynamicScheme) => number } | undefined
+  >;
+
+  const colorGetter = materialColors[prop];
+  if (!colorGetter || typeof colorGetter.getArgb !== 'function') {
+    throw new Error(`Color property not found or invalid: ${prop}`);
+  }
+  return colorGetter.getArgb(scheme);
+}
+
+function extractColors(scheme: DynamicScheme): Record<string, string> {
   const colors: Record<string, string> = {};
   for (const prop of THEME_CSS_VARS) {
     try {
-      const color = (MaterialDynamicColors as any)[prop]?.getArgb(scheme);
+      const color = getColorFromScheme(prop, scheme);
       colors[prop] = hexFromArgb(color);
     } catch {
       colors[prop] = '#FF00FF';
