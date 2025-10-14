@@ -1,59 +1,55 @@
-# Harawihark
+# HarawiHark
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.5.
+A lightweight syllable-meter checker for poetic forms.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Accurate syllable counting** for English
+- **Phonetic precision**, beyond simple vowel counting
+- **8 essential poetic forms** with precise pattern matching
+- **Real-time feedback** with visual indicators and examples
+- **Offline-capable** – usable as a static site or app
 
-```bash
-ng serve
-```
+## What it does
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Pick a form** – choose from 8 carefully selected syllable patterns
+- **Paste your poem** – line-by-line with live preview
+- **Instant feedback** – exact syllable count per line plus ✅ / ❌ against the expected pattern
+- **Zero install** – works directly in any browser
 
-## Code scaffolding
+## Supported Forms
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+| Name           | Syllable pattern | Lines | Origin            |
+| -------------- | ---------------- | ----- | ----------------- |
+| **Haiku**      | 5-7-5            | 3     | Japanese          |
+| **Tanka**      | 5-7-5-7-7        | 5     | Japanese          |
+| **Cinquain**   | 2-4-6-8-2        | 5     | American          |
+| **Limerick**   | 8-8-5-5-8        | 5     | English           |
+| **Redondilla** | 8-8-8-8          | 4     | Spanish           |
+| **Lanterne**   | 1-2-3-4-1        | 5     | Japanese-inspired |
+| **Diamante**   | 1-2-3-4-3-2-1    | 7     | Modern            |
+| **Fibonacci**  | 1-1-2-3-5-8      | 6     | Mathematical      |
 
-```bash
-ng generate component component-name
-```
+## How it Works
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Enter your poem line by line
+- Select the poetic form
+- Get immediate feedback per line: number of syllables and whether it matches the expected pattern
+- Works offline and provides real-time visual feedback
 
-```bash
-ng generate --help
-```
+## User Experience
 
-## Building
+- **Live preview** of syllable counts while typing
+- **Example loader** for each poetic form
+- **Line-by-line counters** with pattern matching
+- **Responsive interface**, optimized for mobile and desktop
 
-To build the project run:
+## Contribution Guidelines
 
-```bash
-ng build
-```
+- Add new poetic forms or examples
+- Improve syllable counting rules and accuracy
+- Enhance documentation
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## License
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT © 2025 HarawiHark contributors
