@@ -1,6 +1,28 @@
 @import 'tailwindcss';
 @plugin "@iconify/tailwind4";
 
+@theme {
+  /* Tipografía Metro */
+  --font-sans: 'Segoe UI', 'Segoe WP', system-ui, sans-serif;
+
+  /* Espaciado Metro (base 4px) */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+
+  /* Sin bordes redondeados (Metro) */
+  --radius-none: 0;
+  --radius-sm: 0.125rem;
+
+  /* Sin sombras (Metro) */
+  --shadow-none: 0 0 #0000;
+}
+
 @layer base {
   html {
     font-size: 12px;
@@ -13,17 +35,23 @@
   }
 
   body {
-    @apply bg-primary text-onBackground;
-    font-family: 'Segoe UI', 'Noto Sans', system-ui, sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-onBackground);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Reset Metro: sin bordes redondeados */
+  * {
+    border-radius: var(--radius-none) !important;
   }
 }
 
 @layer utilities {
   .metro-tile {
     aspect-ratio: 1;
-    transition: transform 0.2s ease;
+    transition: transform 200ms cubic-bezier(0, 0, 0, 1);
   }
 
   .metro-tile:hover {
@@ -34,17 +62,8 @@
     transform: scale(0.98);
   }
 
-  .metro-pivot {
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-  }
-
-  .metro-pivot-item {
-    scroll-snap-align: start;
-  }
-
   .metro-entrance {
-    animation: metro-entrance 0.3s ease-out;
+    animation: metro-entrance 300ms cubic-bezier(0, 0, 0, 1);
   }
 
   @keyframes metro-entrance {
@@ -59,15 +78,11 @@
   }
 }
 
+/* Accesibilidad: respetar preferencia de movimiento */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  .metro-tile:hover,
-  .metro-tile:active {
-    transform: none;
   }
 }

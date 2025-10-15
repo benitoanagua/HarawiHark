@@ -18,7 +18,7 @@ export type SchemeConstructor = new (
   contrastLevel: number
 ) => DynamicScheme;
 
-export const SEED_COLOR = '#4b0082';
+export const SEED_COLOR = '#F4C2C2';
 
 export const SCHEMES: { name: string; variant: SchemeConstructor }[] = [
   { name: 'tonal-spot', variant: SchemeTonalSpot },
@@ -32,4 +32,4 @@ export const SCHEMES: { name: string; variant: SchemeConstructor }[] = [
   { name: 'rainbow', variant: SchemeRainbow },
 ];
 
-export const SELECTED_SCHEME = 'neutral';
+export const SELECTED_SCHEME = 'fidelity';

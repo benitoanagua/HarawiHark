@@ -12,66 +12,38 @@ export interface DocumentationItem {
   icon: string;
 }
 
-export interface NavigationItem {
-  title: string;
-  icon: string;
-  description: string;
-}
-
 @Injectable({
   providedIn: 'root',
 })
 export class AppDataService {
+  // Colores Metro oficiales
   readonly metroTiles: MetroTile[] = [
-    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },
-    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },
-    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },
-    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },
+    { label: 'Mail', color: '#0078D7', icon: 'icon-[iconoir--mail]' },
+    { label: 'Calendar', color: '#F7630C', icon: 'icon-[iconoir--calendar]' },
+    { label: 'Photos', color: '#00ABA9', icon: 'icon-[iconoir--camera]' },
+    { label: 'Store', color: '#8CBF26', icon: 'icon-[iconoir--shop]' },
   ];
 
   readonly documentation: DocumentationItem[] = [
     {
       title: 'Design Principles',
-      description: 'Learn the core principles of Metro UI design language',
+      description: 'Content, not chrome. Typography-first design language.',
       icon: 'icon-[iconoir--design-nib]',
     },
     {
-      title: 'Component Library',
-      description: 'Browse our collection of Metro-styled components',
+      title: 'Live Tiles',
+      description: 'Dynamic, flat, colorful blocks with real-time updates.',
       icon: 'icon-[iconoir--view-grid]',
     },
     {
       title: 'Typography Scale',
-      description: 'Understand the typographic hierarchy and spacing',
+      description: 'Segoe UI Light with tight tracking for hierarchy.',
       icon: 'icon-[iconoir--text-box]',
     },
     {
-      title: 'Motion Guidelines',
-      description: 'Implement meaningful animations and transitions',
+      title: 'Motion Language',
+      description: '2D linear animations with purpose, not decoration.',
       icon: 'icon-[iconoir--flash]',
-    },
-  ];
-
-  readonly navigationItems: NavigationItem[] = [
-    {
-      title: 'Explore Documentation',
-      icon: 'icon-[iconoir--book-stack]',
-      description: 'Learn about Angular features',
-    },
-    {
-      title: 'Tutorials',
-      icon: 'icon-[iconoir--graduation-cap]',
-      description: 'Step-by-step learning guides',
-    },
-    {
-      title: 'AI Development',
-      icon: 'icon-[iconoir--chat-bubble]',
-      description: 'Build with AI assistance',
-    },
-    {
-      title: 'CLI Tools',
-      icon: 'icon-[iconoir--terminal]',
-      description: 'Command line interface docs',
     },
   ];
 }

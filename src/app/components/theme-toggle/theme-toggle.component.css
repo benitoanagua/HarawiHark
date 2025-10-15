@@ -1,13 +1,27 @@
 .theme-toggle {
-  @apply bg-surfaceVariant text-onSurfaceVariant hover:bg-primary hover:text-onPrimary;
-  @apply rounded-full w-10 h-10 flex items-center justify-center cursor-pointer;
-  @apply border-none transition-all duration-200;
+  background-color: var(--color-surfaceVariant);
+  color: var(--color-onSurfaceVariant);
+  border-radius: var(--radius-none);
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  transition: all 200ms cubic-bezier(0, 0, 0, 1);
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-primary);
+  color: var(--color-onPrimary);
 }
 
 .theme-toggle:focus-visible {
-  @apply outline-2 outline-offset-2 outline-primary;
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .theme-toggle:active {
-  @apply scale-95;
+  transform: scale(0.95);
 }

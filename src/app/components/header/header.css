@@ -1,54 +1,76 @@
 .storybook-header {
-  @apply bg-surface text-onSurface border-b border-outlineVariant font-sans;
+  background-color: var(--color-surface);
+  color: var(--color-onSurface);
+  border-bottom: 1px solid var(--color-outlineVariant);
+  font-family: var(--font-sans);
 }
 
 .header-content {
-  @apply flex justify-between items-center px-6 py-4 max-w-7xl mx-auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4) var(--spacing-6);
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .logo-section {
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
 }
 
 .logo-wrapper {
-  @apply flex items-center gap-3;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
 }
 
 .logo-icon {
-  @apply rounded;
+  border-radius: var(--radius-sm);
 }
 
 .logo-title {
-  @apply text-xl font-semibold text-onSurface;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-onSurface);
 }
 
 .nav-section {
-  @apply flex items-center gap-4;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
 }
 
 .user-section {
-  @apply flex items-center gap-3;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
 }
 
 .auth-section {
-  @apply flex items-center gap-3;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
 }
 
 .welcome-text {
-  @apply text-onSurfaceVariant text-sm;
+  color: var(--color-onSurfaceVariant);
+  font-size: 0.875rem;
 }
 
 .user-name {
-  @apply text-onSurface font-semibold;
+  color: var(--color-onSurface);
+  font-weight: 600;
 }
 
-/* Responsive */
+/* Responsive usando media queries de Tailwind */
 @media (max-width: 768px) {
   .header-content {
-    @apply px-4 py-3;
+    padding: var(--spacing-3) var(--spacing-4);
   }
 
   .welcome-text {
-    @apply hidden;
+    display: none;
   }
 }

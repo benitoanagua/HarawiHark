@@ -1,114 +1,188 @@
 .storybook-page {
-  @apply bg-background text-onBackground font-sans min-h-screen;
+  background-color: var(--color-background);
+  color: var(--color-onBackground);
+  font-family: var(--font-sans);
+  min-height: 100vh;
 }
 
 .page-content {
-  @apply max-w-7xl mx-auto px-6 py-8;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: var(--spacing-8) var(--spacing-6);
 }
 
 .hero-section {
-  @apply text-center mb-12 py-8;
+  text-align: center;
+  margin-bottom: var(--spacing-12);
+  padding: var(--spacing-8) 0;
 }
 
 .hero-title {
-  @apply text-4xl font-light text-onBackground tracking-tight mb-4;
+  font-size: 2.25rem;
+  font-weight: 300;
+  color: var(--color-onBackground);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--spacing-4);
+  line-height: 1.1;
 }
 
 .hero-subtitle {
-  @apply text-lg text-onSurfaceVariant font-normal;
+  font-size: 1.125rem;
+  color: var(--color-onSurfaceVariant);
+  font-weight: 400;
 }
 
 .content-grid {
-  @apply grid gap-12 mb-12;
+  display: grid;
+  gap: var(--spacing-12);
+  margin-bottom: var(--spacing-12);
 }
 
 .section-title {
-  @apply text-2xl font-semibold text-onBackground mb-6;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-onBackground);
+  margin-bottom: var(--spacing-6);
 }
 
 .tiles-grid {
-  @apply grid grid-cols-2 sm:grid-cols-4 gap-4;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-4);
+}
+
+@media (min-width: 640px) {
+  .tiles-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .metro-tile-story {
-  @apply aspect-square rounded flex flex-col items-center justify-center text-white font-medium transition-transform duration-200 cursor-pointer;
+  aspect-ratio: 1;
+  border-radius: var(--radius-none);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 500;
+  transition: transform 200ms cubic-bezier(0, 0, 0, 1);
+  cursor: pointer;
+  box-shadow: var(--shadow-none);
 }
 
 .metro-tile-story:hover {
-  @apply scale-105;
+  transform: scale(1.05);
+}
+
+.metro-tile-story:active {
+  transform: scale(0.98);
 }
 
 .tile-icon {
-  @apply text-2xl mb-2;
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-2);
 }
 
 .tile-label {
-  @apply text-sm;
+  font-size: 0.875rem;
 }
 
 .docs-list {
-  @apply flex flex-col gap-4;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
 }
 
 .doc-item {
-  @apply flex items-center gap-4 p-4 bg-surface border border-outlineVariant rounded cursor-pointer transition-all duration-200;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-outlineVariant);
+  border-radius: var(--radius-none);
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(0, 0, 0, 1);
 }
 
 .doc-item:hover {
-  @apply bg-surfaceVariant border-primary;
+  background-color: var(--color-surfaceVariant);
+  border-color: var(--color-primary);
 }
 
 .doc-icon {
-  @apply text-2xl flex-shrink-0 text-primary;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  color: var(--color-primary);
 }
 
 .doc-content {
-  @apply flex-1;
+  flex: 1;
 }
 
 .doc-title {
-  @apply text-base font-semibold text-onSurface mb-1;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-onSurface);
+  margin-bottom: var(--spacing-1);
 }
 
 .doc-description {
-  @apply text-sm text-onSurfaceVariant;
+  font-size: 0.875rem;
+  color: var(--color-onSurfaceVariant);
 }
 
 .doc-arrow {
-  @apply text-primary text-xl font-light;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  font-weight: 300;
 }
 
 .tips-section {
-  @apply border-t border-outlineVariant pt-8;
+  border-top: 1px solid var(--color-outlineVariant);
+  padding-top: var(--spacing-8);
 }
 
 .tip-wrapper {
-  @apply flex items-start gap-4 p-6 bg-primaryContainer text-onPrimaryContainer rounded;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+  padding: var(--spacing-6);
+  background-color: var(--color-primaryContainer);
+  color: var(--color-onPrimaryContainer);
+  border-radius: var(--radius-none);
 }
 
 .tip-badge {
-  @apply text-xl text-primary flex-shrink-0 mt-0.5;
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
 }
 
 .tip-text {
-  @apply text-sm leading-relaxed;
+  font-size: 0.875rem;
+  line-height: 1.6;
 }
 
-/* Responsive */
+/* Responsive usando media queries de Tailwind */
 @media (max-width: 768px) {
   .page-content {
-    @apply px-4 py-6;
+    padding: var(--spacing-6) var(--spacing-4);
   }
 
   .hero-title {
-    @apply text-3xl;
+    font-size: 1.875rem;
   }
 
   .tiles-grid {
-    @apply grid-cols-2 gap-3;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-3);
   }
 
   .content-grid {
-    @apply gap-8;
+    gap: var(--spacing-8);
   }
 }
