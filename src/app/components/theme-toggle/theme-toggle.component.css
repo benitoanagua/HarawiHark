@@ -1,0 +1,13 @@
+.theme-toggle {
+  @apply bg-surfaceVariant text-onSurfaceVariant hover:bg-primary hover:text-onPrimary;
+  @apply rounded-full w-10 h-10 flex items-center justify-center cursor-pointer;
+  @apply border-none transition-all duration-200;
+}
+
+.theme-toggle:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary;
+}
+
+.theme-toggle:active {
+  @apply scale-95;
+}

@@ -1,4 +1,3 @@
-/* Estilos base de la aplicación - Solo Tailwind */
 @import 'tailwindcss';
 @plugin "@iconify/tailwind4";
 
@@ -14,9 +13,8 @@
   }
 
   body {
+    @apply bg-primary text-onBackground;
     font-family: 'Segoe UI', 'Noto Sans', system-ui, sans-serif;
-    background-color: var(--color-background);
-    color: var(--color-onBackground);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../button/button.component';
+import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
 export interface User {
   name: string;
@@ -9,13 +9,11 @@ export interface User {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [ButtonComponent, ThemeToggleComponent],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.css'],
 })
 export class HeaderComponent {
   @Input() user: User | null = null;
-  @Input() theme: 'light' | 'dark' = 'light';
   @Output() login = new EventEmitter<Event>();
   @Output() logout = new EventEmitter<Event>();
   @Output() createAccount = new EventEmitter<Event>();

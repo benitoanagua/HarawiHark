@@ -3,3 +3,4 @@
 @import './app/components/button/button.css';
 @import './app/components/header/header.css';
 @import './app/components/page/page.css';
+@import './app/components/theme-toggle/theme-toggle.component.css';

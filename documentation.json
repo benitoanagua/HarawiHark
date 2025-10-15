@@ -2,23 +2,133 @@
     "pipes": [],
     "interfaces": [
         {
-            "name": "User",
-            "id": "interface-User-d4821beac0e4a852e513391b7470981c4353fdd95a18628bb68136c8695b489ee15b926e2e5031bc26cf30e1508e0a362c3ee13a06734702b4d15af140e485d5",
-            "file": "src/stories/user.ts",
+            "name": "DocumentationItem",
+            "id": "interface-DocumentationItem-331cbed1df1d5be59ce014198c4b9f0ccfe0e5f0a69250e5c5627453a8c004ba8506d71d76019a4a7937c0deab1657d12ef0d4d87475681198d6fec9750a87eb",
+            "file": "src/app/services/app-data.service.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "export interface User {\n  name: string;\n}\n",
+            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\nexport interface NavigationItem {\n  title: string;\n  icon: string;\n  description: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  readonly metroTiles: MetroTile[] = [\n    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n\n  readonly navigationItems: NavigationItem[] = [\n    {\n      title: 'Explore Documentation',\n      icon: 'icon-[iconoir--book-stack]',\n      description: 'Learn about Angular features',\n    },\n    {\n      title: 'Tutorials',\n      icon: 'icon-[iconoir--graduation-cap]',\n      description: 'Step-by-step learning guides',\n    },\n    {\n      title: 'AI Development',\n      icon: 'icon-[iconoir--chat-bubble]',\n      description: 'Build with AI assistance',\n    },\n    {\n      title: 'CLI Tools',\n      icon: 'icon-[iconoir--terminal]',\n      description: 'Command line interface docs',\n    },\n  ];\n}\n",
             "properties": [
                 {
-                    "name": "name",
+                    "name": "description",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "string",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 2
+                    "line": 11
+                },
+                {
+                    "name": "icon",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                },
+                {
+                    "name": "title",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        },
+        {
+            "name": "MetroTile",
+            "id": "interface-MetroTile-331cbed1df1d5be59ce014198c4b9f0ccfe0e5f0a69250e5c5627453a8c004ba8506d71d76019a4a7937c0deab1657d12ef0d4d87475681198d6fec9750a87eb",
+            "file": "src/app/services/app-data.service.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\nexport interface NavigationItem {\n  title: string;\n  icon: string;\n  description: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  readonly metroTiles: MetroTile[] = [\n    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n\n  readonly navigationItems: NavigationItem[] = [\n    {\n      title: 'Explore Documentation',\n      icon: 'icon-[iconoir--book-stack]',\n      description: 'Learn about Angular features',\n    },\n    {\n      title: 'Tutorials',\n      icon: 'icon-[iconoir--graduation-cap]',\n      description: 'Step-by-step learning guides',\n    },\n    {\n      title: 'AI Development',\n      icon: 'icon-[iconoir--chat-bubble]',\n      description: 'Build with AI assistance',\n    },\n    {\n      title: 'CLI Tools',\n      icon: 'icon-[iconoir--terminal]',\n      description: 'Command line interface docs',\n    },\n  ];\n}\n",
+            "properties": [
+                {
+                    "name": "color",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                },
+                {
+                    "name": "icon",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "label",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        },
+        {
+            "name": "NavigationItem",
+            "id": "interface-NavigationItem-331cbed1df1d5be59ce014198c4b9f0ccfe0e5f0a69250e5c5627453a8c004ba8506d71d76019a4a7937c0deab1657d12ef0d4d87475681198d6fec9750a87eb",
+            "file": "src/app/services/app-data.service.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\nexport interface NavigationItem {\n  title: string;\n  icon: string;\n  description: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  readonly metroTiles: MetroTile[] = [\n    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n\n  readonly navigationItems: NavigationItem[] = [\n    {\n      title: 'Explore Documentation',\n      icon: 'icon-[iconoir--book-stack]',\n      description: 'Learn about Angular features',\n    },\n    {\n      title: 'Tutorials',\n      icon: 'icon-[iconoir--graduation-cap]',\n      description: 'Step-by-step learning guides',\n    },\n    {\n      title: 'AI Development',\n      icon: 'icon-[iconoir--chat-bubble]',\n      description: 'Build with AI assistance',\n    },\n    {\n      title: 'CLI Tools',\n      icon: 'icon-[iconoir--terminal]',\n      description: 'Command line interface docs',\n    },\n  ];\n}\n",
+            "properties": [
+                {
+                    "name": "description",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18
+                },
+                {
+                    "name": "icon",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                },
+                {
+                    "name": "title",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 16
                 }
             ],
             "indexSignatures": [],
@@ -28,12 +138,12 @@
         },
         {
             "name": "User",
-            "id": "interface-User-6d45cc53cb9575d30305eb575381b55d50701d053e6e7f1e5e43b1f0163f96f410de7b345aa8573a726a2feff7523860bc3d04becbb75c313aa9f1271f4ad6ff-1",
+            "id": "interface-User-8e6d7a41a58bad4fc6aadd9c78fec981bf912759b5a447b0949f9cfdc227641ea2654bdcb0f99b7b7ddd06321a3f7a50b16c2e2b77a4ce6a19bbd603bc3c0ec8",
             "file": "src/app/components/header/header.component.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\nimport { CommonModule } from '@angular/common';\nimport { ButtonComponent } from '../button/button.component';\n\nexport interface User {\n  name: string;\n}\n\n@Component({\n  selector: 'app-header',\n  standalone: true,\n  imports: [CommonModule, ButtonComponent],\n  templateUrl: './header.component.html',\n  styleUrls: ['./header.css'],\n})\nexport class HeaderComponent {\n  @Input() user: User | null = null;\n  @Input() theme: 'light' | 'dark' = 'light';\n  @Output() login = new EventEmitter<Event>();\n  @Output() logout = new EventEmitter<Event>();\n  @Output() createAccount = new EventEmitter<Event>();\n}\n",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\nimport { ButtonComponent } from '../button/button.component';\nimport { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';\n\nexport interface User {\n  name: string;\n}\n\n@Component({\n  selector: 'app-header',\n  standalone: true,\n  imports: [ButtonComponent, ThemeToggleComponent],\n  templateUrl: './header.component.html',\n})\nexport class HeaderComponent {\n  @Input() user: User | null = null;\n  @Output() login = new EventEmitter<Event>();\n  @Output() logout = new EventEmitter<Event>();\n  @Output() createAccount = new EventEmitter<Event>();\n}\n",
             "properties": [
                 {
                     "name": "name",
@@ -49,13 +159,203 @@
             "indexSignatures": [],
             "kind": 172,
             "methods": [],
-            "extends": [],
-            "isDuplicate": true,
-            "duplicateId": 1,
-            "duplicateName": "User-1"
+            "extends": []
         }
     ],
-    "injectables": [],
+    "injectables": [
+        {
+            "name": "AppDataService",
+            "id": "injectable-AppDataService-331cbed1df1d5be59ce014198c4b9f0ccfe0e5f0a69250e5c5627453a8c004ba8506d71d76019a4a7937c0deab1657d12ef0d4d87475681198d6fec9750a87eb",
+            "file": "src/app/services/app-data.service.ts",
+            "properties": [
+                {
+                    "name": "documentation",
+                    "defaultValue": "[\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "DocumentationItem[]",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 32,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "metroTiles",
+                    "defaultValue": "[\n    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },\n  ]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "MetroTile[]",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 25,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "navigationItems",
+                    "defaultValue": "[\n    {\n      title: 'Explore Documentation',\n      icon: 'icon-[iconoir--book-stack]',\n      description: 'Learn about Angular features',\n    },\n    {\n      title: 'Tutorials',\n      icon: 'icon-[iconoir--graduation-cap]',\n      description: 'Step-by-step learning guides',\n    },\n    {\n      title: 'AI Development',\n      icon: 'icon-[iconoir--chat-bubble]',\n      description: 'Build with AI assistance',\n    },\n    {\n      title: 'CLI Tools',\n      icon: 'icon-[iconoir--terminal]',\n      description: 'Command line interface docs',\n    },\n  ]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "NavigationItem[]",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 55,
+                    "modifierKind": [
+                        148
+                    ]
+                }
+            ],
+            "methods": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\nexport interface NavigationItem {\n  title: string;\n  icon: string;\n  description: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  readonly metroTiles: MetroTile[] = [\n    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n\n  readonly navigationItems: NavigationItem[] = [\n    {\n      title: 'Explore Documentation',\n      icon: 'icon-[iconoir--book-stack]',\n      description: 'Learn about Angular features',\n    },\n    {\n      title: 'Tutorials',\n      icon: 'icon-[iconoir--graduation-cap]',\n      description: 'Step-by-step learning guides',\n    },\n    {\n      title: 'AI Development',\n      icon: 'icon-[iconoir--chat-bubble]',\n      description: 'Build with AI assistance',\n    },\n    {\n      title: 'CLI Tools',\n      icon: 'icon-[iconoir--terminal]',\n      description: 'Command line interface docs',\n    },\n  ];\n}\n",
+            "extends": [],
+            "type": "injectable"
+        },
+        {
+            "name": "ThemeService",
+            "id": "injectable-ThemeService-eb0a14693c99d5a747e1b15c8801151fe40229ec9c63b60b26b5aaae24252d941375e426f3836e3816b01f27e79a6fead9ac2666a47f86b491549df40bb3a721",
+            "file": "src/app/services/theme.service.ts",
+            "properties": [
+                {
+                    "name": "currentTheme",
+                    "defaultValue": "signal<Theme>(this.getInitialTheme())",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "THEME_KEY",
+                    "defaultValue": "'app-theme'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 9,
+                    "modifierKind": [
+                        123,
+                        148
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "applyTheme",
+                    "args": [
+                        {
+                            "name": "theme",
+                            "type": "Theme",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 32,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "theme",
+                            "type": "Theme",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getInitialTheme",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Theme",
+                    "typeParameters": [],
+                    "line": 19,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "setTheme",
+                    "args": [
+                        {
+                            "name": "theme",
+                            "type": "Theme",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 41,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "theme",
+                            "type": "Theme",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "toggleTheme",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 37,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable, signal, effect } from '@angular/core';\n\nexport type Theme = 'light' | 'dark';\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class ThemeService {\n  private readonly THEME_KEY = 'app-theme';\n\n  readonly currentTheme = signal<Theme>(this.getInitialTheme());\n\n  constructor() {\n    effect(() => {\n      this.applyTheme(this.currentTheme());\n    });\n  }\n\n  private getInitialTheme(): Theme {\n    const stored = localStorage.getItem(this.THEME_KEY) as Theme | null;\n    if (stored === 'light' || stored === 'dark') {\n      return stored;\n    }\n\n    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {\n      return 'dark';\n    }\n\n    return 'light';\n  }\n\n  private applyTheme(theme: Theme): void {\n    document.documentElement.setAttribute('data-theme', theme);\n    localStorage.setItem(this.THEME_KEY, theme);\n  }\n\n  toggleTheme(): void {\n    this.currentTheme.update((current) => (current === 'light' ? 'dark' : 'light'));\n  }\n\n  setTheme(theme: Theme): void {\n    this.currentTheme.set(theme);\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 11
+            },
+            "extends": [],
+            "type": "injectable"
+        }
+    ],
     "guards": [],
     "interceptors": [],
     "classes": [],
@@ -63,7 +363,7 @@
     "components": [
         {
             "name": "App",
-            "id": "component-App-44463de71fd6c20d95f539178c7797035e7571111da41e6ebf0bc6ee79a748bd5688d65e90e63b631d1cdd6d7b092f2ba1a30458ba9394a8d6c8dfc2dab581ea",
+            "id": "component-App-0d7c9d494c058a767664afe5d20265bfe5325d8ff598f740efa2cdf74f9e01f584204c6a1f3a3d4f031655ce0fa2110db912998a954ed1c7bfcf09699736e214",
             "file": "src/app/app.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -80,38 +380,7 @@
             "hostDirectives": [],
             "inputsClass": [],
             "outputsClass": [],
-            "propertiesClass": [
-                {
-                    "name": "tiles",
-                    "defaultValue": "signal([\n    { title: 'Calendar', icon: 'iconoir--calendar', color: 'bg-primary', link: '#' },\n    { title: 'Mail', icon: 'iconoir--mail', color: 'bg-error', link: '#' },\n    { title: 'Photos', icon: 'iconoir--camera', color: 'bg-primary-container', link: '#' },\n    { title: 'Store', icon: 'iconoir--shop', color: 'bg-surface-variant', link: '#' },\n  ])",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 14,
-                    "modifierKind": [
-                        124,
-                        148
-                    ]
-                },
-                {
-                    "name": "title",
-                    "defaultValue": "signal('Metro UI App')",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 11,
-                    "modifierKind": [
-                        124,
-                        148
-                    ]
-                }
-            ],
+            "propertiesClass": [],
             "methodsClass": [],
             "deprecated": false,
             "deprecationMessage": "",
@@ -120,23 +389,24 @@
             "standalone": false,
             "imports": [
                 {
-                    "name": "RouterOutlet"
+                    "name": "PageComponent",
+                    "type": "component"
                 }
             ],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, signal } from '@angular/core';\nimport { RouterOutlet } from '@angular/router';\n\n@Component({\n  selector: 'app-root',\n  imports: [RouterOutlet],\n  templateUrl: './app.html',\n  styleUrl: './app.css',\n})\nexport class App {\n  protected readonly title = signal('Metro UI App');\n\n  // Datos de ejemplo para tiles\n  protected readonly tiles = signal([\n    { title: 'Calendar', icon: 'iconoir--calendar', color: 'bg-primary', link: '#' },\n    { title: 'Mail', icon: 'iconoir--mail', color: 'bg-error', link: '#' },\n    { title: 'Photos', icon: 'iconoir--camera', color: 'bg-primary-container', link: '#' },\n    { title: 'Store', icon: 'iconoir--shop', color: 'bg-surface-variant', link: '#' },\n  ]);\n}\n",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { PageComponent } from './components/page/page.component';\n\n@Component({\n  selector: 'app-root',\n  imports: [PageComponent],\n  templateUrl: './app.html',\n  styleUrl: './app.css',\n})\nexport class App {}\n",
             "styleUrl": "./app.css",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<main class=\"min-h-screen bg-background text-on-background font-sans metro-entrance\">\n  <!-- Header Metro UI -->\n  <header class=\"bg-surface text-on-surface px-4 py-3 border-b border-outline\">\n    <div class=\"flex items-center justify-between max-w-6xl mx-auto\">\n      <div class=\"flex items-center gap-3\">\n        <span class=\"icon-[iconoir--windows] text-2xl text-primary\"></span>\n        <h1 class=\"text-xl font-semibold\">{{ title() }}</h1>\n      </div>\n      \n      <div class=\"flex items-center gap-2\">\n        <button class=\"p-2 rounded-sm hover:bg-surface-variant transition-colors\">\n          <span class=\"icon-[iconoir--search] text-lg\"></span>\n        </button>\n        <button class=\"p-2 rounded-sm hover:bg-surface-variant transition-colors\">\n          <span class=\"icon-[iconoir--user] text-lg\"></span>\n        </button>\n      </div>\n    </div>\n  </header>\n\n  <!-- Content Area -->\n  <div class=\"max-w-6xl mx-auto p-4\">\n    <!-- Grid de Tiles estilo Metro -->\n    <div class=\"grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-8\">\n      @for (tile of tiles(); track tile.title) {\n        <a \n          [href]=\"tile.link\"\n          class=\"metro-tile {{tile.color}} text-on-surface rounded-sm p-4 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md transition-all\"\n        >\n          <span class=\"icon-[{{tile.icon}}] text-3xl mb-2\"></span>\n          <span class=\"text-sm font-medium\">{{ tile.title }}</span>\n        </a>\n      }\n    </div>\n\n    <!-- Pivot/Hub Navigation -->\n    <div class=\"metro-pivot flex overflow-x-auto gap-1 pb-4 mb-6 -mx-4 px-4\">\n      @for (section of ['Home', 'Apps', 'Games', 'Music', 'Videos']; track section) {\n        <button \n          class=\"metro-pivot-item px-4 py-2 rounded-sm whitespace-nowrap bg-surface-variant text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors\"\n        >\n          {{ section }}\n        </button>\n      }\n    </div>\n\n    <!-- Content List -->\n    <div class=\"space-y-2\">\n      @for (item of [\n        { title: 'Explore Documentation', icon: 'iconoir--book-stack', description: 'Learn about Angular features' },\n        { title: 'Tutorials', icon: 'iconoir--graduation-cap', description: 'Step-by-step learning guides' },\n        { title: 'AI Development', icon: 'iconoir--robot', description: 'Build with AI assistance' },\n        { title: 'CLI Tools', icon: 'iconoir--terminal', description: 'Command line interface docs' }\n      ]; track item.title) {\n        <div class=\"bg-surface text-on-surface p-3 rounded-sm border border-outline-variant hover:bg-surface-variant transition-colors\">\n          <div class=\"flex items-center gap-3\">\n            <span class=\"icon-[{{item.icon}}] text-xl text-primary\"></span>\n            <div class=\"flex-1\">\n              <h3 class=\"font-medium text-base\">{{ item.title }}</h3>\n              <p class=\"text-sm text-on-surface-variant\">{{ item.description }}</p>\n            </div>\n            <span class=\"icon-[iconoir--arrow-right] text-lg\"></span>\n          </div>\n        </div>\n      }\n    </div>\n  </div>\n\n  <router-outlet />\n</main>"
+            "templateData": "<app-page></app-page>"
         },
         {
             "name": "ButtonComponent",
-            "id": "component-ButtonComponent-5fc4c8f954bcfefd45ae671e646e51af92b7f11ce7eac279c13f85281f63d354b04e93665af9f97aef7d94d98bbd1cc0a77b29d0548493b58261ed6e1d20fd05",
+            "id": "component-ButtonComponent-999efe51c9141fafd14635ee09a50f10177c2cfac20ebe06bf2d9ccaf1d7cf71531a80d581e2d70dbd3c56cab510ce1f4b0b819254dfdfafbdd67b60ee6fdba0",
             "file": "src/app/components/button/button.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -144,9 +414,7 @@
             "outputs": [],
             "providers": [],
             "selector": "app-button",
-            "styleUrls": [
-                "./button.css"
-            ],
+            "styleUrls": [],
             "styles": [],
             "templateUrl": [
                 "./button.component.html"
@@ -155,11 +423,19 @@
             "hostDirectives": [],
             "inputsClass": [
                 {
+                    "name": "icon",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 12,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
                     "name": "label",
                     "defaultValue": "'Button'",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 22,
+                    "line": 11,
                     "type": "string",
                     "decorators": []
                 },
@@ -168,17 +444,8 @@
                     "defaultValue": "'medium'",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 16,
+                    "line": 10,
                     "type": "\"small\" | \"medium\" | \"large\"",
-                    "decorators": []
-                },
-                {
-                    "name": "theme",
-                    "defaultValue": "'light'",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "line": 19,
-                    "type": "\"light\" | \"dark\"",
                     "decorators": []
                 },
                 {
@@ -186,7 +453,7 @@
                     "defaultValue": "'primary'",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 13,
+                    "line": 9,
                     "type": "\"primary\" | \"secondary\" | \"outline\"",
                     "decorators": []
                 }
@@ -197,7 +464,7 @@
                     "defaultValue": "new EventEmitter<Event>()",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 25,
+                    "line": 13,
                     "type": "EventEmitter"
                 }
             ],
@@ -208,23 +475,13 @@
             "hostBindings": [],
             "hostListeners": [],
             "standalone": true,
-            "imports": [
-                {
-                    "name": "CommonModule",
-                    "type": "module"
-                }
-            ],
+            "imports": [],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'app-button',\n  standalone: true,\n  imports: [CommonModule],\n  templateUrl: './button.component.html',\n  styleUrls: ['./button.css'],\n})\nexport class ButtonComponent {\n  @Input()\n  variant: 'primary' | 'secondary' | 'outline' = 'primary';\n\n  @Input()\n  size: 'small' | 'medium' | 'large' = 'medium';\n\n  @Input()\n  theme: 'light' | 'dark' = 'light';\n\n  @Input()\n  label = 'Button';\n\n  @Output()\n  clicked = new EventEmitter<Event>();\n\n  get buttonClasses(): string {\n    const sizeClasses = {\n      small: 'btn-small',\n      medium: 'btn-medium',\n      large: 'btn-large',\n    };\n\n    const variantClasses = {\n      primary: 'btn-primary',\n      secondary: 'btn-secondary',\n      outline: 'btn-outline',\n    };\n\n    return `btn-base ${sizeClasses[this.size]} ${variantClasses[this.variant]}`;\n  }\n}\n",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'app-button',\n  standalone: true,\n  templateUrl: './button.component.html',\n})\nexport class ButtonComponent {\n  @Input() variant: 'primary' | 'secondary' | 'outline' = 'primary';\n  @Input() size: 'small' | 'medium' | 'large' = 'medium';\n  @Input() label = 'Button';\n  @Input() icon?: string;\n  @Output() clicked = new EventEmitter<Event>();\n\n  get buttonClasses(): string {\n    const sizeClasses = {\n      small: 'btn-small',\n      medium: 'btn-medium',\n      large: 'btn-large',\n    };\n\n    const variantClasses = {\n      primary: 'btn-primary',\n      secondary: 'btn-secondary',\n      outline: 'btn-outline',\n    };\n\n    return `btn-base ${sizeClasses[this.size]} ${variantClasses[this.variant]}`;\n  }\n}\n",
             "assetsDirs": [],
-            "styleUrlsData": [
-                {
-                    "data": ".btn-base {\n  @apply font-sans border-none cursor-pointer transition-all duration-200 rounded-sm font-medium transition-colors flex items-center justify-center gap-2;\n}\n\n.btn-base:focus-visible {\n  @apply outline-2 outline-offset-2 outline-primary;\n}\n\n.btn-base:disabled {\n  @apply bg-surfaceVariant text-onSurfaceVariant cursor-not-allowed opacity-60;\n}\n\n.btn-small {\n  @apply px-3 py-1.5 text-sm;\n}\n\n.btn-medium {\n  @apply px-4 py-2 text-base;\n}\n\n.btn-large {\n  @apply px-6 py-3 text-lg;\n}\n\n.btn-primary {\n  @apply bg-primary text-onPrimary;\n}\n\n.btn-primary:hover {\n  @apply bg-primaryContainer text-onPrimaryContainer;\n}\n\n.btn-secondary {\n  @apply bg-surfaceVariant text-onSurfaceVariant;\n}\n\n.btn-secondary:hover {\n  @apply bg-primary text-onPrimary;\n}\n\n.btn-outline {\n  @apply bg-transparent border border-outline text-onSurface;\n}\n\n.btn-outline:hover {\n  @apply bg-surfaceVariant;\n}\n",
-                    "styleUrl": "./button.css"
-                }
-            ],
+            "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
             "accessors": {
@@ -234,15 +491,15 @@
                         "name": "buttonClasses",
                         "type": "string",
                         "returnType": "string",
-                        "line": 27
+                        "line": 15
                     }
                 }
             },
-            "templateData": "<button\n  type=\"button\"\n  (click)=\"clicked.emit($event)\"\n  [class]=\"buttonClasses\"\n  [attr.data-theme]=\"theme\"\n>\n  {{ label }}\n</button>"
+            "templateData": "<button\n  type=\"button\"\n  (click)=\"clicked.emit($event)\"\n  [class]=\"buttonClasses\"\n>\n  @if (icon) {\n    <span [class]=\"icon\" class=\"mr-2\"></span>\n  }\n  {{ label }}\n</button>"
         },
         {
             "name": "HeaderComponent",
-            "id": "component-HeaderComponent-6d45cc53cb9575d30305eb575381b55d50701d053e6e7f1e5e43b1f0163f96f410de7b345aa8573a726a2feff7523860bc3d04becbb75c313aa9f1271f4ad6ff",
+            "id": "component-HeaderComponent-8e6d7a41a58bad4fc6aadd9c78fec981bf912759b5a447b0949f9cfdc227641ea2654bdcb0f99b7b7ddd06321a3f7a50b16c2e2b77a4ce6a19bbd603bc3c0ec8",
             "file": "src/app/components/header/header.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -250,9 +507,7 @@
             "outputs": [],
             "providers": [],
             "selector": "app-header",
-            "styleUrls": [
-                "./header.css"
-            ],
+            "styleUrls": [],
             "styles": [],
             "templateUrl": [
                 "./header.component.html"
@@ -261,20 +516,11 @@
             "hostDirectives": [],
             "inputsClass": [
                 {
-                    "name": "theme",
-                    "defaultValue": "'light'",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "line": 18,
-                    "type": "\"light\" | \"dark\"",
-                    "decorators": []
-                },
-                {
                     "name": "user",
                     "defaultValue": "null",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 17,
+                    "line": 16,
                     "type": "User | null",
                     "decorators": []
                 }
@@ -285,7 +531,7 @@
                     "defaultValue": "new EventEmitter<Event>()",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 21,
+                    "line": 19,
                     "type": "EventEmitter"
                 },
                 {
@@ -293,7 +539,7 @@
                     "defaultValue": "new EventEmitter<Event>()",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 19,
+                    "line": 17,
                     "type": "EventEmitter"
                 },
                 {
@@ -301,7 +547,7 @@
                     "defaultValue": "new EventEmitter<Event>()",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 20,
+                    "line": 18,
                     "type": "EventEmitter"
                 }
             ],
@@ -314,32 +560,27 @@
             "standalone": true,
             "imports": [
                 {
-                    "name": "CommonModule",
-                    "type": "module"
+                    "name": "ButtonComponent",
+                    "type": "component"
                 },
                 {
-                    "name": "ButtonComponent",
+                    "name": "ThemeToggleComponent",
                     "type": "component"
                 }
             ],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\nimport { CommonModule } from '@angular/common';\nimport { ButtonComponent } from '../button/button.component';\n\nexport interface User {\n  name: string;\n}\n\n@Component({\n  selector: 'app-header',\n  standalone: true,\n  imports: [CommonModule, ButtonComponent],\n  templateUrl: './header.component.html',\n  styleUrls: ['./header.css'],\n})\nexport class HeaderComponent {\n  @Input() user: User | null = null;\n  @Input() theme: 'light' | 'dark' = 'light';\n  @Output() login = new EventEmitter<Event>();\n  @Output() logout = new EventEmitter<Event>();\n  @Output() createAccount = new EventEmitter<Event>();\n}\n",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\nimport { ButtonComponent } from '../button/button.component';\nimport { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';\n\nexport interface User {\n  name: string;\n}\n\n@Component({\n  selector: 'app-header',\n  standalone: true,\n  imports: [ButtonComponent, ThemeToggleComponent],\n  templateUrl: './header.component.html',\n})\nexport class HeaderComponent {\n  @Input() user: User | null = null;\n  @Output() login = new EventEmitter<Event>();\n  @Output() logout = new EventEmitter<Event>();\n  @Output() createAccount = new EventEmitter<Event>();\n}\n",
             "assetsDirs": [],
-            "styleUrlsData": [
-                {
-                    "data": ".storybook-header {\n  @apply bg-surface text-onSurface border-b border-outlineVariant font-sans;\n}\n\n.header-content {\n  @apply flex justify-between items-center px-6 py-4 max-w-7xl mx-auto;\n}\n\n.logo-section {\n  @apply flex items-center;\n}\n\n.logo-wrapper {\n  @apply flex items-center gap-3;\n}\n\n.logo-icon {\n  @apply rounded;\n}\n\n.logo-title {\n  @apply text-xl font-semibold text-onSurface;\n}\n\n.nav-section {\n  @apply flex items-center gap-4;\n}\n\n.user-section {\n  @apply flex items-center gap-3;\n}\n\n.auth-section {\n  @apply flex items-center gap-3;\n}\n\n.welcome-text {\n  @apply text-onSurfaceVariant text-sm;\n}\n\n.user-name {\n  @apply text-onSurface font-semibold;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .header-content {\n    @apply px-4 py-3;\n  }\n\n  .welcome-text {\n    @apply hidden;\n  }\n}\n",
-                    "styleUrl": "./header.css"
-                }
-            ],
+            "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<header \n  [attr.data-theme]=\"theme\" \n  class=\"storybook-header\"\n>\n  <div class=\"header-content\">\n    <div class=\"logo-section\">\n      <div class=\"logo-wrapper\">\n        <svg \n          width=\"32\" \n          height=\"32\" \n          viewBox=\"0 0 32 32\" \n          xmlns=\"http://www.w3.org/2000/svg\" \n          class=\"logo-icon\"\n        >\n          <rect width=\"32\" height=\"32\" fill=\"var(--color-primary)\" />\n          <rect x=\"8\" y=\"8\" width=\"16\" height=\"16\" fill=\"var(--color-onPrimary)\" />\n        </svg>\n        <h1 class=\"logo-title\">Metro UI</h1>\n      </div>\n    </div>\n\n    <div class=\"nav-section\">\n      <div *ngIf=\"user\" class=\"user-section\">\n        <span class=\"welcome-text\">\n          Welcome, <b class=\"user-name\">{{ user.name }}</b>!\n        </span>\n        <app-button\n          size=\"small\"\n          variant=\"outline\"\n          [theme]=\"theme\"\n          (clicked)=\"logout.emit($event)\"\n          label=\"Log out\"\n        ></app-button>\n      </div>\n      \n      <div *ngIf=\"!user\" class=\"auth-section\">\n        <app-button\n          size=\"small\"\n          variant=\"outline\"\n          [theme]=\"theme\"\n          (clicked)=\"login.emit($event)\"\n          label=\"Log in\"\n        ></app-button>\n        <app-button\n          size=\"small\"\n          variant=\"primary\"\n          [theme]=\"theme\"\n          (clicked)=\"createAccount.emit($event)\"\n          label=\"Sign up\"\n        ></app-button>\n      </div>\n    </div>\n  </div>\n</header>"
+            "templateData": "<header class=\"storybook-header\">\n  <div class=\"header-content\">\n    <div class=\"logo-section\">\n      <div class=\"logo-wrapper\">\n        <span class=\"icon-[iconoir--windows] text-2xl text-primary\"></span>\n        <h1 class=\"logo-title\">Metro UI</h1>\n      </div>\n    </div>\n\n    <div class=\"nav-section\">\n      <app-theme-toggle />\n      \n      @if (user) {\n        <div class=\"user-section\">\n          <span class=\"welcome-text\">\n            Welcome, <b class=\"user-name\">{{ user.name }}</b>!\n          </span>\n          <app-button\n            size=\"small\"\n            variant=\"outline\"\n            (clicked)=\"logout.emit($event)\"\n            label=\"Log out\"\n            icon=\"icon-[iconoir--log-out]\"\n          />\n        </div>\n      } @else {\n        <div class=\"auth-section\">\n          <app-button\n            size=\"small\"\n            variant=\"outline\"\n            (clicked)=\"login.emit($event)\"\n            label=\"Log in\"\n            icon=\"icon-[iconoir--log-in]\"\n          />\n          <app-button\n            size=\"small\"\n            variant=\"primary\"\n            (clicked)=\"createAccount.emit($event)\"\n            label=\"Sign up\"\n            icon=\"icon-[iconoir--user]\"\n          />\n        </div>\n      }\n    </div>\n  </div>\n</header>"
         },
         {
             "name": "PageComponent",
-            "id": "component-PageComponent-a101731312e409286ffe009ab5bb3624c26c26251d08151e37f6434a3586db7b0664dd85c59eab3c3c24c8420810be000f8fa97b030e252631dcf44eef24b0bf",
+            "id": "component-PageComponent-cd7714038fef4071214e439c326ff9d66c5bdea0527ecbcd00e7653fd76a7043b4d38bf2718cc98ef85833cee0b86c2134801cd11b429c35e399ab3c392b57e9",
             "file": "src/app/components/page/page.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -347,9 +588,7 @@
             "outputs": [],
             "providers": [],
             "selector": "app-page",
-            "styleUrls": [
-                "./page.css"
-            ],
+            "styleUrls": [],
             "styles": [],
             "templateUrl": [
                 "./page.component.html"
@@ -358,49 +597,61 @@
             "hostDirectives": [],
             "inputsClass": [
                 {
-                    "name": "theme",
-                    "defaultValue": "'light'",
+                    "name": "user",
+                    "defaultValue": "null",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "line": 14,
-                    "type": "\"light\" | \"dark\"",
+                    "type": "User | null",
                     "decorators": []
                 }
             ],
             "outputsClass": [],
             "propertiesClass": [
                 {
-                    "name": "documentation",
-                    "defaultValue": "[\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: '🎨',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: '🧩',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: '🔤',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: '⚡',\n    },\n  ]",
+                    "name": "appData",
+                    "defaultValue": "inject(AppDataService)",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "type": "[]",
+                    "type": "",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 24
+                    "line": 12,
+                    "modifierKind": [
+                        123,
+                        148
+                    ]
+                },
+                {
+                    "name": "documentation",
+                    "defaultValue": "this.appData.documentation",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 17,
+                    "modifierKind": [
+                        124,
+                        148
+                    ]
                 },
                 {
                     "name": "metroTiles",
-                    "defaultValue": "[\n    { label: 'Mail', color: 'var(--color-primary)', icon: '✉️' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: '📅' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: '🖼️' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: '🛍️' },\n  ]",
+                    "defaultValue": "this.appData.metroTiles",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "type": "[]",
+                    "type": "",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 17
-                },
-                {
-                    "name": "user",
-                    "defaultValue": "null",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "User | null",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 15
+                    "line": 16,
+                    "modifierKind": [
+                        124,
+                        148
+                    ]
                 }
             ],
             "methodsClass": [
@@ -410,7 +661,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 53,
+                    "line": 27,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -420,7 +671,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 50,
+                    "line": 23,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -430,7 +681,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 47,
+                    "line": 19,
                     "deprecated": false,
                     "deprecationMessage": ""
                 }
@@ -442,10 +693,6 @@
             "standalone": true,
             "imports": [
                 {
-                    "name": "CommonModule",
-                    "type": "module"
-                },
-                {
                     "name": "HeaderComponent",
                     "type": "component"
                 }
@@ -453,17 +700,91 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { CommonModule } from '@angular/common';\nimport { HeaderComponent } from '../header/header.component';\nimport type { User } from '../header/header.component';\n\n@Component({\n  selector: 'app-page',\n  standalone: true,\n  imports: [CommonModule, HeaderComponent],\n  templateUrl: './page.component.html',\n  styleUrls: ['./page.css'],\n})\nexport class PageComponent {\n  @Input() theme: 'light' | 'dark' = 'light';\n  user: User | null = null;\n\n  metroTiles = [\n    { label: 'Mail', color: 'var(--color-primary)', icon: '✉️' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: '📅' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: '🖼️' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: '🛍️' },\n  ];\n\n  documentation = [\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: '🎨',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: '🧩',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: '🔤',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: '⚡',\n    },\n  ];\n\n  doLogout() {\n    this.user = null;\n  }\n  doLogin() {\n    this.user = { name: 'Jane Doe' };\n  }\n  doCreateAccount() {\n    this.user = { name: 'Jane Doe' };\n  }\n}\n",
+            "sourceCode": "import { Component, Input, inject } from '@angular/core';\nimport { HeaderComponent, type User } from '../header/header.component';\nimport { AppDataService } from '../../services/app-data.service';\n\n@Component({\n  selector: 'app-page',\n  standalone: true,\n  imports: [HeaderComponent],\n  templateUrl: './page.component.html',\n})\nexport class PageComponent {\n  private readonly appData = inject(AppDataService);\n\n  @Input() user: User | null = null;\n\n  protected readonly metroTiles = this.appData.metroTiles;\n  protected readonly documentation = this.appData.documentation;\n\n  doLogout(): void {\n    this.user = null;\n  }\n\n  doLogin(): void {\n    this.user = { name: 'Jane Doe' };\n  }\n\n  doCreateAccount(): void {\n    this.user = { name: 'Jane Doe' };\n  }\n}\n",
             "assetsDirs": [],
-            "styleUrlsData": [
-                {
-                    "data": "/* Componente Page - Solo Tailwind */\n.storybook-page {\n  @apply bg-background text-onBackground font-sans min-h-screen;\n}\n\n.page-content {\n  @apply max-w-7xl mx-auto px-6 py-8;\n}\n\n.hero-section {\n  @apply text-center mb-12 py-8;\n}\n\n.hero-title {\n  @apply text-4xl font-light text-onBackground tracking-tight mb-4;\n}\n\n.hero-subtitle {\n  @apply text-lg text-onSurfaceVariant font-normal;\n}\n\n.content-grid {\n  @apply grid gap-12 mb-12;\n}\n\n.section-title {\n  @apply text-2xl font-semibold text-onBackground mb-6;\n}\n\n.tiles-grid {\n  @apply grid grid-cols-2 sm:grid-cols-4 gap-4;\n}\n\n.metro-tile-story {\n  @apply aspect-square rounded flex flex-col items-center justify-center text-white font-medium transition-transform duration-200 cursor-pointer;\n}\n\n.metro-tile-story:hover {\n  @apply scale-105;\n}\n\n.tile-icon {\n  @apply text-2xl mb-2;\n}\n\n.tile-label {\n  @apply text-sm;\n}\n\n.docs-list {\n  @apply flex flex-col gap-4;\n}\n\n.doc-item {\n  @apply flex items-center gap-4 p-4 bg-surface border border-outlineVariant rounded cursor-pointer transition-all duration-200;\n}\n\n.doc-item:hover {\n  @apply bg-surfaceVariant border-primary;\n}\n\n.doc-icon {\n  @apply text-2xl flex-shrink-0;\n}\n\n.doc-content {\n  @apply flex-1;\n}\n\n.doc-title {\n  @apply text-base font-semibold text-onSurface mb-1;\n}\n\n.doc-description {\n  @apply text-sm text-onSurfaceVariant;\n}\n\n.doc-arrow {\n  @apply text-primary text-xl font-light;\n}\n\n.tips-section {\n  @apply border-t border-outlineVariant pt-8;\n}\n\n.tip-wrapper {\n  @apply flex items-start gap-4 p-6 bg-primaryContainer text-onPrimaryContainer rounded;\n}\n\n.tip-badge {\n  @apply bg-primary text-onPrimary px-3 py-1 rounded-full text-xs font-semibold flex-shrink-0 mt-0.5;\n}\n\n.tip-text {\n  @apply text-sm leading-relaxed;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .page-content {\n    @apply px-4 py-6;\n  }\n\n  .hero-title {\n    @apply text-3xl;\n  }\n\n  .tiles-grid {\n    @apply grid-cols-2 gap-3;\n  }\n\n  .content-grid {\n    @apply gap-8;\n  }\n}\n",
-                    "styleUrl": "./page.css"
-                }
-            ],
+            "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<article \n  [attr.data-theme]=\"theme\" \n  class=\"storybook-page\"\n>\n  <app-header\n    [user]=\"user\"\n    [theme]=\"theme\"\n    (logout)=\"doLogout()\"\n    (login)=\"doLogin()\"\n    (createAccount)=\"doCreateAccount()\"\n  ></app-header>\n  \n  <section class=\"page-content\">\n    <!-- Hero Section -->\n    <div class=\"hero-section\">\n      <h2 class=\"hero-title\">Metro UI Design System</h2>\n      <p class=\"hero-subtitle\">\n        Building modern interfaces with Windows Phone inspiration\n      </p>\n    </div>\n\n    <!-- Content Grid -->\n    <div class=\"content-grid\">\n      <!-- Tiles Section -->\n      <div class=\"tiles-section\">\n        <h3 class=\"section-title\">Application Tiles</h3>\n        <div class=\"tiles-grid\">\n          <div \n            *ngFor=\"let tile of metroTiles\" \n            class=\"metro-tile-story\"\n            [style.background]=\"tile.color\"\n          >\n            <span class=\"tile-icon\" [innerHTML]=\"tile.icon\"></span>\n            <span class=\"tile-label\">{{ tile.label }}</span>\n          </div>\n        </div>\n      </div>\n\n      <!-- Documentation Section -->\n      <div class=\"docs-section\">\n        <h3 class=\"section-title\">Getting Started</h3>\n        <div class=\"docs-list\">\n          <div class=\"doc-item\" *ngFor=\"let doc of documentation\">\n            <span class=\"doc-icon\" [innerHTML]=\"doc.icon\"></span>\n            <div class=\"doc-content\">\n              <h4 class=\"doc-title\">{{ doc.title }}</h4>\n              <p class=\"doc-description\">{{ doc.description }}</p>\n            </div>\n            <span class=\"doc-arrow\">→</span>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <!-- Tips Section -->\n    <div class=\"tips-section\">\n      <div class=\"tip-wrapper\">\n        <span class=\"tip-badge\">Tip</span>\n        <p class=\"tip-text\">\n          Metro UI emphasizes clean typography, meaningful motion, and content-first design.\n          Use ample whitespace and focus on readability.\n        </p>\n      </div>\n    </div>\n  </section>\n</article>"
+            "templateData": "<article class=\"storybook-page\">\n  <app-header\n    [user]=\"user\"\n    (logout)=\"doLogout()\"\n    (login)=\"doLogin()\"\n    (createAccount)=\"doCreateAccount()\"\n  />\n  \n  <section class=\"page-content\">\n    <!-- Hero Section -->\n    <div class=\"hero-section\">\n      <h2 class=\"hero-title\">Metro UI Design System</h2>\n      <p class=\"hero-subtitle\">\n        Building modern interfaces with Windows Phone inspiration\n      </p>\n    </div>\n\n    <!-- Content Grid -->\n    <div class=\"content-grid\">\n      <!-- Tiles Section -->\n      <div class=\"tiles-section\">\n        <h3 class=\"section-title\">Application Tiles</h3>\n        <div class=\"tiles-grid\">\n          @for (tile of metroTiles; track tile.label) {\n            <div \n              class=\"metro-tile-story\"\n              [style.background]=\"tile.color\"\n            >\n              <span [class]=\"tile.icon\" class=\"tile-icon\"></span>\n              <span class=\"tile-label\">{{ tile.label }}</span>\n            </div>\n          }\n        </div>\n      </div>\n\n      <!-- Documentation Section -->\n      <div class=\"docs-section\">\n        <h3 class=\"section-title\">Getting Started</h3>\n        <div class=\"docs-list\">\n          @for (doc of documentation; track doc.title) {\n            <div class=\"doc-item\">\n              <span [class]=\"doc.icon\" class=\"doc-icon\"></span>\n              <div class=\"doc-content\">\n                <h4 class=\"doc-title\">{{ doc.title }}</h4>\n                <p class=\"doc-description\">{{ doc.description }}</p>\n              </div>\n              <span class=\"icon-[iconoir--arrow-right] doc-arrow\"></span>\n            </div>\n          }\n        </div>\n      </div>\n    </div>\n\n    <!-- Tips Section -->\n    <div class=\"tips-section\">\n      <div class=\"tip-wrapper\">\n        <span class=\"icon-[iconoir--light-bulb] tip-badge\"></span>\n        <p class=\"tip-text\">\n          Metro UI emphasizes clean typography, meaningful motion, and content-first design.\n          Use ample whitespace and focus on readability.\n        </p>\n      </div>\n    </div>\n  </section>\n</article>"
+        },
+        {
+            "name": "ThemeToggleComponent",
+            "id": "component-ThemeToggleComponent-eb0f882ef1c602de79d6daac4e43f3bb98d73d201891bf090c3b676a717e9b78607f5d38c559409230a2ae6474d95d7d35d873625a992a8c8951a67f5162208a",
+            "file": "src/app/components/theme-toggle/theme-toggle.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-theme-toggle",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./theme-toggle.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "currentTheme",
+                    "defaultValue": "this.themeService.currentTheme",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12,
+                    "modifierKind": [
+                        124,
+                        148
+                    ]
+                },
+                {
+                    "name": "themeService",
+                    "defaultValue": "inject(ThemeService)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10,
+                    "modifierKind": [
+                        123,
+                        148
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "toggleTheme",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 14,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, inject } from '@angular/core';\nimport { ThemeService } from '../../services/theme.service';\n\n@Component({\n  selector: 'app-theme-toggle',\n  standalone: true,\n  templateUrl: './theme-toggle.component.html',\n})\nexport class ThemeToggleComponent {\n  private readonly themeService = inject(ThemeService);\n\n  protected readonly currentTheme = this.themeService.currentTheme;\n\n  toggleTheme(): void {\n    this.themeService.toggleTheme();\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<button\n  type=\"button\"\n  class=\"theme-toggle\"\n  (click)=\"toggleTheme()\"\n  [attr.aria-label]=\"'Switch to ' + (currentTheme() === 'light' ? 'dark' : 'light') + ' theme'\"\n>\n  @if (currentTheme() === 'light') {\n    <span class=\"icon-[iconoir--sun-light] text-xl\"></span>\n  } @else {\n    <span class=\"icon-[iconoir--moon-sat] text-xl\"></span>\n  }\n</button>"
         }
     ],
     "modules": [],
@@ -680,6 +1001,17 @@
                 "deprecationMessage": "",
                 "description": "",
                 "kind": 186
+            },
+            {
+                "name": "Theme",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "\"light\" | \"dark\"",
+                "file": "src/app/services/theme.service.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 193
             }
         ],
         "enumerations": [],
@@ -910,6 +1242,19 @@
                     "description": "",
                     "kind": 186
                 }
+            ],
+            "src/app/services/theme.service.ts": [
+                {
+                    "name": "Theme",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "\"light\" | \"dark\"",
+                    "file": "src/app/services/theme.service.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 193
+                }
             ]
         }
     },
@@ -948,7 +1293,7 @@
                 "linktype": "component",
                 "name": "App",
                 "coveragePercent": 0,
-                "coverageCount": "0/3",
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {
@@ -966,7 +1311,7 @@
                 "linktype": "component",
                 "name": "HeaderComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/6",
+                "coverageCount": "0/5",
                 "status": "low"
             },
             {
@@ -985,6 +1330,70 @@
                 "name": "PageComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/8",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/theme-toggle/theme-toggle.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ThemeToggleComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/app-data.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "AppDataService",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/app-data.service.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "DocumentationItem",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/app-data.service.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "MetroTile",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/app-data.service.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "NavigationItem",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/theme.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ThemeService",
+                "coveragePercent": 0,
+                "coverageCount": "0/8",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/theme.service.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "Theme",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {
@@ -1085,15 +1494,6 @@
                 "name": "SchemeConstructor",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/stories/user.ts",
-                "type": "interface",
-                "linktype": "interface",
-                "name": "User",
-                "coveragePercent": 0,
-                "coverageCount": "0/2",
                 "status": "low"
             }
         ]

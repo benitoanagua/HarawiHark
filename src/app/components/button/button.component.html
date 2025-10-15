@@ -2,7 +2,9 @@
   type="button"
   (click)="clicked.emit($event)"
   [class]="buttonClasses"
-  [attr.data-theme]="theme"
 >
+  @if (icon) {
+    <span [class]="icon" class="mr-2"></span>
+  }
   {{ label }}
 </button>

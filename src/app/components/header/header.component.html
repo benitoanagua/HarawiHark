@@ -1,54 +1,46 @@
-<header 
-  [attr.data-theme]="theme" 
-  class="storybook-header"
->
+<header class="storybook-header">
   <div class="header-content">
     <div class="logo-section">
       <div class="logo-wrapper">
-        <svg 
-          width="32" 
-          height="32" 
-          viewBox="0 0 32 32" 
-          xmlns="http://www.w3.org/2000/svg" 
-          class="logo-icon"
-        >
-          <rect width="32" height="32" fill="var(--color-primary)" />
-          <rect x="8" y="8" width="16" height="16" fill="var(--color-onPrimary)" />
-        </svg>
+        <span class="icon-[iconoir--windows] text-2xl text-primary"></span>
         <h1 class="logo-title">Metro UI</h1>
       </div>
     </div>
 
     <div class="nav-section">
-      <div *ngIf="user" class="user-section">
-        <span class="welcome-text">
-          Welcome, <b class="user-name">{{ user.name }}</b>!
-        </span>
-        <app-button
-          size="small"
-          variant="outline"
-          [theme]="theme"
-          (clicked)="logout.emit($event)"
-          label="Log out"
-        ></app-button>
-      </div>
+      <app-theme-toggle />
       
-      <div *ngIf="!user" class="auth-section">
-        <app-button
-          size="small"
-          variant="outline"
-          [theme]="theme"
-          (clicked)="login.emit($event)"
-          label="Log in"
-        ></app-button>
-        <app-button
-          size="small"
-          variant="primary"
-          [theme]="theme"
-          (clicked)="createAccount.emit($event)"
-          label="Sign up"
-        ></app-button>
-      </div>
+      @if (user) {
+        <div class="user-section">
+          <span class="welcome-text">
+            Welcome, <b class="user-name">{{ user.name }}</b>!
+          </span>
+          <app-button
+            size="small"
+            variant="outline"
+            (clicked)="logout.emit($event)"
+            label="Log out"
+            icon="icon-[iconoir--log-out]"
+          />
+        </div>
+      } @else {
+        <div class="auth-section">
+          <app-button
+            size="small"
+            variant="outline"
+            (clicked)="login.emit($event)"
+            label="Log in"
+            icon="icon-[iconoir--log-in]"
+          />
+          <app-button
+            size="small"
+            variant="primary"
+            (clicked)="createAccount.emit($event)"
+            label="Sign up"
+            icon="icon-[iconoir--user]"
+          />
+        </div>
+      }
     </div>
   </div>
 </header>

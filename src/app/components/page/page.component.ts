@@ -1,56 +1,30 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../header/header.component';
-import type { User } from '../header/header.component';
+import { Component, Input, inject } from '@angular/core';
+import { HeaderComponent, type User } from '../header/header.component';
+import { AppDataService } from '../../services/app-data.service';
 
 @Component({
   selector: 'app-page',
   standalone: true,
-  imports: [CommonModule, HeaderComponent],
+  imports: [HeaderComponent],
   templateUrl: './page.component.html',
-  styleUrls: ['./page.css'],
 })
 export class PageComponent {
-  @Input() theme: 'light' | 'dark' = 'light';
-  user: User | null = null;
+  private readonly appData = inject(AppDataService);
 
-  metroTiles = [
-    { label: 'Mail', color: 'var(--color-primary)', icon: '✉️' },
-    { label: 'Calendar', color: 'var(--color-error)', icon: '📅' },
-    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: '🖼️' },
-    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: '🛍️' },
-  ];
+  @Input() user: User | null = null;
 
-  documentation = [
-    {
-      title: 'Design Principles',
-      description: 'Learn the core principles of Metro UI design language',
-      icon: '🎨',
-    },
-    {
-      title: 'Component Library',
-      description: 'Browse our collection of Metro-styled components',
-      icon: '🧩',
-    },
-    {
-      title: 'Typography Scale',
-      description: 'Understand the typographic hierarchy and spacing',
-      icon: '🔤',
-    },
-    {
-      title: 'Motion Guidelines',
-      description: 'Implement meaningful animations and transitions',
-      icon: '⚡',
-    },
-  ];
+  protected readonly metroTiles = this.appData.metroTiles;
+  protected readonly documentation = this.appData.documentation;
 
-  doLogout() {
+  doLogout(): void {
     this.user = null;
   }
-  doLogin() {
+
+  doLogin(): void {
     this.user = { name: 'Jane Doe' };
   }
-  doCreateAccount() {
+
+  doCreateAccount(): void {
     this.user = { name: 'Jane Doe' };
   }
 }

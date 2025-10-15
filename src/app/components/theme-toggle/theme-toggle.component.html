@@ -1,0 +1,12 @@
+<button
+  type="button"
+  class="theme-toggle"
+  (click)="toggleTheme()"
+  [attr.aria-label]="'Switch to ' + (currentTheme() === 'light' ? 'dark' : 'light') + ' theme'"
+>
+  @if (currentTheme() === 'light') {
+    <span class="icon-[iconoir--sun-light] text-xl"></span>
+  } @else {
+    <span class="icon-[iconoir--moon-sat] text-xl"></span>
+  }
+</button>
