@@ -1,0 +1,54 @@
+.storybook-header {
+  @apply bg-surface text-onSurface border-b border-outlineVariant font-sans;
+}
+
+.header-content {
+  @apply flex justify-between items-center px-6 py-4 max-w-7xl mx-auto;
+}
+
+.logo-section {
+  @apply flex items-center;
+}
+
+.logo-wrapper {
+  @apply flex items-center gap-3;
+}
+
+.logo-icon {
+  @apply rounded;
+}
+
+.logo-title {
+  @apply text-xl font-semibold text-onSurface;
+}
+
+.nav-section {
+  @apply flex items-center gap-4;
+}
+
+.user-section {
+  @apply flex items-center gap-3;
+}
+
+.auth-section {
+  @apply flex items-center gap-3;
+}
+
+.welcome-text {
+  @apply text-onSurfaceVariant text-sm;
+}
+
+.user-name {
+  @apply text-onSurface font-semibold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-content {
+    @apply px-4 py-3;
+  }
+
+  .welcome-text {
+    @apply hidden;
+  }
+}

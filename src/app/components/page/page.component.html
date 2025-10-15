@@ -1,0 +1,66 @@
+<article 
+  [attr.data-theme]="theme" 
+  class="storybook-page"
+>
+  <app-header
+    [user]="user"
+    [theme]="theme"
+    (logout)="doLogout()"
+    (login)="doLogin()"
+    (createAccount)="doCreateAccount()"
+  ></app-header>
+  
+  <section class="page-content">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <h2 class="hero-title">Metro UI Design System</h2>
+      <p class="hero-subtitle">
+        Building modern interfaces with Windows Phone inspiration
+      </p>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+      <!-- Tiles Section -->
+      <div class="tiles-section">
+        <h3 class="section-title">Application Tiles</h3>
+        <div class="tiles-grid">
+          <div 
+            *ngFor="let tile of metroTiles" 
+            class="metro-tile-story"
+            [style.background]="tile.color"
+          >
+            <span class="tile-icon" [innerHTML]="tile.icon"></span>
+            <span class="tile-label">{{ tile.label }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documentation Section -->
+      <div class="docs-section">
+        <h3 class="section-title">Getting Started</h3>
+        <div class="docs-list">
+          <div class="doc-item" *ngFor="let doc of documentation">
+            <span class="doc-icon" [innerHTML]="doc.icon"></span>
+            <div class="doc-content">
+              <h4 class="doc-title">{{ doc.title }}</h4>
+              <p class="doc-description">{{ doc.description }}</p>
+            </div>
+            <span class="doc-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="tips-section">
+      <div class="tip-wrapper">
+        <span class="tip-badge">Tip</span>
+        <p class="tip-text">
+          Metro UI emphasizes clean typography, meaningful motion, and content-first design.
+          Use ample whitespace and focus on readability.
+        </p>
+      </div>
+    </div>
+  </section>
+</article>

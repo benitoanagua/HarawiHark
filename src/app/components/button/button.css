@@ -1,0 +1,47 @@
+.btn-base {
+  @apply font-sans border-none cursor-pointer transition-all duration-200 rounded-sm font-medium transition-colors flex items-center justify-center gap-2;
+}
+
+.btn-base:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary;
+}
+
+.btn-base:disabled {
+  @apply bg-surfaceVariant text-onSurfaceVariant cursor-not-allowed opacity-60;
+}
+
+.btn-small {
+  @apply px-3 py-1.5 text-sm;
+}
+
+.btn-medium {
+  @apply px-4 py-2 text-base;
+}
+
+.btn-large {
+  @apply px-6 py-3 text-lg;
+}
+
+.btn-primary {
+  @apply bg-primary text-onPrimary;
+}
+
+.btn-primary:hover {
+  @apply bg-primaryContainer text-onPrimaryContainer;
+}
+
+.btn-secondary {
+  @apply bg-surfaceVariant text-onSurfaceVariant;
+}
+
+.btn-secondary:hover {
+  @apply bg-primary text-onPrimary;
+}
+
+.btn-outline {
+  @apply bg-transparent border border-outline text-onSurface;
+}
+
+.btn-outline:hover {
+  @apply bg-surfaceVariant;
+}

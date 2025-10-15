@@ -1,0 +1,54 @@
+<header 
+  [attr.data-theme]="theme" 
+  class="storybook-header"
+>
+  <div class="header-content">
+    <div class="logo-section">
+      <div class="logo-wrapper">
+        <svg 
+          width="32" 
+          height="32" 
+          viewBox="0 0 32 32" 
+          xmlns="http://www.w3.org/2000/svg" 
+          class="logo-icon"
+        >
+          <rect width="32" height="32" fill="var(--color-primary)" />
+          <rect x="8" y="8" width="16" height="16" fill="var(--color-onPrimary)" />
+        </svg>
+        <h1 class="logo-title">Metro UI</h1>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div *ngIf="user" class="user-section">
+        <span class="welcome-text">
+          Welcome, <b class="user-name">{{ user.name }}</b>!
+        </span>
+        <app-button
+          size="small"
+          variant="outline"
+          [theme]="theme"
+          (clicked)="logout.emit($event)"
+          label="Log out"
+        ></app-button>
+      </div>
+      
+      <div *ngIf="!user" class="auth-section">
+        <app-button
+          size="small"
+          variant="outline"
+          [theme]="theme"
+          (clicked)="login.emit($event)"
+          label="Log in"
+        ></app-button>
+        <app-button
+          size="small"
+          variant="primary"
+          [theme]="theme"
+          (clicked)="createAccount.emit($event)"
+          label="Sign up"
+        ></app-button>
+      </div>
+    </div>
+  </div>
+</header>

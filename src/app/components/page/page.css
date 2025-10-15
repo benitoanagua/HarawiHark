@@ -1,0 +1,115 @@
+/* Componente Page - Solo Tailwind */
+.storybook-page {
+  @apply bg-background text-onBackground font-sans min-h-screen;
+}
+
+.page-content {
+  @apply max-w-7xl mx-auto px-6 py-8;
+}
+
+.hero-section {
+  @apply text-center mb-12 py-8;
+}
+
+.hero-title {
+  @apply text-4xl font-light text-onBackground tracking-tight mb-4;
+}
+
+.hero-subtitle {
+  @apply text-lg text-onSurfaceVariant font-normal;
+}
+
+.content-grid {
+  @apply grid gap-12 mb-12;
+}
+
+.section-title {
+  @apply text-2xl font-semibold text-onBackground mb-6;
+}
+
+.tiles-grid {
+  @apply grid grid-cols-2 sm:grid-cols-4 gap-4;
+}
+
+.metro-tile-story {
+  @apply aspect-square rounded flex flex-col items-center justify-center text-white font-medium transition-transform duration-200 cursor-pointer;
+}
+
+.metro-tile-story:hover {
+  @apply scale-105;
+}
+
+.tile-icon {
+  @apply text-2xl mb-2;
+}
+
+.tile-label {
+  @apply text-sm;
+}
+
+.docs-list {
+  @apply flex flex-col gap-4;
+}
+
+.doc-item {
+  @apply flex items-center gap-4 p-4 bg-surface border border-outlineVariant rounded cursor-pointer transition-all duration-200;
+}
+
+.doc-item:hover {
+  @apply bg-surfaceVariant border-primary;
+}
+
+.doc-icon {
+  @apply text-2xl flex-shrink-0;
+}
+
+.doc-content {
+  @apply flex-1;
+}
+
+.doc-title {
+  @apply text-base font-semibold text-onSurface mb-1;
+}
+
+.doc-description {
+  @apply text-sm text-onSurfaceVariant;
+}
+
+.doc-arrow {
+  @apply text-primary text-xl font-light;
+}
+
+.tips-section {
+  @apply border-t border-outlineVariant pt-8;
+}
+
+.tip-wrapper {
+  @apply flex items-start gap-4 p-6 bg-primaryContainer text-onPrimaryContainer rounded;
+}
+
+.tip-badge {
+  @apply bg-primary text-onPrimary px-3 py-1 rounded-full text-xs font-semibold flex-shrink-0 mt-0.5;
+}
+
+.tip-text {
+  @apply text-sm leading-relaxed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-content {
+    @apply px-4 py-6;
+  }
+
+  .hero-title {
+    @apply text-3xl;
+  }
+
+  .tiles-grid {
+    @apply grid-cols-2 gap-3;
+  }
+
+  .content-grid {
+    @apply gap-8;
+  }
+}
