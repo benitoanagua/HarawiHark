@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export interface SelectOption {
@@ -25,10 +25,16 @@ export class SelectComponent implements ControlValueAccessor {
   @Input() disabled = false;
   @Input() id = '';
 
+  @Output() selectChange = new EventEmitter<string>();
+
   value = '';
 
-  private onChange!: (value: string) => void;
-  private onTouched!: () => void;
+  private onChange: (value: string) => void = () => {
+    // Placeholder for ControlValueAccessor
+  };
+  private onTouched: () => void = () => {
+    // Placeholder for ControlValueAccessor
+  };
 
   writeValue(value: string): void {
     this.value = value || '';
@@ -49,7 +55,9 @@ export class SelectComponent implements ControlValueAccessor {
   onSelectChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.value = target.value;
+
     this.onChange(this.value);
+    this.selectChange.emit(this.value);
   }
 
   onBlur(): void {

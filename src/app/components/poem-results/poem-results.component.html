@@ -1,0 +1,89 @@
+<app-card padding="large">
+  <div class="space-y-6">
+    <!-- Status Header -->
+    <app-status-message
+      [title]="result.ok ? 'perfect match' : 'pattern mismatch'"
+      [message]="result.summary"
+      [severity]="result.ok ? 'success' : 'warning'"
+    />
+
+    <!-- Line Analysis -->
+    <div>
+      <h3 class="text-lg font-semibold tracking-tight text-onSurface mb-4 lowercase">
+        line-by-line analysis
+      </h3>
+      
+      <div class="space-y-3">
+        @for (line of result.lines; track $index) {
+          <div class="p-4 bg-surfaceVariant border-2 border-outline">
+            <!-- Line Header -->
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs text-onSurfaceVariant font-semibold tracking-tight uppercase">
+                line {{ $index + 1 }}
+              </span>
+              <app-badge
+                [variant]="line.match ? 'success' : 'error'"
+                size="small"
+                [icon]="line.match ? 'icon-[iconoir--check]' : 'icon-[iconoir--cancel]'"
+              >
+                {{ line.count }}/{{ line.expected }} syllables
+              </app-badge>
+            </div>
+
+            <!-- Line Text -->
+            <p class="text-base font-normal text-onSurface mb-3 font-mono">
+              "{{ line.text }}"
+            </p>
+
+            <!-- Syllable Breakdown -->
+            @if (line.syllables && line.syllables.length > 0) {
+              <div class="flex flex-wrap gap-2 mb-2">
+                @for (syllable of line.syllables; track $index) {
+                  <span class="text-xs px-2 py-1 bg-surface text-onSurface border border-outline">
+                    {{ syllable }}
+                  </span>
+                }
+              </div>
+            }
+
+            <!-- Stress Pattern -->
+            @if (line.stresses) {
+              <div class="text-xs text-onSurfaceVariant">
+                stress: {{ line.stresses }}
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Rhyme Scheme -->
+    @if (result.rhymeScheme) {
+      <div class="p-4 bg-inverseBlue border-2 border-inverseBlueContainer">
+        <h4 class="text-sm font-semibold tracking-tight text-onBlueContainer mb-2 lowercase">
+          rhyme scheme
+        </h4>
+        <p class="text-base font-mono text-onBlueContainer">
+          {{ result.rhymeScheme }}
+        </p>
+      </div>
+    }
+
+    <!-- Suggestions -->
+    @if (result.suggestions && result.suggestions.length > 0) {
+      <div>
+        <h4 class="text-sm font-semibold tracking-tight text-onSurface mb-3 lowercase">
+          suggestions for improvement
+        </h4>
+        <ul class="space-y-2">
+          @for (suggestion of result.suggestions; track $index) {
+            <li class="flex items-start gap-2 text-sm text-onSurfaceVariant">
+              <span class="icon-[iconoir--light-bulb] text-lg text-primary flex-shrink-0 mt-0.5"></span>
+              <span>{{ suggestion }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+</app-card>

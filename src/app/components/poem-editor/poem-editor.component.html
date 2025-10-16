@@ -1,0 +1,87 @@
+<!-- src/app/components/poem-editor/poem-editor.component.html -->
+<app-card padding="large">
+  <div class="space-y-6">
+    <!-- Header -->
+    <div>
+      <h2 class="text-2xl font-light tracking-tight text-onSurface mb-2 lowercase">
+        poetry analyzer
+      </h2>
+      <p class="text-sm text-onSurfaceVariant">
+        write your poem and check if it matches the syllable pattern
+      </p>
+    </div>
+
+    <!-- Form Selection -->
+    <div>
+      <app-select
+        id="poetry-form"
+        label="poetry form"
+        [options]="formOptions"
+        [value]="selectedForm()"
+        (selectChange)="onFormChange($event)"
+      />
+      
+      @if (currentForm(); as form) {
+        <div class="mt-3 p-4 bg-primaryContainer text-onPrimaryContainer">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-semibold tracking-tight lowercase">
+              pattern: {{ form.pattern.join('-') }} syllables
+            </span>
+            <span class="text-xs">
+              {{ form.lines }} lines
+            </span>
+          </div>
+          <p class="text-xs">
+            {{ form.description }} · {{ form.origin }}
+          </p>
+        </div>
+      }
+    </div>
+
+    <!-- Poem Input -->
+    <div>
+      <app-input
+        id="poem-text"
+        type="textarea"
+        label="your poem"
+        placeholder="write each line on a new line..."
+        [rows]="8"
+        [value]="poemText()"
+        (inputChange)="onTextChange($event)"
+      />
+      
+      <div class="flex items-center justify-between mt-2 text-xs text-onSurfaceVariant">
+        <span>{{ lineCount() }} lines</span>
+        <span>{{ totalSyllables() }} total syllables</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-wrap gap-3">
+      <app-button
+        variant="primary"
+        size="medium"
+        label="analyze poem"
+        icon="icon-[iconoir--search]"
+        [disabled]="lineCount() === 0"
+        (clicked)="analyze()"
+      />
+      
+      <app-button
+        variant="secondary"
+        size="medium"
+        label="load example"
+        icon="icon-[iconoir--page]"
+        (clicked)="loadExample()"
+      />
+      
+      <app-button
+        variant="outline"
+        size="medium"
+        label="clear"
+        icon="icon-[iconoir--cancel]"
+        (clicked)="clear()"
+      />
+    </div>
+  </div>
+</app-card>

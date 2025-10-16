@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -22,10 +22,17 @@ export class InputComponent implements ControlValueAccessor {
   @Input() rows = 6;
   @Input() id = '';
 
+  @Output() inputChange = new EventEmitter<string>();
+  @Output() inputBlur = new EventEmitter<void>();
+
   value = '';
 
-  private onChange!: (value: string) => void;
-  private onTouched!: () => void;
+  private onChange: (value: string) => void = () => {
+    // Placeholder for ControlValueAccessor
+  };
+  private onTouched: () => void = () => {
+    // Placeholder for ControlValueAccessor
+  };
 
   writeValue(value: string): void {
     this.value = value || '';
@@ -46,10 +53,13 @@ export class InputComponent implements ControlValueAccessor {
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
     this.value = target.value;
+
     this.onChange(this.value);
+    this.inputChange.emit(this.value);
   }
 
   onBlur(): void {
     this.onTouched();
+    this.inputBlur.emit();
   }
 }

@@ -1,0 +1,53 @@
+<article class="min-h-screen bg-background text-onBackground">
+  <app-header />
+
+  <section class="max-w-4xl mx-auto px-4 py-8 lg:px-6 lg:py-12">
+    <!-- Hero Section -->
+    <div class="mb-8 lg:mb-12 text-center">
+      <div class="flex items-center justify-center gap-4 mb-4">
+        <span class="icon-[iconoir--flower] text-5xl text-primary"></span>
+        <h1 class="text-4xl lg:text-6xl font-light tracking-tight text-onBackground lowercase">
+          harawihark
+        </h1>
+      </div>
+      <p class="text-lg lg:text-xl font-light text-onSurfaceVariant lowercase">
+        syllable-meter checker for poetic forms
+      </p>
+    </div>
+
+    <!-- Editor -->
+    <div class="mb-8">
+      <app-poem-editor />
+    </div>
+
+    <!-- Results -->
+    @if (analyzer.result(); as result) {
+      <div class="mb-8">
+        <app-poem-results [result]="result" />
+      </div>
+    } @else {
+      <app-empty-state
+        icon="icon-[iconoir--page-search]"
+        title="no analysis yet"
+        description="write your poem above and click 'analyze poem' to see detailed syllable analysis"
+      />
+    }
+
+    <!-- Info Section -->
+    <div class="mt-12 p-6 lg:p-8 bg-primaryContainer text-onPrimaryContainer">
+      <div class="flex items-start gap-4">
+        <span class="icon-[iconoir--info-circle] text-2xl flex-shrink-0"></span>
+        <div>
+          <h3 class="font-semibold tracking-tight mb-2 lowercase">
+            about harawihark
+          </h3>
+          <p class="text-sm leading-relaxed">
+            harawihark uses advanced phonetic analysis to count syllables accurately. 
+            it supports 8 poetic forms from various traditions, providing real-time 
+            feedback with syllable breakdowns, stress patterns, and rhyme scheme analysis.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</article>

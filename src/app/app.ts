@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { PageComponent } from './components/page/page.component';
+import { PoetryPageComponent } from './components/poetry-page/poetry-page.component';
 
 @Component({
   selector: 'app-root',
-  imports: [PageComponent],
-  templateUrl: './app.html',
+  imports: [PoetryPageComponent],
+  template: '<app-poetry-page />',
 })
 export class App {}

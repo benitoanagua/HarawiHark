@@ -61,7 +61,7 @@ export const EmptyPoems: Story = {
 
 export const MinimalWithoutDescription: Story = {
   args: {
-    icon: 'icon-[iconoir--sparkles]',
+    icon: 'icon-[iconoir--sparks]',
     title: 'nothing here',
   },
 };
