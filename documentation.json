@@ -92,6 +92,51 @@
             "extends": []
         },
         {
+            "name": "SelectOption",
+            "id": "interface-SelectOption-16d305c575099acf92e07f8e6fcba074b755e02875f23fc57a7353f3078430ea99fc8a25072901e353a45447e6cabc098d908160b351b55e9f62beb8c24d93ff",
+            "file": "src/app/components/select/select.component.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { Component, Input, forwardRef } from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\n\nexport interface SelectOption {\n  value: string;\n  label: string;\n  description?: string;\n}\n\n@Component({\n  selector: 'app-select',\n  standalone: true,\n  templateUrl: './select.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => SelectComponent),\n      multi: true,\n    },\n  ],\n})\nexport class SelectComponent implements ControlValueAccessor {\n  @Input() options: SelectOption[] = [];\n  @Input() label = '';\n  @Input() disabled = false;\n\n  value = '';\n\n  private onChange: (value: string) => void;\n  private onTouched: () => void;\n\n  writeValue(value: string): void {\n    this.value = value || '';\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onSelectChange(event: Event): void {\n    const target = event.target as HTMLSelectElement;\n    this.value = target.value;\n    if (this.onChange) {\n      this.onChange(this.value);\n    }\n  }\n\n  onBlur(): void {\n    if (this.onTouched) {\n      this.onTouched();\n    }\n  }\n}\n",
+            "properties": [
+                {
+                    "name": "description",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": true,
+                    "description": "",
+                    "line": 7
+                },
+                {
+                    "name": "label",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "value",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        },
+        {
             "name": "User",
             "id": "interface-User-8e6d7a41a58bad4fc6aadd9c78fec981bf912759b5a447b0949f9cfdc227641ea2654bdcb0f99b7b7ddd06321a3f7a50b16c2e2b77a4ce6a19bbd603bc3c0ec8",
             "file": "src/app/components/header/header.component.ts",
@@ -304,7 +349,7 @@
     "components": [
         {
             "name": "App",
-            "id": "component-App-0d7c9d494c058a767664afe5d20265bfe5325d8ff598f740efa2cdf74f9e01f584204c6a1f3a3d4f031655ce0fa2110db912998a954ed1c7bfcf09699736e214",
+            "id": "component-App-7706a8acf807926016bc78155f179127b9695b9f229a95c860bcd12f3c09cf3cde5646f88ecc67b2b4e69cd58f96a94ec65d27564044c600795092ca6f47a01d",
             "file": "src/app/app.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -337,13 +382,87 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component } from '@angular/core';\nimport { PageComponent } from './components/page/page.component';\n\n@Component({\n  selector: 'app-root',\n  imports: [PageComponent],\n  templateUrl: './app.html',\n  styleUrl: './app.css',\n})\nexport class App {}\n",
-            "styleUrl": "./app.css",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { PageComponent } from './components/page/page.component';\n\n@Component({\n  selector: 'app-root',\n  imports: [PageComponent],\n  templateUrl: './app.html',\n})\nexport class App {}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
             "templateData": "<app-page></app-page>"
+        },
+        {
+            "name": "BadgeComponent",
+            "id": "component-BadgeComponent-2b9eb4f1bc1ab9cb98d0f210fb01958a42ed4875ddb8d9cee55e61485fc4af11b964b178bdc151746f9d2ee65eb88686685eb13d2f3e6538214d84cb7e70ff9d",
+            "file": "src/app/components/badge/badge.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-badge",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./badge.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "icon",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 11,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "size",
+                    "defaultValue": "'medium'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 10,
+                    "type": "\"small\" | \"medium\"",
+                    "decorators": []
+                },
+                {
+                    "name": "variant",
+                    "defaultValue": "'default'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 9,
+                    "type": "\"default\" | \"success\" | \"warning\" | \"error\"",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, Input } from '@angular/core';\n\n@Component({\n  selector: 'app-badge',\n  standalone: true,\n  templateUrl: './badge.component.html',\n})\nexport class BadgeComponent {\n  @Input() variant: 'default' | 'success' | 'warning' | 'error' = 'default';\n  @Input() size: 'small' | 'medium' = 'medium';\n  @Input() icon?: string;\n\n  get badgeClasses(): string {\n    return `badge-${this.variant} badge-${this.size}`;\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "accessors": {
+                "badgeClasses": {
+                    "name": "badgeClasses",
+                    "getSignature": {
+                        "name": "badgeClasses",
+                        "type": "string",
+                        "returnType": "string",
+                        "line": 13
+                    }
+                }
+            },
+            "templateData": "<span [class]=\"badgeClasses\">\n  @if (icon) {\n    <span [class]=\"icon\"></span>\n  }\n  <ng-content />\n</span>"
         },
         {
             "name": "ButtonComponent",
@@ -439,6 +558,276 @@
             "templateData": "<button\n  type=\"button\"\n  (click)=\"clicked.emit($event)\"\n  [class]=\"buttonClasses\"\n>\n  @if (icon) {\n    <span [class]=\"icon\"></span>\n  }\n  {{ label }}\n</button>"
         },
         {
+            "name": "CardComponent",
+            "id": "component-CardComponent-27824ee1b72b2fa55dedcdc921e8fbb3d83c9866b34f3a4887eb045a87e9a633c5ed5fe1867da44c85f54ed02cba5ff890694de7c9ff6bf05ea6789502cce200",
+            "file": "src/app/components/card/card.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-card",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./card.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "clickable",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 11,
+                    "type": "boolean",
+                    "decorators": []
+                },
+                {
+                    "name": "padding",
+                    "defaultValue": "'medium'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 10,
+                    "type": "\"none\" | \"small\" | \"medium\" | \"large\"",
+                    "decorators": []
+                },
+                {
+                    "name": "variant",
+                    "defaultValue": "'default'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 9,
+                    "type": "\"default\" | \"elevated\"",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, Input } from '@angular/core';\n\n@Component({\n  selector: 'app-card',\n  standalone: true,\n  templateUrl: './card.component.html',\n})\nexport class CardComponent {\n  @Input() variant: 'default' | 'elevated' = 'default';\n  @Input() padding: 'none' | 'small' | 'medium' | 'large' = 'medium';\n  @Input() clickable = false;\n\n  get cardClasses(): string {\n    const classes = [`card-${this.variant}`, `card-padding-${this.padding}`];\n\n    if (this.clickable) {\n      classes.push('clickable');\n    }\n\n    return classes.join(' ');\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "accessors": {
+                "cardClasses": {
+                    "name": "cardClasses",
+                    "getSignature": {
+                        "name": "cardClasses",
+                        "type": "string",
+                        "returnType": "string",
+                        "line": 13
+                    }
+                }
+            },
+            "templateData": "<div \n  [class]=\"cardClasses\"\n  [class.clickable]=\"clickable\"\n>\n  <ng-content />\n</div>"
+        },
+        {
+            "name": "EmptyStateComponent",
+            "id": "component-EmptyStateComponent-7055d230916e25afc1fe821d008fa738d870cb312daeb3e07cecc4e8fddedaa8ee8c8cc76a9228916b51b06b123140bf14a45dcaceb4211cc297e33f091ef198",
+            "file": "src/app/components/empty-state/empty-state.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-empty-state",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./empty-state.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "actionLabel",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 14,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "description",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 13,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "icon",
+                    "defaultValue": "'📝'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 11,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "title",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 12,
+                    "type": "string",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "action",
+                    "defaultValue": "new EventEmitter<void>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 15,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [
+                {
+                    "name": "ButtonComponent",
+                    "type": "component"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\nimport { ButtonComponent } from '../button/button.component';\n\n@Component({\n  selector: 'app-empty-state',\n  standalone: true,\n  imports: [ButtonComponent],\n  templateUrl: './empty-state.component.html',\n})\nexport class EmptyStateComponent {\n  @Input() icon = '📝';\n  @Input() title = '';\n  @Input() description = '';\n  @Input() actionLabel?: string;\n  @Output() action = new EventEmitter<void>();\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<div class=\"empty-state\">\n  <span class=\"empty-state-icon\">{{ icon }}</span>\n  <h3 class=\"empty-state-title\">{{ title }}</h3>\n  @if (description) {\n    <p class=\"empty-state-description\">{{ description }}</p>\n  }\n  @if (actionLabel) {\n    <app-button\n      variant=\"primary\"\n      (clicked)=\"action.emit()\"\n      [label]=\"actionLabel\"\n    />\n  }\n</div>"
+        },
+        {
+            "name": "ErrorDisplayComponent",
+            "id": "component-ErrorDisplayComponent-d954ebde6469e7f76ee2282714196dafe00d66cf9d7fa3fa1a484699e5d6ce24e1d84b8ab9d70b53e217f41a31017e2d9ef88944702bef02a192c2640e3090eb",
+            "file": "src/app/components/error-display/error-display.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-error-display",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./error-display.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "actionLabel",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 14,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "message",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 12,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "severity",
+                    "defaultValue": "'error'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 13,
+                    "type": "\"info\" | \"warning\" | \"error\"",
+                    "decorators": []
+                },
+                {
+                    "name": "title",
+                    "defaultValue": "'error'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 11,
+                    "type": "string",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "action",
+                    "defaultValue": "new EventEmitter<void>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 15,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [
+                {
+                    "name": "ButtonComponent",
+                    "type": "component"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\nimport { ButtonComponent } from '../button/button.component';\n\n@Component({\n  selector: 'app-error-display',\n  standalone: true,\n  imports: [ButtonComponent],\n  templateUrl: './error-display.component.html',\n})\nexport class ErrorDisplayComponent {\n  @Input() title = 'error';\n  @Input() message = '';\n  @Input() severity: 'info' | 'warning' | 'error' = 'error';\n  @Input() actionLabel?: string;\n  @Output() action = new EventEmitter<void>();\n\n  get iconClass(): string {\n    const icons = {\n      info: 'icon-[iconoir--info-circle]',\n      warning: 'icon-[iconoir--warning-triangle]',\n      error: 'icon-[iconoir--cancel]',\n    };\n    return icons[this.severity];\n  }\n\n  get containerClasses(): string {\n    return `error-display error-${this.severity}`;\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "accessors": {
+                "iconClass": {
+                    "name": "iconClass",
+                    "getSignature": {
+                        "name": "iconClass",
+                        "type": "string",
+                        "returnType": "string",
+                        "line": 17
+                    }
+                },
+                "containerClasses": {
+                    "name": "containerClasses",
+                    "getSignature": {
+                        "name": "containerClasses",
+                        "type": "string",
+                        "returnType": "string",
+                        "line": 26
+                    }
+                }
+            },
+            "templateData": "<div [class]=\"containerClasses\">\n  <span [class]=\"iconClass + ' error-icon'\"></span>\n  <div class=\"error-content\">\n    <h4 class=\"error-title\">{{ title }}</h4>\n    <p class=\"error-message\">{{ message }}</p>\n  </div>\n  @if (actionLabel) {\n    <app-button\n      variant=\"outline\"\n      size=\"small\"\n      (clicked)=\"action.emit()\"\n      [label]=\"actionLabel\"\n    />\n  }\n</div>"
+        },
+        {
             "name": "HeaderComponent",
             "id": "component-HeaderComponent-8e6d7a41a58bad4fc6aadd9c78fec981bf912759b5a447b0949f9cfdc227641ea2654bdcb0f99b7b7ddd06321a3f7a50b16c2e2b77a4ce6a19bbd603bc3c0ec8",
             "file": "src/app/components/header/header.component.ts",
@@ -518,6 +907,378 @@
             "stylesData": "",
             "extends": [],
             "templateData": "<header class=\"storybook-header\">\n  <div class=\"header-content\">\n    <div class=\"logo-section\">\n      <div class=\"logo-wrapper\">\n        <span class=\"icon-[iconoir--windows] text-2xl text-primary\"></span>\n        <h1 class=\"logo-title\">metro ui</h1>\n      </div>\n    </div>\n\n    <div class=\"nav-section\">\n      <app-theme-toggle />\n      \n      @if (user) {\n        <div class=\"user-section\">\n          <span class=\"welcome-text\">\n            welcome, <b class=\"user-name\">{{ user.name }}</b>\n          </span>\n          <app-button\n            size=\"small\"\n            variant=\"outline\"\n            (clicked)=\"logout.emit($event)\"\n            label=\"log out\"\n            icon=\"icon-[iconoir--log-out]\"\n          />\n        </div>\n      } @else {\n        <div class=\"auth-section\">\n          <app-button\n            size=\"small\"\n            variant=\"outline\"\n            (clicked)=\"login.emit($event)\"\n            label=\"log in\"\n            icon=\"icon-[iconoir--log-in]\"\n          />\n          <app-button\n            size=\"small\"\n            variant=\"primary\"\n            (clicked)=\"createAccount.emit($event)\"\n            label=\"sign up\"\n            icon=\"icon-[iconoir--user]\"\n          />\n        </div>\n      }\n    </div>\n  </div>\n</header>"
+        },
+        {
+            "name": "InputComponent",
+            "id": "component-InputComponent-d6a38dfeaeabdee8c61f397873edb0e101736119c0914d46046b4595f0a826bd010da5472e7b08d79297ef8c53ffc9027b00c95e6eb3e8b1f092c4eddbb608b9",
+            "file": "src/app/components/input/input.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [
+                {
+                    "name": ")"
+                }
+            ],
+            "selector": "app-input",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./input.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "disabled",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 21,
+                    "type": "boolean",
+                    "decorators": []
+                },
+                {
+                    "name": "error",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 20,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "label",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 18,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "placeholder",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 19,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "rows",
+                    "defaultValue": "6",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 22,
+                    "type": "number",
+                    "decorators": []
+                },
+                {
+                    "name": "type",
+                    "defaultValue": "'text'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 17,
+                    "type": "\"text\" | \"textarea\"",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "onChange",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "function",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 26,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "onTouched",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "function",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 27,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "value",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 24
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "onBlur",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 53,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onInput",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "Event",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 45,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "event",
+                            "type": "Event",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnChange",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "value",
+                                    "type": "string",
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ]
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 33,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "value",
+                                    "type": "string",
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ],
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnTouched",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": []
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 37,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [],
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "setDisabledState",
+                    "args": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 41,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "writeValue",
+                    "args": [
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 29,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, Input, forwardRef } from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\n\n@Component({\n  selector: 'app-input',\n  standalone: true,\n  templateUrl: './input.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => InputComponent),\n      multi: true,\n    },\n  ],\n})\nexport class InputComponent implements ControlValueAccessor {\n  @Input() type: 'text' | 'textarea' = 'text';\n  @Input() label = '';\n  @Input() placeholder = '';\n  @Input() error = '';\n  @Input() disabled = false;\n  @Input() rows = 6;\n\n  value = '';\n\n  private onChange: (value: string) => void;\n  private onTouched: () => void;\n\n  writeValue(value: string): void {\n    this.value = value || '';\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onInput(event: Event): void {\n    const target = event.target as HTMLInputElement | HTMLTextAreaElement;\n    this.value = target.value;\n    if (this.onChange) {\n      this.onChange(this.value);\n    }\n  }\n\n  onBlur(): void {\n    if (this.onTouched) {\n      this.onTouched();\n    }\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "implements": [
+                "ControlValueAccessor"
+            ],
+            "templateData": "<div class=\"input-wrapper\">\n  @if (label) {\n    <label class=\"input-label\" [for]=\"label + '-input'\">{{ label }}</label>\n  }\n  \n  @if (type === 'textarea') {\n    <textarea\n      [id]=\"label + '-input'\"\n      class=\"input-base input-textarea\"\n      [class.input-error]=\"error\"\n      [placeholder]=\"placeholder\"\n      [disabled]=\"disabled\"\n      [rows]=\"rows\"\n      [value]=\"value\"\n      (input)=\"onInput($event)\"\n      (blur)=\"onBlur()\"\n    ></textarea>\n  } @else {\n    <input\n      [id]=\"label + '-input'\"\n      class=\"input-base input-text\"\n      [class.input-error]=\"error\"\n      [type]=\"type\"\n      [placeholder]=\"placeholder\"\n      [disabled]=\"disabled\"\n      [value]=\"value\"\n      (input)=\"onInput($event)\"\n      (blur)=\"onBlur()\"\n    />\n  }\n  \n  @if (error) {\n    <span class=\"input-error-text\">{{ error }}</span>\n  }\n</div>"
+        },
+        {
+            "name": "LoadingSpinnerComponent",
+            "id": "component-LoadingSpinnerComponent-82c632d05ccd9ac4bb1e4bf1550bcf185a46bcf00d5f0d315cb9e3ff22fe2bc58ae35bccd713f3bbf0fb647626fc4dc2d22b0371b799aa396a653e9f1acd2a5b",
+            "file": "src/app/components/loading-spinner/loading-spinner.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-loading-spinner",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./loading-spinner.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "size",
+                    "defaultValue": "'medium'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 9,
+                    "type": "\"small\" | \"medium\" | \"large\"",
+                    "decorators": []
+                },
+                {
+                    "name": "text",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 10,
+                    "type": "string",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, Input } from '@angular/core';\n\n@Component({\n  selector: 'app-loading-spinner',\n  standalone: true,\n  templateUrl: './loading-spinner.component.html',\n})\nexport class LoadingSpinnerComponent {\n  @Input() size: 'small' | 'medium' | 'large' = 'medium';\n  @Input() text?: string;\n\n  get spinnerClasses(): string {\n    return `spinner-${this.size}`;\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "accessors": {
+                "spinnerClasses": {
+                    "name": "spinnerClasses",
+                    "getSignature": {
+                        "name": "spinnerClasses",
+                        "type": "string",
+                        "returnType": "string",
+                        "line": 12
+                    }
+                }
+            },
+            "templateData": "<div class=\"spinner-wrapper\">\n  <div [class]=\"spinnerClasses\"></div>\n  @if (text) {\n    <p class=\"spinner-text\">{{ text }}</p>\n  }\n</div>"
         },
         {
             "name": "PageComponent",
@@ -647,6 +1408,285 @@
             "stylesData": "",
             "extends": [],
             "templateData": "<article class=\"storybook-page\">\n  <app-header\n    [user]=\"user\"\n    (logout)=\"doLogout()\"\n    (login)=\"doLogin()\"\n    (createAccount)=\"doCreateAccount()\"\n  />\n  \n  <section class=\"page-content\">\n    <!-- Hero Section -->\n    <div class=\"hero-section\">\n      <h1 class=\"hero-title\">metro ui</h1>\n      <p class=\"hero-subtitle\">\n        content, not chrome\n      </p>\n    </div>\n\n    <!-- Content Grid -->\n    <div class=\"content-grid\">\n      <!-- Live Tiles Section -->\n      <div class=\"tiles-section\">\n        <h2 class=\"section-title\">live tiles</h2>\n        <div class=\"tiles-grid\">\n          @for (tile of metroTiles; track tile.label) {\n            <div \n              class=\"metro-tile-story\"\n              [style.background]=\"tile.color\"\n            >\n              <span [class]=\"tile.icon\" class=\"tile-icon\"></span>\n              <span class=\"tile-label\">{{ tile.label }}</span>\n            </div>\n          }\n        </div>\n      </div>\n\n      <!-- Documentation Section -->\n      <div class=\"docs-section\">\n        <h2 class=\"section-title\">design language</h2>\n        <div class=\"docs-list\">\n          @for (doc of documentation; track doc.title) {\n            <div class=\"doc-item\">\n              <span [class]=\"doc.icon\" class=\"doc-icon\"></span>\n              <div class=\"doc-content\">\n                <h3 class=\"doc-title\">{{ doc.title }}</h3>\n                <p class=\"doc-description\">{{ doc.description }}</p>\n              </div>\n              <span class=\"icon-[iconoir--arrow-right] doc-arrow\"></span>\n            </div>\n          }\n        </div>\n      </div>\n    </div>\n\n    <!-- Tips Section -->\n    <div class=\"tips-section\">\n      <div class=\"tip-wrapper\">\n        <span class=\"icon-[iconoir--light-bulb] tip-badge\"></span>\n        <p class=\"tip-text\">\n          Metro UI (2010–2014) was the first truly digital-native design language.\n          No skeuomorphism, no shadows, no chrome.\n          Just bold typography, flat colors, and purposeful motion.\n        </p>\n      </div>\n    </div>\n  </section>\n</article>"
+        },
+        {
+            "name": "SelectComponent",
+            "id": "component-SelectComponent-16d305c575099acf92e07f8e6fcba074b755e02875f23fc57a7353f3078430ea99fc8a25072901e353a45447e6cabc098d908160b351b55e9f62beb8c24d93ff",
+            "file": "src/app/components/select/select.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [
+                {
+                    "name": ")"
+                }
+            ],
+            "selector": "app-select",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./select.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "disabled",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 25,
+                    "type": "boolean",
+                    "decorators": []
+                },
+                {
+                    "name": "label",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 24,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "options",
+                    "defaultValue": "[]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 23,
+                    "type": "SelectOption[]",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "onChange",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "function",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 29,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "onTouched",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "function",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 30,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "value",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 27
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "onBlur",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 56,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onSelectChange",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "Event",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 48,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "event",
+                            "type": "Event",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnChange",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "value",
+                                    "type": "string",
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ]
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 36,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "value",
+                                    "type": "string",
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ],
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnTouched",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": []
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 40,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [],
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "setDisabledState",
+                    "args": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 44,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "writeValue",
+                    "args": [
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 32,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, Input, forwardRef } from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\n\nexport interface SelectOption {\n  value: string;\n  label: string;\n  description?: string;\n}\n\n@Component({\n  selector: 'app-select',\n  standalone: true,\n  templateUrl: './select.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => SelectComponent),\n      multi: true,\n    },\n  ],\n})\nexport class SelectComponent implements ControlValueAccessor {\n  @Input() options: SelectOption[] = [];\n  @Input() label = '';\n  @Input() disabled = false;\n\n  value = '';\n\n  private onChange: (value: string) => void;\n  private onTouched: () => void;\n\n  writeValue(value: string): void {\n    this.value = value || '';\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onSelectChange(event: Event): void {\n    const target = event.target as HTMLSelectElement;\n    this.value = target.value;\n    if (this.onChange) {\n      this.onChange(this.value);\n    }\n  }\n\n  onBlur(): void {\n    if (this.onTouched) {\n      this.onTouched();\n    }\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "implements": [
+                "ControlValueAccessor"
+            ],
+            "templateData": "<div class=\"select-wrapper\">\n  @if (label) {\n    <label class=\"select-label\" [for]=\"label + '-select'\">{{ label }}</label>\n  }\n  \n  <select\n    [id]=\"label + '-select'\"\n    class=\"select-base\"\n    [disabled]=\"disabled\"\n    [value]=\"value\"\n    (change)=\"onSelectChange($event)\"\n    (blur)=\"onBlur()\"\n  >\n    <option value=\"\" disabled>select an option</option>\n    @for (option of options; track option.value) {\n      <option [value]=\"option.value\">\n        {{ option.label }}\n        @if (option.description) {\n          - {{ option.description }}\n        }\n      </option>\n    }\n  </select>\n  \n  <span class=\"icon-[iconoir--nav-arrow-down] select-icon\"></span>\n</div>"
         },
         {
             "name": "ThemeToggleComponent",
@@ -1238,10 +2278,46 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/components/badge/badge.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "BadgeComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/components/button/button.component.ts",
                 "type": "component",
                 "linktype": "component",
                 "name": "ButtonComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/card/card.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "CardComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/empty-state/empty-state.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "EmptyStateComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/error-display/error-display.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ErrorDisplayComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/6",
                 "status": "low"
@@ -1265,12 +2341,48 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/components/input/input.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "InputComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/16",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/loading-spinner/loading-spinner.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LoadingSpinnerComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/components/page/page.component.ts",
                 "type": "component",
                 "linktype": "component",
                 "name": "PageComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/8",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/select/select.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "SelectComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/13",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/select/select.component.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "SelectOption",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
                 "status": "low"
             },
             {
