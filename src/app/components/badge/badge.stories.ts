@@ -8,7 +8,7 @@ const meta: Meta<BadgeComponent> = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['default', 'success', 'warning', 'error'],
+      options: ['default', 'info', 'success', 'warning', 'error'],
     },
     size: {
       control: { type: 'select' },
@@ -33,6 +33,22 @@ export const Default: Story = {
     template: `
       <app-badge [variant]="variant" [size]="size">
         default
+      </app-badge>
+    `,
+  }),
+};
+
+export const Info: Story = {
+  args: {
+    variant: 'info',
+    size: 'medium',
+    icon: 'icon-[iconoir--info-circle]',
+  },
+  render: (args) => ({
+    props: args,
+    template: `
+      <app-badge [variant]="variant" [size]="size" [icon]="icon">
+        info
       </app-badge>
     `,
   }),
@@ -106,9 +122,24 @@ export const AllVariants: Story = {
     template: `
       <div class="flex flex-wrap gap-3">
         <app-badge variant="default" size="medium">default</app-badge>
+        <app-badge variant="info" size="medium" icon="icon-[iconoir--info-circle]">info</app-badge>
         <app-badge variant="success" size="medium" icon="icon-[iconoir--check]">success</app-badge>
         <app-badge variant="warning" size="medium" icon="icon-[iconoir--warning-triangle]">warning</app-badge>
         <app-badge variant="error" size="medium" icon="icon-[iconoir--cancel]">error</app-badge>
+      </div>
+    `,
+  }),
+};
+
+export const WithoutIcons: Story = {
+  render: () => ({
+    template: `
+      <div class="flex flex-wrap gap-3">
+        <app-badge variant="default" size="medium">default</app-badge>
+        <app-badge variant="info" size="medium">info</app-badge>
+        <app-badge variant="success" size="medium">success</app-badge>
+        <app-badge variant="warning" size="medium">warning</app-badge>
+        <app-badge variant="error" size="medium">error</app-badge>
       </div>
     `,
   }),

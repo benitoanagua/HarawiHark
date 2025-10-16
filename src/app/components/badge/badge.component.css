@@ -1,4 +1,5 @@
 .badge-default,
+.badge-info,
 .badge-success,
 .badge-warning,
 .badge-error {
@@ -19,14 +20,18 @@
   @apply bg-surface text-onSurface border-outline;
 }
 
+.badge-info {
+  @apply bg-inverseBlue text-onBlueContainer border-inverseBlueContainer;
+}
+
 .badge-success {
-  @apply bg-primaryContainer text-onPrimaryContainer border-primary;
+  @apply bg-inverseGreen text-onGreenContainer border-inverseGreenContainer;
 }
 
 .badge-warning {
-  @apply bg-tertiaryContainer text-onTertiaryContainer border-tertiary;
+  @apply bg-inverseYellow text-onYellowContainer border-inverseYellowContainer;
 }
 
 .badge-error {
-  @apply bg-errorContainer text-onErrorContainer border-error;
+  @apply bg-inverseRed text-onRedContainer border-inverseRedContainer;
 }

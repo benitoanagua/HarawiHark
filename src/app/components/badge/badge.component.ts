@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './badge.component.html',
 })
 export class BadgeComponent {
-  @Input() variant: 'default' | 'success' | 'warning' | 'error' = 'default';
+  @Input() variant: 'default' | 'info' | 'success' | 'warning' | 'error' = 'default';
   @Input() size: 'small' | 'medium' = 'medium';
   @Input() icon?: string;
 
