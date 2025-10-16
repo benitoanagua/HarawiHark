@@ -93,12 +93,12 @@
         },
         {
             "name": "SelectOption",
-            "id": "interface-SelectOption-16d305c575099acf92e07f8e6fcba074b755e02875f23fc57a7353f3078430ea99fc8a25072901e353a45447e6cabc098d908160b351b55e9f62beb8c24d93ff",
+            "id": "interface-SelectOption-de84e0e702b942861279889143ff73837f99f4dea1aa8f100fa4d862cd6ea7bcef914da75f298124d30a0452a5c1456ad1d7fc9ae7791a1a61da08ba0308891c",
             "file": "src/app/components/select/select.component.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { Component, Input, forwardRef } from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\n\nexport interface SelectOption {\n  value: string;\n  label: string;\n  description?: string;\n}\n\n@Component({\n  selector: 'app-select',\n  standalone: true,\n  templateUrl: './select.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => SelectComponent),\n      multi: true,\n    },\n  ],\n})\nexport class SelectComponent implements ControlValueAccessor {\n  @Input() options: SelectOption[] = [];\n  @Input() label = '';\n  @Input() disabled = false;\n\n  value = '';\n\n  private onChange: (value: string) => void;\n  private onTouched: () => void;\n\n  writeValue(value: string): void {\n    this.value = value || '';\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onSelectChange(event: Event): void {\n    const target = event.target as HTMLSelectElement;\n    this.value = target.value;\n    if (this.onChange) {\n      this.onChange(this.value);\n    }\n  }\n\n  onBlur(): void {\n    if (this.onTouched) {\n      this.onTouched();\n    }\n  }\n}\n",
+            "sourceCode": "import { Component, Input, forwardRef } from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\n\nexport interface SelectOption {\n  value: string;\n  label: string;\n  description?: string;\n}\n\n@Component({\n  selector: 'app-select',\n  standalone: true,\n  templateUrl: './select.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => SelectComponent),\n      multi: true,\n    },\n  ],\n})\nexport class SelectComponent implements ControlValueAccessor {\n  @Input() options: SelectOption[] = [];\n  @Input() label = '';\n  @Input() disabled = false;\n  @Input() id = '';\n\n  value = '';\n\n  private onChange!: (value: string) => void;\n  private onTouched!: () => void;\n\n  writeValue(value: string): void {\n    this.value = value || '';\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onSelectChange(event: Event): void {\n    const target = event.target as HTMLSelectElement;\n    this.value = target.value;\n    this.onChange(this.value);\n  }\n\n  onBlur(): void {\n    this.onTouched();\n  }\n}\n",
             "properties": [
                 {
                     "name": "description",
@@ -910,7 +910,7 @@
         },
         {
             "name": "InputComponent",
-            "id": "component-InputComponent-d6a38dfeaeabdee8c61f397873edb0e101736119c0914d46046b4595f0a826bd010da5472e7b08d79297ef8c53ffc9027b00c95e6eb3e8b1f092c4eddbb608b9",
+            "id": "component-InputComponent-23f52332de20fe9b820ca9f2f89508222cea832bfafc0e894345b8daef508ad13791e63ef43532726270f312e9edc6b1c94320b6ff0f0cfe276f836d4c37b99f",
             "file": "src/app/components/input/input.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -945,6 +945,15 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "line": 20,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "id",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 23,
                     "type": "string",
                     "decorators": []
                 },
@@ -995,7 +1004,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 26,
+                    "line": 27,
                     "modifierKind": [
                         123
                     ]
@@ -1008,7 +1017,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 27,
+                    "line": 28,
                     "modifierKind": [
                         123
                     ]
@@ -1022,7 +1031,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 24
+                    "line": 25
                 }
             ],
             "methodsClass": [
@@ -1032,7 +1041,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 53,
+                    "line": 52,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -1049,7 +1058,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 45,
+                    "line": 46,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1085,7 +1094,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 33,
+                    "line": 34,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1122,7 +1131,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 37,
+                    "line": 38,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1151,7 +1160,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 41,
+                    "line": 42,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1179,7 +1188,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 29,
+                    "line": 30,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1204,7 +1213,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input, forwardRef } from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\n\n@Component({\n  selector: 'app-input',\n  standalone: true,\n  templateUrl: './input.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => InputComponent),\n      multi: true,\n    },\n  ],\n})\nexport class InputComponent implements ControlValueAccessor {\n  @Input() type: 'text' | 'textarea' = 'text';\n  @Input() label = '';\n  @Input() placeholder = '';\n  @Input() error = '';\n  @Input() disabled = false;\n  @Input() rows = 6;\n\n  value = '';\n\n  private onChange: (value: string) => void;\n  private onTouched: () => void;\n\n  writeValue(value: string): void {\n    this.value = value || '';\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onInput(event: Event): void {\n    const target = event.target as HTMLInputElement | HTMLTextAreaElement;\n    this.value = target.value;\n    if (this.onChange) {\n      this.onChange(this.value);\n    }\n  }\n\n  onBlur(): void {\n    if (this.onTouched) {\n      this.onTouched();\n    }\n  }\n}\n",
+            "sourceCode": "import { Component, Input, forwardRef } from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\n\n@Component({\n  selector: 'app-input',\n  standalone: true,\n  templateUrl: './input.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => InputComponent),\n      multi: true,\n    },\n  ],\n})\nexport class InputComponent implements ControlValueAccessor {\n  @Input() type: 'text' | 'textarea' = 'text';\n  @Input() label = '';\n  @Input() placeholder = '';\n  @Input() error = '';\n  @Input() disabled = false;\n  @Input() rows = 6;\n  @Input() id = '';\n\n  value = '';\n\n  private onChange!: (value: string) => void;\n  private onTouched!: () => void;\n\n  writeValue(value: string): void {\n    this.value = value || '';\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onInput(event: Event): void {\n    const target = event.target as HTMLInputElement | HTMLTextAreaElement;\n    this.value = target.value;\n    this.onChange(this.value);\n  }\n\n  onBlur(): void {\n    this.onTouched();\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -1212,7 +1221,7 @@
             "implements": [
                 "ControlValueAccessor"
             ],
-            "templateData": "<div class=\"input-wrapper\">\n  @if (label) {\n    <label class=\"input-label\" [for]=\"label + '-input'\">{{ label }}</label>\n  }\n  \n  @if (type === 'textarea') {\n    <textarea\n      [id]=\"label + '-input'\"\n      class=\"input-base input-textarea\"\n      [class.input-error]=\"error\"\n      [placeholder]=\"placeholder\"\n      [disabled]=\"disabled\"\n      [rows]=\"rows\"\n      [value]=\"value\"\n      (input)=\"onInput($event)\"\n      (blur)=\"onBlur()\"\n    ></textarea>\n  } @else {\n    <input\n      [id]=\"label + '-input'\"\n      class=\"input-base input-text\"\n      [class.input-error]=\"error\"\n      [type]=\"type\"\n      [placeholder]=\"placeholder\"\n      [disabled]=\"disabled\"\n      [value]=\"value\"\n      (input)=\"onInput($event)\"\n      (blur)=\"onBlur()\"\n    />\n  }\n  \n  @if (error) {\n    <span class=\"input-error-text\">{{ error }}</span>\n  }\n</div>"
+            "templateData": "<div class=\"input-wrapper\">\n  @if (label) {\n    <label class=\"input-label\" [for]=\"id\">{{ label }}</label>\n  }\n  \n  @if (type === 'textarea') {\n    <textarea\n      class=\"input-base input-textarea\"\n      [class.input-error]=\"error\"\n      [placeholder]=\"placeholder\"\n      [disabled]=\"disabled\"\n      [rows]=\"rows\"\n      [value]=\"value\"\n      [id]=\"id\"\n      (input)=\"onInput($event)\"\n      (blur)=\"onBlur()\"\n    ></textarea>\n  } @else {\n    <input\n      class=\"input-base input-text\"\n      [class.input-error]=\"error\"\n      [type]=\"type\"\n      [placeholder]=\"placeholder\"\n      [disabled]=\"disabled\"\n      [value]=\"value\"\n      [id]=\"id\"\n      (input)=\"onInput($event)\"\n      (blur)=\"onBlur()\"\n    />\n  }\n  \n  @if (error) {\n    <span class=\"input-error-text\">{{ error }}</span>\n  }\n</div>\n"
         },
         {
             "name": "LoadingSpinnerComponent",
@@ -1411,7 +1420,7 @@
         },
         {
             "name": "SelectComponent",
-            "id": "component-SelectComponent-16d305c575099acf92e07f8e6fcba074b755e02875f23fc57a7353f3078430ea99fc8a25072901e353a45447e6cabc098d908160b351b55e9f62beb8c24d93ff",
+            "id": "component-SelectComponent-de84e0e702b942861279889143ff73837f99f4dea1aa8f100fa4d862cd6ea7bcef914da75f298124d30a0452a5c1456ad1d7fc9ae7791a1a61da08ba0308891c",
             "file": "src/app/components/select/select.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1438,6 +1447,15 @@
                     "deprecationMessage": "",
                     "line": 25,
                     "type": "boolean",
+                    "decorators": []
+                },
+                {
+                    "name": "id",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 26,
+                    "type": "string",
                     "decorators": []
                 },
                 {
@@ -1469,7 +1487,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 29,
+                    "line": 30,
                     "modifierKind": [
                         123
                     ]
@@ -1482,7 +1500,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 30,
+                    "line": 31,
                     "modifierKind": [
                         123
                     ]
@@ -1496,7 +1514,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 27
+                    "line": 28
                 }
             ],
             "methodsClass": [
@@ -1506,7 +1524,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 56,
+                    "line": 55,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -1523,7 +1541,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 48,
+                    "line": 49,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1559,7 +1577,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 36,
+                    "line": 37,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1596,7 +1614,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 40,
+                    "line": 41,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1625,7 +1643,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 44,
+                    "line": 45,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1653,7 +1671,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 32,
+                    "line": 33,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1678,7 +1696,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input, forwardRef } from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\n\nexport interface SelectOption {\n  value: string;\n  label: string;\n  description?: string;\n}\n\n@Component({\n  selector: 'app-select',\n  standalone: true,\n  templateUrl: './select.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => SelectComponent),\n      multi: true,\n    },\n  ],\n})\nexport class SelectComponent implements ControlValueAccessor {\n  @Input() options: SelectOption[] = [];\n  @Input() label = '';\n  @Input() disabled = false;\n\n  value = '';\n\n  private onChange: (value: string) => void;\n  private onTouched: () => void;\n\n  writeValue(value: string): void {\n    this.value = value || '';\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onSelectChange(event: Event): void {\n    const target = event.target as HTMLSelectElement;\n    this.value = target.value;\n    if (this.onChange) {\n      this.onChange(this.value);\n    }\n  }\n\n  onBlur(): void {\n    if (this.onTouched) {\n      this.onTouched();\n    }\n  }\n}\n",
+            "sourceCode": "import { Component, Input, forwardRef } from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\n\nexport interface SelectOption {\n  value: string;\n  label: string;\n  description?: string;\n}\n\n@Component({\n  selector: 'app-select',\n  standalone: true,\n  templateUrl: './select.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => SelectComponent),\n      multi: true,\n    },\n  ],\n})\nexport class SelectComponent implements ControlValueAccessor {\n  @Input() options: SelectOption[] = [];\n  @Input() label = '';\n  @Input() disabled = false;\n  @Input() id = '';\n\n  value = '';\n\n  private onChange!: (value: string) => void;\n  private onTouched!: () => void;\n\n  writeValue(value: string): void {\n    this.value = value || '';\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onSelectChange(event: Event): void {\n    const target = event.target as HTMLSelectElement;\n    this.value = target.value;\n    this.onChange(this.value);\n  }\n\n  onBlur(): void {\n    this.onTouched();\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -1686,7 +1704,7 @@
             "implements": [
                 "ControlValueAccessor"
             ],
-            "templateData": "<div class=\"select-wrapper\">\n  @if (label) {\n    <label class=\"select-label\" [for]=\"label + '-select'\">{{ label }}</label>\n  }\n  \n  <select\n    [id]=\"label + '-select'\"\n    class=\"select-base\"\n    [disabled]=\"disabled\"\n    [value]=\"value\"\n    (change)=\"onSelectChange($event)\"\n    (blur)=\"onBlur()\"\n  >\n    <option value=\"\" disabled>select an option</option>\n    @for (option of options; track option.value) {\n      <option [value]=\"option.value\">\n        {{ option.label }}\n        @if (option.description) {\n          - {{ option.description }}\n        }\n      </option>\n    }\n  </select>\n  \n  <span class=\"icon-[iconoir--nav-arrow-down] select-icon\"></span>\n</div>"
+            "templateData": "<div class=\"select-wrapper\">\n  @if (label) {\n    <label class=\"select-label\" [for]=\"id\">{{ label }}</label>\n  }\n\n  <select\n    class=\"select-base\"\n    [id]=\"id\"\n    [disabled]=\"disabled\"\n    [value]=\"value\"\n    (change)=\"onSelectChange($event)\"\n    (blur)=\"onBlur()\"\n  >\n    <option value=\"\" disabled>select an option</option>\n    @for (option of options; track option.value) {\n      <option [value]=\"option.value\">\n        {{ option.label }}\n        @if (option.description) {\n          - {{ option.description }}\n        }\n      </option>\n    }\n  </select>\n\n  <span class=\"icon-[iconoir--nav-arrow-down] select-icon\"></span>\n</div>\n"
         },
         {
             "name": "ThemeToggleComponent",
@@ -2346,7 +2364,7 @@
                 "linktype": "component",
                 "name": "InputComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/16",
+                "coverageCount": "0/17",
                 "status": "low"
             },
             {
@@ -2373,7 +2391,7 @@
                 "linktype": "component",
                 "name": "SelectComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/13",
+                "coverageCount": "0/14",
                 "status": "low"
             },
             {

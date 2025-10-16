@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -20,11 +20,12 @@ export class InputComponent implements ControlValueAccessor {
   @Input() error = '';
   @Input() disabled = false;
   @Input() rows = 6;
+  @Input() id = '';
 
   value = '';
 
-  private onChange: (value: string) => void = () => {};
-  private onTouched: () => void = () => {};
+  private onChange!: (value: string) => void;
+  private onTouched!: () => void;
 
   writeValue(value: string): void {
     this.value = value || '';

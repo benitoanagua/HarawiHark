@@ -1,10 +1,11 @@
 <div class="select-wrapper">
   @if (label) {
-    <label class="select-label">{{ label }}</label>
+    <label class="select-label" [for]="id">{{ label }}</label>
   }
-  
+
   <select
     class="select-base"
+    [id]="id"
     [disabled]="disabled"
     [value]="value"
     (change)="onSelectChange($event)"
@@ -20,6 +21,6 @@
       </option>
     }
   </select>
-  
+
   <span class="icon-[iconoir--nav-arrow-down] select-icon"></span>
 </div>

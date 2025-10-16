@@ -1,6 +1,6 @@
 <div class="input-wrapper">
   @if (label) {
-    <label class="input-label">{{ label }}</label>
+    <label class="input-label" [for]="id">{{ label }}</label>
   }
   
   @if (type === 'textarea') {
@@ -11,6 +11,7 @@
       [disabled]="disabled"
       [rows]="rows"
       [value]="value"
+      [id]="id"
       (input)="onInput($event)"
       (blur)="onBlur()"
     ></textarea>
@@ -22,6 +23,7 @@
       [placeholder]="placeholder"
       [disabled]="disabled"
       [value]="value"
+      [id]="id"
       (input)="onInput($event)"
       (blur)="onBlur()"
     />
