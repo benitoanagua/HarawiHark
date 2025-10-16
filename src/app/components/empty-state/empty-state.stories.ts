@@ -26,7 +26,7 @@ type Story = StoryObj<EmptyStateComponent>;
 
 export const Default: Story = {
   args: {
-    icon: '📝',
+    icon: 'icon-[iconoir--page-search]',
     title: 'no poem yet',
     description: 'Start writing your poem to see syllable analysis',
   },
@@ -34,7 +34,7 @@ export const Default: Story = {
 
 export const WithAction: Story = {
   args: {
-    icon: '🌸',
+    icon: 'icon-[iconoir--flower]',
     title: 'no examples loaded',
     description: 'Load a sample poem to see how the analyzer works',
     actionLabel: 'load example',
@@ -43,7 +43,7 @@ export const WithAction: Story = {
 
 export const NoResults: Story = {
   args: {
-    icon: '🔍',
+    icon: 'icon-[iconoir--search-window]',
     title: 'no matches found',
     description: 'Try adjusting your search criteria',
     actionLabel: 'clear filters',
@@ -52,7 +52,7 @@ export const NoResults: Story = {
 
 export const EmptyPoems: Story = {
   args: {
-    icon: '📚',
+    icon: 'icon-[iconoir--book-stack]',
     title: 'no saved poems',
     description: 'Your analyzed poems will appear here once you start creating',
     actionLabel: 'create first poem',
@@ -61,7 +61,7 @@ export const EmptyPoems: Story = {
 
 export const MinimalWithoutDescription: Story = {
   args: {
-    icon: '✨',
+    icon: 'icon-[iconoir--sparkles]',
     title: 'nothing here',
   },
 };

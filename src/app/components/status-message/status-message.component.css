@@ -4,19 +4,19 @@
 }
 
 .status-info {
-  @apply bg-blueContainer border-onBlueContainer;
+  @apply bg-inverseBlue border-inverseBlueContainer;
 }
 
 .status-warning {
-  @apply bg-yellowContainer border-onYellowContainer;
+  @apply bg-inverseYellow border-inverseYellowContainer;
 }
 
 .status-error {
-  @apply bg-redContainer border-onRedContainer;
+  @apply bg-inverseRed border-inverseRedContainer;
 }
 
 .status-success {
-  @apply bg-greenContainer border-onGreenContainer;
+  @apply bg-inverseGreen border-inverseGreenContainer;
 }
 
 .status-icon {
@@ -37,17 +37,17 @@
 
 /* Estilos específicos para cada tipo */
 .status-info .status-icon {
-  @apply text-onBlueContainer;
+  @apply text-inverseBlueContainer;
 }
 
 .status-warning .status-icon {
-  @apply text-onYellowContainer;
+  @apply text-inverseYellowContainer;
 }
 
 .status-error .status-icon {
-  @apply text-onRedContainer;
+  @apply text-inverseRedContainer;
 }
 
 .status-success .status-icon {
-  @apply text-onGreenContainer;
+  @apply text-inverseGreenContainer;
 }

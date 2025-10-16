@@ -1,5 +1,5 @@
 <div class="empty-state">
-  <span class="empty-state-icon">{{ icon }}</span>
+  <span [class]="icon + ' empty-state-icon'"></span>
   <h3 class="empty-state-title">{{ title }}</h3>
   @if (description) {
     <p class="empty-state-description">{{ description }}</p>

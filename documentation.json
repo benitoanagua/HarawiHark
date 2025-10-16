@@ -138,12 +138,12 @@
         },
         {
             "name": "ThemeColor",
-            "id": "interface-ThemeColor-8e3c2a27926300c960f3aed8672cf20eef2989d4a837667c30ddd29f9d3d76835f610c4bf358e903c11c595489bc89ab127a4b5debc13328e5014fe94d175e02",
+            "id": "interface-ThemeColor-29cfd58f74de1dba14f11aa909802f2e70d9e93dcf90e3100a1d0aa8c6d81a367c96a7f818a276a876bd9065787802d4cb308f76a4f67e543e96d47808c31a60",
             "file": "src/lib/material-theme/theme.config.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import {\n  SchemeTonalSpot,\n  SchemeNeutral,\n  SchemeVibrant,\n  SchemeExpressive,\n  SchemeMonochrome,\n  SchemeContent,\n  SchemeFidelity,\n  SchemeFruitSalad,\n  SchemeRainbow,\n  Hct,\n  type DynamicScheme,\n} from '@material/material-color-utilities';\n\nexport type SchemeConstructor = new (\n  sourceColorHct: Hct,\n  isDark: boolean,\n  contrastLevel: number\n) => DynamicScheme;\n\nexport const SEED_COLOR = '#F4C2C2';\n\nexport const SCHEMES: { name: string; variant: SchemeConstructor }[] = [\n  { name: 'tonal-spot', variant: SchemeTonalSpot },\n  { name: 'neutral', variant: SchemeNeutral },\n  { name: 'vibrant', variant: SchemeVibrant },\n  { name: 'expressive', variant: SchemeExpressive },\n  { name: 'monochrome', variant: SchemeMonochrome },\n  { name: 'content', variant: SchemeContent },\n  { name: 'fidelity', variant: SchemeFidelity },\n  { name: 'fruit-salad', variant: SchemeFruitSalad },\n  { name: 'rainbow', variant: SchemeRainbow },\n];\n\nexport const SELECTED_SCHEME = 'fidelity';\n\nexport const EXTRA_COLORS_CONFIG = {\n  terminal: {\n    black: { hue: 0, chroma: 0, tone: 15 },\n    red: { hue: 10, chroma: 84, tone: 50 },\n    green: { hue: 145, chroma: 48, tone: 50 },\n    yellow: { hue: 90, chroma: 70, tone: 60 },\n    blue: { hue: 245, chroma: 80, tone: 50 },\n    magenta: { hue: 330, chroma: 68, tone: 50 },\n    cyan: { hue: 200, chroma: 48, tone: 50 },\n    white: { hue: 0, chroma: 0, tone: 95 },\n  },\n\n  pastel: {\n    teal: { hue: 180, chroma: 25, tone: 75 },\n    maroon: { hue: 355, chroma: 35, tone: 60 },\n    mauve: { hue: 270, chroma: 35, tone: 75 },\n    peach: { hue: 25, chroma: 40, tone: 80 },\n    lime: { hue: 140, chroma: 55, tone: 75 },\n    rosewater: { hue: 5, chroma: 20, tone: 90 },\n  },\n};\n\nexport const THEME_CSS_VARS = [\n  'primary',\n  'onPrimary',\n  'primaryContainer',\n  'onPrimaryContainer',\n  'secondary',\n  'onSecondary',\n  'secondaryContainer',\n  'onSecondaryContainer',\n  'tertiary',\n  'onTertiary',\n  'tertiaryContainer',\n  'onTertiaryContainer',\n  'error',\n  'onError',\n  'errorContainer',\n  'onErrorContainer',\n  'background',\n  'onBackground',\n  'surface',\n  'surfaceDim',\n  'surfaceBright',\n  'surfaceContainerLowest',\n  'surfaceContainerLow',\n  'surfaceContainer',\n  'surfaceContainerHigh',\n  'surfaceContainerHighest',\n  'onSurface',\n  'surfaceVariant',\n  'onSurfaceVariant',\n  'outline',\n  'outlineVariant',\n  'shadow',\n  'scrim',\n  'inverseSurface',\n  'inverseOnSurface',\n  'inversePrimary',\n];\n\nexport const TERMINAL_PASTEL_CSS_VARS = [\n  'black',\n  'blackContainer',\n  'onBlackContainer',\n  'red',\n  'redContainer',\n  'onRedContainer',\n  'green',\n  'greenContainer',\n  'onGreenContainer',\n  'yellow',\n  'yellowContainer',\n  'onYellowContainer',\n  'blue',\n  'blueContainer',\n  'onBlueContainer',\n  'magenta',\n  'magentaContainer',\n  'onMagentaContainer',\n  'cyan',\n  'cyanContainer',\n  'onCyanContainer',\n  'white',\n  'whiteContainer',\n  'onWhiteContainer',\n\n  'teal',\n  'tealContainer',\n  'onTealContainer',\n  'maroon',\n  'maroonContainer',\n  'onMaroonContainer',\n  'mauve',\n  'mauveContainer',\n  'onMauveContainer',\n  'peach',\n  'peachContainer',\n  'onPeachContainer',\n  'lime',\n  'limeContainer',\n  'onLimeContainer',\n  'rosewater',\n  'rosewaterContainer',\n  'onRosewaterContainer',\n];\n\nexport const ALL_CSS_VARS = [...THEME_CSS_VARS, ...TERMINAL_PASTEL_CSS_VARS];\n\nexport const THEME_CONFIG = {\n  seedColor: SEED_COLOR,\n  selectedScheme: SELECTED_SCHEME,\n  availableSchemes: SCHEMES.map((s) => s.name),\n  materialVariables: THEME_CSS_VARS.length,\n  terminalPastelVariables: TERMINAL_PASTEL_CSS_VARS.length,\n  totalVariables: ALL_CSS_VARS.length,\n};\n\nexport interface ThemeColor {\n  hue: number;\n  chroma: number;\n  tone: number;\n}\n\nexport type TerminalColors = keyof typeof EXTRA_COLORS_CONFIG.terminal;\nexport type PastelColors = keyof typeof EXTRA_COLORS_CONFIG.pastel;\nexport type MaterialColors = (typeof THEME_CSS_VARS)[number];\nexport type AllColors = MaterialColors | TerminalColors | PastelColors;\n\nexport function getSchemeConstructor(schemeName: string): SchemeConstructor {\n  const scheme = SCHEMES.find((s) => s.name === schemeName);\n  if (!scheme) {\n    throw new Error(\n      `Scheme not found: ${schemeName}. Available schemes: ${SCHEMES.map((s) => s.name).join(', ')}`\n    );\n  }\n  return scheme.variant;\n}\n\nexport function isValidScheme(schemeName: string): boolean {\n  return SCHEMES.some((s) => s.name === schemeName);\n}\n\nexport function getAvailableSchemes(): string[] {\n  return SCHEMES.map((s) => s.name);\n}\n\nexport function getConfigInfo(): string {\n  return `\nTheme Configuration:\n-------------------\nSeed Color: ${SEED_COLOR}\nSelected Scheme: ${SELECTED_SCHEME}\nAvailable Schemes: ${getAvailableSchemes().join(', ')}\nMaterial Variables: ${THEME_CSS_VARS.length}\nTerminal & Pastel Variables: ${TERMINAL_PASTEL_CSS_VARS.length}\nTotal Variables: ${ALL_CSS_VARS.length}\n  `.trim();\n}\n",
+            "sourceCode": "import {\n  SchemeTonalSpot,\n  SchemeNeutral,\n  SchemeVibrant,\n  SchemeExpressive,\n  SchemeMonochrome,\n  SchemeContent,\n  SchemeFidelity,\n  SchemeFruitSalad,\n  SchemeRainbow,\n  Hct,\n  type DynamicScheme,\n} from '@material/material-color-utilities';\n\nexport type SchemeConstructor = new (\n  sourceColorHct: Hct,\n  isDark: boolean,\n  contrastLevel: number\n) => DynamicScheme;\n\nexport const SEED_COLOR = '#F4C2C2';\n\nexport const SCHEMES: { name: string; variant: SchemeConstructor }[] = [\n  { name: 'tonal-spot', variant: SchemeTonalSpot },\n  { name: 'neutral', variant: SchemeNeutral },\n  { name: 'vibrant', variant: SchemeVibrant },\n  { name: 'expressive', variant: SchemeExpressive },\n  { name: 'monochrome', variant: SchemeMonochrome },\n  { name: 'content', variant: SchemeContent },\n  { name: 'fidelity', variant: SchemeFidelity },\n  { name: 'fruit-salad', variant: SchemeFruitSalad },\n  { name: 'rainbow', variant: SchemeRainbow },\n];\n\nexport const SELECTED_SCHEME = 'fidelity';\n\nexport const TERMINAL_COLORS_CONFIG = {\n  red: { hue: 10, chroma: 84, tone: 50 },\n  green: { hue: 145, chroma: 48, tone: 50 },\n  yellow: { hue: 90, chroma: 70, tone: 60 },\n  blue: { hue: 245, chroma: 80, tone: 50 },\n  magenta: { hue: 330, chroma: 68, tone: 50 },\n  cyan: { hue: 200, chroma: 48, tone: 50 },\n};\n\nexport const THEME_CSS_VARS = [\n  'primary',\n  'onPrimary',\n  'primaryContainer',\n  'onPrimaryContainer',\n  'secondary',\n  'onSecondary',\n  'secondaryContainer',\n  'onSecondaryContainer',\n  'tertiary',\n  'onTertiary',\n  'tertiaryContainer',\n  'onTertiaryContainer',\n  'error',\n  'onError',\n  'errorContainer',\n  'onErrorContainer',\n  'background',\n  'onBackground',\n  'surface',\n  'surfaceDim',\n  'surfaceBright',\n  'surfaceContainerLowest',\n  'surfaceContainerLow',\n  'surfaceContainer',\n  'surfaceContainerHigh',\n  'surfaceContainerHighest',\n  'onSurface',\n  'surfaceVariant',\n  'onSurfaceVariant',\n  'outline',\n  'outlineVariant',\n  'shadow',\n  'scrim',\n  'inverseSurface',\n  'inverseOnSurface',\n  'inversePrimary',\n];\n\nexport const TERMINAL_CSS_VARS = [\n  'red',\n  'redContainer',\n  'onRedContainer',\n  'green',\n  'greenContainer',\n  'onGreenContainer',\n  'yellow',\n  'yellowContainer',\n  'onYellowContainer',\n  'blue',\n  'blueContainer',\n  'onBlueContainer',\n  'magenta',\n  'magentaContainer',\n  'onMagentaContainer',\n  'cyan',\n  'cyanContainer',\n  'onCyanContainer',\n\n  'inverseRed',\n  'inverseRedContainer',\n  'inverseOnRedContainer',\n  'inverseGreen',\n  'inverseGreenContainer',\n  'inverseOnGreenContainer',\n  'inverseYellow',\n  'inverseYellowContainer',\n  'inverseOnYellowContainer',\n  'inverseBlue',\n  'inverseBlueContainer',\n  'inverseOnBlueContainer',\n  'inverseMagenta',\n  'inverseMagentaContainer',\n  'inverseOnMagentaContainer',\n  'inverseCyan',\n  'inverseCyanContainer',\n  'inverseOnCyanContainer',\n];\n\nexport const ALL_CSS_VARS = [...THEME_CSS_VARS, ...TERMINAL_CSS_VARS];\n\nexport const THEME_CONFIG = {\n  seedColor: SEED_COLOR,\n  selectedScheme: SELECTED_SCHEME,\n  availableSchemes: SCHEMES.map((s) => s.name),\n  materialVariables: THEME_CSS_VARS.length,\n  terminalVariables: TERMINAL_CSS_VARS.length,\n  totalVariables: ALL_CSS_VARS.length,\n};\n\nexport interface ThemeColor {\n  hue: number;\n  chroma: number;\n  tone: number;\n}\n\nexport type TerminalColors = keyof typeof TERMINAL_COLORS_CONFIG;\nexport type MaterialColors = (typeof THEME_CSS_VARS)[number];\nexport type AllColors = MaterialColors | TerminalColors;\n\nexport function getSchemeConstructor(schemeName: string): SchemeConstructor {\n  const scheme = SCHEMES.find((s) => s.name === schemeName);\n  if (!scheme) {\n    throw new Error(\n      `Scheme not found: ${schemeName}. Available schemes: ${SCHEMES.map((s) => s.name).join(', ')}`\n    );\n  }\n  return scheme.variant;\n}\n\nexport function isValidScheme(schemeName: string): boolean {\n  return SCHEMES.some((s) => s.name === schemeName);\n}\n\nexport function getAvailableSchemes(): string[] {\n  return SCHEMES.map((s) => s.name);\n}\n\nexport function getConfigInfo(): string {\n  return `\nTheme Configuration:\n-------------------\nSeed Color: ${SEED_COLOR}\nSelected Scheme: ${SELECTED_SCHEME}\nAvailable Schemes: ${getAvailableSchemes().join(', ')}\nMaterial Variables: ${THEME_CSS_VARS.length}\nTerminal Variables: ${TERMINAL_CSS_VARS.length}\nTotal Variables: ${ALL_CSS_VARS.length}\n  `.trim();\n}\n",
             "properties": [
                 {
                     "name": "chroma",
@@ -153,7 +153,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 157
+                    "line": 138
                 },
                 {
                     "name": "hue",
@@ -163,7 +163,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 156
+                    "line": 137
                 },
                 {
                     "name": "tone",
@@ -173,7 +173,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 158
+                    "line": 139
                 }
             ],
             "indexSignatures": [],
@@ -1842,7 +1842,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "[]",
-                "defaultValue": "[...THEME_CSS_VARS, ...TERMINAL_PASTEL_CSS_VARS]"
+                "defaultValue": "[...THEME_CSS_VARS, ...TERMINAL_CSS_VARS]"
             },
             {
                 "name": "appConfig",
@@ -1853,16 +1853,6 @@
                 "deprecationMessage": "",
                 "type": "ApplicationConfig",
                 "defaultValue": "{\n  providers: [\n    provideBrowserGlobalErrorListeners(),\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideRouter(routes)\n  ]\n}"
-            },
-            {
-                "name": "EXTRA_COLORS_CONFIG",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "src/lib/material-theme/theme.config.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "type": "object",
-                "defaultValue": "{\n  terminal: {\n    black: { hue: 0, chroma: 0, tone: 15 },\n    red: { hue: 10, chroma: 84, tone: 50 },\n    green: { hue: 145, chroma: 48, tone: 50 },\n    yellow: { hue: 90, chroma: 70, tone: 60 },\n    blue: { hue: 245, chroma: 80, tone: 50 },\n    magenta: { hue: 330, chroma: 68, tone: 50 },\n    cyan: { hue: 200, chroma: 48, tone: 50 },\n    white: { hue: 0, chroma: 0, tone: 95 },\n  },\n\n  pastel: {\n    teal: { hue: 180, chroma: 25, tone: 75 },\n    maroon: { hue: 355, chroma: 35, tone: 60 },\n    mauve: { hue: 270, chroma: 35, tone: 75 },\n    peach: { hue: 25, chroma: 40, tone: 80 },\n    lime: { hue: 140, chroma: 55, tone: 75 },\n    rosewater: { hue: 5, chroma: 20, tone: 90 },\n  },\n}"
             },
             {
                 "name": "outputDir",
@@ -1925,14 +1915,24 @@
                 "defaultValue": "'fidelity'"
             },
             {
-                "name": "TERMINAL_PASTEL_CSS_VARS",
+                "name": "TERMINAL_COLORS_CONFIG",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/lib/material-theme/theme.config.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\n  red: { hue: 10, chroma: 84, tone: 50 },\n  green: { hue: 145, chroma: 48, tone: 50 },\n  yellow: { hue: 90, chroma: 70, tone: 60 },\n  blue: { hue: 245, chroma: 80, tone: 50 },\n  magenta: { hue: 330, chroma: 68, tone: 50 },\n  cyan: { hue: 200, chroma: 48, tone: 50 },\n}"
+            },
+            {
+                "name": "TERMINAL_CSS_VARS",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
                 "file": "src/lib/material-theme/theme.config.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "[]",
-                "defaultValue": "[\n  'black',\n  'blackContainer',\n  'onBlackContainer',\n  'red',\n  'redContainer',\n  'onRedContainer',\n  'green',\n  'greenContainer',\n  'onGreenContainer',\n  'yellow',\n  'yellowContainer',\n  'onYellowContainer',\n  'blue',\n  'blueContainer',\n  'onBlueContainer',\n  'magenta',\n  'magentaContainer',\n  'onMagentaContainer',\n  'cyan',\n  'cyanContainer',\n  'onCyanContainer',\n  'white',\n  'whiteContainer',\n  'onWhiteContainer',\n\n  'teal',\n  'tealContainer',\n  'onTealContainer',\n  'maroon',\n  'maroonContainer',\n  'onMaroonContainer',\n  'mauve',\n  'mauveContainer',\n  'onMauveContainer',\n  'peach',\n  'peachContainer',\n  'onPeachContainer',\n  'lime',\n  'limeContainer',\n  'onLimeContainer',\n  'rosewater',\n  'rosewaterContainer',\n  'onRosewaterContainer',\n]"
+                "defaultValue": "[\n  'red',\n  'redContainer',\n  'onRedContainer',\n  'green',\n  'greenContainer',\n  'onGreenContainer',\n  'yellow',\n  'yellowContainer',\n  'onYellowContainer',\n  'blue',\n  'blueContainer',\n  'onBlueContainer',\n  'magenta',\n  'magentaContainer',\n  'onMagentaContainer',\n  'cyan',\n  'cyanContainer',\n  'onCyanContainer',\n\n  'inverseRed',\n  'inverseRedContainer',\n  'inverseOnRedContainer',\n  'inverseGreen',\n  'inverseGreenContainer',\n  'inverseOnGreenContainer',\n  'inverseYellow',\n  'inverseYellowContainer',\n  'inverseOnYellowContainer',\n  'inverseBlue',\n  'inverseBlueContainer',\n  'inverseOnBlueContainer',\n  'inverseMagenta',\n  'inverseMagentaContainer',\n  'inverseOnMagentaContainer',\n  'inverseCyan',\n  'inverseCyanContainer',\n  'inverseOnCyanContainer',\n]"
             },
             {
                 "name": "THEME_CONFIG",
@@ -1942,7 +1942,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "object",
-                "defaultValue": "{\n  seedColor: SEED_COLOR,\n  selectedScheme: SELECTED_SCHEME,\n  availableSchemes: SCHEMES.map((s) => s.name),\n  materialVariables: THEME_CSS_VARS.length,\n  terminalPastelVariables: TERMINAL_PASTEL_CSS_VARS.length,\n  totalVariables: ALL_CSS_VARS.length,\n}"
+                "defaultValue": "{\n  seedColor: SEED_COLOR,\n  selectedScheme: SELECTED_SCHEME,\n  availableSchemes: SCHEMES.map((s) => s.name),\n  materialVariables: THEME_CSS_VARS.length,\n  terminalVariables: TERMINAL_CSS_VARS.length,\n  totalVariables: ALL_CSS_VARS.length,\n}"
             },
             {
                 "name": "THEME_CSS_VARS",
@@ -1958,7 +1958,7 @@
         "functions": [
             {
                 "name": "capitalizeFirst",
-                "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "file": "src/lib/material-theme/terminal-generator.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "deprecated": false,
@@ -1986,81 +1986,8 @@
                 ]
             },
             {
-                "name": "createNeutralColorVariations",
-                "file": "src/lib/material-theme/terminal-pastel-generator.ts",
-                "ctype": "miscellaneous",
-                "subtype": "function",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "description": "",
-                "args": [
-                    {
-                        "name": "isDark",
-                        "type": "boolean",
-                        "deprecated": false,
-                        "deprecationMessage": ""
-                    }
-                ],
-                "returnType": "literal type",
-                "jsdoctags": [
-                    {
-                        "name": "isDark",
-                        "type": "boolean",
-                        "deprecated": false,
-                        "deprecationMessage": "",
-                        "tagName": {
-                            "text": "param"
-                        }
-                    }
-                ]
-            },
-            {
-                "name": "createPastelColorVariations",
-                "file": "src/lib/material-theme/terminal-pastel-generator.ts",
-                "ctype": "miscellaneous",
-                "subtype": "function",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "description": "",
-                "args": [
-                    {
-                        "name": "baseHct",
-                        "type": "Hct",
-                        "deprecated": false,
-                        "deprecationMessage": ""
-                    },
-                    {
-                        "name": "isDark",
-                        "type": "boolean",
-                        "deprecated": false,
-                        "deprecationMessage": ""
-                    }
-                ],
-                "returnType": "literal type",
-                "jsdoctags": [
-                    {
-                        "name": "baseHct",
-                        "type": "Hct",
-                        "deprecated": false,
-                        "deprecationMessage": "",
-                        "tagName": {
-                            "text": "param"
-                        }
-                    },
-                    {
-                        "name": "isDark",
-                        "type": "boolean",
-                        "deprecated": false,
-                        "deprecationMessage": "",
-                        "tagName": {
-                            "text": "param"
-                        }
-                    }
-                ]
-            },
-            {
                 "name": "createTerminalColorVariations",
-                "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "file": "src/lib/material-theme/terminal-generator.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "deprecated": false,
@@ -2132,8 +2059,8 @@
                 ]
             },
             {
-                "name": "generateTerminalPastelColors",
-                "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "name": "generateTerminalColors",
+                "file": "src/lib/material-theme/terminal-generator.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "deprecated": false,
@@ -2163,8 +2090,8 @@
                 ]
             },
             {
-                "name": "generateTerminalPastelCSS",
-                "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "name": "generateTerminalCSS",
+                "file": "src/lib/material-theme/terminal-generator.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "deprecated": false,
@@ -2174,8 +2101,8 @@
                 "returnType": "string"
             },
             {
-                "name": "generateTerminalPastelFiles",
-                "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "name": "generateTerminalFiles",
+                "file": "src/lib/material-theme/terminal-generator.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "deprecated": false,
@@ -2358,7 +2285,7 @@
             },
             {
                 "name": "harmonizeWithSeed",
-                "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "file": "src/lib/material-theme/terminal-generator.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "deprecated": false,
@@ -2435,7 +2362,7 @@
                 "name": "AllColors",
                 "ctype": "miscellaneous",
                 "subtype": "typealias",
-                "rawtype": "MaterialColors | TerminalColors | PastelColors",
+                "rawtype": "MaterialColors | TerminalColors",
                 "file": "src/lib/material-theme/theme.config.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
@@ -2452,17 +2379,6 @@
                 "deprecationMessage": "",
                 "description": "",
                 "kind": 200
-            },
-            {
-                "name": "PastelColors",
-                "ctype": "miscellaneous",
-                "subtype": "typealias",
-                "rawtype": "",
-                "file": "src/lib/material-theme/theme.config.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "description": "",
-                "kind": 199
             },
             {
                 "name": "SchemeConstructor",
@@ -2509,17 +2425,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "[]",
-                    "defaultValue": "[...THEME_CSS_VARS, ...TERMINAL_PASTEL_CSS_VARS]"
-                },
-                {
-                    "name": "EXTRA_COLORS_CONFIG",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/lib/material-theme/theme.config.ts",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "object",
-                    "defaultValue": "{\n  terminal: {\n    black: { hue: 0, chroma: 0, tone: 15 },\n    red: { hue: 10, chroma: 84, tone: 50 },\n    green: { hue: 145, chroma: 48, tone: 50 },\n    yellow: { hue: 90, chroma: 70, tone: 60 },\n    blue: { hue: 245, chroma: 80, tone: 50 },\n    magenta: { hue: 330, chroma: 68, tone: 50 },\n    cyan: { hue: 200, chroma: 48, tone: 50 },\n    white: { hue: 0, chroma: 0, tone: 95 },\n  },\n\n  pastel: {\n    teal: { hue: 180, chroma: 25, tone: 75 },\n    maroon: { hue: 355, chroma: 35, tone: 60 },\n    mauve: { hue: 270, chroma: 35, tone: 75 },\n    peach: { hue: 25, chroma: 40, tone: 80 },\n    lime: { hue: 140, chroma: 55, tone: 75 },\n    rosewater: { hue: 5, chroma: 20, tone: 90 },\n  },\n}"
+                    "defaultValue": "[...THEME_CSS_VARS, ...TERMINAL_CSS_VARS]"
                 },
                 {
                     "name": "SCHEMES",
@@ -2552,14 +2458,24 @@
                     "defaultValue": "'fidelity'"
                 },
                 {
-                    "name": "TERMINAL_PASTEL_CSS_VARS",
+                    "name": "TERMINAL_COLORS_CONFIG",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/lib/material-theme/theme.config.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  red: { hue: 10, chroma: 84, tone: 50 },\n  green: { hue: 145, chroma: 48, tone: 50 },\n  yellow: { hue: 90, chroma: 70, tone: 60 },\n  blue: { hue: 245, chroma: 80, tone: 50 },\n  magenta: { hue: 330, chroma: 68, tone: 50 },\n  cyan: { hue: 200, chroma: 48, tone: 50 },\n}"
+                },
+                {
+                    "name": "TERMINAL_CSS_VARS",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
                     "file": "src/lib/material-theme/theme.config.ts",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "[]",
-                    "defaultValue": "[\n  'black',\n  'blackContainer',\n  'onBlackContainer',\n  'red',\n  'redContainer',\n  'onRedContainer',\n  'green',\n  'greenContainer',\n  'onGreenContainer',\n  'yellow',\n  'yellowContainer',\n  'onYellowContainer',\n  'blue',\n  'blueContainer',\n  'onBlueContainer',\n  'magenta',\n  'magentaContainer',\n  'onMagentaContainer',\n  'cyan',\n  'cyanContainer',\n  'onCyanContainer',\n  'white',\n  'whiteContainer',\n  'onWhiteContainer',\n\n  'teal',\n  'tealContainer',\n  'onTealContainer',\n  'maroon',\n  'maroonContainer',\n  'onMaroonContainer',\n  'mauve',\n  'mauveContainer',\n  'onMauveContainer',\n  'peach',\n  'peachContainer',\n  'onPeachContainer',\n  'lime',\n  'limeContainer',\n  'onLimeContainer',\n  'rosewater',\n  'rosewaterContainer',\n  'onRosewaterContainer',\n]"
+                    "defaultValue": "[\n  'red',\n  'redContainer',\n  'onRedContainer',\n  'green',\n  'greenContainer',\n  'onGreenContainer',\n  'yellow',\n  'yellowContainer',\n  'onYellowContainer',\n  'blue',\n  'blueContainer',\n  'onBlueContainer',\n  'magenta',\n  'magentaContainer',\n  'onMagentaContainer',\n  'cyan',\n  'cyanContainer',\n  'onCyanContainer',\n\n  'inverseRed',\n  'inverseRedContainer',\n  'inverseOnRedContainer',\n  'inverseGreen',\n  'inverseGreenContainer',\n  'inverseOnGreenContainer',\n  'inverseYellow',\n  'inverseYellowContainer',\n  'inverseOnYellowContainer',\n  'inverseBlue',\n  'inverseBlueContainer',\n  'inverseOnBlueContainer',\n  'inverseMagenta',\n  'inverseMagentaContainer',\n  'inverseOnMagentaContainer',\n  'inverseCyan',\n  'inverseCyanContainer',\n  'inverseOnCyanContainer',\n]"
                 },
                 {
                     "name": "THEME_CONFIG",
@@ -2569,7 +2485,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "object",
-                    "defaultValue": "{\n  seedColor: SEED_COLOR,\n  selectedScheme: SELECTED_SCHEME,\n  availableSchemes: SCHEMES.map((s) => s.name),\n  materialVariables: THEME_CSS_VARS.length,\n  terminalPastelVariables: TERMINAL_PASTEL_CSS_VARS.length,\n  totalVariables: ALL_CSS_VARS.length,\n}"
+                    "defaultValue": "{\n  seedColor: SEED_COLOR,\n  selectedScheme: SELECTED_SCHEME,\n  availableSchemes: SCHEMES.map((s) => s.name),\n  materialVariables: THEME_CSS_VARS.length,\n  terminalVariables: TERMINAL_CSS_VARS.length,\n  totalVariables: ALL_CSS_VARS.length,\n}"
                 },
                 {
                     "name": "THEME_CSS_VARS",
@@ -2630,10 +2546,10 @@
             ]
         },
         "groupedFunctions": {
-            "src/lib/material-theme/terminal-pastel-generator.ts": [
+            "src/lib/material-theme/terminal-generator.ts": [
                 {
                     "name": "capitalizeFirst",
-                    "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                    "file": "src/lib/material-theme/terminal-generator.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "deprecated": false,
@@ -2661,81 +2577,8 @@
                     ]
                 },
                 {
-                    "name": "createNeutralColorVariations",
-                    "file": "src/lib/material-theme/terminal-pastel-generator.ts",
-                    "ctype": "miscellaneous",
-                    "subtype": "function",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "description": "",
-                    "args": [
-                        {
-                            "name": "isDark",
-                            "type": "boolean",
-                            "deprecated": false,
-                            "deprecationMessage": ""
-                        }
-                    ],
-                    "returnType": "literal type",
-                    "jsdoctags": [
-                        {
-                            "name": "isDark",
-                            "type": "boolean",
-                            "deprecated": false,
-                            "deprecationMessage": "",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "createPastelColorVariations",
-                    "file": "src/lib/material-theme/terminal-pastel-generator.ts",
-                    "ctype": "miscellaneous",
-                    "subtype": "function",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "description": "",
-                    "args": [
-                        {
-                            "name": "baseHct",
-                            "type": "Hct",
-                            "deprecated": false,
-                            "deprecationMessage": ""
-                        },
-                        {
-                            "name": "isDark",
-                            "type": "boolean",
-                            "deprecated": false,
-                            "deprecationMessage": ""
-                        }
-                    ],
-                    "returnType": "literal type",
-                    "jsdoctags": [
-                        {
-                            "name": "baseHct",
-                            "type": "Hct",
-                            "deprecated": false,
-                            "deprecationMessage": "",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        },
-                        {
-                            "name": "isDark",
-                            "type": "boolean",
-                            "deprecated": false,
-                            "deprecationMessage": "",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                },
-                {
                     "name": "createTerminalColorVariations",
-                    "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                    "file": "src/lib/material-theme/terminal-generator.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "deprecated": false,
@@ -2778,8 +2621,8 @@
                     ]
                 },
                 {
-                    "name": "generateTerminalPastelColors",
-                    "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                    "name": "generateTerminalColors",
+                    "file": "src/lib/material-theme/terminal-generator.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "deprecated": false,
@@ -2809,8 +2652,8 @@
                     ]
                 },
                 {
-                    "name": "generateTerminalPastelCSS",
-                    "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                    "name": "generateTerminalCSS",
+                    "file": "src/lib/material-theme/terminal-generator.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "deprecated": false,
@@ -2820,8 +2663,8 @@
                     "returnType": "string"
                 },
                 {
-                    "name": "generateTerminalPastelFiles",
-                    "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                    "name": "generateTerminalFiles",
+                    "file": "src/lib/material-theme/terminal-generator.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "deprecated": false,
@@ -2865,7 +2708,7 @@
                 },
                 {
                     "name": "harmonizeWithSeed",
-                    "file": "src/lib/material-theme/terminal-pastel-generator.ts",
+                    "file": "src/lib/material-theme/terminal-generator.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "deprecated": false,
@@ -3117,7 +2960,7 @@
                     "name": "AllColors",
                     "ctype": "miscellaneous",
                     "subtype": "typealias",
-                    "rawtype": "MaterialColors | TerminalColors | PastelColors",
+                    "rawtype": "MaterialColors | TerminalColors",
                     "file": "src/lib/material-theme/theme.config.ts",
                     "deprecated": false,
                     "deprecationMessage": "",
@@ -3134,17 +2977,6 @@
                     "deprecationMessage": "",
                     "description": "",
                     "kind": 200
-                },
-                {
-                    "name": "PastelColors",
-                    "ctype": "miscellaneous",
-                    "subtype": "typealias",
-                    "rawtype": "",
-                    "file": "src/lib/material-theme/theme.config.ts",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "description": "",
-                    "kind": 199
                 },
                 {
                     "name": "SchemeConstructor",
@@ -3406,7 +3238,7 @@
                 "status": "low"
             },
             {
-                "filePath": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "filePath": "src/lib/material-theme/terminal-generator.ts",
                 "type": "function",
                 "linktype": "miscellaneous",
                 "linksubtype": "function",
@@ -3416,27 +3248,7 @@
                 "status": "low"
             },
             {
-                "filePath": "src/lib/material-theme/terminal-pastel-generator.ts",
-                "type": "function",
-                "linktype": "miscellaneous",
-                "linksubtype": "function",
-                "name": "createNeutralColorVariations",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/lib/material-theme/terminal-pastel-generator.ts",
-                "type": "function",
-                "linktype": "miscellaneous",
-                "linksubtype": "function",
-                "name": "createPastelColorVariations",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "filePath": "src/lib/material-theme/terminal-generator.ts",
                 "type": "function",
                 "linktype": "miscellaneous",
                 "linksubtype": "function",
@@ -3446,37 +3258,37 @@
                 "status": "low"
             },
             {
-                "filePath": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "filePath": "src/lib/material-theme/terminal-generator.ts",
                 "type": "function",
                 "linktype": "miscellaneous",
                 "linksubtype": "function",
-                "name": "generateTerminalPastelColors",
+                "name": "generateTerminalColors",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "filePath": "src/lib/material-theme/terminal-generator.ts",
                 "type": "function",
                 "linktype": "miscellaneous",
                 "linksubtype": "function",
-                "name": "generateTerminalPastelCSS",
+                "name": "generateTerminalCSS",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "filePath": "src/lib/material-theme/terminal-generator.ts",
                 "type": "function",
                 "linktype": "miscellaneous",
                 "linksubtype": "function",
-                "name": "generateTerminalPastelFiles",
+                "name": "generateTerminalFiles",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "src/lib/material-theme/terminal-pastel-generator.ts",
+                "filePath": "src/lib/material-theme/terminal-generator.ts",
                 "type": "function",
                 "linktype": "miscellaneous",
                 "linksubtype": "function",
@@ -3579,16 +3391,6 @@
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "EXTRA_COLORS_CONFIG",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/lib/material-theme/theme.config.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
                 "name": "SCHEMES",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
@@ -3619,7 +3421,17 @@
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "TERMINAL_PASTEL_CSS_VARS",
+                "name": "TERMINAL_COLORS_CONFIG",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/material-theme/theme.config.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "TERMINAL_CSS_VARS",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
@@ -3660,16 +3472,6 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "typealias",
                 "name": "MaterialColors",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/lib/material-theme/theme.config.ts",
-                "type": "type alias",
-                "linktype": "miscellaneous",
-                "linksubtype": "typealias",
-                "name": "PastelColors",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"

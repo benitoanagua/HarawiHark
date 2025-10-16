@@ -23,7 +23,7 @@ function createTerminalColorVariations(
 
   const containerColor = Hct.from(baseHct.hue, baseHct.chroma * 0.7, containerTone).toInt();
 
-  const onContainerTone = isDark ? Math.min(95, baseTone + 60) : Math.max(20, baseTone - 50);
+  const onContainerTone = isDark ? Math.min(95, baseTone + 60) : Math.max(30, baseTone - 20);
 
   const onContainerColor = Hct.from(baseHct.hue, baseHct.chroma * 0.2, onContainerTone).toInt();
 

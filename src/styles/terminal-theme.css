@@ -1,22 +1,22 @@
 @theme {
   --color-red: #de3054;
   --color-redContainer: #f77483;
-  --color-onRedContainer: #44292b;
+  --color-onRedContainer: #5d3f41;
   --color-green: #5e8129;
   --color-greenContainer: #8da667;
-  --color-onGreenContainer: #2e3226;
+  --color-onGreenContainer: #44483b;
   --color-yellow: #c3830d;
   --color-yellowContainer: #e3af65;
-  --color-onYellowContainer: #392f21;
+  --color-onYellowContainer: #695c4b;
   --color-blue: #3d79c4;
   --color-blueContainer: #80a0d2;
-  --color-onBlueContainer: #2c313a;
+  --color-onBlueContainer: #434851;
   --color-magenta: #c2469d;
   --color-magentaContainer: #da80b8;
-  --color-onMagentaContainer: #3d2b35;
+  --color-onMagentaContainer: #55414c;
   --color-cyan: #0f8296;
   --color-cyanContainer: #71a5b3;
-  --color-onCyanContainer: #293234;
+  --color-onCyanContainer: #3f484b;
   --color-inverseRed: #ffb2b7;
   --color-inverseRedContainer: #a63647;
   --color-inverseOnRedContainer: #ffeced;

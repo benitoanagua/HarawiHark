@@ -8,7 +8,7 @@ import { ButtonComponent } from '../button/button.component';
   templateUrl: './empty-state.component.html',
 })
 export class EmptyStateComponent {
-  @Input() icon = '📝';
+  @Input() icon = 'icon-[iconoir--page-search]';
   @Input() title = '';
   @Input() description = '';
   @Input() actionLabel?: string;
