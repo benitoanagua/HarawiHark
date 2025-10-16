@@ -1,71 +1,57 @@
 .btn-base {
-  font-family: var(--font-sans);
-  border: none;
-  cursor: pointer;
-  transition: all 200ms cubic-bezier(0, 0, 0, 1);
-  border-radius: var(--radius-none);
-  box-shadow: var(--shadow-none);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-2);
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  @apply border-0 cursor-pointer;
+  @apply font-semibold tracking-tight;
+  @apply transition-all duration-200;
+  @apply flex items-center justify-center gap-2;
 }
 
 .btn-base:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  @apply outline outline-2 outline-offset-2 outline-primary;
 }
 
 .btn-base:disabled {
-  background-color: var(--color-surfaceVariant);
-  color: var(--color-onSurfaceVariant);
-  cursor: not-allowed;
-  opacity: 0.6;
+  @apply opacity-30 cursor-not-allowed;
+}
+
+.btn-base:active:not(:disabled) {
+  @apply scale-95;
 }
 
 .btn-small {
-  padding: var(--spacing-2) var(--spacing-4);
-  font-size: 0.875rem;
+  @apply px-4 py-2 text-sm;
 }
 
 .btn-medium {
-  padding: var(--spacing-3) var(--spacing-6);
-  font-size: 1rem;
+  @apply px-6 py-3 text-base;
 }
 
 .btn-large {
-  padding: var(--spacing-4) var(--spacing-8);
-  font-size: 1.125rem;
+  @apply px-8 py-4 text-lg;
 }
 
+/* Primary - Material Design */
 .btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-onPrimary);
+  @apply bg-primary text-onPrimary;
+
+  &:hover:not(:disabled) {
+    @apply bg-primaryContainer text-onPrimaryContainer;
+  }
 }
 
-.btn-primary:hover:not(:disabled) {
-  background-color: var(--color-primaryContainer);
-  color: var(--color-onPrimaryContainer);
-}
-
+/* Secondary - Material Design */
 .btn-secondary {
-  background-color: var(--color-surfaceVariant);
-  color: var(--color-onSurfaceVariant);
+  @apply bg-surfaceVariant text-onSurfaceVariant;
+
+  &:hover:not(:disabled) {
+    @apply bg-surfaceContainerHigh;
+  }
 }
 
-.btn-secondary:hover:not(:disabled) {
-  background-color: var(--color-primary);
-  color: var(--color-onPrimary);
-}
-
+/* Outline - Material Design */
 .btn-outline {
-  background-color: transparent;
-  border: 1px solid var(--color-outline);
-  color: var(--color-onSurface);
-}
+  @apply bg-transparent border-2 border-outline text-onSurface;
 
-.btn-outline:hover:not(:disabled) {
-  background-color: var(--color-surfaceVariant);
+  &:hover:not(:disabled) {
+    @apply bg-surfaceVariant;
+  }
 }

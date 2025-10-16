@@ -3,12 +3,12 @@
     "interfaces": [
         {
             "name": "DocumentationItem",
-            "id": "interface-DocumentationItem-331cbed1df1d5be59ce014198c4b9f0ccfe0e5f0a69250e5c5627453a8c004ba8506d71d76019a4a7937c0deab1657d12ef0d4d87475681198d6fec9750a87eb",
+            "id": "interface-DocumentationItem-cc4c61d4cdd15ed2b89f8d99c723dfb7a49745584a5558a2ab7e3d8a27583e1fa3ef25546ce8056713a36d3273d2389baee34f3d3cd921d75b5e6ce4aba714e9",
             "file": "src/app/services/app-data.service.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\nexport interface NavigationItem {\n  title: string;\n  icon: string;\n  description: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  readonly metroTiles: MetroTile[] = [\n    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n\n  readonly navigationItems: NavigationItem[] = [\n    {\n      title: 'Explore Documentation',\n      icon: 'icon-[iconoir--book-stack]',\n      description: 'Learn about Angular features',\n    },\n    {\n      title: 'Tutorials',\n      icon: 'icon-[iconoir--graduation-cap]',\n      description: 'Step-by-step learning guides',\n    },\n    {\n      title: 'AI Development',\n      icon: 'icon-[iconoir--chat-bubble]',\n      description: 'Build with AI assistance',\n    },\n    {\n      title: 'CLI Tools',\n      icon: 'icon-[iconoir--terminal]',\n      description: 'Command line interface docs',\n    },\n  ];\n}\n",
+            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  // Usar colores CSS de Material Design 3\n  readonly metroTiles: MetroTile[] = [\n    { label: 'mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'calendar', color: 'var(--color-secondary)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'photos', color: 'var(--color-tertiary)', icon: 'icon-[iconoir--camera]' },\n    { label: 'store', color: 'var(--color-error)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'content, not chrome',\n      description: 'Typography-first design. No ornaments, just pure content.',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'live tiles',\n      description: 'Dynamic flat blocks with real-time updates and bold colors.',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'clean typography',\n      description: 'Light weight with tight tracking for visual hierarchy.',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'linear motion',\n      description: 'Purposeful animations without decoration or bounce.',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n}\n",
             "properties": [
                 {
                     "name": "description",
@@ -48,12 +48,12 @@
         },
         {
             "name": "MetroTile",
-            "id": "interface-MetroTile-331cbed1df1d5be59ce014198c4b9f0ccfe0e5f0a69250e5c5627453a8c004ba8506d71d76019a4a7937c0deab1657d12ef0d4d87475681198d6fec9750a87eb",
+            "id": "interface-MetroTile-cc4c61d4cdd15ed2b89f8d99c723dfb7a49745584a5558a2ab7e3d8a27583e1fa3ef25546ce8056713a36d3273d2389baee34f3d3cd921d75b5e6ce4aba714e9",
             "file": "src/app/services/app-data.service.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\nexport interface NavigationItem {\n  title: string;\n  icon: string;\n  description: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  readonly metroTiles: MetroTile[] = [\n    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n\n  readonly navigationItems: NavigationItem[] = [\n    {\n      title: 'Explore Documentation',\n      icon: 'icon-[iconoir--book-stack]',\n      description: 'Learn about Angular features',\n    },\n    {\n      title: 'Tutorials',\n      icon: 'icon-[iconoir--graduation-cap]',\n      description: 'Step-by-step learning guides',\n    },\n    {\n      title: 'AI Development',\n      icon: 'icon-[iconoir--chat-bubble]',\n      description: 'Build with AI assistance',\n    },\n    {\n      title: 'CLI Tools',\n      icon: 'icon-[iconoir--terminal]',\n      description: 'Command line interface docs',\n    },\n  ];\n}\n",
+            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  // Usar colores CSS de Material Design 3\n  readonly metroTiles: MetroTile[] = [\n    { label: 'mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'calendar', color: 'var(--color-secondary)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'photos', color: 'var(--color-tertiary)', icon: 'icon-[iconoir--camera]' },\n    { label: 'store', color: 'var(--color-error)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'content, not chrome',\n      description: 'Typography-first design. No ornaments, just pure content.',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'live tiles',\n      description: 'Dynamic flat blocks with real-time updates and bold colors.',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'clean typography',\n      description: 'Light weight with tight tracking for visual hierarchy.',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'linear motion',\n      description: 'Purposeful animations without decoration or bounce.',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n}\n",
             "properties": [
                 {
                     "name": "color",
@@ -92,51 +92,6 @@
             "extends": []
         },
         {
-            "name": "NavigationItem",
-            "id": "interface-NavigationItem-331cbed1df1d5be59ce014198c4b9f0ccfe0e5f0a69250e5c5627453a8c004ba8506d71d76019a4a7937c0deab1657d12ef0d4d87475681198d6fec9750a87eb",
-            "file": "src/app/services/app-data.service.ts",
-            "deprecated": false,
-            "deprecationMessage": "",
-            "type": "interface",
-            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\nexport interface NavigationItem {\n  title: string;\n  icon: string;\n  description: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  readonly metroTiles: MetroTile[] = [\n    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n\n  readonly navigationItems: NavigationItem[] = [\n    {\n      title: 'Explore Documentation',\n      icon: 'icon-[iconoir--book-stack]',\n      description: 'Learn about Angular features',\n    },\n    {\n      title: 'Tutorials',\n      icon: 'icon-[iconoir--graduation-cap]',\n      description: 'Step-by-step learning guides',\n    },\n    {\n      title: 'AI Development',\n      icon: 'icon-[iconoir--chat-bubble]',\n      description: 'Build with AI assistance',\n    },\n    {\n      title: 'CLI Tools',\n      icon: 'icon-[iconoir--terminal]',\n      description: 'Command line interface docs',\n    },\n  ];\n}\n",
-            "properties": [
-                {
-                    "name": "description",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 18
-                },
-                {
-                    "name": "icon",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 17
-                },
-                {
-                    "name": "title",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 16
-                }
-            ],
-            "indexSignatures": [],
-            "kind": 172,
-            "methods": [],
-            "extends": []
-        },
-        {
             "name": "User",
             "id": "interface-User-8e6d7a41a58bad4fc6aadd9c78fec981bf912759b5a447b0949f9cfdc227641ea2654bdcb0f99b7b7ddd06321a3f7a50b16c2e2b77a4ce6a19bbd603bc3c0ec8",
             "file": "src/app/components/header/header.component.ts",
@@ -165,47 +120,33 @@
     "injectables": [
         {
             "name": "AppDataService",
-            "id": "injectable-AppDataService-331cbed1df1d5be59ce014198c4b9f0ccfe0e5f0a69250e5c5627453a8c004ba8506d71d76019a4a7937c0deab1657d12ef0d4d87475681198d6fec9750a87eb",
+            "id": "injectable-AppDataService-cc4c61d4cdd15ed2b89f8d99c723dfb7a49745584a5558a2ab7e3d8a27583e1fa3ef25546ce8056713a36d3273d2389baee34f3d3cd921d75b5e6ce4aba714e9",
             "file": "src/app/services/app-data.service.ts",
             "properties": [
                 {
                     "name": "documentation",
-                    "defaultValue": "[\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ]",
+                    "defaultValue": "[\n    {\n      title: 'content, not chrome',\n      description: 'Typography-first design. No ornaments, just pure content.',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'live tiles',\n      description: 'Dynamic flat blocks with real-time updates and bold colors.',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'clean typography',\n      description: 'Light weight with tight tracking for visual hierarchy.',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'linear motion',\n      description: 'Purposeful animations without decoration or bounce.',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ]",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "DocumentationItem[]",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 32,
+                    "line": 27,
                     "modifierKind": [
                         148
                     ]
                 },
                 {
                     "name": "metroTiles",
-                    "defaultValue": "[\n    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },\n  ]",
+                    "defaultValue": "[\n    { label: 'mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'calendar', color: 'var(--color-secondary)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'photos', color: 'var(--color-tertiary)', icon: 'icon-[iconoir--camera]' },\n    { label: 'store', color: 'var(--color-error)', icon: 'icon-[iconoir--shop]' },\n  ]",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "MetroTile[]",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 25,
-                    "modifierKind": [
-                        148
-                    ]
-                },
-                {
-                    "name": "navigationItems",
-                    "defaultValue": "[\n    {\n      title: 'Explore Documentation',\n      icon: 'icon-[iconoir--book-stack]',\n      description: 'Learn about Angular features',\n    },\n    {\n      title: 'Tutorials',\n      icon: 'icon-[iconoir--graduation-cap]',\n      description: 'Step-by-step learning guides',\n    },\n    {\n      title: 'AI Development',\n      icon: 'icon-[iconoir--chat-bubble]',\n      description: 'Build with AI assistance',\n    },\n    {\n      title: 'CLI Tools',\n      icon: 'icon-[iconoir--terminal]',\n      description: 'Command line interface docs',\n    },\n  ]",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "NavigationItem[]",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 55,
+                    "line": 20,
                     "modifierKind": [
                         148
                     ]
@@ -216,7 +157,7 @@
             "deprecationMessage": "",
             "description": "",
             "rawdescription": "\n",
-            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\nexport interface NavigationItem {\n  title: string;\n  icon: string;\n  description: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  readonly metroTiles: MetroTile[] = [\n    { label: 'Mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'Calendar', color: 'var(--color-error)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'Photos', color: 'var(--color-primaryContainer)', icon: 'icon-[iconoir--camera]' },\n    { label: 'Store', color: 'var(--color-surfaceVariant)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'Design Principles',\n      description: 'Learn the core principles of Metro UI design language',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'Component Library',\n      description: 'Browse our collection of Metro-styled components',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'Typography Scale',\n      description: 'Understand the typographic hierarchy and spacing',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'Motion Guidelines',\n      description: 'Implement meaningful animations and transitions',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n\n  readonly navigationItems: NavigationItem[] = [\n    {\n      title: 'Explore Documentation',\n      icon: 'icon-[iconoir--book-stack]',\n      description: 'Learn about Angular features',\n    },\n    {\n      title: 'Tutorials',\n      icon: 'icon-[iconoir--graduation-cap]',\n      description: 'Step-by-step learning guides',\n    },\n    {\n      title: 'AI Development',\n      icon: 'icon-[iconoir--chat-bubble]',\n      description: 'Build with AI assistance',\n    },\n    {\n      title: 'CLI Tools',\n      icon: 'icon-[iconoir--terminal]',\n      description: 'Command line interface docs',\n    },\n  ];\n}\n",
+            "sourceCode": "import { Injectable } from '@angular/core';\n\nexport interface MetroTile {\n  label: string;\n  color: string;\n  icon: string;\n}\n\nexport interface DocumentationItem {\n  title: string;\n  description: string;\n  icon: string;\n}\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class AppDataService {\n  // Usar colores CSS de Material Design 3\n  readonly metroTiles: MetroTile[] = [\n    { label: 'mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },\n    { label: 'calendar', color: 'var(--color-secondary)', icon: 'icon-[iconoir--calendar]' },\n    { label: 'photos', color: 'var(--color-tertiary)', icon: 'icon-[iconoir--camera]' },\n    { label: 'store', color: 'var(--color-error)', icon: 'icon-[iconoir--shop]' },\n  ];\n\n  readonly documentation: DocumentationItem[] = [\n    {\n      title: 'content, not chrome',\n      description: 'Typography-first design. No ornaments, just pure content.',\n      icon: 'icon-[iconoir--design-nib]',\n    },\n    {\n      title: 'live tiles',\n      description: 'Dynamic flat blocks with real-time updates and bold colors.',\n      icon: 'icon-[iconoir--view-grid]',\n    },\n    {\n      title: 'clean typography',\n      description: 'Light weight with tight tracking for visual hierarchy.',\n      icon: 'icon-[iconoir--text-box]',\n    },\n    {\n      title: 'linear motion',\n      description: 'Purposeful animations without decoration or bounce.',\n      icon: 'icon-[iconoir--flash]',\n    },\n  ];\n}\n",
             "extends": [],
             "type": "injectable"
         },
@@ -495,7 +436,7 @@
                     }
                 }
             },
-            "templateData": "<button\n  type=\"button\"\n  (click)=\"clicked.emit($event)\"\n  [class]=\"buttonClasses\"\n>\n  @if (icon) {\n    <span [class]=\"icon\" class=\"mr-2\"></span>\n  }\n  {{ label }}\n</button>"
+            "templateData": "<button\n  type=\"button\"\n  (click)=\"clicked.emit($event)\"\n  [class]=\"buttonClasses\"\n>\n  @if (icon) {\n    <span [class]=\"icon\"></span>\n  }\n  {{ label }}\n</button>"
         },
         {
             "name": "HeaderComponent",
@@ -576,7 +517,7 @@
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<header class=\"storybook-header\">\n  <div class=\"header-content\">\n    <div class=\"logo-section\">\n      <div class=\"logo-wrapper\">\n        <span class=\"icon-[iconoir--windows] text-2xl text-primary\"></span>\n        <h1 class=\"logo-title\">Metro UI</h1>\n      </div>\n    </div>\n\n    <div class=\"nav-section\">\n      <app-theme-toggle />\n      \n      @if (user) {\n        <div class=\"user-section\">\n          <span class=\"welcome-text\">\n            Welcome, <b class=\"user-name\">{{ user.name }}</b>!\n          </span>\n          <app-button\n            size=\"small\"\n            variant=\"outline\"\n            (clicked)=\"logout.emit($event)\"\n            label=\"Log out\"\n            icon=\"icon-[iconoir--log-out]\"\n          />\n        </div>\n      } @else {\n        <div class=\"auth-section\">\n          <app-button\n            size=\"small\"\n            variant=\"outline\"\n            (clicked)=\"login.emit($event)\"\n            label=\"Log in\"\n            icon=\"icon-[iconoir--log-in]\"\n          />\n          <app-button\n            size=\"small\"\n            variant=\"primary\"\n            (clicked)=\"createAccount.emit($event)\"\n            label=\"Sign up\"\n            icon=\"icon-[iconoir--user]\"\n          />\n        </div>\n      }\n    </div>\n  </div>\n</header>"
+            "templateData": "<header class=\"storybook-header\">\n  <div class=\"header-content\">\n    <div class=\"logo-section\">\n      <div class=\"logo-wrapper\">\n        <span class=\"icon-[iconoir--windows] text-2xl text-primary\"></span>\n        <h1 class=\"logo-title\">metro ui</h1>\n      </div>\n    </div>\n\n    <div class=\"nav-section\">\n      <app-theme-toggle />\n      \n      @if (user) {\n        <div class=\"user-section\">\n          <span class=\"welcome-text\">\n            welcome, <b class=\"user-name\">{{ user.name }}</b>\n          </span>\n          <app-button\n            size=\"small\"\n            variant=\"outline\"\n            (clicked)=\"logout.emit($event)\"\n            label=\"log out\"\n            icon=\"icon-[iconoir--log-out]\"\n          />\n        </div>\n      } @else {\n        <div class=\"auth-section\">\n          <app-button\n            size=\"small\"\n            variant=\"outline\"\n            (clicked)=\"login.emit($event)\"\n            label=\"log in\"\n            icon=\"icon-[iconoir--log-in]\"\n          />\n          <app-button\n            size=\"small\"\n            variant=\"primary\"\n            (clicked)=\"createAccount.emit($event)\"\n            label=\"sign up\"\n            icon=\"icon-[iconoir--user]\"\n          />\n        </div>\n      }\n    </div>\n  </div>\n</header>"
         },
         {
             "name": "PageComponent",
@@ -705,7 +646,7 @@
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<article class=\"storybook-page\">\n  <app-header\n    [user]=\"user\"\n    (logout)=\"doLogout()\"\n    (login)=\"doLogin()\"\n    (createAccount)=\"doCreateAccount()\"\n  />\n  \n  <section class=\"page-content\">\n    <!-- Hero Section -->\n    <div class=\"hero-section\">\n      <h2 class=\"hero-title\">Metro UI Design System</h2>\n      <p class=\"hero-subtitle\">\n        Building modern interfaces with Windows Phone inspiration\n      </p>\n    </div>\n\n    <!-- Content Grid -->\n    <div class=\"content-grid\">\n      <!-- Tiles Section -->\n      <div class=\"tiles-section\">\n        <h3 class=\"section-title\">Application Tiles</h3>\n        <div class=\"tiles-grid\">\n          @for (tile of metroTiles; track tile.label) {\n            <div \n              class=\"metro-tile-story\"\n              [style.background]=\"tile.color\"\n            >\n              <span [class]=\"tile.icon\" class=\"tile-icon\"></span>\n              <span class=\"tile-label\">{{ tile.label }}</span>\n            </div>\n          }\n        </div>\n      </div>\n\n      <!-- Documentation Section -->\n      <div class=\"docs-section\">\n        <h3 class=\"section-title\">Getting Started</h3>\n        <div class=\"docs-list\">\n          @for (doc of documentation; track doc.title) {\n            <div class=\"doc-item\">\n              <span [class]=\"doc.icon\" class=\"doc-icon\"></span>\n              <div class=\"doc-content\">\n                <h4 class=\"doc-title\">{{ doc.title }}</h4>\n                <p class=\"doc-description\">{{ doc.description }}</p>\n              </div>\n              <span class=\"icon-[iconoir--arrow-right] doc-arrow\"></span>\n            </div>\n          }\n        </div>\n      </div>\n    </div>\n\n    <!-- Tips Section -->\n    <div class=\"tips-section\">\n      <div class=\"tip-wrapper\">\n        <span class=\"icon-[iconoir--light-bulb] tip-badge\"></span>\n        <p class=\"tip-text\">\n          Metro UI emphasizes clean typography, meaningful motion, and content-first design.\n          Use ample whitespace and focus on readability.\n        </p>\n      </div>\n    </div>\n  </section>\n</article>"
+            "templateData": "<article class=\"storybook-page\">\n  <app-header\n    [user]=\"user\"\n    (logout)=\"doLogout()\"\n    (login)=\"doLogin()\"\n    (createAccount)=\"doCreateAccount()\"\n  />\n  \n  <section class=\"page-content\">\n    <!-- Hero Section -->\n    <div class=\"hero-section\">\n      <h1 class=\"hero-title\">metro ui</h1>\n      <p class=\"hero-subtitle\">\n        content, not chrome\n      </p>\n    </div>\n\n    <!-- Content Grid -->\n    <div class=\"content-grid\">\n      <!-- Live Tiles Section -->\n      <div class=\"tiles-section\">\n        <h2 class=\"section-title\">live tiles</h2>\n        <div class=\"tiles-grid\">\n          @for (tile of metroTiles; track tile.label) {\n            <div \n              class=\"metro-tile-story\"\n              [style.background]=\"tile.color\"\n            >\n              <span [class]=\"tile.icon\" class=\"tile-icon\"></span>\n              <span class=\"tile-label\">{{ tile.label }}</span>\n            </div>\n          }\n        </div>\n      </div>\n\n      <!-- Documentation Section -->\n      <div class=\"docs-section\">\n        <h2 class=\"section-title\">design language</h2>\n        <div class=\"docs-list\">\n          @for (doc of documentation; track doc.title) {\n            <div class=\"doc-item\">\n              <span [class]=\"doc.icon\" class=\"doc-icon\"></span>\n              <div class=\"doc-content\">\n                <h3 class=\"doc-title\">{{ doc.title }}</h3>\n                <p class=\"doc-description\">{{ doc.description }}</p>\n              </div>\n              <span class=\"icon-[iconoir--arrow-right] doc-arrow\"></span>\n            </div>\n          }\n        </div>\n      </div>\n    </div>\n\n    <!-- Tips Section -->\n    <div class=\"tips-section\">\n      <div class=\"tip-wrapper\">\n        <span class=\"icon-[iconoir--light-bulb] tip-badge\"></span>\n        <p class=\"tip-text\">\n          Metro UI (2010–2014) was the first truly digital-native design language.\n          No skeuomorphism, no shadows, no chrome.\n          Just bold typography, flat colors, and purposeful motion.\n        </p>\n      </div>\n    </div>\n  </section>\n</article>"
         },
         {
             "name": "ThemeToggleComponent",
@@ -848,7 +789,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "string",
-                "defaultValue": "'#4b0082'"
+                "defaultValue": "'#F4C2C2'"
             },
             {
                 "name": "SELECTED_SCHEME",
@@ -858,7 +799,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "string",
-                "defaultValue": "'neutral'"
+                "defaultValue": "'fidelity'"
             },
             {
                 "name": "THEME_CSS_VARS",
@@ -1081,7 +1022,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "string",
-                    "defaultValue": "'#4b0082'"
+                    "defaultValue": "'#F4C2C2'"
                 },
                 {
                     "name": "SELECTED_SCHEME",
@@ -1091,7 +1032,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "string",
-                    "defaultValue": "'neutral'"
+                    "defaultValue": "'fidelity'"
                 }
             ],
             "src/lib/material-theme/theme-generator.ts": [
@@ -1347,7 +1288,7 @@
                 "linktype": "injectable",
                 "name": "AppDataService",
                 "coveragePercent": 0,
-                "coverageCount": "0/4",
+                "coverageCount": "0/3",
                 "status": "low"
             },
             {
@@ -1364,15 +1305,6 @@
                 "type": "interface",
                 "linktype": "interface",
                 "name": "MetroTile",
-                "coveragePercent": 0,
-                "coverageCount": "0/4",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/services/app-data.service.ts",
-                "type": "interface",
-                "linktype": "interface",
-                "name": "NavigationItem",
                 "coveragePercent": 0,
                 "coverageCount": "0/4",
                 "status": "low"

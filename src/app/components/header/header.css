@@ -1,76 +1,43 @@
 .storybook-header {
-  background-color: var(--color-surface);
-  color: var(--color-onSurface);
-  border-bottom: 1px solid var(--color-outlineVariant);
-  font-family: var(--font-sans);
+  @apply bg-surface text-onSurface;
+  @apply border-b-2 border-outlineVariant;
 }
 
 .header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-4) var(--spacing-6);
-  max-width: 80rem;
-  margin-left: auto;
-  margin-right: auto;
+  @apply flex justify-between items-center;
+  @apply px-6 py-4 max-w-7xl mx-auto;
 }
 
 .logo-section {
-  display: flex;
-  align-items: center;
+  @apply flex items-center;
 }
 
 .logo-wrapper {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3);
-}
-
-.logo-icon {
-  border-radius: var(--radius-sm);
+  @apply flex items-center gap-3;
 }
 
 .logo-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-onSurface);
+  @apply text-xl lg:text-2xl;
+  @apply font-light tracking-tight text-onSurface;
 }
 
 .nav-section {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-4);
+  @apply flex items-center gap-4 lg:gap-6;
 }
 
 .user-section {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3);
+  @apply flex items-center gap-3 lg:gap-4;
 }
 
 .auth-section {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3);
+  @apply flex items-center gap-3;
 }
 
 .welcome-text {
-  color: var(--color-onSurfaceVariant);
-  font-size: 0.875rem;
+  @apply text-onSurfaceVariant text-sm;
+  @apply hidden md:block;
 }
 
 .user-name {
-  color: var(--color-onSurface);
-  font-weight: 600;
-}
-
-/* Responsive usando media queries de Tailwind */
-@media (max-width: 768px) {
-  .header-content {
-    padding: var(--spacing-3) var(--spacing-4);
-  }
-
-  .welcome-text {
-    display: none;
-  }
+  @apply text-onSurface font-semibold;
 }

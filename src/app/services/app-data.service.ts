@@ -16,33 +16,33 @@ export interface DocumentationItem {
   providedIn: 'root',
 })
 export class AppDataService {
-  // Colores Metro oficiales
+  // Usar colores CSS de Material Design 3
   readonly metroTiles: MetroTile[] = [
-    { label: 'Mail', color: '#0078D7', icon: 'icon-[iconoir--mail]' },
-    { label: 'Calendar', color: '#F7630C', icon: 'icon-[iconoir--calendar]' },
-    { label: 'Photos', color: '#00ABA9', icon: 'icon-[iconoir--camera]' },
-    { label: 'Store', color: '#8CBF26', icon: 'icon-[iconoir--shop]' },
+    { label: 'mail', color: 'var(--color-primary)', icon: 'icon-[iconoir--mail]' },
+    { label: 'calendar', color: 'var(--color-secondary)', icon: 'icon-[iconoir--calendar]' },
+    { label: 'photos', color: 'var(--color-tertiary)', icon: 'icon-[iconoir--camera]' },
+    { label: 'store', color: 'var(--color-error)', icon: 'icon-[iconoir--shop]' },
   ];
 
   readonly documentation: DocumentationItem[] = [
     {
-      title: 'Design Principles',
-      description: 'Content, not chrome. Typography-first design language.',
+      title: 'content, not chrome',
+      description: 'Typography-first design. No ornaments, just pure content.',
       icon: 'icon-[iconoir--design-nib]',
     },
     {
-      title: 'Live Tiles',
-      description: 'Dynamic, flat, colorful blocks with real-time updates.',
+      title: 'live tiles',
+      description: 'Dynamic flat blocks with real-time updates and bold colors.',
       icon: 'icon-[iconoir--view-grid]',
     },
     {
-      title: 'Typography Scale',
-      description: 'Segoe UI Light with tight tracking for hierarchy.',
+      title: 'clean typography',
+      description: 'Light weight with tight tracking for visual hierarchy.',
       icon: 'icon-[iconoir--text-box]',
     },
     {
-      title: 'Motion Language',
-      description: '2D linear animations with purpose, not decoration.',
+      title: 'linear motion',
+      description: 'Purposeful animations without decoration or bounce.',
       icon: 'icon-[iconoir--flash]',
     },
   ];

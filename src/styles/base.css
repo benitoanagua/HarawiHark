@@ -1,88 +1,89 @@
 @import 'tailwindcss';
 @plugin "@iconify/tailwind4";
 
-@theme {
-  /* Tipografía Metro */
-  --font-sans: 'Segoe UI', 'Segoe WP', system-ui, sans-serif;
-
-  /* Espaciado Metro (base 4px) */
-  --spacing-1: 0.25rem;
-  --spacing-2: 0.5rem;
-  --spacing-3: 0.75rem;
-  --spacing-4: 1rem;
-  --spacing-6: 1.5rem;
-  --spacing-8: 2rem;
-  --spacing-12: 3rem;
-  --spacing-16: 4rem;
-
-  /* Sin bordes redondeados (Metro) */
-  --radius-none: 0;
-  --radius-sm: 0.125rem;
-
-  /* Sin sombras (Metro) */
-  --shadow-none: 0 0 #0000;
-}
-
 @layer base {
   html {
-    font-size: 12px;
-  }
-
-  @media (min-width: 600px) {
-    html {
-      font-size: 14px;
-    }
+    @apply text-[12px] lg:text-[14px];
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-onBackground);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply bg-background text-onBackground;
+    @apply font-sans antialiased;
   }
 
-  /* Reset Metro: sin bordes redondeados */
+  /* Metro: sin bordes ni sombras */
   * {
-    border-radius: var(--radius-none) !important;
+    @apply rounded-none shadow-none;
   }
 }
 
 @layer utilities {
+  /* Metro Tile */
   .metro-tile {
-    aspect-ratio: 1;
-    transition: transform 200ms cubic-bezier(0, 0, 0, 1);
-  }
+    @apply flex flex-col justify-end p-4;
+    @apply bg-primary text-onPrimary;
+    @apply transition-transform duration-300 ease-out;
+    @apply cursor-pointer aspect-square;
 
-  .metro-tile:hover {
-    transform: scale(1.02);
-  }
-
-  .metro-tile:active {
-    transform: scale(0.98);
-  }
-
-  .metro-entrance {
-    animation: metro-entrance 300ms cubic-bezier(0, 0, 0, 1);
-  }
-
-  @keyframes metro-entrance {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
+    &:hover {
+      @apply scale-105;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+
+    &:active {
+      @apply scale-95;
     }
+  }
+
+  /* Metro Typography */
+  .metro-heading {
+    @apply font-light tracking-tight text-onBackground;
+  }
+
+  .metro-body {
+    @apply font-normal text-sm opacity-80;
   }
 }
 
-/* Accesibilidad: respetar preferencia de movimiento */
+/* Animaciones - Sin @apply */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flip {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(180deg);
+  }
+}
+
+/* Accesibilidad */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

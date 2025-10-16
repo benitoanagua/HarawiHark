@@ -1,27 +1,20 @@
 .theme-toggle {
-  background-color: var(--color-surfaceVariant);
-  color: var(--color-onSurfaceVariant);
-  border-radius: var(--radius-none);
-  width: 2.5rem;
-  height: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: none;
-  transition: all 200ms cubic-bezier(0, 0, 0, 1);
-}
+  @apply bg-surfaceVariant text-onSurfaceVariant;
+  @apply w-10 h-10 lg:w-12 lg:h-12;
+  @apply flex items-center justify-center;
+  @apply border-2 border-outline;
+  @apply transition-all duration-200;
+  @apply cursor-pointer;
 
-.theme-toggle:hover {
-  background-color: var(--color-primary);
-  color: var(--color-onPrimary);
-}
+  &:hover {
+    @apply bg-surfaceContainerHigh;
+  }
 
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
+  &:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary;
+  }
 
-.theme-toggle:active {
-  transform: scale(0.95);
+  &:active {
+    @apply scale-95;
+  }
 }

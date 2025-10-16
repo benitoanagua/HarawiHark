@@ -3,7 +3,7 @@
     <div class="logo-section">
       <div class="logo-wrapper">
         <span class="icon-[iconoir--windows] text-2xl text-primary"></span>
-        <h1 class="logo-title">Metro UI</h1>
+        <h1 class="logo-title">metro ui</h1>
       </div>
     </div>
 
@@ -13,13 +13,13 @@
       @if (user) {
         <div class="user-section">
           <span class="welcome-text">
-            Welcome, <b class="user-name">{{ user.name }}</b>!
+            welcome, <b class="user-name">{{ user.name }}</b>
           </span>
           <app-button
             size="small"
             variant="outline"
             (clicked)="logout.emit($event)"
-            label="Log out"
+            label="log out"
             icon="icon-[iconoir--log-out]"
           />
         </div>
@@ -29,14 +29,14 @@
             size="small"
             variant="outline"
             (clicked)="login.emit($event)"
-            label="Log in"
+            label="log in"
             icon="icon-[iconoir--log-in]"
           />
           <app-button
             size="small"
             variant="primary"
             (clicked)="createAccount.emit($event)"
-            label="Sign up"
+            label="sign up"
             icon="icon-[iconoir--user]"
           />
         </div>
