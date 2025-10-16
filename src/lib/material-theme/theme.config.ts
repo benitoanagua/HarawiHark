@@ -36,23 +36,23 @@ export const SELECTED_SCHEME = 'fidelity';
 
 export const EXTRA_COLORS_CONFIG = {
   terminal: {
-    black: { hue: 0, chroma: 0, tone: 10 },
+    black: { hue: 0, chroma: 0, tone: 15 },
     red: { hue: 10, chroma: 84, tone: 50 },
     green: { hue: 145, chroma: 48, tone: 50 },
-    yellow: { hue: 80, chroma: 70, tone: 60 },
+    yellow: { hue: 90, chroma: 70, tone: 60 },
     blue: { hue: 245, chroma: 80, tone: 50 },
     magenta: { hue: 330, chroma: 68, tone: 50 },
-    cyan: { hue: 190, chroma: 48, tone: 50 },
+    cyan: { hue: 200, chroma: 48, tone: 50 },
     white: { hue: 0, chroma: 0, tone: 95 },
   },
 
   pastel: {
-    teal: { hue: 170, chroma: 25, tone: 80 },
-    maroon: { hue: 350, chroma: 30, tone: 75 },
-    mauve: { hue: 280, chroma: 35, tone: 80 },
-    peach: { hue: 20, chroma: 40, tone: 85 },
-    lime: { hue: 100, chroma: 45, tone: 85 },
-    rosewater: { hue: 10, chroma: 15, tone: 92 },
+    teal: { hue: 180, chroma: 25, tone: 75 },
+    maroon: { hue: 355, chroma: 35, tone: 60 },
+    mauve: { hue: 270, chroma: 35, tone: 75 },
+    peach: { hue: 25, chroma: 40, tone: 80 },
+    lime: { hue: 140, chroma: 55, tone: 75 },
+    rosewater: { hue: 5, chroma: 20, tone: 90 },
   },
 };
 
