@@ -1,8 +1,8 @@
 <div [class]="containerClasses">
-  <span [class]="iconClass + ' error-icon'"></span>
-  <div class="error-content">
-    <h4 class="error-title">{{ title }}</h4>
-    <p class="error-message">{{ message }}</p>
+  <span [class]="iconClass + ' status-icon'"></span>
+  <div class="status-content">
+    <h4 class="status-title">{{ title }}</h4>
+    <p class="status-message-text">{{ message }}</p>
   </div>
   @if (actionLabel) {
     <app-button

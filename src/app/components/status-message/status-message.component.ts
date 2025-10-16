@@ -2,15 +2,15 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 
 @Component({
-  selector: 'app-error-display',
+  selector: 'app-status-message',
   standalone: true,
   imports: [ButtonComponent],
-  templateUrl: './error-display.component.html',
+  templateUrl: './status-message.component.html',
 })
-export class ErrorDisplayComponent {
-  @Input() title = 'error';
+export class StatusMessageComponent {
+  @Input() title = '';
   @Input() message = '';
-  @Input() severity: 'info' | 'warning' | 'error' = 'error';
+  @Input() severity: 'info' | 'warning' | 'error' | 'success' = 'info';
   @Input() actionLabel?: string;
   @Output() action = new EventEmitter<void>();
 
@@ -19,11 +19,12 @@ export class ErrorDisplayComponent {
       info: 'icon-[iconoir--info-circle]',
       warning: 'icon-[iconoir--warning-triangle]',
       error: 'icon-[iconoir--cancel]',
+      success: 'icon-[iconoir--check]',
     };
     return icons[this.severity];
   }
 
   get containerClasses(): string {
-    return `error-display error-${this.severity}`;
+    return `status-message status-${this.severity}`;
   }
 }

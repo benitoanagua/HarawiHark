@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { ErrorDisplayComponent } from './error-display.component';
+import { StatusMessageComponent } from './status-message.component';
 
-const meta: Meta<ErrorDisplayComponent> = {
-  title: 'Metro UI/Error Display',
-  component: ErrorDisplayComponent,
+const meta: Meta<StatusMessageComponent> = {
+  title: 'Metro UI/Status Message',
+  component: StatusMessageComponent,
   tags: ['autodocs'],
   argTypes: {
     title: {
@@ -14,7 +14,7 @@ const meta: Meta<ErrorDisplayComponent> = {
     },
     severity: {
       control: { type: 'select' },
-      options: ['info', 'warning', 'error'],
+      options: ['info', 'warning', 'error', 'success'],
     },
     actionLabel: {
       control: { type: 'text' },
@@ -23,7 +23,7 @@ const meta: Meta<ErrorDisplayComponent> = {
 };
 
 export default meta;
-type Story = StoryObj<ErrorDisplayComponent>;
+type Story = StoryObj<StatusMessageComponent>;
 
 export const Info: Story = {
   args: {
@@ -49,6 +49,14 @@ export const Error: Story = {
   },
 };
 
+export const Success: Story = {
+  args: {
+    title: 'analysis complete',
+    message: 'Your poem matches the haiku pattern perfectly!',
+    severity: 'success',
+  },
+};
+
 export const WithAction: Story = {
   args: {
     title: 'pattern not found',
@@ -58,33 +66,38 @@ export const WithAction: Story = {
   },
 };
 
-export const ValidationError: Story = {
+export const SuccessWithAction: Story = {
   args: {
-    title: 'validation error',
-    message: 'Empty lines are not allowed. Please write at least one word per line.',
-    severity: 'error',
-    actionLabel: 'clear input',
+    title: 'poem saved',
+    message: 'Your poem has been saved successfully.',
+    severity: 'success',
+    actionLabel: 'view poems',
   },
 };
 
-export const AllSeverities: Story = {
+export const AllStatuses: Story = {
   render: () => ({
     template: `
       <div class="flex flex-col gap-4">
-        <app-error-display
+        <app-status-message
           title="info"
           message="This is an informational message."
           severity="info"
         />
-        <app-error-display
+        <app-status-message
           title="warning"
           message="This is a warning message."
           severity="warning"
         />
-        <app-error-display
+        <app-status-message
           title="error"
           message="This is an error message."
           severity="error"
+        />
+        <app-status-message
+          title="success"
+          message="This is a success message."
+          severity="success"
         />
       </div>
     `,

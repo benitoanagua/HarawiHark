@@ -1,0 +1,53 @@
+.status-message {
+  @apply flex items-start gap-4 p-4;
+  @apply border-2;
+}
+
+.status-info {
+  @apply bg-blueContainer border-onBlueContainer;
+}
+
+.status-warning {
+  @apply bg-yellowContainer border-onYellowContainer;
+}
+
+.status-error {
+  @apply bg-redContainer border-onRedContainer;
+}
+
+.status-success {
+  @apply bg-greenContainer border-onGreenContainer;
+}
+
+.status-icon {
+  @apply text-2xl flex-shrink-0;
+}
+
+.status-content {
+  @apply flex-1;
+}
+
+.status-title {
+  @apply text-base font-semibold tracking-tight mb-1;
+}
+
+.status-message-text {
+  @apply text-sm;
+}
+
+/* Estilos específicos para cada tipo */
+.status-info .status-icon {
+  @apply text-onBlueContainer;
+}
+
+.status-warning .status-icon {
+  @apply text-onYellowContainer;
+}
+
+.status-error .status-icon {
+  @apply text-onRedContainer;
+}
+
+.status-success .status-icon {
+  @apply text-onGreenContainer;
+}
