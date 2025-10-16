@@ -10,6 +10,6 @@ export class LoadingSpinnerComponent {
   @Input() text?: string;
 
   get spinnerClasses(): string {
-    return `spinner spinner-${this.size}`;
+    return `spinner-${this.size}`;
   }
 }

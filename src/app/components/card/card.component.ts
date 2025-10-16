@@ -11,6 +11,12 @@ export class CardComponent {
   @Input() clickable = false;
 
   get cardClasses(): string {
-    return `card-base card-${this.variant} card-padding-${this.padding}`;
+    const classes = [`card-${this.variant}`, `card-padding-${this.padding}`];
+
+    if (this.clickable) {
+      classes.push('clickable');
+    }
+
+    return classes.join(' ');
   }
 }

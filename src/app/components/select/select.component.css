@@ -14,11 +14,11 @@
   @apply appearance-none cursor-pointer;
   @apply transition-all duration-200;
   @apply focus:outline-none focus:border-primary;
-}
 
-.select-base:disabled {
-  @apply opacity-50 cursor-not-allowed;
-  @apply bg-surfaceVariant;
+  &:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    @apply bg-surfaceVariant;
+  }
 }
 
 .select-icon {

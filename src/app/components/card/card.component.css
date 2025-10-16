@@ -1,17 +1,13 @@
-.card-base {
+.card-default {
   @apply bg-surface text-onSurface;
   @apply border border-outlineVariant;
   @apply transition-all duration-200;
 }
 
-.card-default {
-  @apply card-base;
-}
-
 .card-elevated {
-  @apply card-base;
-  @apply border-0;
-  @apply shadow-md;
+  @apply bg-surface text-onSurface;
+  @apply border-0 shadow-md;
+  @apply transition-all duration-200;
 }
 
 .card-padding-none {

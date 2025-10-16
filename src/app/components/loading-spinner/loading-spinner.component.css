@@ -2,11 +2,11 @@
   @apply flex flex-col items-center justify-center gap-4;
 }
 
-.spinner {
-  @apply border-4 border-surfaceVariant;
-  @apply border-t-primary;
-  @apply rounded-full;
-  @apply animate-spin;
+.spinner-small,
+.spinner-medium,
+.spinner-large {
+  @apply border-surfaceVariant border-t-primary;
+  @apply rounded-full animate-spin;
 }
 
 .spinner-small {

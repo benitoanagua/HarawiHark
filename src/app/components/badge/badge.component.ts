@@ -11,6 +11,6 @@ export class BadgeComponent {
   @Input() icon?: string;
 
   get badgeClasses(): string {
-    return `badge-base badge-${this.variant} badge-${this.size}`;
+    return `badge-${this.variant} badge-${this.size}`;
   }
 }

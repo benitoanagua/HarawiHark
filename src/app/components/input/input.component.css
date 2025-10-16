@@ -7,33 +7,30 @@
   @apply text-onSurface;
 }
 
-.input-base {
+.input-text,
+.input-textarea {
   @apply w-full bg-surface text-onSurface;
   @apply border-2 border-outline;
   @apply px-4 py-3 font-normal;
   @apply transition-all duration-200;
   @apply focus:outline-none focus:border-primary;
-}
 
-.input-text {
-  @apply input-base;
+  &:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    @apply bg-surfaceVariant;
+  }
+
+  &.input-error {
+    @apply border-error;
+
+    &:focus {
+      @apply border-error;
+    }
+  }
 }
 
 .input-textarea {
-  @apply input-base resize-none;
-}
-
-.input-base:disabled {
-  @apply opacity-50 cursor-not-allowed;
-  @apply bg-surfaceVariant;
-}
-
-.input-error {
-  @apply border-error;
-
-  &:focus {
-    @apply border-error;
-  }
+  @apply resize-none;
 }
 
 .input-error-text {
