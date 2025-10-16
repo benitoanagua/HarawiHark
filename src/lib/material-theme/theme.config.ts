@@ -34,26 +34,13 @@ export const SCHEMES: { name: string; variant: SchemeConstructor }[] = [
 
 export const SELECTED_SCHEME = 'fidelity';
 
-export const EXTRA_COLORS_CONFIG = {
-  terminal: {
-    black: { hue: 0, chroma: 0, tone: 15 },
-    red: { hue: 10, chroma: 84, tone: 50 },
-    green: { hue: 145, chroma: 48, tone: 50 },
-    yellow: { hue: 90, chroma: 70, tone: 60 },
-    blue: { hue: 245, chroma: 80, tone: 50 },
-    magenta: { hue: 330, chroma: 68, tone: 50 },
-    cyan: { hue: 200, chroma: 48, tone: 50 },
-    white: { hue: 0, chroma: 0, tone: 95 },
-  },
-
-  pastel: {
-    teal: { hue: 180, chroma: 25, tone: 75 },
-    maroon: { hue: 355, chroma: 35, tone: 60 },
-    mauve: { hue: 270, chroma: 35, tone: 75 },
-    peach: { hue: 25, chroma: 40, tone: 80 },
-    lime: { hue: 140, chroma: 55, tone: 75 },
-    rosewater: { hue: 5, chroma: 20, tone: 90 },
-  },
+export const TERMINAL_COLORS_CONFIG = {
+  red: { hue: 10, chroma: 84, tone: 50 },
+  green: { hue: 145, chroma: 48, tone: 50 },
+  yellow: { hue: 90, chroma: 70, tone: 60 },
+  blue: { hue: 245, chroma: 80, tone: 50 },
+  magenta: { hue: 330, chroma: 68, tone: 50 },
+  cyan: { hue: 200, chroma: 48, tone: 50 },
 };
 
 export const THEME_CSS_VARS = [
@@ -95,10 +82,7 @@ export const THEME_CSS_VARS = [
   'inversePrimary',
 ];
 
-export const TERMINAL_PASTEL_CSS_VARS = [
-  'black',
-  'blackContainer',
-  'onBlackContainer',
+export const TERMINAL_CSS_VARS = [
   'red',
   'redContainer',
   'onRedContainer',
@@ -117,38 +101,35 @@ export const TERMINAL_PASTEL_CSS_VARS = [
   'cyan',
   'cyanContainer',
   'onCyanContainer',
-  'white',
-  'whiteContainer',
-  'onWhiteContainer',
 
-  'teal',
-  'tealContainer',
-  'onTealContainer',
-  'maroon',
-  'maroonContainer',
-  'onMaroonContainer',
-  'mauve',
-  'mauveContainer',
-  'onMauveContainer',
-  'peach',
-  'peachContainer',
-  'onPeachContainer',
-  'lime',
-  'limeContainer',
-  'onLimeContainer',
-  'rosewater',
-  'rosewaterContainer',
-  'onRosewaterContainer',
+  'inverseRed',
+  'inverseRedContainer',
+  'inverseOnRedContainer',
+  'inverseGreen',
+  'inverseGreenContainer',
+  'inverseOnGreenContainer',
+  'inverseYellow',
+  'inverseYellowContainer',
+  'inverseOnYellowContainer',
+  'inverseBlue',
+  'inverseBlueContainer',
+  'inverseOnBlueContainer',
+  'inverseMagenta',
+  'inverseMagentaContainer',
+  'inverseOnMagentaContainer',
+  'inverseCyan',
+  'inverseCyanContainer',
+  'inverseOnCyanContainer',
 ];
 
-export const ALL_CSS_VARS = [...THEME_CSS_VARS, ...TERMINAL_PASTEL_CSS_VARS];
+export const ALL_CSS_VARS = [...THEME_CSS_VARS, ...TERMINAL_CSS_VARS];
 
 export const THEME_CONFIG = {
   seedColor: SEED_COLOR,
   selectedScheme: SELECTED_SCHEME,
   availableSchemes: SCHEMES.map((s) => s.name),
   materialVariables: THEME_CSS_VARS.length,
-  terminalPastelVariables: TERMINAL_PASTEL_CSS_VARS.length,
+  terminalVariables: TERMINAL_CSS_VARS.length,
   totalVariables: ALL_CSS_VARS.length,
 };
 
@@ -158,10 +139,9 @@ export interface ThemeColor {
   tone: number;
 }
 
-export type TerminalColors = keyof typeof EXTRA_COLORS_CONFIG.terminal;
-export type PastelColors = keyof typeof EXTRA_COLORS_CONFIG.pastel;
+export type TerminalColors = keyof typeof TERMINAL_COLORS_CONFIG;
 export type MaterialColors = (typeof THEME_CSS_VARS)[number];
-export type AllColors = MaterialColors | TerminalColors | PastelColors;
+export type AllColors = MaterialColors | TerminalColors;
 
 export function getSchemeConstructor(schemeName: string): SchemeConstructor {
   const scheme = SCHEMES.find((s) => s.name === schemeName);
@@ -189,7 +169,7 @@ Seed Color: ${SEED_COLOR}
 Selected Scheme: ${SELECTED_SCHEME}
 Available Schemes: ${getAvailableSchemes().join(', ')}
 Material Variables: ${THEME_CSS_VARS.length}
-Terminal & Pastel Variables: ${TERMINAL_PASTEL_CSS_VARS.length}
+Terminal Variables: ${TERMINAL_CSS_VARS.length}
 Total Variables: ${ALL_CSS_VARS.length}
   `.trim();
 }

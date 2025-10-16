@@ -1,5 +1,5 @@
 import { generateThemeFiles } from './theme-generator';
-import { generateTerminalPastelFiles } from './terminal-pastel-generator';
+import { generateTerminalFiles } from './terminal-generator';
 import { getConfigInfo } from './theme.config';
 
 const root = process.cwd();
@@ -12,6 +12,6 @@ generateThemeFiles(root, outputDir);
 
 console.log('\n---\n');
 
-generateTerminalPastelFiles(root, outputDir);
+generateTerminalFiles(root, outputDir);
 
 console.log('\n🎉 All themes generated successfully!');
