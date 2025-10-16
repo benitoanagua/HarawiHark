@@ -5,6 +5,5 @@ import { PageComponent } from './components/page/page.component';
   selector: 'app-root',
   imports: [PageComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css',
 })
 export class App {}

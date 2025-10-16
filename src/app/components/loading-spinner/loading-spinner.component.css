@@ -1,0 +1,26 @@
+.spinner-wrapper {
+  @apply flex flex-col items-center justify-center gap-4;
+}
+
+.spinner {
+  @apply border-4 border-surfaceVariant;
+  @apply border-t-primary;
+  @apply rounded-full;
+  @apply animate-spin;
+}
+
+.spinner-small {
+  @apply w-6 h-6 border-2;
+}
+
+.spinner-medium {
+  @apply w-12 h-12 border-4;
+}
+
+.spinner-large {
+  @apply w-16 h-16 border-4;
+}
+
+.spinner-text {
+  @apply text-sm text-onSurfaceVariant;
+}

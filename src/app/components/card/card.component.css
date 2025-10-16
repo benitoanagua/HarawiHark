@@ -1,0 +1,43 @@
+.card-base {
+  @apply bg-surface text-onSurface;
+  @apply border border-outlineVariant;
+  @apply transition-all duration-200;
+}
+
+.card-default {
+  @apply card-base;
+}
+
+.card-elevated {
+  @apply card-base;
+  @apply border-0;
+  @apply shadow-md;
+}
+
+.card-padding-none {
+  @apply p-0;
+}
+
+.card-padding-small {
+  @apply p-3;
+}
+
+.card-padding-medium {
+  @apply p-4 lg:p-6;
+}
+
+.card-padding-large {
+  @apply p-6 lg:p-8;
+}
+
+.clickable {
+  @apply cursor-pointer;
+
+  &:hover {
+    @apply bg-surfaceVariant;
+  }
+
+  &:active {
+    @apply scale-[0.98];
+  }
+}

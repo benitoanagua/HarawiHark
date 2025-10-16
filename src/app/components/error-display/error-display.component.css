@@ -1,0 +1,32 @@
+.error-display {
+  @apply flex items-start gap-4 p-4;
+  @apply border-2;
+}
+
+.error-info {
+  @apply bg-surfaceVariant border-outline;
+}
+
+.error-warning {
+  @apply bg-tertiaryContainer border-tertiary;
+}
+
+.error-error {
+  @apply bg-errorContainer border-error;
+}
+
+.error-icon {
+  @apply text-2xl flex-shrink-0;
+}
+
+.error-content {
+  @apply flex-1;
+}
+
+.error-title {
+  @apply text-base font-semibold tracking-tight mb-1;
+}
+
+.error-message {
+  @apply text-sm;
+}

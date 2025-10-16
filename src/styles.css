@@ -4,3 +4,10 @@
 @import './app/components/header/header.css';
 @import './app/components/page/page.css';
 @import './app/components/theme-toggle/theme-toggle.component.css';
+@import './app/components/card/card.component.css';
+@import './app/components/input/input.component.css';
+@import './app/components/select/select.component.css';
+@import './app/components/badge/badge.component.css';
+@import './app/components/loading-spinner/loading-spinner.component.css';
+@import './app/components/empty-state/empty-state.component.css';
+@import './app/components/error-display/error-display.component.css';

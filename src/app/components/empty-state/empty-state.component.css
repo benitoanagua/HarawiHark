@@ -1,0 +1,18 @@
+.empty-state {
+  @apply flex flex-col items-center justify-center;
+  @apply text-center gap-4 p-8 lg:p-12;
+}
+
+.empty-state-icon {
+  @apply text-5xl lg:text-6xl;
+}
+
+.empty-state-title {
+  @apply text-xl lg:text-2xl;
+  @apply font-light tracking-tight text-onSurface;
+}
+
+.empty-state-description {
+  @apply text-sm lg:text-base;
+  @apply text-onSurfaceVariant max-w-md;
+}

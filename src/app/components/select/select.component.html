@@ -1,0 +1,25 @@
+<div class="select-wrapper">
+  @if (label) {
+    <label class="select-label">{{ label }}</label>
+  }
+  
+  <select
+    class="select-base"
+    [disabled]="disabled"
+    [value]="value"
+    (change)="onSelectChange($event)"
+    (blur)="onBlur()"
+  >
+    <option value="" disabled>select an option</option>
+    @for (option of options; track option.value) {
+      <option [value]="option.value">
+        {{ option.label }}
+        @if (option.description) {
+          - {{ option.description }}
+        }
+      </option>
+    }
+  </select>
+  
+  <span class="icon-[iconoir--nav-arrow-down] select-icon"></span>
+</div>

@@ -1,0 +1,30 @@
+.badge-base {
+  @apply inline-flex items-center gap-1;
+  @apply font-semibold tracking-tight;
+  @apply px-3 py-1;
+  @apply border-2;
+}
+
+.badge-small {
+  @apply text-xs px-2 py-0.5;
+}
+
+.badge-medium {
+  @apply text-sm px-3 py-1;
+}
+
+.badge-default {
+  @apply bg-surface text-onSurface border-outline;
+}
+
+.badge-success {
+  @apply bg-primaryContainer text-onPrimaryContainer border-primary;
+}
+
+.badge-warning {
+  @apply bg-tertiaryContainer text-onTertiaryContainer border-tertiary;
+}
+
+.badge-error {
+  @apply bg-errorContainer text-onErrorContainer border-error;
+}

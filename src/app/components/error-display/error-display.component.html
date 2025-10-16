@@ -1,0 +1,15 @@
+<div [class]="containerClasses">
+  <span [class]="iconClass + ' error-icon'"></span>
+  <div class="error-content">
+    <h4 class="error-title">{{ title }}</h4>
+    <p class="error-message">{{ message }}</p>
+  </div>
+  @if (actionLabel) {
+    <app-button
+      variant="outline"
+      size="small"
+      (clicked)="action.emit()"
+      [label]="actionLabel"
+    />
+  }
+</div>

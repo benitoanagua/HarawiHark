@@ -1,0 +1,33 @@
+<div class="input-wrapper">
+  @if (label) {
+    <label class="input-label">{{ label }}</label>
+  }
+  
+  @if (type === 'textarea') {
+    <textarea
+      class="input-base input-textarea"
+      [class.input-error]="error"
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      [rows]="rows"
+      [value]="value"
+      (input)="onInput($event)"
+      (blur)="onBlur()"
+    ></textarea>
+  } @else {
+    <input
+      class="input-base input-text"
+      [class.input-error]="error"
+      [type]="type"
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      [value]="value"
+      (input)="onInput($event)"
+      (blur)="onBlur()"
+    />
+  }
+  
+  @if (error) {
+    <span class="input-error-text">{{ error }}</span>
+  }
+</div>
