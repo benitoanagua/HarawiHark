@@ -1,7 +1,8 @@
 <button
   type="button"
-  (click)="clicked.emit($event)"
+  (click)="!disabled && clicked.emit($event)"
   [class]="buttonClasses"
+  [disabled]="disabled"
 >
   @if (icon) {
     <span [class]="icon"></span>

@@ -25,9 +25,18 @@ export class SelectComponent implements ControlValueAccessor {
   @Input() disabled = false;
   @Input() id = '';
 
-  @Output() selectChange = new EventEmitter<string>();
+  @Input()
+  get value(): string {
+    return this._value;
+  }
+  set value(val: string) {
+    this._value = val || '';
+    this.onChange(this._value);
+  }
 
-  value = '';
+  _value = '';
+
+  @Output() selectChange = new EventEmitter<string>();
 
   private onChange: (value: string) => void = () => {
     // Placeholder for ControlValueAccessor
@@ -37,7 +46,7 @@ export class SelectComponent implements ControlValueAccessor {
   };
 
   writeValue(value: string): void {
-    this.value = value || '';
+    this._value = value || '';
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -54,10 +63,9 @@ export class SelectComponent implements ControlValueAccessor {
 
   onSelectChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
-    this.value = target.value;
-
-    this.onChange(this.value);
-    this.selectChange.emit(this.value);
+    this._value = target.value;
+    this.onChange(this._value);
+    this.selectChange.emit(this._value);
   }
 
   onBlur(): void {

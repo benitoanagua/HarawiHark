@@ -22,10 +22,19 @@ export class InputComponent implements ControlValueAccessor {
   @Input() rows = 6;
   @Input() id = '';
 
+  @Input()
+  get value(): string {
+    return this._value;
+  }
+  set value(val: string) {
+    this._value = val || '';
+    this.onChange(this._value);
+  }
+
+  _value = '';
+
   @Output() inputChange = new EventEmitter<string>();
   @Output() inputBlur = new EventEmitter<void>();
-
-  value = '';
 
   private onChange: (value: string) => void = () => {
     // Placeholder for ControlValueAccessor
@@ -35,7 +44,7 @@ export class InputComponent implements ControlValueAccessor {
   };
 
   writeValue(value: string): void {
-    this.value = value || '';
+    this._value = value || '';
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -52,10 +61,9 @@ export class InputComponent implements ControlValueAccessor {
 
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
-    this.value = target.value;
-
-    this.onChange(this.value);
-    this.inputChange.emit(this.value);
+    this._value = target.value;
+    this.onChange(this._value);
+    this.inputChange.emit(this._value);
   }
 
   onBlur(): void {

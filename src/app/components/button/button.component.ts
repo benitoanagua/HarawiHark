@@ -10,6 +10,7 @@ export class ButtonComponent {
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
   @Input() label = 'Button';
   @Input() icon?: string;
+  @Input() disabled = false;
   @Output() clicked = new EventEmitter<Event>();
 
   get buttonClasses(): string {

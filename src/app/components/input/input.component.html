@@ -2,7 +2,7 @@
   @if (label) {
     <label class="input-label" [for]="id">{{ label }}</label>
   }
-  
+
   @if (type === 'textarea') {
     <textarea
       class="input-base input-textarea"
@@ -10,7 +10,7 @@
       [placeholder]="placeholder"
       [disabled]="disabled"
       [rows]="rows"
-      [value]="value"
+      [value]="_value"
       [id]="id"
       (input)="onInput($event)"
       (blur)="onBlur()"
@@ -22,13 +22,13 @@
       [type]="type"
       [placeholder]="placeholder"
       [disabled]="disabled"
-      [value]="value"
+      [value]="_value"
       [id]="id"
       (input)="onInput($event)"
       (blur)="onBlur()"
     />
   }
-  
+
   @if (error) {
     <span class="input-error-text">{{ error }}</span>
   }
