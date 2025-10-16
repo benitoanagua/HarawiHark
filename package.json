@@ -49,6 +49,7 @@
     "@angular/cli": "^20.3.5",
     "@angular/compiler-cli": "^20.3.5",
     "@compodoc/compodoc": "^1.1.31",
+    "@emotion/css": "^11.13.5",
     "@eslint/js": "^9.37.0",
     "@iconify-json/iconoir": "^1.2.9",
     "@iconify/tailwind4": "^1.0.6",

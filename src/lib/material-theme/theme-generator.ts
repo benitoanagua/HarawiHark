@@ -7,46 +7,7 @@ import {
   Hct,
   DynamicScheme,
 } from '@material/material-color-utilities';
-import { SEED_COLOR, SCHEMES, SELECTED_SCHEME } from './theme.config';
-
-const THEME_CSS_VARS = [
-  'primary',
-  'onPrimary',
-  'primaryContainer',
-  'onPrimaryContainer',
-  'secondary',
-  'onSecondary',
-  'secondaryContainer',
-  'onSecondaryContainer',
-  'tertiary',
-  'onTertiary',
-  'tertiaryContainer',
-  'onTertiaryContainer',
-  'error',
-  'onError',
-  'errorContainer',
-  'onErrorContainer',
-  'background',
-  'onBackground',
-  'surface',
-  'surfaceDim',
-  'surfaceBright',
-  'surfaceContainerLowest',
-  'surfaceContainerLow',
-  'surfaceContainer',
-  'surfaceContainerHigh',
-  'surfaceContainerHighest',
-  'onSurface',
-  'surfaceVariant',
-  'onSurfaceVariant',
-  'outline',
-  'outlineVariant',
-  'shadow',
-  'scrim',
-  'inverseSurface',
-  'inverseOnSurface',
-  'inversePrimary',
-];
+import { SEED_COLOR, SCHEMES, SELECTED_SCHEME, THEME_CSS_VARS } from './theme.config';
 
 function getColorFromScheme(prop: string, scheme: DynamicScheme): number {
   const materialColors = MaterialDynamicColors as unknown as Record<
@@ -80,6 +41,7 @@ export function generateThemeFiles(root: string, outputDir: string): void {
     console.log('🎨 Harawihark - Generating Material Design theme...');
     console.log(`   🎨 Base color: ${SEED_COLOR}`);
     console.log(`   🎨 Scheme: ${SELECTED_SCHEME}`);
+    console.log(`   🎨 CSS Variables: ${THEME_CSS_VARS.length}`);
 
     const selectedScheme = SCHEMES.find((s) => s.name === SELECTED_SCHEME);
     if (!selectedScheme) {
@@ -108,10 +70,11 @@ ${THEME_CSS_VARS.map((k) => `  --color-${k}: ${darkColors[k]};`).join('\n')}
 
     writeFileSync(resolve(outputPath, 'material-theme.css'), cssContent);
 
-    console.log('✅ Theme generated successfully:');
+    console.log('✅ Material theme generated successfully:');
     console.log(`   📁 ${outputDir}/material-theme.css`);
+    console.log(`   📊 Variables: ${THEME_CSS_VARS.length}`);
   } catch (error) {
-    console.error('❌ Error generating theme:', error);
+    console.error('❌ Error generating Material theme:', error);
     throw error;
   }
 }
