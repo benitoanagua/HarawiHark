@@ -11,7 +11,7 @@
         </h1>
       </div>
       <p class="text-lg lg:text-xl font-light text-onSurfaceVariant lowercase">
-        syllable-meter checker for poetic forms
+        advanced syllable-meter checker with AI-powered suggestions
       </p>
     </div>
 
@@ -20,16 +20,30 @@
       <app-poem-editor />
     </div>
 
+    <!-- Word Suggestions Modal -->
+    @if (analyzer.wordAlternatives(); as alternatives) {
+      <div class="mb-8">
+        <app-word-suggestions
+          [data]="alternatives"
+          (replaceWord)="onReplaceWord($event)"
+          (closeSuggestions)="onCloseSuggestions()"
+        />
+      </div>
+    }
+
     <!-- Results -->
     @if (analyzer.result(); as result) {
       <div class="mb-8">
-        <app-poem-results [result]="result" />
+        <app-poem-results
+          [result]="result"
+          (wordSelected)="onWordSelected($event)"
+        />
       </div>
     } @else {
       <app-empty-state
         icon="icon-[iconoir--page-search]"
         title="no analysis yet"
-        description="write your poem above and click 'analyze poem' to see detailed syllable analysis"
+        description="write your poem above and click 'analyze poem' to see detailed analysis with alliterations, stress patterns, and word suggestions"
       />
     }
 
@@ -39,13 +53,20 @@
         <span class="icon-[iconoir--info-circle] text-2xl flex-shrink-0"></span>
         <div>
           <h3 class="font-semibold tracking-tight mb-2 lowercase">
-            about harawihark
+            about harawihark enhanced
           </h3>
-          <p class="text-sm leading-relaxed">
-            harawihark uses advanced phonetic analysis to count syllables accurately. 
-            it supports 8 poetic forms from various traditions, providing real-time 
-            feedback with syllable breakdowns, stress patterns, and rhyme scheme analysis.
+          <p class="text-sm leading-relaxed mb-3">
+            harawihark uses advanced phonetic analysis powered by RiTa.js to provide
+            comprehensive poetic analysis. New features include:
           </p>
+          <ul class="text-sm space-y-1 ml-4">
+            <li>• Click words to see intelligent replacement suggestions</li>
+            <li>• Automatic alliteration detection</li>
+            <li>• Part-of-speech tagging for each word</li>
+            <li>• Stress pattern analysis</li>
+            <li>• Cross-line pattern detection</li>
+            <li>• Rhyme and sound-alike word discovery</li>
+          </ul>
         </div>
       </div>
     </div>

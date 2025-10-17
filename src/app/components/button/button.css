@@ -49,7 +49,7 @@
 
 /* Outline - Material Design */
 .btn-outline {
-  @apply bg-transparent border-2 border-outline text-onSurface;
+  @apply bg-transparent ring-2 ring-inset ring-outline text-onSurface;
 
   &:hover:not(:disabled) {
     @apply bg-surfaceVariant;

@@ -1,0 +1,66 @@
+<app-card padding="large">
+  <div class="suggestions-container">
+    <!-- Header -->
+    <div class="suggestions-header">
+      <div>
+        <h3 class="suggestions-title">suggestions for "{{ data.original }}"</h3>
+        <p class="suggestions-subtitle">
+          needs {{ data.targetSyllables }} syllable{{ data.targetSyllables !== 1 ? 's' : '' }}
+          (currently {{ data.currentSyllables }})
+        </p>
+      </div>
+      <button
+        type="button"
+        class="close-button"
+        (click)="closeSuggestions.emit()"
+        aria-label="Close suggestions"
+      >
+        <span class="icon-[iconoir--cancel] text-xl"></span>
+      </button>
+    </div>
+
+    <!-- Alternatives List -->
+    @if (data.alternatives.length > 0) {
+      <div class="alternatives-list">
+        @for (alt of data.alternatives; track alt.word) {
+          <div class="alternative-item">
+            <div class="alternative-content">
+              <div class="alternative-main">
+                <span class="alternative-word">{{ alt.word }}</span>
+                <app-badge
+                  [variant]="getReasonVariant(alt.reason)"
+                  size="small"
+                >
+                  {{ getReasonLabel(alt.reason) }}
+                </app-badge>
+              </div>
+              <div class="alternative-meta">
+                <span class="syllable-count">
+                  <span class="icon-[iconoir--sound-high] text-sm"></span>
+                  {{ alt.syllables }} syllable{{ alt.syllables !== 1 ? 's' : '' }}
+                </span>
+                @if (alt.pos) {
+                  <span class="pos-tag">{{ alt.pos }}</span>
+                }
+              </div>
+            </div>
+            <app-button
+              variant="outline"
+              size="small"
+              label="use"
+              icon="icon-[iconoir--check]"
+              (clicked)="onReplaceWord(alt.word)"
+            />
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="no-alternatives">
+        <span class="icon-[iconoir--search] text-4xl text-onSurfaceVariant"></span>
+        <p class="no-alternatives-text">
+          No alternatives found with {{ data.targetSyllables }} syllables
+        </p>
+      </div>
+    }
+  </div>
+</app-card>
