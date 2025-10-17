@@ -8,53 +8,123 @@ export interface WordSuggestionData {
   alternatives: AlternativeWord[];
 }
 
+export interface SuggestionContext {
+  pos?: string;
+  lineIndex?: number;
+  isLineEnd?: boolean;
+  previousWord?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class PoetrySuggestionsService {
   private readonly rita = inject(RitaService);
 
-  async getWordAlternatives(word: string, targetSyllables: number): Promise<WordSuggestionData> {
+  async getWordAlternativesEnhanced(
+    word: string,
+    targetSyllables: number,
+    context: SuggestionContext = {}
+  ): Promise<WordSuggestionData> {
     const currentSyllables = this.rita.analyzeLine(word).syllables;
-    const alternatives = await this.rita.suggestAlternatives(word, targetSyllables, 12);
+
+    const [exactMatches, rhymes, phonetic, spelling] = await Promise.all([
+      this.searchBySyllablesAndPOS(targetSyllables, context.pos),
+
+      context.isLineEnd
+        ? this.rita.findRhymes(word, targetSyllables).then((r) => r.perfectRhymes)
+        : Promise.resolve([]),
+
+      this.rita.suggestAlternatives(word, targetSyllables, 5),
+
+      this.rita.findSpellingSuggestions(word, targetSyllables),
+    ]);
+
+    const allAlternatives = [
+      ...exactMatches,
+      ...rhymes.map((w) => ({
+        word: w,
+        syllables: targetSyllables,
+        reason: 'rhyme-match' as const,
+        pos: this.rita.analyzeGrammar(w).pos,
+      })),
+      ...phonetic,
+      ...spelling,
+    ];
+
+    const unique = this.deduplicateAndRank(allAlternatives, word, context);
 
     return {
       original: word,
       currentSyllables,
       targetSyllables,
-      alternatives,
+      alternatives: unique.slice(0, 12),
     };
+  }
+
+  private async searchBySyllablesAndPOS(
+    syllables: number,
+    pos?: string
+  ): Promise<AlternativeWord[]> {
+    try {
+      const results = await this.rita.advancedSearch({
+        syllables,
+        pos,
+      });
+
+      return results.slice(0, 8).map((word) => ({
+        word,
+        syllables,
+        reason: 'exact-match' as const,
+        pos: this.rita.analyzeGrammar(word).pos,
+      }));
+    } catch (error) {
+      console.warn('Search by syllables failed:', error);
+      return [];
+    }
+  }
+
+  private deduplicateAndRank(
+    alternatives: AlternativeWord[],
+    originalWord: string,
+    context: SuggestionContext
+  ): AlternativeWord[] {
+    const seen = new Set<string>();
+    const unique = alternatives.filter((alt) => {
+      const key = alt.word.toLowerCase();
+      if (seen.has(key) || key === originalWord.toLowerCase()) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
+
+    return unique.sort((a, b) => {
+      if (a.reason === 'exact-match' && b.reason !== 'exact-match') return -1;
+      if (b.reason === 'exact-match' && a.reason !== 'exact-match') return 1;
+
+      if (context.isLineEnd) {
+        if (a.reason === 'rhyme-match' && b.reason !== 'rhyme-match') return -1;
+        if (b.reason === 'rhyme-match' && a.reason !== 'rhyme-match') return 1;
+      }
+
+      if (context.pos) {
+        const aMatchesPOS = a.pos === context.pos;
+        const bMatchesPOS = b.pos === context.pos;
+        if (aMatchesPOS && !bMatchesPOS) return -1;
+        if (bMatchesPOS && !aMatchesPOS) return 1;
+      }
+
+      return 0;
+    });
+  }
+
+  async getWordAlternatives(word: string, targetSyllables: number): Promise<WordSuggestionData> {
+    return this.getWordAlternativesEnhanced(word, targetSyllables);
   }
 
   generateLineSuggestions(line: string, targetSyllables: number): string[] {
     return this.rita.generateSuggestions(line, targetSyllables);
-  }
-
-  async getEnhancedAlternatives(word: string, targetSyllables: number): Promise<AlternativeWord[]> {
-    const [basic, semantic, spelling, morphological] = await Promise.all([
-      this.rita.suggestAlternatives(word, targetSyllables, 5),
-      this.rita.findSemanticRhymes(word, targetSyllables),
-      this.rita.findSpellingSuggestions(word, targetSyllables),
-      Promise.resolve(
-        this.rita
-          .suggestMorphologicalVariants(word)
-          .map((w) => ({
-            word: w,
-            syllables: this.rita.analyzeLine(w).syllables,
-            reason: 'morphological' as const,
-            pos: this.rita.analyzeGrammar(w).pos,
-          }))
-          .filter((w) => w.syllables === targetSyllables)
-      ),
-    ]);
-
-    const allAlternatives = [...basic, ...semantic, ...spelling, ...morphological];
-    return allAlternatives
-      .filter(
-        (alt, idx, self) =>
-          idx === self.findIndex((a) => a.word.toLowerCase() === alt.word.toLowerCase())
-      )
-      .slice(0, 12);
   }
 
   generateImprovementSuggestions(lines: string[], pattern: number[]): string[] {

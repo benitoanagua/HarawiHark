@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { BadgeComponent } from '../badge/badge.component';
 import { ButtonComponent } from '../button/button.component';
+import { UtilsService } from '../../services/core/utils.service';
 import { WordSuggestionData } from '../../services/poetry';
 
 @Component({
@@ -11,6 +12,8 @@ import { WordSuggestionData } from '../../services/poetry';
   templateUrl: './word-suggestions.component.html',
 })
 export class WordSuggestionsComponent {
+  private readonly utils = inject(UtilsService);
+
   @Input({ required: true }) data!: WordSuggestionData;
   @Output() replaceWord = new EventEmitter<string>();
   @Output() closeSuggestions = new EventEmitter<void>();
@@ -31,6 +34,10 @@ export class WordSuggestionsComponent {
     if (reason === 'exact-match') return 'success';
     if (reason === 'rhyme-match' || reason === 'semantic-rhyme') return 'info';
     return 'default';
+  }
+
+  getPosLabel(pos: string): string {
+    return this.utils.getPosLabel(pos);
   }
 
   onReplaceWord(word: string): void {

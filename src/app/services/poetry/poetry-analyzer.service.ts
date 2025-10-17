@@ -5,6 +5,12 @@ import { PoetryPatternsService } from './poetry-patterns.service';
 import { RhymeAnalysisService } from './rhyme-analysis.service';
 import { PoemQualityService, type QualityMetrics } from './poem-quality.service';
 import { PoemGeneratorService } from './poem-generator.service';
+import { MeterType } from './meter-analysis.service';
+import {
+  MeterAnalysisService,
+  type MeterAnalysis,
+  type RhythmSuggestion,
+} from './meter-analysis.service';
 import {
   RitaService,
   type GrammaticalAnalysis,
@@ -48,6 +54,7 @@ export interface EnhancedPoetryResult {
     word: string;
     suggestions: string[];
   }[];
+  meterAnalysis?: MeterAnalysis;
 }
 
 export interface WordSuggestionData {
@@ -67,6 +74,7 @@ export class PoetryAnalyzerService {
   private readonly rhymes = inject(RhymeAnalysisService);
   private readonly quality = inject(PoemQualityService);
   private readonly generator = inject(PoemGeneratorService);
+  private readonly meterService = inject(MeterAnalysisService);
   private readonly rita = inject(RitaService);
 
   readonly isLoading = signal(false);
@@ -78,6 +86,186 @@ export class PoetryAnalyzerService {
   readonly poemVariations = signal<string[][]>([]);
   readonly selectedForm = signal<string>('haiku');
   readonly poemText = signal<string>('');
+  readonly rhythmSuggestions = signal<RhythmSuggestion[]>([]);
+
+  async analyze(formKey: string, rawLines: string[]): Promise<EnhancedPoetryResult> {
+    this.isLoading.set(true);
+
+    try {
+      const form = POETRY_FORMS[formKey];
+      if (!form) {
+        throw new Error(`Unknown form "${formKey}"`);
+      }
+
+      const lines = rawLines.map((line) => line.trim()).filter((line) => line.length > 0);
+
+      const typos = await this.rita.detectTypos(lines);
+
+      const meterAnalysis = this.meterService.detectMeter(lines);
+      const rhythmSuggestions = this.meterService.generateRhythmSuggestions(
+        lines,
+        meterAnalysis.type
+      );
+      this.rhythmSuggestions.set(rhythmSuggestions);
+
+      const lineAnalyses: EnhancedLineAnalysis[] = await Promise.all(
+        lines.map(async (line, index) => {
+          const analysis = this.rita.analyzeLine(line);
+          const words = this.rita.analyzeWords(line);
+          const alliterations = this.rita.detectAlliterations(line);
+          const expected = form.pattern[index] ?? 0;
+
+          const wordsWithGrammar = words.map((word) => ({
+            ...word,
+            grammar: this.rita.analyzeGrammar(word.word),
+          }));
+
+          return {
+            text: line,
+            count: analysis.syllables,
+            expected,
+            match: analysis.syllables === expected,
+            syllables: analysis.breakdown,
+            stresses: analysis.stresses,
+            words: wordsWithGrammar,
+            alliterations: alliterations.length > 0 ? alliterations : undefined,
+            typos: typos.filter((t) => t.line === index),
+          };
+        })
+      );
+
+      const quality = this.quality.assessQuality(
+        lines,
+        form.pattern,
+        this.createResultForQualityAssessment(formKey, lineAnalyses)
+      );
+
+      const overallAlliterations = this.rhymes.detectCrossLineAlliterations(lines);
+      const detectedPatterns = [
+        ...this.detectPatterns(lineAnalyses),
+        ...this.generateMeterPatterns(meterAnalysis),
+      ];
+
+      const ok = lineAnalyses.length === form.pattern.length && lineAnalyses.every((l) => l.match);
+
+      const mismatches = lineAnalyses.filter((l) => !l.match).length;
+      const summary = ok
+        ? `Perfect match: all ${lineAnalyses.length} lines follow the ${form.pattern.join(
+            '-'
+          )} pattern`
+        : `${mismatches} of ${lineAnalyses.length} lines don't match the expected pattern`;
+
+      const suggestions = this.generateEnhancedSuggestions(
+        lineAnalyses,
+        form.pattern,
+        meterAnalysis
+      );
+      const rhymeScheme = lines.length > 1 ? this.rita.analyzeRhymeScheme(lines) : undefined;
+
+      const result: EnhancedPoetryResult = {
+        ok,
+        form: formKey,
+        totalLines: {
+          expected: form.pattern.length,
+          actual: lineAnalyses.length,
+        },
+        lines: lineAnalyses,
+        summary,
+        rhymeScheme,
+        suggestions,
+        overallAlliterations,
+        detectedPatterns,
+        typos: typos.length > 0 ? typos : undefined,
+        meterAnalysis,
+      };
+
+      this.result.set(result);
+      this.qualityMetrics.set(quality);
+      return result;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async selectWordEnhanced(word: string | null): Promise<void> {
+    this.selectedWord.set(word);
+    this.wordAlternatives.set(null);
+
+    if (!word) return;
+
+    const result = this.result();
+    if (!result) return;
+
+    for (const line of result.lines) {
+      const wordAnalysis = line.words.find((w) => w.word.toLowerCase() === word.toLowerCase());
+
+      if (wordAnalysis) {
+        const targetSyllables = line.expected;
+        const currentLineSyllables = line.count;
+        const diff = targetSyllables - currentLineSyllables;
+        const neededSyllables = wordAnalysis.syllables + diff;
+
+        if (neededSyllables > 0) {
+          try {
+            const alternatives = await this.suggestions.getWordAlternativesEnhanced(
+              word,
+              neededSyllables,
+              {
+                pos: wordAnalysis.pos,
+                lineIndex: result.lines.indexOf(line),
+                isLineEnd: line.words[line.words.length - 1]?.word === word,
+                previousWord: this.getPreviousWord(line.words, word),
+              }
+            );
+
+            this.wordAlternatives.set(alternatives);
+          } catch (error) {
+            console.warn('Error getting enhanced alternatives:', error);
+
+            await this.selectWord(word);
+          }
+        }
+        break;
+      }
+    }
+  }
+
+  async selectWord(word: string | null): Promise<void> {
+    this.selectedWord.set(word);
+    this.wordAlternatives.set(null);
+
+    if (!word) {
+      return;
+    }
+
+    const result = this.result();
+    if (!result) return;
+
+    for (const line of result.lines) {
+      const wordAnalysis = line.words.find((w) => w.word.toLowerCase() === word.toLowerCase());
+      if (wordAnalysis) {
+        const targetSyllables = line.expected;
+        const currentLineSyllables = line.count;
+        const diff = targetSyllables - currentLineSyllables;
+        const neededSyllables = wordAnalysis.syllables + diff;
+
+        if (neededSyllables > 0) {
+          try {
+            const alternatives = await this.rita.suggestAlternatives(word, neededSyllables, 8);
+            this.wordAlternatives.set({
+              original: word,
+              currentSyllables: wordAnalysis.syllables,
+              targetSyllables: neededSyllables,
+              alternatives,
+            });
+          } catch (error) {
+            console.warn('Error getting word alternatives:', error);
+          }
+        }
+        break;
+      }
+    }
+  }
 
   async generatePoem(formId: string): Promise<void> {
     this.isLoading.set(true);
@@ -128,175 +316,40 @@ export class PoetryAnalyzerService {
     this.qualityMetrics.set(metrics);
   }
 
-  async analyze(formKey: string, rawLines: string[]): Promise<EnhancedPoetryResult> {
-    this.isLoading.set(true);
+  applyVariation(lineIndex: number, variation: string): void {
+    const result = this.result();
+    if (!result || lineIndex >= result.lines.length) return;
 
-    try {
-      const form = POETRY_FORMS[formKey];
-      if (!form) {
-        throw new Error(`Unknown form "${formKey}"`);
-      }
+    const updatedLines = [...result.lines.map((l) => l.text)];
+    updatedLines[lineIndex] = variation;
 
-      const lines = rawLines.map((line) => line.trim()).filter((line) => line.length > 0);
-      const typos = await this.rita.detectTypos(lines);
-
-      const lineAnalyses: EnhancedLineAnalysis[] = await Promise.all(
-        lines.map(async (line, index) => {
-          const analysis = this.rita.analyzeLine(line);
-          const words = this.rita.analyzeWords(line);
-          const alliterations = this.rita.detectAlliterations(line);
-          const expected = form.pattern[index] ?? 0;
-
-          const wordsWithGrammar = words.map((word) => ({
-            ...word,
-            grammar: this.rita.analyzeGrammar(word.word),
-          }));
-
-          return {
-            text: line,
-            count: analysis.syllables,
-            expected,
-            match: analysis.syllables === expected,
-            syllables: analysis.breakdown,
-            stresses: analysis.stresses,
-            words: wordsWithGrammar,
-            alliterations: alliterations.length > 0 ? alliterations : undefined,
-            typos: typos.filter((t) => t.line === index),
-          };
-        })
-      );
-
-      const quality = this.quality.assessQuality(lines, form.pattern, {
-        ok: lineAnalyses.every((l) => l.match),
-        form: formKey,
-        totalLines: { expected: form.pattern.length, actual: lineAnalyses.length },
-        lines: lineAnalyses,
-        summary: '',
-        rhymeScheme: undefined,
-        suggestions: [],
-        overallAlliterations: [],
-        detectedPatterns: [],
-      });
-
-      const overallAlliterations = this.rhymes.detectCrossLineAlliterations(lines);
-      const detectedPatterns = this.detectPatterns(lineAnalyses);
-
-      const ok = lineAnalyses.length === form.pattern.length && lineAnalyses.every((l) => l.match);
-
-      const mismatches = lineAnalyses.filter((l) => !l.match).length;
-      const summary = ok
-        ? `Perfect match: all ${lineAnalyses.length} lines follow the ${form.pattern.join(
-            '-'
-          )} pattern`
-        : `${mismatches} of ${lineAnalyses.length} lines don't match the expected pattern`;
-
-      const suggestions = this.generateEnhancedSuggestions(lineAnalyses, form.pattern);
-      const rhymeScheme = lines.length > 1 ? this.rita.analyzeRhymeScheme(lines) : undefined;
-
-      const result: EnhancedPoetryResult = {
-        ok,
-        form: formKey,
-        totalLines: {
-          expected: form.pattern.length,
-          actual: lineAnalyses.length,
-        },
-        lines: lineAnalyses,
-        summary,
-        rhymeScheme,
-        suggestions,
-        overallAlliterations,
-        detectedPatterns,
-        typos: typos.length > 0 ? typos : undefined,
-      };
-
-      this.result.set(result);
-      this.qualityMetrics.set(quality);
-      return result;
-    } finally {
-      this.isLoading.set(false);
-    }
+    this.poemText.set(updatedLines.join('\n'));
+    this.analyze(result.form, updatedLines);
   }
 
-  async selectWordEnhanced(word: string | null): Promise<void> {
-    this.selectedWord.set(word);
-    this.wordAlternatives.set(null);
-
-    if (!word) return;
-
+  replaceWord(oldWord: string, newWord: string): void {
     const result = this.result();
     if (!result) return;
 
-    for (const line of result.lines) {
-      const wordAnalysis = line.words.find((w) => w.word.toLowerCase() === word.toLowerCase());
+    const updatedLines = result.lines.map((line) => {
+      const updatedText = line.text.replace(new RegExp(`\\b${oldWord}\\b`, 'gi'), newWord);
+      return updatedText;
+    });
 
-      if (wordAnalysis) {
-        const targetSyllables = line.expected;
-        const currentLineSyllables = line.count;
-        const diff = targetSyllables - currentLineSyllables;
-        const neededSyllables = wordAnalysis.syllables + diff;
-
-        if (neededSyllables > 0) {
-          try {
-            const alternatives = await this.suggestions.getEnhancedAlternatives(
-              word,
-              neededSyllables
-            );
-            this.wordAlternatives.set({
-              original: word,
-              currentSyllables: wordAnalysis.syllables,
-              targetSyllables: neededSyllables,
-              alternatives,
-            });
-          } catch (error) {
-            console.warn('Error getting enhanced alternatives:', error);
-          }
-        }
-        break;
-      }
-    }
-  }
-
-  async selectWord(word: string | null): Promise<void> {
-    this.selectedWord.set(word);
-    this.wordAlternatives.set(null);
-
-    if (!word) {
-      return;
-    }
-
-    const result = this.result();
-    if (!result) return;
-
-    for (const line of result.lines) {
-      const wordAnalysis = line.words.find((w) => w.word.toLowerCase() === word.toLowerCase());
-      if (wordAnalysis) {
-        const targetSyllables = line.expected;
-        const currentLineSyllables = line.count;
-        const diff = targetSyllables - currentLineSyllables;
-        const neededSyllables = wordAnalysis.syllables + diff;
-
-        if (neededSyllables > 0) {
-          try {
-            const alternatives = await this.rita.suggestAlternatives(word, neededSyllables, 8);
-            this.wordAlternatives.set({
-              original: word,
-              currentSyllables: wordAnalysis.syllables,
-              targetSyllables: neededSyllables,
-              alternatives,
-            });
-          } catch (error) {
-            console.warn('Error getting word alternatives:', error);
-          }
-        }
-        break;
-      }
-    }
+    this.poemText.set(updatedLines.join('\n'));
+    this.analyze(result.form, updatedLines);
+    this.selectWordEnhanced(null);
   }
 
   clear(): void {
     this.result.set(null);
     this.selectedWord.set(null);
     this.wordAlternatives.set(null);
+    this.generatedPoem.set(null);
+    this.qualityMetrics.set(null);
+    this.poemVariations.set([]);
+    this.rhythmSuggestions.set([]);
+    this.poemText.set('');
   }
 
   loadExample(): void {
@@ -334,6 +387,7 @@ export class PoetryAnalyzerService {
     const nouns = allWords.filter((w) => w.pos.startsWith('nn')).length;
     const verbs = allWords.filter((w) => w.pos.startsWith('vb')).length;
     const adjectives = allWords.filter((w) => w.pos.startsWith('jj')).length;
+    const adverbs = allWords.filter((w) => w.pos.startsWith('rb')).length;
 
     if (nouns > verbs * 2) {
       patterns.push('Noun-heavy composition (descriptive style)');
@@ -345,6 +399,10 @@ export class PoetryAnalyzerService {
       patterns.push('High use of adjectives (vivid imagery)');
     }
 
+    if (adverbs > allWords.length * 0.15) {
+      patterns.push('Adverb-rich language (detailed action)');
+    }
+
     const avgWordLength =
       allWords.reduce((sum, w) => sum + w.word.length, 0) / (allWords.length || 1);
     if (avgWordLength > 6) {
@@ -353,12 +411,34 @@ export class PoetryAnalyzerService {
       patterns.push('Simple vocabulary (short words)');
     }
 
+    const uniqueStressPatterns = new Set(stressPatterns);
+    if (uniqueStressPatterns.size === 1 && stressPatterns.length > 1) {
+      patterns.push('Perfect rhythmic consistency');
+    }
+
+    return patterns;
+  }
+
+  private generateMeterPatterns(meter: MeterAnalysis): string[] {
+    const patterns: string[] = [];
+
+    if (meter.consistency > 70) {
+      patterns.push(`Strong ${meter.type} meter (${meter.consistency.toFixed(0)}% consistent)`);
+    } else if (meter.consistency > 40) {
+      patterns.push(`Emerging ${meter.type} meter (${meter.consistency.toFixed(0)}% consistent)`);
+    }
+
+    if (meter.type !== 'irregular') {
+      patterns.push(`Meter: ${meter.pattern}`);
+    }
+
     return patterns;
   }
 
   private generateEnhancedSuggestions(
     lineAnalyses: EnhancedLineAnalysis[],
-    pattern: number[]
+    pattern: number[],
+    meterAnalysis: MeterAnalysis
   ): string[] {
     const suggestions: string[] = [];
 
@@ -368,6 +448,16 @@ export class PoetryAnalyzerService {
     } else if (lineAnalyses.length > pattern.length) {
       const extra = lineAnalyses.length - pattern.length;
       suggestions.push(`Remove ${extra} line${extra > 1 ? 's' : ''} to match the pattern`);
+    }
+
+    if (meterAnalysis.consistency < 60) {
+      suggestions.push(
+        `Improve rhythm consistency: ${meterAnalysis.type} meter detected but inconsistent`
+      );
+    }
+
+    if (meterAnalysis.type === 'irregular' && lineAnalyses.length > 2) {
+      suggestions.push('Consider using a regular meter pattern for better poetic flow');
     }
 
     lineAnalyses.forEach((line, index) => {
@@ -401,6 +491,85 @@ export class PoetryAnalyzerService {
       suggestions.push('Consider adding alliteration for poetic effect');
     }
 
-    return suggestions.slice(0, 5);
+    const hasRhyme = lineAnalyses.some((line) =>
+      line.words.some(
+        (word) => (word.pos && word.pos.startsWith('nn')) || word.pos.startsWith('vb')
+      )
+    );
+    if (!hasRhyme && lineAnalyses.length > 1) {
+      suggestions.push('Try incorporating rhyme for musical quality');
+    }
+
+    return suggestions.slice(0, 6);
+  }
+
+  private getPreviousWord(words: { word: string }[], currentWord: string): string | undefined {
+    const currentIndex = words.findIndex((w) => w.word.toLowerCase() === currentWord.toLowerCase());
+    return currentIndex > 0 ? words[currentIndex - 1].word : undefined;
+  }
+
+  private createResultForQualityAssessment(
+    formKey: string,
+    lineAnalyses: EnhancedLineAnalysis[]
+  ): EnhancedPoetryResult {
+    const form = POETRY_FORMS[formKey];
+    const ok = lineAnalyses.length === form.pattern.length && lineAnalyses.every((l) => l.match);
+
+    return {
+      ok,
+      form: formKey,
+      totalLines: {
+        expected: form.pattern.length,
+        actual: lineAnalyses.length,
+      },
+      lines: lineAnalyses,
+      summary: '',
+      suggestions: [],
+      overallAlliterations: [],
+      detectedPatterns: [],
+    };
+  }
+
+  getRhythmSuggestions(targetMeter?: MeterType): RhythmSuggestion[] {
+    const result = this.result();
+    if (!result) return [];
+
+    return this.meterService.generateRhythmSuggestions(
+      result.lines.map((l) => l.text),
+      targetMeter
+    );
+  }
+
+  isCompletePoem(): boolean {
+    const result = this.result();
+    if (!result) return false;
+
+    return (
+      result.lines.length === result.totalLines.expected && result.lines.every((line) => line.match)
+    );
+  }
+
+  getQuickStats(): {
+    totalSyllables: number;
+    avgSyllablesPerLine: number;
+    vocabularyRichness: number;
+  } {
+    const result = this.result();
+    if (!result || result.lines.length === 0) {
+      return { totalSyllables: 0, avgSyllablesPerLine: 0, vocabularyRichness: 0 };
+    }
+
+    const totalSyllables = result.lines.reduce((sum, line) => sum + line.count, 0);
+    const avgSyllablesPerLine = totalSyllables / result.lines.length;
+
+    const allWords = result.lines.flatMap((line) => line.words.map((w) => w.word.toLowerCase()));
+    const uniqueWords = new Set(allWords);
+    const vocabularyRichness = (uniqueWords.size / allWords.length) * 100;
+
+    return {
+      totalSyllables,
+      avgSyllablesPerLine: Math.round(avgSyllablesPerLine * 10) / 10,
+      vocabularyRichness: Math.round(vocabularyRichness * 10) / 10,
+    };
   }
 }

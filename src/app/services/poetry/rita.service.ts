@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { RiTa } from 'rita';
+import { UtilsService } from '../core/utils.service';
 
 export interface SyllableAnalysis {
   syllables: number;
@@ -70,6 +71,7 @@ export interface GrammaticalAnalysis {
 })
 export class RitaService {
   private readonly cache = new Map<string, SyllableAnalysis>();
+  private readonly utils = inject(UtilsService);
 
   analyzeLine(line: string): SyllableAnalysis {
     const trimmedLine = line.trim();
@@ -431,6 +433,53 @@ export class RitaService {
     return [...new Set(combined)];
   }
 
+  async suggestAlternativesEnhanced(
+    word: string,
+    targetSyllables: number,
+    context: { pos?: string; lineIndex?: number } = {}
+  ): Promise<AlternativeWord[]> {
+    const searches = await Promise.all([
+      this.advancedSearch({
+        syllables: targetSyllables,
+        pos: context.pos,
+      }),
+
+      context.lineIndex !== undefined
+        ? RiTa.rhymes(word, { numSyllables: targetSyllables, limit: 3 })
+        : [],
+
+      RiTa.soundsLike(word, { numSyllables: targetSyllables, limit: 3 }),
+    ]);
+
+    const allResults = searches.flat();
+    return this.rankAlternatives(allResults, word, context);
+  }
+
+  private rankAlternatives(
+    words: string[],
+    originalWord: string,
+    context: { pos?: string }
+  ): AlternativeWord[] {
+    return words
+      .filter((word) => word.toLowerCase() !== originalWord.toLowerCase())
+      .map((word) => ({
+        word,
+        syllables: RiTa.syllables(word).split('/').length,
+        reason: 'exact-match' as const,
+        pos: RiTa.pos(word)[0],
+      }))
+      .sort((a, b) => {
+        if (context.pos) {
+          const aMatches = a.pos === context.pos;
+          const bMatches = b.pos === context.pos;
+          if (aMatches && !bMatches) return -1;
+          if (bMatches && !aMatches) return 1;
+        }
+        return 0;
+      })
+      .slice(0, 8);
+  }
+
   async findSemanticRhymes(word: string, targetSyllables: number): Promise<AlternativeWord[]> {
     const pos = RiTa.pos(word)[0];
 
@@ -453,40 +502,13 @@ export class RitaService {
     }
   }
 
-  private getPosLabel(pos: string): string {
-    const labels: Record<string, string> = {
-      nn: 'noun',
-      nns: 'noun (plural)',
-      nnp: 'proper noun',
-      vb: 'verb',
-      vbd: 'verb (past)',
-      vbg: 'verb (gerund)',
-      vbn: 'verb (past participle)',
-      vbp: 'verb (present)',
-      vbz: 'verb (3rd person)',
-      jj: 'adjective',
-      jjr: 'adjective (comparative)',
-      jjs: 'adjective (superlative)',
-      rb: 'adverb',
-      rbr: 'adverb (comparative)',
-      rbs: 'adverb (superlative)',
-      dt: 'determiner',
-      in: 'preposition',
-      cc: 'conjunction',
-      prp: 'pronoun',
-      prp$: 'possessive pronoun',
-      uh: 'interjection',
-    };
-    return labels[pos.toLowerCase()] || pos;
-  }
-
   analyzeGrammar(word: string): GrammaticalAnalysis {
     const pos = RiTa.pos(word)[0] || 'unknown';
 
     const analysis: GrammaticalAnalysis = {
       word,
       pos,
-      posLabel: this.getPosLabel(pos),
+      posLabel: this.utils.getPosLabel(pos),
       isNoun: RiTa.isNoun(word) === 'true',
       isVerb: RiTa.isVerb(word) === 'true',
       isAdjective: RiTa.isAdjective(word) === 'true',

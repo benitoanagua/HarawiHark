@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { BadgeComponent } from '../badge/badge.component';
 import { ButtonComponent } from '../button/button.component';
 import { CardComponent } from '../card/card.component';
 import { HeaderComponent } from '../header/header.component';
@@ -7,13 +8,15 @@ import { PoemEditorComponent } from '../poem-editor/poem-editor.component';
 import { PoemResultsComponent } from '../poem-results/poem-results.component';
 import { PoemQualityComponent } from '../poem-quality/poem-quality.component';
 import { WordSuggestionsComponent } from '../word-suggestions/word-suggestions.component';
-import { PoetryAnalyzerService } from '../../services/poetry'; // ✅ IMPORT CORRECTO
+import { PoetryAnalyzerService } from '../../services/poetry';
+import { MeterAnalysisService } from '../../services/poetry/meter-analysis.service';
 
 @Component({
   selector: 'app-poetry-page',
   standalone: true,
   imports: [
     CommonModule,
+    BadgeComponent,
     ButtonComponent,
     CardComponent,
     HeaderComponent,
@@ -26,17 +29,18 @@ import { PoetryAnalyzerService } from '../../services/poetry'; // ✅ IMPORT COR
 })
 export class PoetryPageComponent {
   readonly analyzer = inject(PoetryAnalyzerService);
+  readonly meterService = inject(MeterAnalysisService);
 
   readonly showQuality = signal(false);
   readonly showVariations = signal(false);
+  readonly showMeterAnalysis = signal(false);
 
   onWordSelected(word: string): void {
     this.analyzer.selectWordEnhanced(word);
   }
 
   onReplaceWord(newWord: string): void {
-    console.log('Replace word with:', newWord);
-    this.analyzer.selectWordEnhanced(null);
+    this.analyzer.replaceWord(this.analyzer.wordAlternatives()?.original || '', newWord);
   }
 
   onCloseSuggestions(): void {
@@ -58,7 +62,7 @@ export class PoetryPageComponent {
   }
 
   onUseVariation(lineIndex: number, variation: string): void {
-    console.log('Use variation:', lineIndex, variation);
+    this.analyzer.applyVariation(lineIndex, variation);
   }
 
   onAssessQuality(): void {
@@ -72,5 +76,13 @@ export class PoetryPageComponent {
       this.analyzer.poemText.set(generated.join('\n'));
       this.analyzer.generatedPoem.set(null);
     }
+  }
+
+  onShowMeterAnalysis(): void {
+    this.showMeterAnalysis.set(true);
+  }
+
+  getQuickStats() {
+    return this.analyzer.getQuickStats();
   }
 }

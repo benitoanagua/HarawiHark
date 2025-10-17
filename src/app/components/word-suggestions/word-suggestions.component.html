@@ -40,7 +40,7 @@
                   {{ alt.syllables }} syllable{{ alt.syllables !== 1 ? 's' : '' }}
                 </span>
                 @if (alt.pos) {
-                  <span class="pos-tag">{{ alt.pos }}</span>
+                  <span class="pos-tag">{{ getPosLabel(alt.pos) }}</span>
                 }
               </div>
             </div>

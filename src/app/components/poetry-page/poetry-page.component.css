@@ -3,43 +3,43 @@
 }
 
 .page-content {
-  @apply max-w-4xl mx-auto px-4 py-8 lg:px-6 lg:py-12;
+  @apply max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8 lg:py-12;
 }
 
 .hero-section {
-  @apply mb-8 lg:mb-12 text-center;
+  @apply mb-8 sm:mb-10 lg:mb-12 text-center;
 }
 
 .hero-icon-container {
-  @apply flex items-center justify-center gap-4 mb-4;
+  @apply flex items-center justify-center gap-3 sm:gap-4 mb-4;
 }
 
 .hero-icon {
-  @apply text-5xl text-primary;
+  @apply text-4xl sm:text-5xl lg:text-6xl text-primary;
 }
 
 .hero-title {
-  @apply text-4xl lg:text-6xl font-light tracking-tight text-onBackground lowercase;
+  @apply text-3xl sm:text-4xl lg:text-6xl font-light tracking-tight text-onBackground lowercase;
 }
 
 .hero-subtitle {
-  @apply text-lg lg:text-xl font-light text-onSurfaceVariant lowercase;
+  @apply text-base sm:text-lg lg:text-xl font-light text-onSurfaceVariant lowercase;
 }
 
 .editor-section {
-  @apply mb-8;
+  @apply mb-6 sm:mb-8;
 }
 
 .generation-actions {
-  @apply mb-8;
+  @apply mb-6 sm:mb-8;
 }
 
 .actions-grid {
-  @apply flex flex-wrap gap-3;
+  @apply flex flex-col sm:flex-row flex-wrap gap-3;
 }
 
 .generated-section {
-  @apply mb-8;
+  @apply mb-6 sm:mb-8;
 }
 
 .generated-container {
@@ -47,7 +47,7 @@
 }
 
 .generated-title {
-  @apply text-xl font-light tracking-tight text-onSurface lowercase;
+  @apply text-lg sm:text-xl font-light tracking-tight text-onSurface lowercase;
 }
 
 .generated-poem {
@@ -55,47 +55,151 @@
 }
 
 .generated-line {
-  @apply text-base text-onSurface font-normal;
+  @apply text-sm sm:text-base text-onSurface font-normal;
 }
 
 .generated-actions {
-  @apply flex flex-wrap gap-3;
+  @apply flex flex-col sm:flex-row flex-wrap gap-3;
 }
 
 .suggestions-section {
-  @apply mb-8;
+  @apply mb-6 sm:mb-8;
 }
 
 .results-section {
-  @apply mb-8 space-y-6;
+  @apply mb-6 sm:mb-8 space-y-4 sm:space-y-6;
+}
+
+.quick-stats {
+  @apply mt-4 sm:mt-6;
+}
+
+.stats-container {
+  @apply grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4;
+}
+
+.stat-item {
+  @apply flex flex-col items-center text-center p-3 sm:p-4 bg-surfaceVariant border border-outlineVariant;
+}
+
+.stat-label {
+  @apply text-xs text-onSurfaceVariant uppercase tracking-wide mb-1;
+}
+
+.stat-value {
+  @apply text-lg sm:text-xl lg:text-2xl font-semibold text-onSurface;
 }
 
 .advanced-actions {
-  @apply mt-6;
+  @apply mt-4 sm:mt-6;
 }
 
 .actions-row {
-  @apply flex flex-wrap gap-3;
+  @apply flex flex-col sm:flex-row flex-wrap gap-3;
 }
 
 .quality-section {
-  @apply mt-6;
+  @apply mt-4 sm:mt-6;
+}
+
+.meter-analysis-section {
+  @apply mt-4 sm:mt-6;
+}
+
+.meter-analysis-container {
+  @apply space-y-4 sm:space-y-6;
+}
+
+.meter-info {
+  @apply space-y-3 p-4 sm:p-6 bg-surfaceContainerHigh border border-outlineVariant;
+}
+
+.meter-header {
+  @apply flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4;
+}
+
+.consistency-score {
+  @apply text-sm text-onSurfaceVariant font-medium;
+}
+
+.meter-pattern {
+  @apply text-base sm:text-lg lg:text-xl font-mono text-primary font-semibold;
+}
+
+.meter-description {
+  @apply text-sm text-onSurfaceVariant leading-relaxed;
+}
+
+.meter-examples {
+  @apply mt-4 p-4 bg-surfaceVariant border border-outlineVariant;
+}
+
+.meter-examples h4 {
+  @apply text-sm font-semibold text-onSurface mb-3 lowercase;
+}
+
+.examples-list {
+  @apply space-y-2;
+}
+
+.example-item {
+  @apply text-sm text-onSurfaceVariant italic pl-4 border-l-2 border-primary;
+}
+
+.rhythm-suggestions {
+  @apply p-4 sm:p-6 bg-surfaceVariant border border-outlineVariant;
+}
+
+.suggestions-title {
+  @apply text-sm font-semibold text-onSurface mb-4 lowercase;
+}
+
+.suggestions-list {
+  @apply space-y-3;
+}
+
+.suggestion-item {
+  @apply flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 p-3 bg-surface border border-outlineVariant;
+}
+
+.suggestion-item .line-number {
+  @apply font-mono text-xs bg-primary text-onPrimary px-2 py-1 rounded-none flex-shrink-0 self-start;
+}
+
+.suggestion-content {
+  @apply flex-1 space-y-1;
+}
+
+.suggestion-issue {
+  @apply text-sm text-onSurface font-medium;
+}
+
+.suggestion-text {
+  @apply text-sm text-onSurfaceVariant;
+}
+
+.no-rhythm-suggestions {
+  @apply flex items-center justify-center gap-3 py-6 text-center;
+}
+
+.no-suggestions-icon {
+  @apply text-2xl text-inverseGreen;
+}
+
+.no-suggestions-text {
+  @apply text-sm text-onSurfaceVariant;
 }
 
 .variations-section {
-  @apply mt-6;
+  @apply mt-4 sm:mt-6;
 }
 
 .variations-container {
-  @apply flex flex-col gap-4;
-}
-
-.variations-title {
-  @apply text-xl font-light tracking-tight text-onSurface lowercase mb-4;
+  @apply space-y-4 sm:space-y-6;
 }
 
 .variations-grid {
-  @apply space-y-6;
+  @apply space-y-4 sm:space-y-6;
 }
 
 .line-variations {
@@ -103,7 +207,11 @@
 }
 
 .line-title {
-  @apply text-base font-semibold tracking-tight text-onSurface;
+  @apply flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-base font-semibold tracking-tight text-onSurface;
+}
+
+.original-syllables {
+  @apply text-sm text-onSurfaceVariant font-normal;
 }
 
 .variation-list {
@@ -111,7 +219,7 @@
 }
 
 .variation-item {
-  @apply flex items-center justify-between gap-4 p-3 bg-surfaceVariant border border-outlineVariant;
+  @apply flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-3 bg-surfaceVariant border border-outlineVariant;
 }
 
 .variation-text {
@@ -119,35 +227,39 @@
 }
 
 .empty-state-section {
-  @apply mb-8;
+  @apply mb-6 sm:mb-8;
 }
 
 .empty-content {
-  @apply flex flex-col items-center justify-center gap-4 py-8 text-center;
+  @apply flex flex-col items-center justify-center gap-4 py-8 sm:py-12 text-center;
 }
 
 .empty-icon {
-  @apply text-4xl text-onSurfaceVariant;
+  @apply text-3xl sm:text-4xl text-onSurfaceVariant;
 }
 
 .empty-title {
-  @apply text-xl font-light tracking-tight text-onSurface lowercase;
+  @apply text-lg sm:text-xl font-light tracking-tight text-onSurface lowercase;
 }
 
 .empty-description {
-  @apply text-sm text-onSurfaceVariant max-w-md;
+  @apply text-sm text-onSurfaceVariant max-w-md mb-4;
+}
+
+.empty-actions {
+  @apply mt-4;
 }
 
 .info-section {
-  @apply mt-12 p-6 lg:p-8 bg-primaryContainer text-onPrimaryContainer;
+  @apply mt-8 sm:mt-12 p-4 sm:p-6 lg:p-8 bg-primaryContainer text-onPrimaryContainer;
 }
 
 .info-content {
-  @apply flex items-start gap-4;
+  @apply flex flex-col sm:flex-row items-start gap-3 sm:gap-4;
 }
 
 .info-icon {
-  @apply text-2xl flex-shrink-0;
+  @apply text-xl sm:text-2xl flex-shrink-0 mt-1;
 }
 
 .info-text {
@@ -155,13 +267,43 @@
 }
 
 .info-title {
-  @apply font-semibold tracking-tight mb-2 lowercase;
+  @apply font-semibold tracking-tight mb-3 lowercase text-base sm:text-lg;
 }
 
 .info-description {
-  @apply text-sm leading-relaxed mb-3;
+  @apply text-sm leading-relaxed mb-4 opacity-90;
 }
 
 .info-features {
-  @apply text-sm space-y-1 ml-4;
+  @apply space-y-2;
+}
+
+.info-features li {
+  @apply flex items-center gap-3 text-sm;
+}
+
+.feature-icon {
+  @apply text-base sm:text-lg opacity-80 flex-shrink-0;
+}
+
+.actions-row app-button:disabled,
+.actions-grid app-button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.generation-actions:has(app-button:disabled) {
+  @apply opacity-70;
+}
+
+.stat-item:focus-visible,
+.variation-item:focus-visible,
+.suggestion-item:focus-visible {
+  @apply outline-2 outline-primary outline-offset-2;
+}
+
+.results-section,
+.meter-analysis-section,
+.quality-section,
+.variations-section {
+  @apply transition-opacity duration-300 ease-in-out;
 }
