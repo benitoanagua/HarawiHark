@@ -9,156 +9,154 @@
 
     <!-- Detected Patterns Section -->
     @if (result.detectedPatterns && result.detectedPatterns.length > 0) {
-      <div class="patterns-section">
-        <h3 class="section-title">detected patterns</h3>
-        <div class="patterns-list">
-          @for (pattern of result.detectedPatterns; track $index) {
-            <div class="pattern-item">
-              <span class="icon-[iconoir--sparks] pattern-icon"></span>
-              <span class="pattern-text">{{ pattern }}</span>
-            </div>
-          }
+    <div class="patterns-section">
+      <h3 class="section-title">detected patterns</h3>
+      <div class="patterns-list">
+        @for (pattern of result.detectedPatterns; track $index) {
+        <div class="pattern-item">
+          <span class="icon-[iconoir--sparks] pattern-icon"></span>
+          <span class="pattern-text">{{ pattern }}</span>
         </div>
+        }
       </div>
+    </div>
     }
 
     <!-- Alliteration Section -->
     @if (result.overallAlliterations && result.overallAlliterations.length > 0) {
-      <div class="alliteration-section">
-        <h3 class="section-title">alliterations detected</h3>
-        <div class="alliteration-list">
-          @for (alliteration of result.overallAlliterations; track $index) {
-            <div class="alliteration-item">
-              <app-badge variant="info" size="small" icon="icon-[iconoir--sound-high]">
-                {{ alliteration.sound }}
-              </app-badge>
-              <span class="alliteration-words">
-                {{ alliteration.words.join(' • ') }}
-              </span>
-            </div>
-          }
+    <div class="alliteration-section">
+      <h3 class="section-title">alliterations detected</h3>
+      <div class="alliteration-list">
+        @for (alliteration of result.overallAlliterations; track $index) {
+        <div class="alliteration-item">
+          <app-badge variant="info" size="small" icon="icon-[iconoir--sound-high]">
+            {{ alliteration.sound }}
+          </app-badge>
+          <span class="alliteration-words">
+            {{ alliteration.words.join(' • ') }}
+          </span>
         </div>
+        }
       </div>
+    </div>
     }
 
     <!-- Line Analysis -->
     <div class="line-analysis-section">
       <h3 class="section-title">line-by-line analysis</h3>
-      
+
       <div class="lines-container">
         @for (line of result.lines; track $index) {
-          <div class="line-card">
-            <!-- Line Header -->
-            <div class="line-header">
-              <span class="line-number">
-                line {{ $index + 1 }}
-              </span>
-              <app-badge
-                [variant]="line.match ? 'success' : 'error'"
-                size="small"
-                [icon]="line.match ? 'icon-[iconoir--check]' : 'icon-[iconoir--cancel]'"
-              >
-                {{ line.count }}/{{ line.expected }} syllables
-              </app-badge>
-            </div>
+        <div class="line-card">
+          <!-- Line Header -->
+          <div class="line-header">
+            <span class="line-number"> line {{ $index + 1 }} </span>
+            <app-badge
+              [variant]="line.match ? 'success' : 'error'"
+              size="small"
+              [icon]="line.match ? 'icon-[iconoir--check]' : 'icon-[iconoir--cancel]'"
+            >
+              {{ line.count }}/{{ line.expected }} syllables
+            </app-badge>
+          </div>
 
-            <!-- Line Text with Clickable Words -->
-            <p class="line-text">
-              @for (word of line.words; track $index) {
-                <span
-                  class="word-token"
-                  [class.word-clickable]="!line.match"
-                  [attr.role]="!line.match ? 'button' : null"
-                  [attr.tabindex]="!line.match ? 0 : null"
-                  (click)="!line.match && onWordClick(word.word)"
-                  (keyup.enter)="!line.match && onWordClick(word.word)"
-                  (keyup.space)="!line.match && onWordClick(word.word)"
-                  [title]="getPosLabel(word.pos) + ' • ' + word.syllables + ' syllable(s)'"
-                >
-                  {{ word.word }}
-                </span>
-              }
-            </p>
-
-            <!-- Alliterations in Line -->
-            @if (line.alliterations && line.alliterations.length > 0) {
-              <div class="line-alliterations">
-                @for (alliteration of line.alliterations; track $index) {
-                  <app-badge variant="info" size="small" icon="icon-[iconoir--sound-high]">
-                    alliteration: {{ alliteration.words.join(', ') }}
-                  </app-badge>
-                }
-              </div>
+          <!-- Line Text with Clickable Words -->
+          <p class="line-text">
+            @for (word of line.words; track $index) {
+            <span
+              class="word-token"
+              [class.word-clickable]="!line.match"
+              [attr.role]="!line.match ? 'button' : null"
+              [attr.tabindex]="!line.match ? 0 : null"
+              (click)="!line.match && onWordClick(word.word)"
+              (keyup.enter)="!line.match && onWordClick(word.word)"
+              (keyup.space)="!line.match && onWordClick(word.word)"
+              [title]="getPosLabel(word.pos) + ' • ' + word.syllables + ' syllable(s)'"
+            >
+              {{ word.word }}
+            </span>
             }
+          </p>
 
-            <!-- Syllable Breakdown -->
-            @if (line.syllables && line.syllables.length > 0) {
-              <div class="syllable-breakdown">
-                <span class="breakdown-label">syllables:</span>
-                <div class="syllable-chips">
-                  @for (syllable of line.syllables; track $index) {
-                    <span class="syllable-chip">{{ syllable }}</span>
+          <!-- Alliterations in Line -->
+          @if (line.alliterations && line.alliterations.length > 0) {
+          <div class="line-alliterations">
+            @for (alliteration of line.alliterations; track $index) {
+            <app-badge variant="info" size="small" icon="icon-[iconoir--sound-high]">
+              alliteration: {{ alliteration.words.join(', ') }}
+            </app-badge>
+            }
+          </div>
+          }
+
+          <!-- Syllable Breakdown -->
+          @if (line.syllables && line.syllables.length > 0) {
+          <div class="syllable-breakdown">
+            <span class="breakdown-label">syllables:</span>
+            <div class="syllable-chips">
+              @for (syllable of line.syllables; track $index) {
+              <span class="syllable-chip">{{ syllable }}</span>
+              }
+            </div>
+          </div>
+          }
+
+          <!-- Stress Pattern -->
+          @if (line.stresses) {
+          <div class="stress-pattern">
+            <span class="breakdown-label">stress:</span>
+            <span class="stress-value">{{ line.stresses }}</span>
+          </div>
+          }
+
+          <!-- Word Details -->
+          <details class="word-details">
+            <summary class="word-details-summary">view word analysis</summary>
+            <div class="word-details-content">
+              @for (word of line.words; track $index) {
+              <div class="word-detail-item">
+                <span class="word-detail-word">{{ word.word }}</span>
+                <div class="word-detail-meta">
+                  <span class="word-detail-syllables">
+                    {{ word.syllables }} syllable{{ word.syllables !== 1 ? 's' : '' }}
+                  </span>
+                  <span class="word-detail-pos">{{ getPosLabel(word.pos) }}</span>
+                  @if (word.phones) {
+                  <span class="word-detail-phones">{{ word.phones }}</span>
                   }
                 </div>
               </div>
-            }
-
-            <!-- Stress Pattern -->
-            @if (line.stresses) {
-              <div class="stress-pattern">
-                <span class="breakdown-label">stress:</span>
-                <span class="stress-value">{{ line.stresses }}</span>
-              </div>
-            }
-
-            <!-- Word Details -->
-            <details class="word-details">
-              <summary class="word-details-summary">view word analysis</summary>
-              <div class="word-details-content">
-                @for (word of line.words; track $index) {
-                  <div class="word-detail-item">
-                    <span class="word-detail-word">{{ word.word }}</span>
-                    <div class="word-detail-meta">
-                      <span class="word-detail-syllables">
-                        {{ word.syllables }} syllable{{ word.syllables !== 1 ? 's' : '' }}
-                      </span>
-                      <span class="word-detail-pos">{{ getPosLabel(word.pos) }}</span>
-                      @if (word.phones) {
-                        <span class="word-detail-phones">{{ word.phones }}</span>
-                      }
-                    </div>
-                  </div>
-                }
-              </div>
-            </details>
-          </div>
+              }
+            </div>
+          </details>
+        </div>
         }
       </div>
     </div>
 
     <!-- Rhyme Scheme -->
     @if (result.rhymeScheme) {
-      <div class="rhyme-section">
-        <h4 class="section-title">rhyme scheme</h4>
-        <div class="rhyme-scheme">
-          <span class="rhyme-value">{{ result.rhymeScheme }}</span>
-        </div>
+    <div class="rhyme-section">
+      <h4 class="section-title">rhyme scheme</h4>
+      <div class="rhyme-scheme">
+        <span class="rhyme-value">{{ result.rhymeScheme }}</span>
       </div>
+    </div>
     }
 
     <!-- Suggestions -->
     @if (result.suggestions && result.suggestions.length > 0) {
-      <div class="suggestions-section">
-        <h4 class="section-title">suggestions for improvement</h4>
-        <ul class="suggestions-list">
-          @for (suggestion of result.suggestions; track $index) {
-            <li class="suggestion-item">
-              <span class="icon-[iconoir--light-bulb] suggestion-icon"></span>
-              <span>{{ suggestion }}</span>
-            </li>
-          }
-        </ul>
-      </div>
+    <div class="suggestions-section">
+      <h4 class="section-title">suggestions for improvement</h4>
+      <ul class="suggestions-list">
+        @for (suggestion of result.suggestions; track $index) {
+        <li class="suggestion-item">
+          <span class="icon-[iconoir--light-bulb] suggestion-icon"></span>
+          <span>{{ suggestion }}</span>
+        </li>
+        }
+      </ul>
+    </div>
     }
   </div>
 </app-card>

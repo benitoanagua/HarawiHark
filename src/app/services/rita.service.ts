@@ -62,15 +62,16 @@ export class RitaService {
     const phones: string[] = [];
 
     words.forEach((word) => {
-      const syllableCount = RiTa.syllables(word).split('/').length;
-      totalSyllables += syllableCount;
+      const syllableStr = RiTa.syllables(word);
+      const wordSyllables = syllableStr ? syllableStr.split('/') : [word];
+      totalSyllables += wordSyllables.length;
+
+      syllables.push(...wordSyllables);
 
       const wordPhones = RiTa.phones(word);
       if (wordPhones) {
-        syllables.push(...wordPhones.split('-'));
         phones.push(wordPhones);
       } else {
-        syllables.push(word);
         phones.push('');
       }
 
@@ -119,14 +120,11 @@ export class RitaService {
     const alternatives: AlternativeWord[] = [];
 
     try {
-      // 1. Usar un enfoque más simple: buscar palabras que comiencen con la misma letra
       const firstLetter = word[0].toLowerCase();
       const allWords = await RiTa.search(new RegExp(`^${firstLetter}`, 'i'));
 
-      // Filter by syllable count manually
       const exactMatches: string[] = [];
       for (const w of allWords.slice(0, 100)) {
-        // Limit for performance
         try {
           if (typeof w !== 'string') continue;
 
@@ -149,7 +147,6 @@ export class RitaService {
         });
       });
 
-      // 2. Buscar rimas con las sílabas correctas
       const rhymes = await RiTa.rhymes(word);
       for (const r of rhymes) {
         if (alternatives.length >= maxResults) break;
@@ -170,7 +167,6 @@ export class RitaService {
         }
       }
 
-      // 3. Buscar palabras con sonido similar
       if (alternatives.length < maxResults) {
         const soundAlikes = await RiTa.soundsLike(word);
         for (const s of soundAlikes) {
