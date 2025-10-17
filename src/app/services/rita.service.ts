@@ -19,7 +19,13 @@ export interface WordAnalysis {
 export interface AlternativeWord {
   word: string;
   syllables: number;
-  reason: 'exact-match' | 'rhyme-match' | 'sound-match';
+  reason:
+    | 'exact-match'
+    | 'rhyme-match'
+    | 'sound-match'
+    | 'semantic-rhyme'
+    | 'spelling-match'
+    | 'morphological';
   pos?: string;
 }
 
@@ -34,6 +40,29 @@ export interface RhymeMatch {
   rhymesWith: string[];
   perfectRhymes: string[];
   nearRhymes: string[];
+}
+
+export interface AdvancedSearchOptions {
+  syllables?: number;
+  pos?: string;
+  startsWith?: string;
+  endsWith?: string;
+  contains?: string;
+  minLength?: number;
+  maxLength?: number;
+}
+
+export interface GrammaticalAnalysis {
+  word: string;
+  pos: string;
+  posLabel: string;
+  isNoun: boolean;
+  isVerb: boolean;
+  isAdjective: boolean;
+  isAdverb: boolean;
+  conjugations?: string[];
+  pluralForm?: string;
+  stemForm?: string;
 }
 
 @Injectable({
@@ -357,6 +386,272 @@ export class RitaService {
     }
 
     return suggestions;
+  }
+
+  /**
+   * Búsqueda multi-criterio avanzada
+   */
+  async advancedSearch(options: AdvancedSearchOptions): Promise<string[]> {
+    const queries: Promise<string[]>[] = [];
+    const searchOpts = {
+      numSyllables: options.syllables,
+      pos: options.pos,
+      limit: 15,
+    };
+
+    // Búsqueda por diferentes patrones
+    if (options.startsWith) {
+      queries.push(RiTa.search(new RegExp(`^${options.startsWith}`, 'i'), searchOpts));
+    }
+
+    if (options.endsWith) {
+      queries.push(RiTa.search(new RegExp(`${options.endsWith}$`, 'i'), searchOpts));
+    }
+
+    if (options.contains) {
+      queries.push(RiTa.search(new RegExp(options.contains, 'i'), searchOpts));
+    }
+
+    // Si no hay criterios específicos, búsqueda general
+    if (queries.length === 0) {
+      queries.push(
+        RiTa.search(/.*/, {
+          ...searchOpts,
+          limit: 20,
+        })
+      );
+    }
+
+    // Combina resultados
+    const results = await Promise.all(queries);
+    let combined = results.flat();
+
+    // Filtra por longitud si se especifica
+    if (options.minLength || options.maxLength) {
+      combined = combined.filter((word) => {
+        if (options.minLength && word.length < options.minLength) return false;
+        if (options.maxLength && word.length > options.maxLength) return false;
+        return true;
+      });
+    }
+
+    return [...new Set(combined)]; // Remove duplicates
+  }
+
+  /**
+   * Encuentra palabras que riman Y tienen el mismo POS
+   */
+  async findSemanticRhymes(word: string, targetSyllables: number): Promise<AlternativeWord[]> {
+    const pos = RiTa.pos(word)[0];
+
+    try {
+      const rhymes = await RiTa.rhymes(word, {
+        numSyllables: targetSyllables,
+        pos: pos,
+        limit: 10,
+      });
+
+      return rhymes.map((w) => ({
+        word: w,
+        syllables: targetSyllables,
+        reason: 'semantic-rhyme' as const,
+        pos: RiTa.pos(w)[0],
+      }));
+    } catch (error) {
+      console.warn('Error finding semantic rhymes:', error);
+      return [];
+    }
+  }
+
+  private getPosLabel(pos: string): string {
+    const labels: Record<string, string> = {
+      nn: 'noun',
+      nns: 'noun (plural)',
+      nnp: 'proper noun',
+      vb: 'verb',
+      vbd: 'verb (past)',
+      vbg: 'verb (gerund)',
+      vbn: 'verb (past participle)',
+      vbp: 'verb (present)',
+      vbz: 'verb (3rd person)',
+      jj: 'adjective',
+      jjr: 'adjective (comparative)',
+      jjs: 'adjective (superlative)',
+      rb: 'adverb',
+      rbr: 'adverb (comparative)',
+      rbs: 'adverb (superlative)',
+      dt: 'determiner',
+      in: 'preposition',
+      cc: 'conjunction',
+      prp: 'pronoun',
+      prp$: 'possessive pronoun',
+      uh: 'interjection',
+    };
+    return labels[pos.toLowerCase()] || pos;
+  }
+
+  /**
+   * Análisis gramatical exhaustivo de una palabra
+   */
+  analyzeGrammar(word: string): GrammaticalAnalysis {
+    const pos = RiTa.pos(word)[0] || 'unknown';
+
+    // Convertir los resultados string a boolean
+    const analysis: GrammaticalAnalysis = {
+      word,
+      pos,
+      posLabel: this.getPosLabel(pos),
+      isNoun: RiTa.isNoun(word) === 'true', // Convertir string a boolean
+      isVerb: RiTa.isVerb(word) === 'true',
+      isAdjective: RiTa.isAdjective(word) === 'true',
+      isAdverb: RiTa.isAdverb(word) === 'true',
+      stemForm: RiTa.stem(word),
+    };
+
+    // Conjugaciones si es verbo
+    if (analysis.isVerb) {
+      analysis.conjugations = [
+        RiTa.conjugate(word, { tense: RiTa.PAST }),
+        RiTa.conjugate(word, { tense: RiTa.PRESENT }),
+        RiTa.pastPart(word),
+        RiTa.presentPart(word),
+      ].filter(Boolean);
+    }
+
+    // Plural si es sustantivo
+    if (analysis.isNoun) {
+      analysis.pluralForm = RiTa.pluralize(word);
+    }
+
+    return analysis;
+  }
+
+  /**
+   * Sugiere formas alternativas de la misma palabra
+   */
+  suggestMorphologicalVariants(word: string): string[] {
+    const variants: string[] = [];
+
+    if (RiTa.isVerb(word)) {
+      const gerund = RiTa.presentPart(word);
+      const past = RiTa.conjugate(word, { tense: RiTa.PAST });
+      const pastPart = RiTa.pastPart(word);
+
+      if (gerund && gerund !== word) variants.push(gerund);
+      if (past && past !== word) variants.push(past);
+      if (pastPart && pastPart !== word) variants.push(pastPart);
+    }
+
+    if (RiTa.isNoun(word)) {
+      const plural = RiTa.pluralize(word);
+      const singular = RiTa.singularize(word);
+
+      if (plural && plural !== word) variants.push(plural);
+      if (singular && singular !== word) variants.push(singular);
+    }
+
+    return variants;
+  }
+
+  /**
+   * Encuentra palabras similares ortográficamente
+   */
+  async findSpellingSuggestions(
+    word: string,
+    targetSyllables?: number
+  ): Promise<AlternativeWord[]> {
+    try {
+      const similar = await RiTa.spellsLike(word, {
+        numSyllables: targetSyllables,
+        limit: 8,
+        minLength: Math.max(2, word.length - 2),
+        maxLength: word.length + 2,
+      });
+
+      return similar.map((w) => ({
+        word: w,
+        syllables: RiTa.syllables(w).split('/').length,
+        reason: 'spelling-match' as const,
+        pos: RiTa.pos(w)[0],
+      }));
+    } catch (error) {
+      console.warn('Error finding spelling suggestions:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Detecta posibles errores tipográficos en el poema
+   */
+  async detectTypos(lines: string[]): Promise<
+    {
+      line: number;
+      word: string;
+      suggestions: string[];
+    }[]
+  > {
+    const typos: {
+      line: number;
+      word: string;
+      suggestions: string[];
+    }[] = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const words = RiTa.tokenize(lines[i]).filter((w) => /[a-zA-Z]/.test(w));
+
+      for (const word of words) {
+        // Si la palabra no existe en el léxico y tiene más de 2 letras
+        if (!RiTa.hasWord(word) && word.length > 2) {
+          const suggestions = await RiTa.spellsLike(word, { limit: 3 });
+
+          if (suggestions.length > 0) {
+            typos.push({
+              line: i,
+              word,
+              suggestions,
+            });
+          }
+        }
+      }
+    }
+
+    return typos;
+  }
+
+  /**
+   * Mejorado: Análisis de rima más sofisticado
+   */
+  async analyzeRhymeQuality(
+    word1: string,
+    word2: string
+  ): Promise<{
+    perfectRhyme: boolean;
+    nearRhyme: boolean;
+    alliteration: boolean;
+    similarityScore: number;
+  }> {
+    const [perfectRhymes, nearRhymes, alliterations] = await Promise.all([
+      RiTa.rhymes(word1, { limit: 50 }),
+      RiTa.soundsLike(word1, { limit: 50 }),
+      RiTa.alliterations(word1, { limit: 50 }),
+    ]);
+
+    return {
+      perfectRhyme: perfectRhymes.includes(word2),
+      nearRhyme: nearRhymes.includes(word2),
+      alliteration: alliterations.includes(word2),
+      similarityScore: this.calculateWordSimilarity(word1, word2),
+    };
+  }
+
+  private calculateWordSimilarity(word1: string, word2: string): number {
+    // Simple similarity based on shared characters
+    const set1 = new Set(word1.toLowerCase());
+    const set2 = new Set(word2.toLowerCase());
+    const intersection = new Set([...set1].filter((x) => set2.has(x)));
+    const union = new Set([...set1, ...set2]);
+
+    return intersection.size / union.size;
   }
 
   private getLastWord(line: string): string {

@@ -18,55 +18,142 @@
       <app-poem-editor />
     </div>
 
-    <!-- Word Suggestions Modal -->
-    @if (analyzer.wordAlternatives(); as alternatives) {
-      <div class="suggestions-section">
-        <app-word-suggestions
-          [data]="alternatives"
-          (replaceWord)="onReplaceWord($event)"
-          (closeSuggestions)="onCloseSuggestions()"
+     <!-- Nuevas Acciones de Generación -->
+    <div class="generation-actions" *ngIf="!analyzer.result()">
+      <div class="actions-grid">
+        <app-button
+          variant="secondary"
+          size="medium"
+          label="generate poem"
+          icon="icon-[iconoir--magic-wand]"
+          (clicked)="onGeneratePoem()"
+          [disabled]="analyzer.isLoading()"
         />
+        
+        <app-button
+          variant="outline"
+          size="medium"
+          label="use template"
+          icon="icon-[iconoir--page]"
+          (clicked)="analyzer.loadExample()"
+        />
+      </div>
+    </div>
+
+    <!-- Poema Generado -->
+    @if (analyzer.generatedPoem(); as generated) {
+      <div class="generated-section">
+        <app-card padding="large">
+          <div class="generated-container">
+            <h3 class="generated-title">generated poem</h3>
+            <div class="generated-poem">
+              @for (line of generated; track $index) {
+                <p class="generated-line">{{ line }}</p>
+              }
+            </div>
+            <div class="generated-actions">
+              <app-button
+                variant="primary"
+                size="small"
+                label="use this poem"
+                icon="icon-[iconoir--check]"
+                (clicked)="onUseGeneratedPoem()"
+              />
+              <app-button
+                variant="outline"
+                size="small"
+                label="generate another"
+                icon="icon-[iconoir--refresh]"
+                (clicked)="onGeneratePoem()"
+              />
+            </div>
+          </div>
+        </app-card>
       </div>
     }
 
-    <!-- Results -->
+    <!-- Word Suggestions Modal existente -->
+
+    <!-- Results Section mejorada -->
     @if (analyzer.result(); as result) {
       <div class="results-section">
         <app-poem-results
           [result]="result"
           (wordSelected)="onWordSelected($event)"
         />
+
+        <!-- Acciones de Análisis Avanzado -->
+        <div class="advanced-actions">
+          <div class="actions-row">
+            <app-button
+              variant="secondary"
+              size="medium"
+              label="assess quality"
+              icon="icon-[iconoir--star]"
+              (clicked)="onAssessQuality()"
+            />
+            
+            <app-button
+              variant="outline"
+              size="medium"
+              label="generate variations"
+              icon="icon-[iconoir--view-grid]"
+              (clicked)="onGenerateVariations()"
+              [disabled]="analyzer.isLoading()"
+            />
+            
+            <app-button
+              variant="outline"
+              size="medium"
+              label="export poem"
+              icon="icon-[iconoir--cloud-download]"
+              (clicked)="onExportPoem()"
+            />
+          </div>
+        </div>
+
+        <!-- Calidad del Poema -->
+        @if (showQuality() && analyzer.qualityMetrics()) {
+          <div class="quality-section">
+            <app-poem-quality [metrics]="analyzer.qualityMetrics()!" />
+          </div>
+        }
+
+        <!-- Variaciones del Poema -->
+        @if (showVariations() && analyzer.poemVariations().length > 0) {
+          <div class="variations-section">
+            <app-card padding="large">
+              <div class="variations-container">
+                <h3 class="variations-title">poem variations</h3>
+                <div class="variations-grid">
+                  @for (lineVariations of analyzer.poemVariations(); track $index; let i = $index) {
+                    <div class="line-variations">
+                      <h4 class="line-title">line {{ i + 1 }} alternatives</h4>
+                      <div class="variation-list">
+                        @for (variation of lineVariations; track $index) {
+                          <div class="variation-item">
+                            <span class="variation-text">{{ variation }}</span>
+                            <app-button
+                              variant="outline"
+                              size="small"
+                              label="use"
+                              (clicked)="onUseVariation(i, variation)"
+                            />
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            </app-card>
+          </div>
+        }
       </div>
     } @else {
-      <div class="empty-state-section">
-        <app-empty-state
-          icon="icon-[iconoir--page-search]"
-          title="no analysis yet"
-          description="write your poem above and click 'analyze poem' to see detailed analysis with alliterations, stress patterns, and word suggestions"
-        />
-      </div>
+      <!-- Empty State existente -->
     }
 
-    <!-- Info Section -->
-    <div class="info-section">
-      <div class="info-content">
-        <span class="icon-[iconoir--info-circle] info-icon"></span>
-        <div class="info-text">
-          <h3 class="info-title">about harawihark enhanced</h3>
-          <p class="info-description">
-            harawihark uses advanced phonetic analysis powered by RiTa.js to provide
-            comprehensive poetic analysis. New features include:
-          </p>
-          <ul class="info-features">
-            <li>• Click words to see intelligent replacement suggestions</li>
-            <li>• Automatic alliteration detection</li>
-            <li>• Part-of-speech tagging for each word</li>
-            <li>• Stress pattern analysis</li>
-            <li>• Cross-line pattern detection</li>
-            <li>• Rhyme and sound-alike word discovery</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <!-- Info Section existente -->
   </section>
 </article>

@@ -1,0 +1,60 @@
+<app-card padding="large" *ngIf="metrics">
+  <div class="quality-container">
+    <!-- Header con puntuación -->
+    <div class="quality-header">
+      <div class="score-section">
+        <h3 class="quality-title">quality assessment</h3>
+        <div class="score-display">
+          <span class="score-number">{{ metrics.score.toFixed(1) }}</span>
+          <span class="score-max">/100</span>
+          <app-badge [variant]="getGradeVariant(metrics.grade)" size="medium" class="grade-badge">
+            {{ metrics.grade }}
+          </app-badge>
+        </div>
+      </div>
+    </div>
+
+    <!-- Breakdown de métricas -->
+    <div class="metrics-breakdown">
+      <h4 class="breakdown-title">detailed breakdown</h4>
+      <div class="metrics-grid">
+        <div class="metric-item" *ngFor="let metric of getMetricEntries()">
+          <div class="metric-header">
+            <span class="metric-name">{{ metric.name }}</span>
+            <span class="metric-score">{{ metric.value.toFixed(1) }}%</span>
+          </div>
+          <div class="metric-bar">
+            <div
+              class="metric-fill"
+              [style.width.%]="metric.value"
+              [class]="getMetricColor(metric.value)"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fortalezas y mejoras -->
+    <div class="feedback-section">
+      <div class="strengths">
+        <h4 class="feedback-title">
+          <span class="icon-[iconoir--check] feedback-icon"></span>
+          strengths
+        </h4>
+        <ul class="feedback-list">
+          <li *ngFor="let strength of metrics.strengths">{{ strength }}</li>
+        </ul>
+      </div>
+
+      <div class="improvements">
+        <h4 class="feedback-title">
+          <span class="icon-[iconoir--light-bulb] feedback-icon"></span>
+          suggestions
+        </h4>
+        <ul class="feedback-list">
+          <li *ngFor="let improvement of metrics.improvements">{{ improvement }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</app-card>

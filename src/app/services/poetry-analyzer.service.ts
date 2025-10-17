@@ -1,6 +1,15 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { RitaService, type AlliterationMatch, type AlternativeWord } from './rita.service';
-import { POETRY_FORMS } from '../data/poetry-forms.data';
+import { RiTa } from 'rita';
+import {
+  RitaService,
+  type AlliterationMatch,
+  type AlternativeWord,
+  type GrammaticalAnalysis,
+} from './rita.service';
+import { PoemGeneratorService } from './poem-generator.service';
+import { GrammarGeneratorService } from './grammar-generator.service';
+import { PoemQualityService, QualityMetrics } from './poem-quality.service';
+import { POETRY_FORMS, POETRY_EXAMPLES } from '../data/poetry-forms.data';
 import type { LineAnalysis, PoetryResult } from '../models/poetry.model';
 
 export interface EnhancedLineAnalysis extends LineAnalysis {
@@ -9,15 +18,25 @@ export interface EnhancedLineAnalysis extends LineAnalysis {
     syllables: number;
     pos: string;
     phones: string;
+    grammar?: GrammaticalAnalysis;
   }[];
   alliterations?: AlliterationMatch[];
-  alternatives?: Map<string, { word: string; syllables: number; reason: string }[]>;
+  typos?: {
+    line: number;
+    word: string;
+    suggestions: string[];
+  }[];
 }
 
 export interface EnhancedPoetryResult extends PoetryResult {
   lines: EnhancedLineAnalysis[];
   overallAlliterations: AlliterationMatch[];
   detectedPatterns: string[];
+  typos?: {
+    line: number;
+    word: string;
+    suggestions: string[];
+  }[];
 }
 
 export interface WordSuggestionData {
@@ -32,12 +51,82 @@ export interface WordSuggestionData {
 })
 export class PoetryAnalyzerService {
   private readonly rita = inject(RitaService);
+  private readonly poemGenerator = inject(PoemGeneratorService);
+  private readonly grammarGenerator = inject(GrammarGeneratorService);
+  private readonly poemQuality = inject(PoemQualityService);
 
   readonly isLoading = signal(false);
   readonly result = signal<EnhancedPoetryResult | null>(null);
   readonly selectedWord = signal<string | null>(null);
   readonly wordAlternatives = signal<WordSuggestionData | null>(null);
+  readonly generatedPoem = signal<string[] | null>(null);
+  readonly qualityMetrics = signal<QualityMetrics | null>(null);
+  readonly poemVariations = signal<string[][]>([]);
+  readonly selectedForm = signal<string>('haiku');
+  readonly poemText = signal<string>('');
 
+  async generatePoem(formId: string): Promise<void> {
+    this.isLoading.set(true);
+
+    try {
+      const poem = await this.poemGenerator.generatePoem(formId);
+      this.generatedPoem.set(poem);
+
+      // Analizar el poema generado automáticamente
+      if (poem.length > 0) {
+        await this.analyze(formId, poem);
+      }
+    } catch (error) {
+      console.error('Error generating poem:', error);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  /**
+   * Generar variaciones del poema actual
+   */
+  async generateVariations(): Promise<void> {
+    const currentResult = this.result();
+    if (!currentResult) return;
+
+    this.isLoading.set(true);
+    const variations: string[][] = [];
+
+    try {
+      for (const line of currentResult.lines) {
+        const lineVariations = await this.poemGenerator.generateVariations(
+          line.text,
+          line.expected
+        );
+        variations.push(lineVariations);
+      }
+
+      this.poemVariations.set(variations);
+    } catch (error) {
+      console.error('Error generating variations:', error);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  /**
+   * Evaluar calidad del poema
+   */
+  assessQuality(): void {
+    const result = this.result();
+    if (!result) return;
+
+    const lines = result.lines.map((l) => l.text);
+    const pattern = POETRY_FORMS[result.form].pattern;
+
+    const metrics = this.poemQuality.assessQuality(lines, pattern, result);
+    this.qualityMetrics.set(metrics);
+  }
+
+  /**
+   * Mejorado: Análisis con características extendidas
+   */
   async analyze(formKey: string, rawLines: string[]): Promise<EnhancedPoetryResult> {
     this.isLoading.set(true);
 
@@ -49,22 +138,48 @@ export class PoetryAnalyzerService {
 
       const lines = rawLines.map((line) => line.trim()).filter((line) => line.length > 0);
 
-      const lineAnalyses: EnhancedLineAnalysis[] = lines.map((line, index) => {
-        const analysis = this.rita.analyzeLine(line);
-        const words = this.rita.analyzeWords(line);
-        const alliterations = this.rita.detectAlliterations(line);
-        const expected = form.pattern[index] ?? 0;
+      // Análisis mejorado con detección de errores tipográficos
+      const typos = await this.rita.detectTypos(lines);
 
-        return {
-          text: line,
-          count: analysis.syllables,
-          expected,
-          match: analysis.syllables === expected,
-          syllables: analysis.breakdown,
-          stresses: analysis.stresses,
-          words,
-          alliterations: alliterations.length > 0 ? alliterations : undefined,
-        };
+      const lineAnalyses: EnhancedLineAnalysis[] = await Promise.all(
+        lines.map(async (line, index) => {
+          const analysis = this.rita.analyzeLine(line);
+          const words = this.rita.analyzeWords(line);
+          const alliterations = this.rita.detectAlliterations(line);
+          const expected = form.pattern[index] ?? 0;
+
+          // Análisis gramatical extendido para cada palabra
+          const wordsWithGrammar = words.map((word) => ({
+            ...word,
+            grammar: this.rita.analyzeGrammar(word.word),
+          }));
+
+          return {
+            text: line,
+            count: analysis.syllables,
+            expected,
+            match: analysis.syllables === expected,
+            syllables: analysis.breakdown,
+            stresses: analysis.stresses,
+            words: wordsWithGrammar,
+            alliterations: alliterations.length > 0 ? alliterations : undefined,
+            typos: typos.filter((t) => t.line === index),
+          };
+        })
+      );
+
+      // Análisis de calidad
+      const quality = this.poemQuality.assessQuality(lines, form.pattern, {
+        // Resultado básico para el cálculo de calidad
+        ok: lineAnalyses.every((l) => l.match),
+        form: formKey,
+        totalLines: { expected: form.pattern.length, actual: lineAnalyses.length },
+        lines: lineAnalyses,
+        summary: '',
+        rhymeScheme: undefined,
+        suggestions: [],
+        overallAlliterations: [],
+        detectedPatterns: [],
       });
 
       const overallAlliterations = this.detectCrossLineAlliterations(lines);
@@ -95,12 +210,80 @@ export class PoetryAnalyzerService {
         suggestions,
         overallAlliterations,
         detectedPatterns,
+        // quality, // Remover esta línea - quality no existe en EnhancedPoetryResult
+        typos: typos.length > 0 ? typos : undefined,
       };
 
       this.result.set(result);
+      this.qualityMetrics.set(quality);
       return result;
     } finally {
       this.isLoading.set(false);
+    }
+  }
+
+  /**
+   * Mejorado: Sugerencias de palabras con múltiples estrategias
+   */
+  async selectWordEnhanced(word: string | null): Promise<void> {
+    this.selectedWord.set(word);
+    this.wordAlternatives.set(null);
+
+    if (!word) return;
+
+    const result = this.result();
+    if (!result) return;
+
+    for (const line of result.lines) {
+      const wordAnalysis = line.words.find((w) => w.word.toLowerCase() === word.toLowerCase());
+
+      if (wordAnalysis) {
+        const targetSyllables = line.expected;
+        const currentLineSyllables = line.count;
+        const diff = targetSyllables - currentLineSyllables;
+        const neededSyllables = wordAnalysis.syllables + diff;
+
+        if (neededSyllables > 0) {
+          try {
+            // Estrategia 1: Alternativas básicas
+            const basic = await this.rita.suggestAlternatives(word, neededSyllables, 5);
+
+            // Estrategia 2: Rimas semánticas
+            const semantic = await this.rita.findSemanticRhymes(word, neededSyllables);
+
+            // Estrategia 3: Similitud ortográfica
+            const spelling = await this.rita.findSpellingSuggestions(word, neededSyllables);
+
+            // Estrategia 4: Variantes morfológicas
+            const morphological = this.rita
+              .suggestMorphologicalVariants(word)
+              .map((w) => ({
+                word: w,
+                syllables: (RiTa.syllables(w) as string).split('/').length,
+                reason: 'morphological' as const,
+                pos: RiTa.pos(w)[0],
+              }))
+              .filter((w) => w.syllables === neededSyllables);
+
+            // Combina y deduplica
+            const allAlternatives = [...basic, ...semantic, ...spelling, ...morphological];
+
+            const unique = allAlternatives.filter(
+              (alt, idx, self) => idx === self.findIndex((a) => a.word === alt.word)
+            );
+
+            this.wordAlternatives.set({
+              original: word,
+              currentSyllables: wordAnalysis.syllables,
+              targetSyllables: neededSyllables,
+              alternatives: unique.slice(0, 12),
+            });
+          } catch (error) {
+            console.warn('Error getting enhanced alternatives:', error);
+          }
+        }
+        break;
+      }
     }
   }
 
@@ -145,6 +328,14 @@ export class PoetryAnalyzerService {
     this.result.set(null);
     this.selectedWord.set(null);
     this.wordAlternatives.set(null);
+  }
+
+  loadExample(): void {
+    const formId = this.selectedForm();
+    const example = POETRY_EXAMPLES[formId];
+    if (example) {
+      this.poemText.set(example.join('\n'));
+    }
   }
 
   private detectCrossLineAlliterations(lines: string[]): AlliterationMatch[] {

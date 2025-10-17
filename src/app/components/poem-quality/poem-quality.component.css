@@ -1,0 +1,105 @@
+.quality-container {
+  @apply flex flex-col gap-6;
+}
+
+.quality-header {
+  @apply flex items-start justify-between;
+}
+
+.quality-title {
+  @apply text-xl font-light tracking-tight text-onSurface lowercase mb-2;
+}
+
+.score-display {
+  @apply flex items-center gap-3;
+}
+
+.score-number {
+  @apply text-3xl font-light text-onSurface;
+}
+
+.score-max {
+  @apply text-lg text-onSurfaceVariant;
+}
+
+.grade-badge {
+  @apply text-sm;
+}
+
+.metrics-breakdown {
+  @apply flex flex-col gap-4;
+}
+
+.breakdown-title {
+  @apply text-lg font-semibold tracking-tight text-onSurface lowercase;
+}
+
+.metrics-grid {
+  @apply space-y-3;
+}
+
+.metric-item {
+  @apply flex flex-col gap-2;
+}
+
+.metric-header {
+  @apply flex justify-between items-center;
+}
+
+.metric-name {
+  @apply text-sm font-medium text-onSurface capitalize;
+}
+
+.metric-score {
+  @apply text-sm text-onSurfaceVariant;
+}
+
+.metric-bar {
+  @apply w-full h-2 bg-surfaceVariant rounded-none overflow-hidden;
+}
+
+.metric-fill {
+  @apply h-full transition-all duration-500 ease-out;
+}
+
+.metric-excellent {
+  @apply bg-inverseGreen;
+}
+
+.metric-good {
+  @apply bg-inverseBlue;
+}
+
+.metric-fair {
+  @apply bg-inverseYellow;
+}
+
+.metric-poor {
+  @apply bg-inverseRed;
+}
+
+.feedback-section {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.strengths,
+.improvements {
+  @apply flex flex-col gap-3;
+}
+
+.feedback-title {
+  @apply flex items-center gap-2 text-base font-semibold tracking-tight text-onSurface lowercase;
+}
+
+.feedback-icon {
+  @apply text-lg;
+}
+
+.feedback-list {
+  @apply space-y-2;
+}
+
+.feedback-list li {
+  @apply text-sm text-onSurfaceVariant pl-4;
+  list-style-type: disc;
+}
