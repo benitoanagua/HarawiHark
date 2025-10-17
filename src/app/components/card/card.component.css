@@ -1,13 +1,9 @@
 .card-default {
-  @apply bg-surface text-onSurface;
-  @apply border border-outlineVariant;
-  @apply transition-all duration-200;
+  @apply bg-surface text-onSurface border border-outlineVariant transition-all duration-200;
 }
 
 .card-elevated {
-  @apply bg-surface text-onSurface;
-  @apply border-0 shadow-md;
-  @apply transition-all duration-200;
+  @apply bg-surface text-onSurface border-0 shadow-md transition-all duration-200;
 }
 
 .card-padding-none {
@@ -15,15 +11,15 @@
 }
 
 .card-padding-small {
-  @apply p-3;
+  @apply p-2 lg:p-3;
 }
 
 .card-padding-medium {
-  @apply p-4 lg:p-6;
+  @apply p-3 lg:p-4 xl:p-6;
 }
 
 .card-padding-large {
-  @apply p-6 lg:p-8;
+  @apply p-4 lg:p-6 xl:p-8;
 }
 
 .clickable {
@@ -34,6 +30,6 @@
   }
 
   &:active {
-    @apply scale-[0.98];
+    @apply scale-98;
   }
 }

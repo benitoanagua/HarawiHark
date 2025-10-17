@@ -1,46 +1,28 @@
-<header class="storybook-header">
+<header class="metro-header">
   <div class="header-content">
+    <!-- Logo y nombre del sitio -->
     <div class="logo-section">
       <div class="logo-wrapper">
-        <span class="icon-[iconoir--windows] text-2xl text-primary"></span>
-        <h1 class="logo-title">metro ui</h1>
+        <span class="icon-[iconoir--flower] text-2xl text-primary"></span>
+        <h1 class="logo-title">harawihark</h1>
       </div>
     </div>
 
+    <!-- Navegación -->
     <div class="nav-section">
-      <app-theme-toggle />
+      <!-- Enlace GitHub -->
+      <a 
+        href="https://github.com/benitoanagua/HarawiHark" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="github-link"
+        aria-label="GitHub Repository"
+      >
+        <span class="icon-[iconoir--github] text-xl"></span>
+      </a>
       
-      @if (user) {
-        <div class="user-section">
-          <span class="welcome-text">
-            welcome, <b class="user-name">{{ user.name }}</b>
-          </span>
-          <app-button
-            size="small"
-            variant="outline"
-            (clicked)="logout.emit($event)"
-            label="log out"
-            icon="icon-[iconoir--log-out]"
-          />
-        </div>
-      } @else {
-        <div class="auth-section">
-          <app-button
-            size="small"
-            variant="outline"
-            (clicked)="login.emit($event)"
-            label="log in"
-            icon="icon-[iconoir--log-in]"
-          />
-          <app-button
-            size="small"
-            variant="primary"
-            (clicked)="createAccount.emit($event)"
-            label="sign up"
-            icon="icon-[iconoir--user]"
-          />
-        </div>
-      }
+      <!-- Theme Toggle -->
+      <app-theme-toggle />
     </div>
   </div>
 </header>

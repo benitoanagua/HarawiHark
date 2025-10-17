@@ -4,6 +4,7 @@ import { BadgeComponent } from '../badge/badge.component';
 import { ButtonComponent } from '../button/button.component';
 import { CardComponent } from '../card/card.component';
 import { HeaderComponent } from '../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
 import { PoemEditorComponent } from '../poem-editor/poem-editor.component';
 import { PoemResultsComponent } from '../poem-results/poem-results.component';
 import { PoemQualityComponent } from '../poem-quality/poem-quality.component';
@@ -20,6 +21,7 @@ import { MeterAnalysisService } from '../../services/poetry/meter-analysis.servi
     ButtonComponent,
     CardComponent,
     HeaderComponent,
+    FooterComponent,
     PoemEditorComponent,
     PoemResultsComponent,
     PoemQualityComponent,

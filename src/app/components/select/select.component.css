@@ -1,28 +1,23 @@
 .select-wrapper {
-  @apply flex flex-col gap-2 relative;
+  @apply flex flex-col gap-1 lg:gap-2 relative;
 }
 
 .select-label {
-  @apply text-sm font-semibold tracking-tight;
-  @apply text-onSurface;
+  @apply text-xs lg:text-sm font-semibold tracking-tight text-onSurface;
 }
 
 .select-base {
-  @apply w-full bg-surface text-onSurface;
-  @apply border-2 border-outline;
-  @apply px-4 py-3 pr-10 font-normal;
-  @apply appearance-none cursor-pointer;
-  @apply transition-all duration-200;
-  @apply focus:outline-none focus:border-primary;
+  @apply w-full bg-surface text-onSurface border-2 border-outline 
+         px-3 py-2 lg:px-4 lg:py-3 pr-8 lg:pr-10 font-normal
+         appearance-none cursor-pointer transition-all duration-200 
+         focus:outline-none focus:border-primary;
 
   &:disabled {
-    @apply opacity-50 cursor-not-allowed;
-    @apply bg-surfaceVariant;
+    @apply opacity-50 cursor-not-allowed bg-surfaceVariant;
   }
 }
 
 .select-icon {
-  @apply absolute right-4 top-[2.75rem];
-  @apply text-onSurfaceVariant text-xl;
-  @apply pointer-events-none;
+  @apply absolute right-2 lg:right-4 top-7 lg:top-[2.75rem] 
+         text-onSurfaceVariant text-lg lg:text-xl pointer-events-none;
 }

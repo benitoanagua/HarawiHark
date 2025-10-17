@@ -3,17 +3,15 @@
 .badge-success,
 .badge-warning,
 .badge-error {
-  @apply inline-flex items-center gap-1;
-  @apply font-semibold tracking-tight;
-  @apply border-2;
+  @apply inline-flex items-center gap-1 font-semibold tracking-tight border-2;
 }
 
 .badge-small {
-  @apply text-xs px-2 py-0.5;
+  @apply text-xs px-1.5 py-0.5 lg:px-2;
 }
 
 .badge-medium {
-  @apply text-sm px-3 py-1;
+  @apply text-xs lg:text-sm px-2 py-1 lg:px-3;
 }
 
 .badge-default {

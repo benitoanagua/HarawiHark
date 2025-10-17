@@ -1,5 +1,5 @@
 .quality-container {
-  @apply flex flex-col gap-6;
+  @apply flex flex-col gap-4 lg:gap-6;
 }
 
 .quality-header {
@@ -7,39 +7,39 @@
 }
 
 .quality-title {
-  @apply text-xl font-light tracking-tight text-onSurface lowercase mb-2;
+  @apply text-lg lg:text-xl font-light tracking-tight text-onSurface lowercase mb-1 lg:mb-2;
 }
 
 .score-display {
-  @apply flex items-center gap-3;
+  @apply flex items-center gap-2 lg:gap-3;
 }
 
 .score-number {
-  @apply text-3xl font-light text-onSurface;
+  @apply text-2xl lg:text-3xl font-light text-onSurface;
 }
 
 .score-max {
-  @apply text-lg text-onSurfaceVariant;
+  @apply text-base lg:text-lg text-onSurfaceVariant;
 }
 
 .grade-badge {
-  @apply text-sm;
+  @apply text-xs lg:text-sm;
 }
 
 .metrics-breakdown {
-  @apply flex flex-col gap-4;
+  @apply flex flex-col gap-3 lg:gap-4;
 }
 
 .breakdown-title {
-  @apply text-lg font-semibold tracking-tight text-onSurface lowercase;
+  @apply text-base lg:text-lg font-semibold tracking-tight text-onSurface lowercase;
 }
 
 .metrics-grid {
-  @apply space-y-3;
+  @apply space-y-2 lg:space-y-3;
 }
 
 .metric-item {
-  @apply flex flex-col gap-2;
+  @apply flex flex-col gap-1 lg:gap-2;
 }
 
 .metric-header {
@@ -47,15 +47,15 @@
 }
 
 .metric-name {
-  @apply text-sm font-medium text-onSurface capitalize;
+  @apply text-xs lg:text-sm font-medium text-onSurface capitalize;
 }
 
 .metric-score {
-  @apply text-sm text-onSurfaceVariant;
+  @apply text-xs lg:text-sm text-onSurfaceVariant;
 }
 
 .metric-bar {
-  @apply w-full h-2 bg-surfaceVariant rounded-none overflow-hidden;
+  @apply w-full h-1.5 lg:h-2 bg-surfaceVariant rounded-none overflow-hidden;
 }
 
 .metric-fill {
@@ -79,27 +79,26 @@
 }
 
 .feedback-section {
-  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+  @apply grid grid-cols-1 gap-4 lg:gap-6 md:grid-cols-2;
 }
 
 .strengths,
 .improvements {
-  @apply flex flex-col gap-3;
+  @apply flex flex-col gap-2 lg:gap-3;
 }
 
 .feedback-title {
-  @apply flex items-center gap-2 text-base font-semibold tracking-tight text-onSurface lowercase;
+  @apply flex items-center gap-1 lg:gap-2 text-sm lg:text-base font-semibold tracking-tight text-onSurface lowercase;
 }
 
 .feedback-icon {
-  @apply text-lg;
+  @apply text-base lg:text-lg;
 }
 
 .feedback-list {
-  @apply space-y-2;
+  @apply space-y-1 lg:space-y-2;
 }
 
 .feedback-list li {
-  @apply text-sm text-onSurfaceVariant pl-4;
-  list-style-type: disc;
+  @apply text-xs list-disc lg:text-sm text-onSurfaceVariant pl-3 lg:pl-4;
 }

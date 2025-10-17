@@ -1,22 +1,22 @@
 .results-container {
-  @apply flex flex-col gap-6;
+  @apply flex flex-col gap-4 lg:gap-6;
 }
 
 .section-title {
-  @apply text-lg font-semibold tracking-tight text-onSurface mb-4 lowercase;
+  @apply text-base lg:text-lg font-semibold tracking-tight text-onSurface mb-3 lg:mb-4 lowercase;
 }
 
 /* Patterns Section */
 .patterns-section {
-  @apply p-4 bg-primaryContainer border-2 border-primary;
+  @apply p-3 lg:p-4 bg-primaryContainer border-2 border-primary;
 }
 
 .patterns-list {
-  @apply flex flex-col gap-2;
+  @apply flex flex-col gap-1 lg:gap-2;
 }
 
 .pattern-item {
-  @apply flex items-start gap-3 text-sm text-onPrimaryContainer;
+  @apply flex items-start gap-2 lg:gap-3 text-xs lg:text-sm text-onPrimaryContainer;
 }
 
 .pattern-icon {
@@ -25,32 +25,32 @@
 
 /* Alliteration Section */
 .alliteration-section {
-  @apply p-4 bg-inverseBlue border-2 border-inverseBlueContainer;
+  @apply p-3 lg:p-4 bg-inverseBlue border-2 border-inverseBlueContainer;
 }
 
 .alliteration-list {
-  @apply flex flex-col gap-2;
+  @apply flex flex-col gap-1 lg:gap-2;
 }
 
 .alliteration-item {
-  @apply flex items-center gap-3;
+  @apply flex items-center gap-2 lg:gap-3;
 }
 
 .alliteration-words {
-  @apply text-sm text-onBlueContainer font-mono;
+  @apply text-xs lg:text-sm text-onBlueContainer font-mono;
 }
 
 /* Line Analysis */
 .line-analysis-section {
-  @apply flex flex-col gap-3;
+  @apply flex flex-col gap-2 lg:gap-3;
 }
 
 .lines-container {
-  @apply flex flex-col gap-3;
+  @apply flex flex-col gap-2 lg:gap-3;
 }
 
 .line-card {
-  @apply p-4 bg-surfaceVariant border-2 border-outline flex flex-col gap-3;
+  @apply p-3 lg:p-4 bg-surfaceVariant border-2 border-outline flex flex-col gap-2 lg:gap-3;
 }
 
 .line-header {
@@ -58,11 +58,11 @@
 }
 
 .line-number {
-  @apply text-xs text-onSurfaceVariant font-semibold tracking-tight uppercase;
+  @apply text-xs font-semibold tracking-tight text-onSurfaceVariant uppercase;
 }
 
 .line-text {
-  @apply text-base font-normal text-onSurface leading-relaxed;
+  @apply text-sm lg:text-base font-normal text-onSurface leading-relaxed;
 }
 
 .word-token {
@@ -82,12 +82,12 @@
 }
 
 .line-alliterations {
-  @apply flex flex-wrap gap-2;
+  @apply flex flex-wrap gap-1 lg:gap-2;
 }
 
 /* Syllable Breakdown */
 .syllable-breakdown {
-  @apply flex flex-wrap items-center gap-2;
+  @apply flex flex-wrap items-center gap-1 lg:gap-2;
 }
 
 .breakdown-label {
@@ -99,12 +99,12 @@
 }
 
 .syllable-chip {
-  @apply text-xs px-2 py-1 bg-surfaceContainer text-onSurface border border-outlineVariant rounded-none font-medium;
+  @apply text-xs px-1.5 py-0.5 lg:px-2 lg:py-1 bg-surfaceContainer text-onSurface border border-outlineVariant rounded-none font-medium;
 }
 
 /* Stress Pattern */
 .stress-pattern {
-  @apply flex items-center gap-2 text-xs text-onSurfaceVariant;
+  @apply flex items-center gap-1 lg:gap-2 text-xs text-onSurfaceVariant;
 }
 
 .stress-value {
@@ -113,7 +113,7 @@
 
 /* Word Details */
 .word-details {
-  @apply mt-2;
+  @apply mt-1 lg:mt-2;
 }
 
 .word-details-summary {
@@ -125,11 +125,11 @@
 }
 
 .word-details-content {
-  @apply mt-3 p-3 bg-surface border border-outline flex flex-col gap-2;
+  @apply mt-2 lg:mt-3 p-2 lg:p-3 bg-surface border border-outline flex flex-col gap-1 lg:gap-2;
 }
 
 .word-detail-item {
-  @apply flex items-start justify-between gap-4 text-xs;
+  @apply flex items-start justify-between gap-3 lg:gap-4 text-xs;
 }
 
 .word-detail-word {
@@ -137,15 +137,15 @@
 }
 
 .word-detail-meta {
-  @apply flex items-center gap-3 text-onSurfaceVariant;
+  @apply flex items-center gap-2 lg:gap-3 text-onSurfaceVariant;
 }
 
 .word-detail-syllables {
-  @apply px-2 py-1 bg-surfaceVariant;
+  @apply px-1.5 py-0.5 lg:px-2 lg:py-1 bg-surfaceVariant;
 }
 
 .word-detail-pos {
-  @apply px-2 py-1 bg-primaryContainer text-onPrimaryContainer;
+  @apply px-1.5 py-0.5 lg:px-2 lg:py-1 bg-primaryContainer text-onPrimaryContainer;
 }
 
 .word-detail-phones {
@@ -154,30 +154,30 @@
 
 /* Rhyme Section */
 .rhyme-section {
-  @apply p-4 bg-inverseBlue border-2 border-inverseBlueContainer;
+  @apply p-3 lg:p-4 bg-inverseBlue border-2 border-inverseBlueContainer;
 }
 
 .rhyme-scheme {
-  @apply flex items-center gap-2;
+  @apply flex items-center gap-1 lg:gap-2;
 }
 
 .rhyme-value {
-  @apply text-2xl font-mono font-bold text-onBlueContainer tracking-widest;
+  @apply text-xl lg:text-2xl font-mono font-bold text-onBlueContainer tracking-widest;
 }
 
 /* Suggestions */
 .suggestions-section {
-  @apply flex flex-col gap-2;
+  @apply flex flex-col gap-1 lg:gap-2;
 }
 
 .suggestions-list {
-  @apply space-y-2;
+  @apply space-y-1 lg:space-y-2;
 }
 
 .suggestion-item {
-  @apply flex items-start gap-2 text-sm text-onSurfaceVariant;
+  @apply flex items-start gap-1 lg:gap-2 text-xs lg:text-sm text-onSurfaceVariant;
 }
 
 .suggestion-icon {
-  @apply text-lg text-primary flex-shrink-0 mt-0.5;
+  @apply text-base lg:text-lg text-primary flex-shrink-0 mt-0.5;
 }
