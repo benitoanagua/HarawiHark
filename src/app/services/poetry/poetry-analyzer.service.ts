@@ -1,16 +1,18 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { RiTa } from 'rita';
+import { PoetryAnalysisService } from './poetry-analysis.service';
+import { PoetrySuggestionsService } from './poetry-suggestions.service';
+import { PoetryPatternsService } from './poetry-patterns.service';
+import { RhymeAnalysisService } from './rhyme-analysis.service';
+import { PoemQualityService, type QualityMetrics } from './poem-quality.service';
+import { PoemGeneratorService } from './poem-generator.service';
 import {
   RitaService,
+  type GrammaticalAnalysis,
   type AlliterationMatch,
   type AlternativeWord,
-  type GrammaticalAnalysis,
 } from './rita.service';
-import { PoemGeneratorService } from './poem-generator.service';
-import { GrammarGeneratorService } from './grammar-generator.service';
-import { PoemQualityService, QualityMetrics } from './poem-quality.service';
-import { POETRY_FORMS, POETRY_EXAMPLES } from '../data/poetry-forms.data';
-import type { LineAnalysis, PoetryResult } from '../models/poetry.model';
+import { POETRY_FORMS, POETRY_EXAMPLES } from '../../data/poetry-forms.data';
+import type { LineAnalysis } from '../../models/poetry.model';
 
 export interface EnhancedLineAnalysis extends LineAnalysis {
   words: {
@@ -28,8 +30,17 @@ export interface EnhancedLineAnalysis extends LineAnalysis {
   }[];
 }
 
-export interface EnhancedPoetryResult extends PoetryResult {
+export interface EnhancedPoetryResult {
+  ok: boolean;
+  form: string;
+  totalLines: {
+    expected: number;
+    actual: number;
+  };
   lines: EnhancedLineAnalysis[];
+  summary: string;
+  rhymeScheme?: string;
+  suggestions: string[];
   overallAlliterations: AlliterationMatch[];
   detectedPatterns: string[];
   typos?: {
@@ -50,10 +61,13 @@ export interface WordSuggestionData {
   providedIn: 'root',
 })
 export class PoetryAnalyzerService {
+  private readonly analysis = inject(PoetryAnalysisService);
+  private readonly suggestions = inject(PoetrySuggestionsService);
+  private readonly patterns = inject(PoetryPatternsService);
+  private readonly rhymes = inject(RhymeAnalysisService);
+  private readonly quality = inject(PoemQualityService);
+  private readonly generator = inject(PoemGeneratorService);
   private readonly rita = inject(RitaService);
-  private readonly poemGenerator = inject(PoemGeneratorService);
-  private readonly grammarGenerator = inject(GrammarGeneratorService);
-  private readonly poemQuality = inject(PoemQualityService);
 
   readonly isLoading = signal(false);
   readonly result = signal<EnhancedPoetryResult | null>(null);
@@ -69,10 +83,9 @@ export class PoetryAnalyzerService {
     this.isLoading.set(true);
 
     try {
-      const poem = await this.poemGenerator.generatePoem(formId);
+      const poem = await this.generator.generatePoem(formId);
       this.generatedPoem.set(poem);
 
-      // Analizar el poema generado automáticamente
       if (poem.length > 0) {
         await this.analyze(formId, poem);
       }
@@ -83,9 +96,6 @@ export class PoetryAnalyzerService {
     }
   }
 
-  /**
-   * Generar variaciones del poema actual
-   */
   async generateVariations(): Promise<void> {
     const currentResult = this.result();
     if (!currentResult) return;
@@ -95,10 +105,7 @@ export class PoetryAnalyzerService {
 
     try {
       for (const line of currentResult.lines) {
-        const lineVariations = await this.poemGenerator.generateVariations(
-          line.text,
-          line.expected
-        );
+        const lineVariations = await this.generator.generateVariations(line.text, line.expected);
         variations.push(lineVariations);
       }
 
@@ -110,9 +117,6 @@ export class PoetryAnalyzerService {
     }
   }
 
-  /**
-   * Evaluar calidad del poema
-   */
   assessQuality(): void {
     const result = this.result();
     if (!result) return;
@@ -120,13 +124,10 @@ export class PoetryAnalyzerService {
     const lines = result.lines.map((l) => l.text);
     const pattern = POETRY_FORMS[result.form].pattern;
 
-    const metrics = this.poemQuality.assessQuality(lines, pattern, result);
+    const metrics = this.quality.assessQuality(lines, pattern, result);
     this.qualityMetrics.set(metrics);
   }
 
-  /**
-   * Mejorado: Análisis con características extendidas
-   */
   async analyze(formKey: string, rawLines: string[]): Promise<EnhancedPoetryResult> {
     this.isLoading.set(true);
 
@@ -137,8 +138,6 @@ export class PoetryAnalyzerService {
       }
 
       const lines = rawLines.map((line) => line.trim()).filter((line) => line.length > 0);
-
-      // Análisis mejorado con detección de errores tipográficos
       const typos = await this.rita.detectTypos(lines);
 
       const lineAnalyses: EnhancedLineAnalysis[] = await Promise.all(
@@ -148,7 +147,6 @@ export class PoetryAnalyzerService {
           const alliterations = this.rita.detectAlliterations(line);
           const expected = form.pattern[index] ?? 0;
 
-          // Análisis gramatical extendido para cada palabra
           const wordsWithGrammar = words.map((word) => ({
             ...word,
             grammar: this.rita.analyzeGrammar(word.word),
@@ -168,9 +166,7 @@ export class PoetryAnalyzerService {
         })
       );
 
-      // Análisis de calidad
-      const quality = this.poemQuality.assessQuality(lines, form.pattern, {
-        // Resultado básico para el cálculo de calidad
+      const quality = this.quality.assessQuality(lines, form.pattern, {
         ok: lineAnalyses.every((l) => l.match),
         form: formKey,
         totalLines: { expected: form.pattern.length, actual: lineAnalyses.length },
@@ -182,7 +178,7 @@ export class PoetryAnalyzerService {
         detectedPatterns: [],
       });
 
-      const overallAlliterations = this.detectCrossLineAlliterations(lines);
+      const overallAlliterations = this.rhymes.detectCrossLineAlliterations(lines);
       const detectedPatterns = this.detectPatterns(lineAnalyses);
 
       const ok = lineAnalyses.length === form.pattern.length && lineAnalyses.every((l) => l.match);
@@ -210,7 +206,6 @@ export class PoetryAnalyzerService {
         suggestions,
         overallAlliterations,
         detectedPatterns,
-        // quality, // Remover esta línea - quality no existe en EnhancedPoetryResult
         typos: typos.length > 0 ? typos : undefined,
       };
 
@@ -222,9 +217,6 @@ export class PoetryAnalyzerService {
     }
   }
 
-  /**
-   * Mejorado: Sugerencias de palabras con múltiples estrategias
-   */
   async selectWordEnhanced(word: string | null): Promise<void> {
     this.selectedWord.set(word);
     this.wordAlternatives.set(null);
@@ -245,38 +237,15 @@ export class PoetryAnalyzerService {
 
         if (neededSyllables > 0) {
           try {
-            // Estrategia 1: Alternativas básicas
-            const basic = await this.rita.suggestAlternatives(word, neededSyllables, 5);
-
-            // Estrategia 2: Rimas semánticas
-            const semantic = await this.rita.findSemanticRhymes(word, neededSyllables);
-
-            // Estrategia 3: Similitud ortográfica
-            const spelling = await this.rita.findSpellingSuggestions(word, neededSyllables);
-
-            // Estrategia 4: Variantes morfológicas
-            const morphological = this.rita
-              .suggestMorphologicalVariants(word)
-              .map((w) => ({
-                word: w,
-                syllables: (RiTa.syllables(w) as string).split('/').length,
-                reason: 'morphological' as const,
-                pos: RiTa.pos(w)[0],
-              }))
-              .filter((w) => w.syllables === neededSyllables);
-
-            // Combina y deduplica
-            const allAlternatives = [...basic, ...semantic, ...spelling, ...morphological];
-
-            const unique = allAlternatives.filter(
-              (alt, idx, self) => idx === self.findIndex((a) => a.word === alt.word)
+            const alternatives = await this.suggestions.getEnhancedAlternatives(
+              word,
+              neededSyllables
             );
-
             this.wordAlternatives.set({
               original: word,
               currentSyllables: wordAnalysis.syllables,
               targetSyllables: neededSyllables,
-              alternatives: unique.slice(0, 12),
+              alternatives,
             });
           } catch (error) {
             console.warn('Error getting enhanced alternatives:', error);
@@ -338,50 +307,6 @@ export class PoetryAnalyzerService {
     }
   }
 
-  private detectCrossLineAlliterations(lines: string[]): AlliterationMatch[] {
-    const allWords: { word: string; lineIndex: number; wordIndex: number }[] = [];
-
-    lines.forEach((line, lineIndex) => {
-      const words = line.split(/\s+/).filter((w) => /[a-zA-Z]/.test(w));
-      words.forEach((word, wordIndex) => {
-        allWords.push({ word, lineIndex, wordIndex });
-      });
-    });
-
-    const crossLineAlliterations: AlliterationMatch[] = [];
-    const processed = new Set<number>();
-
-    for (let i = 0; i < allWords.length - 1; i++) {
-      if (processed.has(i)) continue;
-
-      const matchingWords: string[] = [allWords[i].word];
-      const positions: number[] = [i];
-
-      for (let j = i + 1; j < allWords.length && j < i + 10; j++) {
-        try {
-          if (this.rita.isRhyme(allWords[i].word, allWords[j].word)) {
-            matchingWords.push(allWords[j].word);
-            positions.push(j);
-            processed.add(j);
-          }
-        } catch {
-          continue;
-        }
-      }
-
-      if (matchingWords.length > 2) {
-        crossLineAlliterations.push({
-          words: matchingWords,
-          positions,
-          sound: matchingWords[0][0],
-        });
-        processed.add(i);
-      }
-    }
-
-    return crossLineAlliterations;
-  }
-
   private detectPatterns(lines: EnhancedLineAnalysis[]): string[] {
     const patterns: string[] = [];
 
@@ -431,18 +356,21 @@ export class PoetryAnalyzerService {
     return patterns;
   }
 
-  private generateEnhancedSuggestions(lines: EnhancedLineAnalysis[], pattern: number[]): string[] {
+  private generateEnhancedSuggestions(
+    lineAnalyses: EnhancedLineAnalysis[],
+    pattern: number[]
+  ): string[] {
     const suggestions: string[] = [];
 
-    if (lines.length < pattern.length) {
-      const missing = pattern.length - lines.length;
+    if (lineAnalyses.length < pattern.length) {
+      const missing = pattern.length - lineAnalyses.length;
       suggestions.push(`Add ${missing} more line${missing > 1 ? 's' : ''} to complete the pattern`);
-    } else if (lines.length > pattern.length) {
-      const extra = lines.length - pattern.length;
+    } else if (lineAnalyses.length > pattern.length) {
+      const extra = lineAnalyses.length - pattern.length;
       suggestions.push(`Remove ${extra} line${extra > 1 ? 's' : ''} to match the pattern`);
     }
 
-    lines.forEach((line, index) => {
+    lineAnalyses.forEach((line, index) => {
       if (!line.match && index < pattern.length) {
         const lineSuggestions = this.rita.generateSuggestions(line.text, pattern[index]);
         suggestions.push(`Line ${index + 1}: ${lineSuggestions[0]}`);
@@ -466,10 +394,10 @@ export class PoetryAnalyzerService {
       }
     });
 
-    const linesWithAlliteration = lines.filter(
+    const linesWithAlliteration = lineAnalyses.filter(
       (l) => l.alliterations && l.alliterations.length > 0
     );
-    if (linesWithAlliteration.length === 0 && lines.length > 2) {
+    if (linesWithAlliteration.length === 0 && lineAnalyses.length > 2) {
       suggestions.push('Consider adding alliteration for poetic effect');
     }
 

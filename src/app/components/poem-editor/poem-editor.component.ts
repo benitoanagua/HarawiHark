@@ -3,9 +3,9 @@ import { SelectComponent } from '../select/select.component';
 import { InputComponent } from '../input/input.component';
 import { ButtonComponent } from '../button/button.component';
 import { CardComponent } from '../card/card.component';
-import { POETRY_FORMS, POETRY_FORM_OPTIONS, POETRY_EXAMPLES } from '../../data/poetry-forms.data';
-import { RitaService } from '../../services/rita.service';
-import { PoetryAnalyzerService } from '../../services/poetry-analyzer.service';
+import { POETRY_FORM_OPTIONS, POETRY_EXAMPLES } from '../../data/poetry-forms.data';
+import { PoetryAnalyzerService } from '../../services/poetry';
+import { PoetryPatternsService } from '../../services/poetry';
 
 @Component({
   selector: 'app-poem-editor',
@@ -14,14 +14,14 @@ import { PoetryAnalyzerService } from '../../services/poetry-analyzer.service';
   templateUrl: './poem-editor.component.html',
 })
 export class PoemEditorComponent {
-  private readonly rita = inject(RitaService);
-  readonly analyzer = inject(PoetryAnalyzerService);
+  private readonly analyzer = inject(PoetryAnalyzerService);
+  private readonly patterns = inject(PoetryPatternsService);
 
   readonly formOptions = POETRY_FORM_OPTIONS;
   readonly selectedForm = signal('haiku');
   readonly poemText = signal('');
 
-  readonly currentForm = computed(() => POETRY_FORMS[this.selectedForm()]);
+  readonly currentForm = computed(() => this.patterns.getFormInfo(this.selectedForm()));
   readonly lines = computed(() =>
     this.poemText()
       .split('\n')
@@ -30,16 +30,18 @@ export class PoemEditorComponent {
   readonly lineCount = computed(() => this.lines().length);
   readonly totalSyllables = computed(() => {
     return this.lines().reduce((total, line) => {
-      return total + this.rita.analyzeLine(line).syllables;
+      return total + this.analyzer['rita'].analyzeLine(line).syllables;
     }, 0);
   });
 
   onFormChange(formId: string): void {
     this.selectedForm.set(formId);
+    this.analyzer.selectedForm.set(formId);
   }
 
   onTextChange(text: string): void {
     this.poemText.set(text);
+    this.analyzer.poemText.set(text);
   }
 
   loadExample(): void {
@@ -47,11 +49,13 @@ export class PoemEditorComponent {
     const example = POETRY_EXAMPLES[formId];
     if (example) {
       this.poemText.set(example.join('\n'));
+      this.analyzer.poemText.set(example.join('\n'));
     }
   }
 
   clear(): void {
     this.poemText.set('');
+    this.analyzer.poemText.set('');
     this.analyzer.clear();
   }
 

@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { BadgeComponent } from '../badge/badge.component';
 import { StatusMessageComponent } from '../status-message/status-message.component';
-import { EnhancedPoetryResult } from '../../services/poetry-analyzer.service';
+import { EnhancedPoetryResult } from '../../services/poetry';
 
 @Component({
   selector: 'app-poem-results',

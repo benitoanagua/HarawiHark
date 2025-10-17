@@ -1,17 +1,12 @@
-// src/app/services/grammar-generator.service.ts
 import { Injectable } from '@angular/core';
 import { RiTa } from 'rita';
 
-// Eliminar la interfaz no utilizada y usar solo Record
 type GrammarRulesRecord = Record<string, string>;
 
 @Injectable({
   providedIn: 'root',
 })
 export class GrammarGeneratorService {
-  /**
-   * Genera un poema usando gramática formal
-   */
   generatePoemWithGrammar(form: string): string {
     const grammars: Record<string, GrammarRulesRecord> = {
       haiku: {
@@ -70,9 +65,6 @@ export class GrammarGeneratorService {
     return grammar.expand();
   }
 
-  /**
-   * Genera un poema con tema específico
-   */
   generateThematicPoem(theme: 'nature' | 'love' | 'melancholy' | 'joy'): string[] {
     const themes: Record<string, GrammarRulesRecord> = {
       nature: {

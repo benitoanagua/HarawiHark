@@ -2,14 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { BadgeComponent } from '../badge/badge.component';
 import { ButtonComponent } from '../button/button.component';
-import type { AlternativeWord } from '../../services/rita.service';
-
-export interface WordSuggestionData {
-  original: string;
-  currentSyllables: number;
-  targetSyllables: number;
-  alternatives: AlternativeWord[];
-}
+import { WordSuggestionData } from '../../services/poetry';
 
 @Component({
   selector: 'app-word-suggestions',
@@ -27,13 +20,16 @@ export class WordSuggestionsComponent {
       'exact-match': 'exact syllables',
       'rhyme-match': 'rhymes with original',
       'sound-match': 'similar sound',
+      'semantic-rhyme': 'semantic rhyme',
+      'spelling-match': 'spelling match',
+      morphological: 'morphological variant',
     };
     return labels[reason] || reason;
   }
 
   getReasonVariant(reason: string): 'success' | 'info' | 'default' {
     if (reason === 'exact-match') return 'success';
-    if (reason === 'rhyme-match') return 'info';
+    if (reason === 'rhyme-match' || reason === 'semantic-rhyme') return 'info';
     return 'default';
   }
 

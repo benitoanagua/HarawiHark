@@ -2,7 +2,6 @@
   <app-header />
 
   <section class="page-content">
-    <!-- Hero Section -->
     <div class="hero-section">
       <div class="hero-icon-container">
         <span class="icon-[iconoir--flower] hero-icon"></span>
@@ -13,12 +12,10 @@
       </p>
     </div>
 
-    <!-- Editor -->
     <div class="editor-section">
       <app-poem-editor />
     </div>
 
-     <!-- Nuevas Acciones de Generación -->
     <div class="generation-actions" *ngIf="!analyzer.result()">
       <div class="actions-grid">
         <app-button
@@ -40,7 +37,6 @@
       </div>
     </div>
 
-    <!-- Poema Generado -->
     @if (analyzer.generatedPoem(); as generated) {
       <div class="generated-section">
         <app-card padding="large">
@@ -72,9 +68,16 @@
       </div>
     }
 
-    <!-- Word Suggestions Modal existente -->
+    @if (analyzer.wordAlternatives(); as alternatives) {
+      <div class="suggestions-section">
+        <app-word-suggestions
+          [data]="alternatives"
+          (replaceWord)="onReplaceWord($event)"
+          (closeSuggestions)="onCloseSuggestions()"
+        />
+      </div>
+    }
 
-    <!-- Results Section mejorada -->
     @if (analyzer.result(); as result) {
       <div class="results-section">
         <app-poem-results
@@ -82,7 +85,6 @@
           (wordSelected)="onWordSelected($event)"
         />
 
-        <!-- Acciones de Análisis Avanzado -->
         <div class="advanced-actions">
           <div class="actions-row">
             <app-button
@@ -112,14 +114,12 @@
           </div>
         </div>
 
-        <!-- Calidad del Poema -->
         @if (showQuality() && analyzer.qualityMetrics()) {
           <div class="quality-section">
             <app-poem-quality [metrics]="analyzer.qualityMetrics()!" />
           </div>
         }
 
-        <!-- Variaciones del Poema -->
         @if (showVariations() && analyzer.poemVariations().length > 0) {
           <div class="variations-section">
             <app-card padding="large">
@@ -151,9 +151,36 @@
         }
       </div>
     } @else {
-      <!-- Empty State existente -->
+      <div class="empty-state-section">
+        <app-card padding="large">
+          <div class="empty-content">
+            <span class="icon-[iconoir--flower] empty-icon"></span>
+            <h3 class="empty-title">ready to analyze</h3>
+            <p class="empty-description">
+              Write your poem or generate one to see syllable analysis and suggestions
+            </p>
+          </div>
+        </app-card>
+      </div>
     }
 
-    <!-- Info Section existente -->
+    <div class="info-section">
+      <div class="info-content">
+        <span class="icon-[iconoir--light-bulb] info-icon"></span>
+        <div class="info-text">
+          <h4 class="info-title">how it works</h4>
+          <p class="info-description">
+            Harawihark uses advanced phonetic analysis to count syllables accurately, 
+            detect rhyme schemes, and provide intelligent suggestions for improving your poetry.
+          </p>
+          <ul class="info-features">
+            <li>Real-time syllable counting with RiTa.js</li>
+            <li>8 different poetic forms supported</li>
+            <li>AI-powered word suggestions and variations</li>
+            <li>Quality assessment with detailed metrics</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </section>
 </article>

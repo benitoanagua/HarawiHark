@@ -1,9 +1,7 @@
-// src/app/services/poem-generator.service.ts
 import { Injectable } from '@angular/core';
 import { RiTa } from 'rita';
-import { POETRY_FORMS, POETRY_EXAMPLES } from '../data/poetry-forms.data';
+import { POETRY_FORMS, POETRY_EXAMPLES } from '../../data/poetry-forms.data';
 
-// Definir interfaz basada en los tipos reales
 interface MarkovModel {
   generate: (
     count: number,
@@ -24,14 +22,10 @@ interface MarkovModel {
 export class PoemGeneratorService {
   private markovModels = new Map<string, MarkovModel>();
 
-  /**
-   * Genera un nuevo poema basado en ejemplos del mismo tipo
-   */
   async generatePoem(formId: string, examples?: string[]): Promise<string[]> {
     const key = `markov_${formId}`;
 
     if (!this.markovModels.has(key)) {
-      // RiTa.markov NO acepta temperature, solo maxLengthMatch, etc.
       const rm = RiTa.markov(2, {
         maxLengthMatch: 8,
         maxAttempts: 50,
@@ -56,9 +50,6 @@ export class PoemGeneratorService {
     return lines;
   }
 
-  /**
-   * Genera variaciones de una línea específica
-   */
   async generateVariations(line: string, targetSyllables: number): Promise<string[]> {
     const rm = RiTa.markov(2) as MarkovModel;
     rm.addText(line);
@@ -66,10 +57,9 @@ export class PoemGeneratorService {
     const variations: string[] = [];
 
     for (let i = 0; i < 8; i++) {
-      // RiMarkov.generate SÍ acepta temperature
       const generated = rm.generate(1, {
         maxLength: 35,
-        temperature: 1.8, // ✅ Válido aquí
+        temperature: 1.8,
       });
 
       if (generated.length > 0) {
@@ -92,11 +82,10 @@ export class PoemGeneratorService {
     maxAttempts = 25
   ): Promise<string> {
     for (let attempts = 0; attempts < maxAttempts; attempts++) {
-      // RiMarkov.generate SÍ acepta temperature
       const candidates = model.generate(1, {
         minLength: 3,
         maxLength: 40,
-        temperature: 1.5, // ✅ Válido aquí
+        temperature: 1.5,
       });
 
       if (candidates.length > 0) {

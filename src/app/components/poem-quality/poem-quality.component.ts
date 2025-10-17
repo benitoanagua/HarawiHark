@@ -1,7 +1,6 @@
-// src/app/components/poem-quality/poem-quality.component.ts
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { QualityMetrics } from '../../services/poem-quality.service';
+import { QualityMetrics } from '../../services/poetry';
 import { CardComponent } from '../card/card.component';
 import { BadgeComponent } from '../badge/badge.component';
 

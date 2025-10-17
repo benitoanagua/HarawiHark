@@ -30,16 +30,112 @@
   @apply mb-8;
 }
 
+.generation-actions {
+  @apply mb-8;
+}
+
+.actions-grid {
+  @apply flex flex-wrap gap-3;
+}
+
+.generated-section {
+  @apply mb-8;
+}
+
+.generated-container {
+  @apply flex flex-col gap-4;
+}
+
+.generated-title {
+  @apply text-xl font-light tracking-tight text-onSurface lowercase;
+}
+
+.generated-poem {
+  @apply space-y-2;
+}
+
+.generated-line {
+  @apply text-base text-onSurface font-normal;
+}
+
+.generated-actions {
+  @apply flex flex-wrap gap-3;
+}
+
 .suggestions-section {
   @apply mb-8;
 }
 
 .results-section {
-  @apply mb-8;
+  @apply mb-8 space-y-6;
+}
+
+.advanced-actions {
+  @apply mt-6;
+}
+
+.actions-row {
+  @apply flex flex-wrap gap-3;
+}
+
+.quality-section {
+  @apply mt-6;
+}
+
+.variations-section {
+  @apply mt-6;
+}
+
+.variations-container {
+  @apply flex flex-col gap-4;
+}
+
+.variations-title {
+  @apply text-xl font-light tracking-tight text-onSurface lowercase mb-4;
+}
+
+.variations-grid {
+  @apply space-y-6;
+}
+
+.line-variations {
+  @apply space-y-3;
+}
+
+.line-title {
+  @apply text-base font-semibold tracking-tight text-onSurface;
+}
+
+.variation-list {
+  @apply space-y-2;
+}
+
+.variation-item {
+  @apply flex items-center justify-between gap-4 p-3 bg-surfaceVariant border border-outlineVariant;
+}
+
+.variation-text {
+  @apply text-sm text-onSurfaceVariant flex-1;
 }
 
 .empty-state-section {
   @apply mb-8;
+}
+
+.empty-content {
+  @apply flex flex-col items-center justify-center gap-4 py-8 text-center;
+}
+
+.empty-icon {
+  @apply text-4xl text-onSurfaceVariant;
+}
+
+.empty-title {
+  @apply text-xl font-light tracking-tight text-onSurface lowercase;
+}
+
+.empty-description {
+  @apply text-sm text-onSurfaceVariant max-w-md;
 }
 
 .info-section {

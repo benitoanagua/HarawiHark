@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { RiTa } from 'rita';
-import { EnhancedPoetryResult } from './poetry-analyzer.service';
+import { RitaService } from './rita.service';
+import type { EnhancedPoetryResult } from './poetry-analyzer.service';
 
 export interface QualityMetrics {
   score: number;
@@ -20,6 +21,8 @@ export interface QualityMetrics {
   providedIn: 'root',
 })
 export class PoemQualityService {
+  private readonly rita = inject(RitaService);
+
   assessQuality(lines: string[], pattern: number[], result: EnhancedPoetryResult): QualityMetrics {
     const metrics = {
       syllableAccuracy: this.calculateSyllableAccuracy(result, pattern),
@@ -64,7 +67,6 @@ export class PoemQualityService {
       }
     });
 
-    // Normalizado: más de 15 fonemas únicos = 100%
     return Math.min(100, (uniquePhonemes.size / 15) * 100);
   }
 
@@ -76,22 +78,18 @@ export class PoemQualityService {
     if (words.length === 0) return 0;
 
     const unique = new Set(words.map((w) => w.toLowerCase()));
-
-    // Type-Token Ratio (TTR)
     const ttr = unique.size / words.length;
 
-    // Normalizado: TTR > 0.6 es bueno para poesía
     return Math.min(100, (ttr / 0.6) * 100);
   }
 
   private calculateRhythmConsistency(result: EnhancedPoetryResult): number {
     const stressPatterns = result.lines
       .map((l) => l.stresses)
-      .filter((s): s is string => s !== undefined && s.length > 0); // Type guard
+      .filter((s): s is string => s !== undefined && s.length > 0);
 
     if (stressPatterns.length < 2) return 50;
 
-    // Verifica similitud entre patrones de estrés
     const firstPattern = stressPatterns[0];
     const similarCount = stressPatterns.filter(
       (p) => this.stressSimilarity(firstPattern, p) > 0.6
@@ -103,31 +101,26 @@ export class PoemQualityService {
   private calculateRhetoricalDevices(result: EnhancedPoetryResult): number {
     let score = 0;
 
-    // Aliteración (+20 puntos)
     if (result.overallAlliterations.length > 0) {
       score += Math.min(20, result.overallAlliterations.length * 5);
     }
 
-    // Rima (+30 puntos)
     if (result.rhymeScheme && result.rhymeScheme !== 'A'.repeat(result.lines.length)) {
       score += 30;
     }
 
-    // Repetición intencional (+20 puntos)
     const concordance = RiTa.concordance(result.lines.map((l) => l.text).join(' '));
     const repeatedWords = Object.values(concordance).filter((count) => count > 1).length;
     if (repeatedWords > 0) {
       score += Math.min(20, repeatedWords * 4);
     }
 
-    // Variedad de POS (+15 puntos)
     const allWords = result.lines.flatMap((l) => l.words);
     const uniquePOS = new Set(allWords.map((w) => w.pos));
     if (uniquePOS.size >= 4) {
       score += 15;
     }
 
-    // Imágenes sensoriales (+15 puntos)
     const sensoryWords = this.countSensoryWords(allWords.map((w) => w.word));
     if (sensoryWords >= 3) {
       score += 15;
@@ -232,11 +225,11 @@ export class PoemQualityService {
 
   private countSensoryWords(words: string[]): number {
     const sensoryPatterns = [
-      /bright|dark|color|hue|shade/i, // visual
-      /loud|quiet|sound|music|voice|echo/i, // auditory
-      /soft|hard|smooth|rough|warm|cold/i, // tactile
-      /sweet|bitter|fragrant|scent|smell/i, // olfactory
-      /taste|flavor|savory|delicious/i, // gustatory
+      /bright|dark|color|hue|shade/i,
+      /loud|quiet|sound|music|voice|echo/i,
+      /soft|hard|smooth|rough|warm|cold/i,
+      /sweet|bitter|fragrant|scent|smell/i,
+      /taste|flavor|savory|delicious/i,
     ];
 
     return words.filter((word) => sensoryPatterns.some((pattern) => pattern.test(word))).length;

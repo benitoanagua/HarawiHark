@@ -388,9 +388,6 @@ export class RitaService {
     return suggestions;
   }
 
-  /**
-   * Búsqueda multi-criterio avanzada
-   */
   async advancedSearch(options: AdvancedSearchOptions): Promise<string[]> {
     const queries: Promise<string[]>[] = [];
     const searchOpts = {
@@ -399,7 +396,6 @@ export class RitaService {
       limit: 15,
     };
 
-    // Búsqueda por diferentes patrones
     if (options.startsWith) {
       queries.push(RiTa.search(new RegExp(`^${options.startsWith}`, 'i'), searchOpts));
     }
@@ -412,7 +408,6 @@ export class RitaService {
       queries.push(RiTa.search(new RegExp(options.contains, 'i'), searchOpts));
     }
 
-    // Si no hay criterios específicos, búsqueda general
     if (queries.length === 0) {
       queries.push(
         RiTa.search(/.*/, {
@@ -422,11 +417,9 @@ export class RitaService {
       );
     }
 
-    // Combina resultados
     const results = await Promise.all(queries);
     let combined = results.flat();
 
-    // Filtra por longitud si se especifica
     if (options.minLength || options.maxLength) {
       combined = combined.filter((word) => {
         if (options.minLength && word.length < options.minLength) return false;
@@ -435,12 +428,9 @@ export class RitaService {
       });
     }
 
-    return [...new Set(combined)]; // Remove duplicates
+    return [...new Set(combined)];
   }
 
-  /**
-   * Encuentra palabras que riman Y tienen el mismo POS
-   */
   async findSemanticRhymes(word: string, targetSyllables: number): Promise<AlternativeWord[]> {
     const pos = RiTa.pos(word)[0];
 
@@ -490,25 +480,20 @@ export class RitaService {
     return labels[pos.toLowerCase()] || pos;
   }
 
-  /**
-   * Análisis gramatical exhaustivo de una palabra
-   */
   analyzeGrammar(word: string): GrammaticalAnalysis {
     const pos = RiTa.pos(word)[0] || 'unknown';
 
-    // Convertir los resultados string a boolean
     const analysis: GrammaticalAnalysis = {
       word,
       pos,
       posLabel: this.getPosLabel(pos),
-      isNoun: RiTa.isNoun(word) === 'true', // Convertir string a boolean
+      isNoun: RiTa.isNoun(word) === 'true',
       isVerb: RiTa.isVerb(word) === 'true',
       isAdjective: RiTa.isAdjective(word) === 'true',
       isAdverb: RiTa.isAdverb(word) === 'true',
       stemForm: RiTa.stem(word),
     };
 
-    // Conjugaciones si es verbo
     if (analysis.isVerb) {
       analysis.conjugations = [
         RiTa.conjugate(word, { tense: RiTa.PAST }),
@@ -518,7 +503,6 @@ export class RitaService {
       ].filter(Boolean);
     }
 
-    // Plural si es sustantivo
     if (analysis.isNoun) {
       analysis.pluralForm = RiTa.pluralize(word);
     }
@@ -526,9 +510,6 @@ export class RitaService {
     return analysis;
   }
 
-  /**
-   * Sugiere formas alternativas de la misma palabra
-   */
   suggestMorphologicalVariants(word: string): string[] {
     const variants: string[] = [];
 
@@ -553,9 +534,6 @@ export class RitaService {
     return variants;
   }
 
-  /**
-   * Encuentra palabras similares ortográficamente
-   */
   async findSpellingSuggestions(
     word: string,
     targetSyllables?: number
@@ -580,9 +558,6 @@ export class RitaService {
     }
   }
 
-  /**
-   * Detecta posibles errores tipográficos en el poema
-   */
   async detectTypos(lines: string[]): Promise<
     {
       line: number;
@@ -600,7 +575,6 @@ export class RitaService {
       const words = RiTa.tokenize(lines[i]).filter((w) => /[a-zA-Z]/.test(w));
 
       for (const word of words) {
-        // Si la palabra no existe en el léxico y tiene más de 2 letras
         if (!RiTa.hasWord(word) && word.length > 2) {
           const suggestions = await RiTa.spellsLike(word, { limit: 3 });
 
@@ -618,9 +592,6 @@ export class RitaService {
     return typos;
   }
 
-  /**
-   * Mejorado: Análisis de rima más sofisticado
-   */
   async analyzeRhymeQuality(
     word1: string,
     word2: string
@@ -645,7 +616,6 @@ export class RitaService {
   }
 
   private calculateWordSimilarity(word1: string, word2: string): number {
-    // Simple similarity based on shared characters
     const set1 = new Set(word1.toLowerCase());
     const set2 = new Set(word2.toLowerCase());
     const intersection = new Set([...set1].filter((x) => set2.has(x)));

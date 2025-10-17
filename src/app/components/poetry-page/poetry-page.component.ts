@@ -6,7 +6,8 @@ import { HeaderComponent } from '../header/header.component';
 import { PoemEditorComponent } from '../poem-editor/poem-editor.component';
 import { PoemResultsComponent } from '../poem-results/poem-results.component';
 import { PoemQualityComponent } from '../poem-quality/poem-quality.component';
-import { PoetryAnalyzerService } from '../../services/poetry-analyzer.service';
+import { WordSuggestionsComponent } from '../word-suggestions/word-suggestions.component';
+import { PoetryAnalyzerService } from '../../services/poetry'; // ✅ IMPORT CORRECTO
 
 @Component({
   selector: 'app-poetry-page',
@@ -19,14 +20,13 @@ import { PoetryAnalyzerService } from '../../services/poetry-analyzer.service';
     PoemEditorComponent,
     PoemResultsComponent,
     PoemQualityComponent,
+    WordSuggestionsComponent,
   ],
   templateUrl: './poetry-page.component.html',
 })
-// Actualizaciones a src/app/components/poetry-page/poetry-page.component.ts
 export class PoetryPageComponent {
   readonly analyzer = inject(PoetryAnalyzerService);
 
-  // Nuevas funcionalidades
   readonly showQuality = signal(false);
   readonly showVariations = signal(false);
 
@@ -36,7 +36,6 @@ export class PoetryPageComponent {
 
   onReplaceWord(newWord: string): void {
     console.log('Replace word with:', newWord);
-    // Aquí implementarías la lógica para reemplazar la palabra en el poema
     this.analyzer.selectWordEnhanced(null);
   }
 
@@ -46,10 +45,8 @@ export class PoetryPageComponent {
 
   onExportPoem(): void {
     console.log('Export poem functionality');
-    // Implementar exportación aquí
   }
 
-  // Nuevos métodos
   async onGeneratePoem(): Promise<void> {
     const currentForm = this.analyzer.selectedForm() || 'haiku';
     await this.analyzer.generatePoem(currentForm);
@@ -62,7 +59,6 @@ export class PoetryPageComponent {
 
   onUseVariation(lineIndex: number, variation: string): void {
     console.log('Use variation:', lineIndex, variation);
-    // Implementar uso de variación aquí
   }
 
   onAssessQuality(): void {
@@ -73,7 +69,6 @@ export class PoetryPageComponent {
   onUseGeneratedPoem(): void {
     const generated = this.analyzer.generatedPoem();
     if (generated) {
-      // Actualizar el texto del poema con el generado
       this.analyzer.poemText.set(generated.join('\n'));
       this.analyzer.generatedPoem.set(null);
     }
