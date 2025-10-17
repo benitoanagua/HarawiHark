@@ -1,11 +1,51 @@
-.space-y-6 > * + * {
-  margin-top: 1.5rem;
+.editor-container {
+  @apply flex flex-col gap-6;
 }
 
-.space-y-3 > * + * {
-  margin-top: 0.75rem;
+.editor-header {
+  @apply flex flex-col gap-2;
 }
 
-.space-y-2 > * + * {
-  margin-top: 0.5rem;
+.editor-title {
+  @apply text-2xl font-light tracking-tight text-onSurface lowercase mb-2;
+}
+
+.editor-subtitle {
+  @apply text-sm text-onSurfaceVariant;
+}
+
+.form-section {
+  @apply flex flex-col gap-3;
+}
+
+.form-info {
+  @apply p-4 bg-primaryContainer text-onPrimaryContainer;
+}
+
+.form-info-header {
+  @apply flex items-center justify-between mb-2;
+}
+
+.form-pattern {
+  @apply text-sm font-semibold tracking-tight lowercase;
+}
+
+.form-lines {
+  @apply text-xs;
+}
+
+.form-description {
+  @apply text-xs;
+}
+
+.input-section {
+  @apply flex flex-col gap-2;
+}
+
+.input-stats {
+  @apply flex items-center justify-between text-xs text-onSurfaceVariant mt-2;
+}
+
+.actions-section {
+  @apply flex flex-wrap gap-3;
 }

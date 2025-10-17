@@ -1,0 +1,71 @@
+.page-container {
+  @apply min-h-screen bg-background text-onBackground;
+}
+
+.page-content {
+  @apply max-w-4xl mx-auto px-4 py-8 lg:px-6 lg:py-12;
+}
+
+.hero-section {
+  @apply mb-8 lg:mb-12 text-center;
+}
+
+.hero-icon-container {
+  @apply flex items-center justify-center gap-4 mb-4;
+}
+
+.hero-icon {
+  @apply text-5xl text-primary;
+}
+
+.hero-title {
+  @apply text-4xl lg:text-6xl font-light tracking-tight text-onBackground lowercase;
+}
+
+.hero-subtitle {
+  @apply text-lg lg:text-xl font-light text-onSurfaceVariant lowercase;
+}
+
+.editor-section {
+  @apply mb-8;
+}
+
+.suggestions-section {
+  @apply mb-8;
+}
+
+.results-section {
+  @apply mb-8;
+}
+
+.empty-state-section {
+  @apply mb-8;
+}
+
+.info-section {
+  @apply mt-12 p-6 lg:p-8 bg-primaryContainer text-onPrimaryContainer;
+}
+
+.info-content {
+  @apply flex items-start gap-4;
+}
+
+.info-icon {
+  @apply text-2xl flex-shrink-0;
+}
+
+.info-text {
+  @apply flex-1;
+}
+
+.info-title {
+  @apply font-semibold tracking-tight mb-2 lowercase;
+}
+
+.info-description {
+  @apply text-sm leading-relaxed mb-3;
+}
+
+.info-features {
+  @apply text-sm space-y-1 ml-4;
+}

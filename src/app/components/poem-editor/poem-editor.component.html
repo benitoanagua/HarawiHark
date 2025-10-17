@@ -1,17 +1,15 @@
 <app-card padding="large">
-  <div class="space-y-6">
+  <div class="editor-container">
     <!-- Header -->
-    <div>
-      <h2 class="text-2xl font-light tracking-tight text-onSurface mb-2 lowercase">
-        enhanced poetry analyzer
-      </h2>
-      <p class="text-sm text-onSurfaceVariant">
+    <div class="editor-header">
+      <h2 class="editor-title">enhanced poetry analyzer</h2>
+      <p class="editor-subtitle">
         write your poem and get advanced analysis with word suggestions
       </p>
     </div>
 
     <!-- Form Selection -->
-    <div>
+    <div class="form-section">
       <app-select
         id="poetry-form"
         label="poetry form"
@@ -21,16 +19,12 @@
       />
       
       @if (currentForm(); as form) {
-        <div class="mt-3 p-4 bg-primaryContainer text-onPrimaryContainer">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-sm font-semibold tracking-tight lowercase">
-              pattern: {{ form.pattern.join('-') }} syllables
-            </span>
-            <span class="text-xs">
-              {{ form.lines }} lines
-            </span>
+        <div class="form-info">
+          <div class="form-info-header">
+            <span class="form-pattern">pattern: {{ form.pattern.join('-') }} syllables</span>
+            <span class="form-lines">{{ form.lines }} lines</span>
           </div>
-          <p class="text-xs">
+          <p class="form-description">
             {{ form.description }} · {{ form.origin }}
           </p>
         </div>
@@ -38,7 +32,7 @@
     </div>
 
     <!-- Poem Input -->
-    <div>
+    <div class="input-section">
       <app-input
         id="poem-text"
         type="textarea"
@@ -49,14 +43,14 @@
         (inputChange)="onTextChange($event)"
       />
       
-      <div class="flex items-center justify-between mt-2 text-xs text-onSurfaceVariant">
+      <div class="input-stats">
         <span>{{ lineCount() }} lines</span>
         <span>{{ totalSyllables() }} total syllables</span>
       </div>
     </div>
 
     <!-- Actions -->
-    <div class="flex flex-wrap gap-3">
+    <div class="actions-section">
       <app-button
         variant="primary"
         size="medium"

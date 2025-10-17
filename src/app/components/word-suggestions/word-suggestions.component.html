@@ -15,7 +15,7 @@
         (click)="closeSuggestions.emit()"
         aria-label="Close suggestions"
       >
-        <span class="icon-[iconoir--cancel] text-xl"></span>
+        <span class="icon-[iconoir--cancel] close-icon"></span>
       </button>
     </div>
 
@@ -36,7 +36,7 @@
               </div>
               <div class="alternative-meta">
                 <span class="syllable-count">
-                  <span class="icon-[iconoir--sound-high] text-sm"></span>
+                  <span class="icon-[iconoir--sound-high] syllable-icon"></span>
                   {{ alt.syllables }} syllable{{ alt.syllables !== 1 ? 's' : '' }}
                 </span>
                 @if (alt.pos) {
@@ -56,7 +56,7 @@
       </div>
     } @else {
       <div class="no-alternatives">
-        <span class="icon-[iconoir--search] text-4xl text-onSurfaceVariant"></span>
+        <span class="icon-[iconoir--search] no-alternatives-icon"></span>
         <p class="no-alternatives-text">
           No alternatives found with {{ data.targetSyllables }} syllables
         </p>

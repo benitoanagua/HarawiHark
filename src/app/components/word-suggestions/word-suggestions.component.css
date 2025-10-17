@@ -15,14 +15,15 @@
 }
 
 .close-button {
-  @apply w-8 h-8 flex items-center justify-center;
-  @apply bg-surfaceVariant text-onSurfaceVariant;
-  @apply border-2 border-outline;
-  @apply transition-all duration-200;
+  @apply w-8 h-8 flex items-center justify-center bg-surfaceVariant text-onSurfaceVariant border-2 border-outline transition-all duration-200;
 
   &:hover {
     @apply bg-surfaceContainerHigh;
   }
+}
+
+.close-icon {
+  @apply text-xl;
 }
 
 .alternatives-list {
@@ -30,9 +31,7 @@
 }
 
 .alternative-item {
-  @apply flex items-center justify-between gap-4 p-3;
-  @apply bg-surface border border-outlineVariant;
-  @apply transition-all duration-200;
+  @apply flex items-center justify-between gap-4 p-3 bg-surface border border-outlineVariant transition-all duration-200;
 
   &:hover {
     @apply bg-surfaceVariant;
@@ -59,12 +58,20 @@
   @apply flex items-center gap-1;
 }
 
+.syllable-icon {
+  @apply text-sm;
+}
+
 .pos-tag {
   @apply px-2 py-1 bg-surface text-onSurface border border-outline uppercase;
 }
 
 .no-alternatives {
   @apply flex flex-col items-center justify-center gap-4 py-8;
+}
+
+.no-alternatives-icon {
+  @apply text-4xl text-onSurfaceVariant;
 }
 
 .no-alternatives-text {
