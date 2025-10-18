@@ -11,9 +11,12 @@
       }
       <span class="accordion-title">{{ title }}</span>
     </div>
-    <span 
-      [class]="'icon-[iconoir--nav-arrow-' + (expanded ? 'up' : 'down')] + ' accordion-chevron'"
-    ></span>
+    
+    @if (expanded) {
+      <span class="icon-[iconoir--nav-arrow-up] accordion-chevron"></span>
+    } @else {
+      <span class="icon-[iconoir--nav-arrow-down] accordion-chevron"></span>
+    }
   </button>
   
   @if (expanded) {

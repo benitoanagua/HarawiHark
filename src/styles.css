@@ -1,6 +1,8 @@
 @import './styles/base.css';
 @import './styles/material-theme.css';
 @import './styles/terminal-theme.css';
+@import './app/components/accordion/accordion.component.css';
+@import './app/components/analysis-panel/analysis-panel.component.css';
 @import './app/components/badge/badge.component.css';
 @import './app/components/button/button.component.css';
 @import './app/components/card/card.component.css';
@@ -15,5 +17,7 @@
 @import './app/components/poetry-page/poetry-page.component.css';
 @import './app/components/select/select.component.css';
 @import './app/components/status-message/status-message.component.css';
+@import './app/components/tabs/tabs.component.css';
+@import './app/components/tooltip/tooltip.component.css';
 @import './app/components/theme-toggle/theme-toggle.component.css';
 @import './app/components/word-suggestions/word-suggestions.component.css';
