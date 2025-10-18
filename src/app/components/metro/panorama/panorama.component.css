@@ -1,4 +1,3 @@
-/* panorama.component.css */
 .metro-panorama {
   @apply overflow-x-auto overflow-y-hidden;
   @apply flex gap-0;

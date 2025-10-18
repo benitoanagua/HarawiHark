@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './toggle.component.html',
-  styleUrls: ['./toggle.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -24,8 +23,12 @@ export class ToggleComponent implements ControlValueAccessor {
   @Input() checked = false;
   @Output() checkedChange = new EventEmitter<boolean>();
 
-  private onChange: (value: boolean) => void = () => {};
-  private onTouched: () => void = () => {};
+  private onChange: (value: boolean) => void = () => {
+    // Método requerido por ControlValueAccessor
+  };
+  private onTouched: () => void = () => {
+    // Método requerido por ControlValueAccessor
+  };
 
   onToggle(event: Event): void {
     const target = event.target as HTMLInputElement;

@@ -1,4 +1,3 @@
-/* list-item.component.css */
 .metro-list {
   @apply divide-y-2 divide-outlineVariant;
   @apply border-y-2 border-outlineVariant;

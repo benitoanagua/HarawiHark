@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { QualityMetrics } from '../../services/poetry';
-import { CardComponent } from '../card/card.component';
-import { BadgeComponent } from '../badge/badge.component';
+import { QualityMetrics } from '../../../services';
+import { CardComponent, BadgeComponent } from '../../ui';
 
 @Component({
   selector: 'app-poem-quality',

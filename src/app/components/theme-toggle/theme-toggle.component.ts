@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { ToggleComponent } from '../metro/toggle/toggle.component';
-import { ThemeService } from '../../services/core/theme.service';
+import { ToggleComponent } from '../metro';
+import { ThemeService } from '../../services/';
 
 @Component({
   selector: 'app-theme-toggle',
   standalone: true,
   imports: [ToggleComponent],
-
   templateUrl: './theme-toggle.component.html',
 })
 export class ThemeToggleComponent {

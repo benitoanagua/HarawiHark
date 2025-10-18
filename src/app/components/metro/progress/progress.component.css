@@ -1,5 +1,3 @@
-/* progress.component.css */
-
 /* Barra Horizontal Determinada */
 .metro-progress {
   @apply w-full h-1 bg-surfaceVariant;

@@ -1,4 +1,3 @@
-// src/app/components/metro/index.ts
 export * from './panorama/panorama.component';
 export * from './pivot/pivot.component';
 export * from './appbar/appbar.component';

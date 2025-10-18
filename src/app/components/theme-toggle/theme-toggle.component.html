@@ -1,10 +1,13 @@
-<app-toggle [id]="'theme-toggle'" [checked]="currentTheme() === 'dark'" (checkedChange)="onThemeChange($event)"
+<app-toggle 
+  [id]="'theme-toggle'" 
+  [checked]="currentTheme() === 'dark'" 
+  (checkedChange)="onThemeChange($event)"
   class="theme-toggle-wrapper">
   <span slot="before" class="theme-icon">
     @if (currentTheme() === 'light') {
-    <span class="icon-[iconoir--sun-light]"></span>
+      <span class="icon-[iconoir--sun-light]"></span>
     } @else {
-    <span class="icon-[iconoir--moon-sat]"></span>
+      <span class="icon-[iconoir--moon-sat]"></span>
     }
   </span>
 </app-toggle>

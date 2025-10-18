@@ -12,7 +12,6 @@ export interface PanoramaSection {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './panorama.component.html',
-  styleUrls: ['./panorama.component.css'],
 })
 export class PanoramaComponent {
   @Input() sections: PanoramaSection[] = [];

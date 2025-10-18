@@ -7,10 +7,9 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './progress.component.html',
-  styleUrls: ['./progress.component.css'],
 })
 export class ProgressComponent {
   @Input() type: 'bar' | 'ring' = 'bar';
-  @Input() value?: number; // undefined = indeterminate
+  @Input() value?: number;
   @Input() label?: string;
 }

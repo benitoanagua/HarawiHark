@@ -1,4 +1,3 @@
-/* pivot.component.css */
 .metro-pivot {
   @apply flex border-b-2 border-outlineVariant bg-surface;
   @apply overflow-x-auto overflow-y-hidden;

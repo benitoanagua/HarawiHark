@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './list-item.component.html',
-  styleUrls: ['./list-item.component.css'],
 })
 export class ListItemComponent {
   @Input() title = '';

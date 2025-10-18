@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CardComponent } from '../card/card.component';
+import { CardComponent } from '../../ui';
 
 export interface QuickStats {
   totalSyllables: number;

@@ -14,7 +14,6 @@ export interface AppBarAction {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './appbar.component.html',
-  styleUrls: ['./appbar.component.css'],
 })
 export class AppBarComponent {
   @Input() actions: AppBarAction[] = [];

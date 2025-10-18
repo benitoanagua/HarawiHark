@@ -8,7 +8,6 @@ import { ToastService } from '../../../services/core/toast.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './toast-container.component.html',
-  styleUrls: ['./toast-container.component.css'],
 })
 export class ToastContainerComponent {
   readonly toastService = inject(ToastService);

@@ -1,29 +1,61 @@
+/* =====================================================
+   base.css - Metro UI Foundation
+   ===================================================== */
 @import 'tailwindcss';
 @plugin "@iconify/tailwind4";
 
 @layer base {
   html {
-    @apply text-[12px] lg:text-[14px];
+    /* Mobile: 14px, Desktop: 16px */
+    font-size: 14px;
+
+    @media (width >= 1024px) {
+      font-size: 16px;
+    }
   }
 
   body {
     @apply bg-background text-onBackground;
     @apply font-sans antialiased;
+    /* Metro: sin scroll horizontal */
+    @apply overflow-x-hidden;
+    /* Metro: altura mínima pantalla completa */
+    @apply min-h-screen;
   }
 
-  /* Metro: sin bordes ni sombras */
-  * {
+  /* Metro: Geometría pura - sin decoración */
+  *,
+  *::before,
+  *::after {
     @apply rounded-none shadow-none;
+  }
+
+  /* Metro: Focus visible y accesible */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2;
+    outline-color: var(--metro-accent);
+  }
+
+  /* Metro: Selección de texto */
+  ::selection {
+    background-color: var(--metro-accent);
+    color: var(--metro-accent-on);
   }
 }
 
+/* ============================================
+   METRO UTILITIES
+   ============================================ */
 @layer utilities {
-  /* Metro Tile */
+  /* Metro Tile - Live Tile Pattern */
   .metro-tile {
-    @apply flex flex-col justify-end p-4;
+    @apply flex flex-col justify-end;
+    @apply p-metro-sm sm:p-metro-md;
     @apply bg-primary text-onPrimary;
     @apply transition-transform duration-300 ease-out;
-    @apply cursor-pointer aspect-square;
+    @apply cursor-pointer;
+    @apply min-h-[120px] sm:min-h-[140px] lg:min-h-[160px];
+    @apply aspect-square;
 
     &:hover {
       @apply scale-105;
@@ -34,18 +66,77 @@
     }
   }
 
-  /* Metro Typography */
-  .metro-heading {
-    @apply font-light tracking-tight text-onBackground;
+  /* Metro Grid System */
+  .metro-grid {
+    @apply grid gap-metro-sm sm:gap-metro-md lg:gap-metro-lg;
+    @apply grid-cols-2 sm:grid-cols-3 lg:grid-cols-4;
+    @apply p-metro-sm sm:p-metro-md lg:p-metro-lg;
+  }
+
+  /* Metro Typography Scale */
+  .metro-header-1 {
+    @apply text-5xl sm:text-6xl lg:text-8xl;
+    @apply font-light tracking-tight lowercase;
+    @apply text-onBackground;
+  }
+
+  .metro-header-2 {
+    @apply text-3xl sm:text-4xl lg:text-6xl;
+    @apply font-light tracking-tight lowercase;
+    @apply text-onBackground;
+  }
+
+  .metro-header-3 {
+    @apply text-2xl sm:text-3xl lg:text-4xl;
+    @apply font-light tracking-tight lowercase;
+    @apply text-onBackground;
+  }
+
+  .metro-header-4 {
+    @apply text-xl sm:text-2xl lg:text-3xl;
+    @apply font-semibold tracking-tight lowercase;
+    @apply text-onBackground;
+  }
+
+  .metro-body-large {
+    @apply text-lg sm:text-xl;
+    @apply font-normal leading-relaxed;
   }
 
   .metro-body {
-    @apply font-normal text-sm opacity-80;
+    @apply text-base sm:text-lg;
+    @apply font-normal opacity-80;
+  }
+
+  .metro-caption {
+    @apply text-sm sm:text-base;
+    @apply font-normal opacity-60;
+  }
+
+  .metro-list-item-text {
+    @apply text-lg sm:text-xl;
+    @apply font-semibold tracking-tight;
+  }
+
+  /* Metro Accent Utilities */
+  .accent-bg {
+    background-color: var(--metro-accent);
+    color: var(--metro-accent-on);
+  }
+
+  .accent-text {
+    color: var(--metro-accent);
+  }
+
+  .accent-border {
+    border-color: var(--metro-accent);
   }
 }
 
-/* Animaciones - Sin @apply */
-@keyframes slideIn {
+/* ============================================
+   METRO ANIMATIONS
+   ============================================ */
+@keyframes metro-slide-in-left {
   from {
     transform: translateX(-100%);
     opacity: 0;
@@ -56,7 +147,18 @@
   }
 }
 
-@keyframes slideUp {
+@keyframes metro-slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes metro-slide-up {
   from {
     transform: translateY(100%);
     opacity: 0;
@@ -67,7 +169,18 @@
   }
 }
 
-@keyframes flip {
+@keyframes metro-slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes metro-flip {
   from {
     transform: rotateY(0deg);
   }
@@ -76,7 +189,35 @@
   }
 }
 
-/* Accesibilidad */
+@keyframes metro-fade-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes metro-progress-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+@keyframes metro-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY - Reduced Motion
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -85,5 +226,17 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   SCROLLBAR STYLING - Hidden but functional
+   ============================================ */
+.metro-scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

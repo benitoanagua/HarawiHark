@@ -1,11 +1,7 @@
 import { Component, signal, computed, inject } from '@angular/core';
-import { SelectComponent } from '../select/select.component';
-import { InputComponent } from '../input/input.component';
-import { ButtonComponent } from '../button/button.component';
-import { CardComponent } from '../card/card.component';
-import { POETRY_FORM_OPTIONS, POETRY_EXAMPLES } from '../../data/poetry-forms.data';
-import { PoetryAnalyzerService } from '../../services/poetry';
-import { PoetryPatternsService } from '../../services/poetry';
+import { SelectComponent, InputComponent, ButtonComponent, CardComponent } from '../../ui';
+import { POETRY_FORM_OPTIONS, POETRY_EXAMPLES } from '../../../data/poetry-forms.data';
+import { PoetryAnalyzerService, PoetryPatternsService } from '../../../services';
 
 @Component({
   selector: 'app-poem-editor',

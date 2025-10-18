@@ -13,7 +13,6 @@ export interface PivotItem {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './pivot.component.html',
-  styleUrls: ['./pivot.component.css'],
 })
 export class PivotComponent {
   @Input() items: PivotItem[] = [];

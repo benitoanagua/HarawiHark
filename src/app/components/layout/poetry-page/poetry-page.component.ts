@@ -1,34 +1,27 @@
-// poetry-page.component.ts - VERSIÓN ACTUALIZADA
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-// Metro Components
-import { PanoramaComponent, type PanoramaSection } from '../metro/panorama/panorama.component';
-import { PivotComponent, type PivotItem } from '../metro/pivot/pivot.component';
-import { AppBarComponent, type AppBarAction } from '../metro/appbar/appbar.component';
-import { ProgressComponent } from '../metro/progress/progress.component';
-import { ToastContainerComponent } from '../metro/toast-container/toast-container.component';
-
-// Poetry Components
-import { PoemEditorComponent } from '../poetry/poem-editor/poem-editor.component';
-import { PoemResultsComponent } from '../poetry/poem-results/poem-results.component';
-import { PoemQualityComponent } from '../poetry/poem-quality/poem-quality.component';
-import { WordSuggestionsComponent } from '../poetry/word-suggestions/word-suggestions.component';
-import { QuickStatsPanelComponent } from '../poetry/quick-stats-panel/quick-stats-panel.component';
-import { MeterAnalysisSectionComponent } from '../poetry/meter-analysis-section/meter-analysis-section.component';
-
-// UI Components
-import { ButtonComponent } from '../ui/button/button.component';
-import { CardComponent } from '../ui/card/card.component';
-import { BadgeComponent } from '../ui/badge/badge.component';
-
-// Layout
-import { HeaderComponent } from '../layout/header/header.component';
-import { FooterComponent } from '../layout/footer/footer.component';
-
-// Services
-import { PoetryAnalyzerService } from '../../services/poetry';
-import { ToastService } from '../../services/toast.service';
+import {
+  PanoramaComponent,
+  type PanoramaSection,
+  PivotComponent,
+  type PivotItem,
+  AppBarComponent,
+  type AppBarAction,
+  ProgressComponent,
+  ToastContainerComponent,
+} from '../../metro';
+import {
+  PoemEditorComponent,
+  PoemResultsComponent,
+  PoemQualityComponent,
+  WordSuggestionsComponent,
+  QuickStatsPanelComponent,
+  MeterAnalysisSectionComponent,
+} from '../../poetry';
+import { ButtonComponent, CardComponent } from '../../ui';
+import { HeaderComponent, FooterComponent } from '../../layout';
+import { PoetryAnalyzerService, ToastService } from '../../../services';
 
 @Component({
   selector: 'app-poetry-page',
@@ -51,13 +44,11 @@ import { ToastService } from '../../services/toast.service';
     // UI
     ButtonComponent,
     CardComponent,
-    BadgeComponent,
     // Layout
     HeaderComponent,
     FooterComponent,
   ],
   templateUrl: './poetry-page.component.html',
-  styleUrls: ['./poetry-page.component.css'],
 })
 export class PoetryPageComponent {
   readonly analyzer = inject(PoetryAnalyzerService);
@@ -120,7 +111,7 @@ export class PoetryPageComponent {
     try {
       await navigator.clipboard.writeText(exportText);
       this.toastService.success('Exported', 'Poem copied to clipboard');
-    } catch (error) {
+    } catch {
       this.toastService.error('Export Failed', 'Could not copy to clipboard');
     }
   }

@@ -1,9 +1,6 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
-import { CardComponent } from '../card/card.component';
-import { BadgeComponent } from '../badge/badge.component';
-import { ButtonComponent } from '../button/button.component';
-import { UtilsService } from '../../services/core/utils.service';
-import { WordSuggestionData } from '../../services/poetry';
+import { CardComponent, BadgeComponent, ButtonComponent } from '../../ui';
+import { UtilsService, WordSuggestionData } from '../../../services';
 
 @Component({
   selector: 'app-word-suggestions',

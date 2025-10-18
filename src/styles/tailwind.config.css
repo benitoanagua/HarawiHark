@@ -1,0 +1,88 @@
+/* =====================================================
+   tailwind.config.css - Tailwind 4 Configuration
+   ===================================================== */
+@import 'tailwindcss';
+
+@theme {
+  /* ============================================
+     METRO SPACING SYSTEM - Múltiplos de 12px
+     ============================================ */
+  --spacing-metro-xs: 6px;
+  --spacing-metro-sm: 12px;
+  --spacing-metro-md: 24px;
+  --spacing-metro-lg: 36px;
+  --spacing-metro-xl: 48px;
+  --spacing-metro-2xl: 60px;
+  --spacing-metro-3xl: 72px;
+
+  /* ============================================
+     METRO TYPOGRAPHY - Segoe UI Hierarchy
+     ============================================ */
+  --font-family-sans: 'Segoe UI', 'Segoe WP', system-ui, -apple-system, sans-serif;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+
+  /* Metro Typography Scale */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem; /* 36px */
+  --font-size-5xl: 3rem; /* 48px */
+  --font-size-6xl: 3.75rem; /* 60px */
+  --font-size-7xl: 4.5rem; /* 72px */
+  --font-size-8xl: 6rem; /* 96px */
+
+  /* ============================================
+     METRO GEOMETRY - Sin decoración
+     ============================================ */
+  --radius-none: 0;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+
+  --shadow-none: none;
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  /* ============================================
+     METRO TRANSITIONS
+     ============================================ */
+  --transition-fast: 150ms ease-out;
+  --transition-base: 200ms ease-out;
+  --transition-slow: 300ms ease-out;
+
+  /* ============================================
+     METRO Z-INDEX LAYERS
+     ============================================ */
+  --z-base: 0;
+  --z-header: 50;
+  --z-appbar: 60;
+  --z-overlay: 100;
+  --z-toast: 200;
+  --z-context-menu: 300;
+
+  /* ============================================
+     METRO BREAKPOINTS - Mobile First
+     ============================================ */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+/* ============================================
+   METRO ACCENT SYSTEM - Un color dominante
+   ============================================ */
+:root {
+  --metro-accent: var(--color-primary);
+  --metro-accent-on: var(--color-onPrimary);
+  --metro-accent-container: var(--color-primaryContainer);
+  --metro-accent-on-container: var(--color-onPrimaryContainer);
+}

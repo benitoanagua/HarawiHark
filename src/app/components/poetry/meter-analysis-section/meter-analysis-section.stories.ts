@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { MeterAnalysisSectionComponent } from './meter-analysis-section.component';
-import type { EnhancedPoetryResult, MeterAnalysis } from '../../services/poetry';
+import type { EnhancedPoetryResult, MeterAnalysis } from '../../../services';
 
 const meta: Meta<MeterAnalysisSectionComponent> = {
   title: 'Metro UI/Meter Analysis Section',

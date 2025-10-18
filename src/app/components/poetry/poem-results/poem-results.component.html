@@ -1,11 +1,16 @@
 <app-card padding="large">
   <div class="results-container">
     <!-- Status Header -->
-    <app-status-message
-      [title]="result.ok ? 'perfect match' : 'pattern mismatch'"
-      [message]="result.summary"
-      [severity]="result.ok ? 'success' : 'warning'"
-    />
+    <div class="status-header mb-metro-md">
+      <app-badge
+        [variant]="result.ok ? 'success' : 'warning'"
+        size="medium"
+        [icon]="result.ok ? 'icon-[iconoir--check]' : 'icon-[iconoir--warning-triangle]'"
+      >
+        {{ result.ok ? 'Perfect match' : 'Pattern mismatch' }}
+      </app-badge>
+      <p class="status-summary mt-metro-xs text-sm opacity-80">{{ result.summary }}</p>
+    </div>
 
     <!-- Detected Patterns Section -->
     @if (result.detectedPatterns && result.detectedPatterns.length > 0) {

@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CardComponent } from '../card/card.component';
-import { BadgeComponent } from '../badge/badge.component';
-import { EnhancedPoetryResult } from '../../services/poetry';
+import { CardComponent, BadgeComponent } from '../../ui';
+import { EnhancedPoetryResult } from '../../../services/';
 
 @Component({
   selector: 'app-meter-analysis-section',

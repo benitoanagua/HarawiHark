@@ -5,6 +5,14 @@
   @apply flex flex-col gap-metro-sm sm:gap-metro-md lg:gap-metro-lg;
 }
 
+.status-header {
+  @apply flex flex-col items-start gap-metro-xs;
+}
+
+.status-summary {
+  @apply text-onSurfaceVariant;
+}
+
 .section-title {
   @apply text-base sm:text-lg font-semibold tracking-tight text-onSurface lowercase;
   @apply mb-metro-sm sm:mb-metro-md;

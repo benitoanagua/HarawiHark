@@ -1,14 +1,11 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
-import { CardComponent } from '../card/card.component';
-import { BadgeComponent } from '../badge/badge.component';
-import { StatusMessageComponent } from '../status-message/status-message.component';
-import { EnhancedPoetryResult } from '../../services/poetry';
-import { UtilsService } from '../../services/core/utils.service';
+import { CardComponent, BadgeComponent } from '../../ui';
+import { EnhancedPoetryResult, UtilsService } from '../../../services';
 
 @Component({
   selector: 'app-poem-results',
   standalone: true,
-  imports: [CardComponent, BadgeComponent, StatusMessageComponent],
+  imports: [CardComponent, BadgeComponent],
   templateUrl: './poem-results.component.html',
 })
 export class PoemResultsComponent {
