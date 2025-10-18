@@ -16,24 +16,6 @@ export const Default: Story = {
   args: {},
 };
 
-export const MobileView: Story = {
-  parameters: {
-    viewport: {
-      defaultViewport: 'mobile1',
-    },
-  },
-  args: {},
-};
-
-export const DesktopView: Story = {
-  parameters: {
-    viewport: {
-      defaultViewport: 'desktop',
-    },
-  },
-  args: {},
-};
-
 export const DarkTheme: Story = {
   parameters: {
     themes: {

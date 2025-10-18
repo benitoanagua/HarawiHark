@@ -1,66 +1,58 @@
 .metro-footer {
-  @apply bg-surfaceVariant text-onSurface border-t border-outlineVariant mt-auto;
+  @apply bg-surfaceVariant text-onSurfaceVariant border-t-2 border-outlineVariant;
+  @apply transition-colors duration-200;
 }
 
 .footer-content {
-  @apply max-w-7xl mx-auto px-4 py-12;
-  @apply sm:px-6 sm:py-16 sm:grid sm:grid-cols-2 sm:gap-8;
-  @apply lg:px-8 lg:py-20 lg:grid-cols-3 lg:gap-12;
+  @apply container mx-auto px-4 py-6;
+  @apply sm:px-6 sm:py-8 lg:px-8 lg:py-10 flex flex-col gap-4;
+  @apply sm:flex-row sm:items-center sm:justify-between sm:gap-6;
 }
 
-.footer-info {
-  @apply lg:col-span-1;
+.footer-brand {
+  @apply flex items-center gap-3 sm:gap-4;
 }
 
-.footer-logo {
-  @apply flex items-center gap-3 mb-4 sm:mb-6;
+.footer-icon {
+  @apply text-xl text-primary sm:text-2xl lg:text-3xl;
 }
 
 .footer-title {
-  @apply text-lg font-light tracking-tight lowercase text-onSurface;
+  @apply text-lg font-light tracking-tight lowercase text-onSurfaceVariant;
   @apply sm:text-xl lg:text-2xl;
 }
 
+.footer-info {
+  @apply flex flex-col gap-2 sm:items-end sm:gap-3;
+}
+
 .footer-description {
-  @apply text-sm text-onSurfaceVariant max-w-xs;
-  @apply sm:text-base lg:text-lg;
+  @apply text-xs text-onSurfaceVariant opacity-80;
+  @apply sm:text-sm lg:text-base max-w-md text-center sm:text-right;
 }
 
 .footer-links {
-  @apply grid grid-cols-1 gap-6;
-  @apply sm:grid-cols-2 sm:col-span-1;
-  @apply lg:col-span-2 lg:gap-8;
-}
-
-.link-group {
-  @apply flex flex-col gap-2 sm:gap-3;
-}
-
-.link-group-title {
-  @apply text-sm font-semibold tracking-tight text-onSurface uppercase mb-2;
-  @apply sm:text-base;
+  @apply flex items-center gap-4 sm:gap-6;
 }
 
 .footer-link {
-  @apply flex items-center gap-3 text-sm text-onSurfaceVariant;
-  @apply transition-colors duration-200 cursor-pointer py-2 min-h-8;
-  @apply sm:text-base;
+  @apply flex items-center gap-2 text-xs text-onSurfaceVariant opacity-80;
+  @apply transition-all duration-200 cursor-pointer sm:text-sm lg:text-base;
 
   &:hover {
-    @apply text-primary;
+    @apply text-primary opacity-100 scale-105;
   }
 
   &:active {
-    @apply opacity-80;
+    @apply scale-95;
+  }
+
+  &:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary rounded-sm;
   }
 }
 
-.footer-bottom {
-  @apply col-span-full pt-6 border-t border-outlineVariant;
-  @apply sm:pt-8 lg:pt-12;
-}
-
-.copyright {
-  @apply text-xs text-onSurfaceVariant text-center;
+.footer-copyright {
+  @apply text-xs text-onSurfaceVariant opacity-60;
   @apply sm:text-sm;
 }

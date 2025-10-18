@@ -64,7 +64,7 @@
                   Real-time syllable counting with RiTa.js
                 </li>
                 <li>
-                  <span class="icon-[iconoir--music-double] feature-icon"></span>
+                  <span class="icon-[iconoir--music-note] feature-icon"></span>
                   Advanced meter analysis (iambic, trochaic, etc.)
                 </li>
                 <li>
@@ -100,7 +100,7 @@
                   </div>
 
                   <div class="stage" [class.active]="currentStage() === 'rhythm'">
-                    <span class="icon-[iconoir--music-double] stage-icon"></span>
+                    <span class="icon-[iconoir--music-note] stage-icon"></span>
                     <span class="stage-label">analyzing rhythm</span>
                     @if (currentStage() === 'rhythm') {
                       <app-progress type="bar" />
@@ -174,7 +174,7 @@
               <app-button
                 variant="outline"
                 label="analyze rhythm"
-                icon="icon-[iconoir--music-double]"
+                icon="icon-[iconoir--music-note]"
                 (clicked)="onShowMeterAnalysis()"
               />
               <app-button
