@@ -1,0 +1,69 @@
+/* =====================================================
+   meter-analysis-section.component.css - Metro Meter Analysis
+   ===================================================== */
+.meter-analysis-container {
+  @apply flex flex-col gap-metro-md;
+}
+
+.section-title {
+  @apply text-lg sm:text-xl font-light tracking-tight text-onSurface lowercase;
+}
+
+.meter-info {
+  @apply space-y-metro-sm;
+  @apply p-metro-md sm:p-metro-lg;
+  @apply bg-surfaceContainerHigh border-2 border-outlineVariant;
+}
+
+.meter-header {
+  @apply flex flex-col gap-metro-xs;
+  @apply sm:flex-row sm:items-center sm:gap-metro-md;
+}
+
+.consistency-score {
+  @apply text-sm text-onSurfaceVariant font-medium;
+}
+
+.meter-pattern {
+  @apply text-lg sm:text-xl font-mono font-semibold;
+  color: var(--metro-accent);
+}
+
+.meter-description {
+  @apply text-sm sm:text-base text-onSurfaceVariant leading-relaxed;
+}
+
+.meter-examples {
+  @apply mt-metro-md;
+  @apply p-metro-sm sm:p-metro-md;
+  @apply bg-surfaceVariant border-2 border-outlineVariant;
+}
+
+.meter-examples h4 {
+  @apply text-sm font-semibold text-onSurface lowercase;
+  @apply mb-metro-xs sm:mb-metro-sm;
+}
+
+.examples-list {
+  @apply space-y-[6px] sm:space-y-metro-xs;
+}
+
+.example-item {
+  @apply text-sm text-onSurfaceVariant italic;
+  @apply pl-metro-sm border-l-2;
+  border-left-color: var(--metro-accent);
+}
+
+.no-meter-analysis {
+  @apply flex flex-col items-center justify-center;
+  @apply gap-metro-sm sm:gap-metro-md;
+  @apply py-metro-2xl text-center;
+}
+
+.no-meter-icon {
+  @apply text-3xl sm:text-4xl text-onSurfaceVariant;
+}
+
+.no-meter-text {
+  @apply text-sm text-onSurfaceVariant;
+}

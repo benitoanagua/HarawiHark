@@ -1,0 +1,59 @@
+/* =====================================================
+   analysis-panel.component.css - Metro Analysis Panel
+   ===================================================== */
+.analysis-panel {
+  @apply flex flex-col gap-metro-sm;
+}
+
+.panel-title {
+  @apply text-sm sm:text-base font-semibold tracking-tight text-onSurface lowercase;
+}
+
+.metrics-grid {
+  @apply grid gap-metro-xs sm:gap-metro-sm;
+}
+
+.metric-item {
+  @apply flex flex-col gap-1;
+}
+
+.metric-header {
+  @apply flex items-center justify-between gap-metro-xs;
+}
+
+.metric-icon {
+  @apply text-base sm:text-lg flex-shrink-0;
+  color: var(--metro-accent);
+}
+
+.metric-label {
+  @apply text-xs sm:text-sm text-onSurfaceVariant flex-1;
+}
+
+.metric-value {
+  @apply text-xs sm:text-sm font-semibold text-onSurface;
+}
+
+.metric-progress {
+  @apply w-full h-1 bg-surfaceVariant overflow-hidden;
+}
+
+.metric-progress-bar {
+  @apply h-full transition-all duration-500 ease-out;
+}
+
+.metric-default {
+  background-color: var(--metro-accent);
+}
+
+.metric-success {
+  @apply bg-inverseGreen;
+}
+
+.metric-warning {
+  @apply bg-inverseYellow;
+}
+
+.metric-error {
+  @apply bg-inverseRed;
+}

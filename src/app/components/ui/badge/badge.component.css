@@ -1,0 +1,42 @@
+/* =====================================================
+   badge.component.css - Metro Badge
+   ===================================================== */
+.badge-default,
+.badge-info,
+.badge-success,
+.badge-warning,
+.badge-error {
+  @apply inline-flex items-center gap-1;
+  @apply font-semibold tracking-tight border-2;
+  @apply rounded-none shadow-none;
+}
+
+.badge-small {
+  @apply text-xs px-2 py-[2px];
+  @apply sm:px-[10px] sm:py-1;
+}
+
+.badge-medium {
+  @apply text-sm px-[10px] py-1;
+  @apply sm:px-metro-sm sm:py-[6px];
+}
+
+.badge-default {
+  @apply bg-surface text-onSurface border-outline;
+}
+
+.badge-info {
+  @apply bg-inverseBlue text-onBlueContainer border-inverseBlueContainer;
+}
+
+.badge-success {
+  @apply bg-inverseGreen text-onGreenContainer border-inverseGreenContainer;
+}
+
+.badge-warning {
+  @apply bg-inverseYellow text-onYellowContainer border-inverseYellowContainer;
+}
+
+.badge-error {
+  @apply bg-inverseRed text-onRedContainer border-inverseRedContainer;
+}

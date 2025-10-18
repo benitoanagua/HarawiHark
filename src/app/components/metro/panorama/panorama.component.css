@@ -1,0 +1,39 @@
+/* panorama.component.css */
+.metro-panorama {
+  @apply overflow-x-auto overflow-y-hidden;
+  @apply flex gap-0;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.metro-panorama-section {
+  @apply flex-shrink-0;
+  /* Mobile: casi full width para snap natural */
+  @apply w-[92vw];
+  /* Tablet: secciones medianas */
+  @apply sm:w-[48vw];
+  /* Desktop: múltiples secciones visibles */
+  @apply lg:w-[35vw];
+  @apply px-metro-sm sm:px-metro-md;
+  scroll-snap-align: start;
+}
+
+.metro-panorama-header {
+  /* Metro: headers GIGANTES y audaces */
+  @apply text-4xl sm:text-5xl lg:text-7xl;
+  @apply font-light tracking-tight lowercase;
+  @apply text-onBackground;
+  @apply mb-metro-md sm:mb-metro-lg;
+  /* Metro: permitir que el header se corte parcialmente */
+  @apply pr-metro-xl;
+}
+
+.metro-panorama-content {
+  @apply space-y-metro-sm sm:space-y-metro-md;
+}

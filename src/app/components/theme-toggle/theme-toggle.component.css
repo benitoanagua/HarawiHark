@@ -1,19 +1,7 @@
-.theme-toggle {
-  @apply bg-surfaceVariant text-onSurfaceVariant 
-         w-8 h-8 lg:w-12 lg:h-12 
-         flex items-center justify-center 
-         border-2 border-outline 
-         transition-all duration-200 cursor-pointer;
+.theme-toggle-wrapper {
+  @apply flex items-center gap-metro-xs;
+}
 
-  &:hover {
-    @apply bg-surfaceContainerHigh;
-  }
-
-  &:focus-visible {
-    @apply outline outline-2 outline-offset-2 outline-primary;
-  }
-
-  &:active {
-    @apply scale-95;
-  }
+.theme-icon {
+  @apply text-xl text-onSurface;
 }

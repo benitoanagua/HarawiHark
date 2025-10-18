@@ -1,12 +1,10 @@
-<button
-  type="button"
-  class="theme-toggle"
-  (click)="toggleTheme()"
-  [attr.aria-label]="'Switch to ' + (currentTheme() === 'light' ? 'dark' : 'light') + ' theme'"
->
-  @if (currentTheme() === 'light') {
-    <span class="icon-[iconoir--sun-light] text-xl"></span>
-  } @else {
-    <span class="icon-[iconoir--moon-sat] text-xl"></span>
-  }
-</button>
+<app-toggle [id]="'theme-toggle'" [checked]="currentTheme() === 'dark'" (checkedChange)="onThemeChange($event)"
+  class="theme-toggle-wrapper">
+  <span slot="before" class="theme-icon">
+    @if (currentTheme() === 'light') {
+    <span class="icon-[iconoir--sun-light]"></span>
+    } @else {
+    <span class="icon-[iconoir--moon-sat]"></span>
+    }
+  </span>
+</app-toggle>

@@ -1,0 +1,17 @@
+<!-- toggle.component.html -->
+<div class="metro-toggle-wrapper">
+  <input
+    type="checkbox"
+    class="metro-toggle-input"
+    [id]="id"
+    [checked]="checked"
+    [disabled]="disabled"
+    (change)="onToggle($event)"
+  />
+  <label [for]="id" class="metro-toggle">
+    <span class="metro-toggle-slider"></span>
+  </label>
+  @if (label) {
+    <label [for]="id" class="metro-toggle-label">{{ label }}</label>
+  }
+</div>

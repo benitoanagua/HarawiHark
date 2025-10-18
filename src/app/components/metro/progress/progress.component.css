@@ -1,0 +1,66 @@
+/* progress.component.css */
+
+/* Barra Horizontal Determinada */
+.metro-progress {
+  @apply w-full h-1 bg-surfaceVariant;
+  @apply overflow-hidden relative;
+}
+
+.metro-progress-bar {
+  @apply h-full;
+  background-color: var(--metro-accent);
+  @apply transition-all duration-300 ease-out;
+}
+
+/* Barra Horizontal Indeterminada */
+.metro-progress-indeterminate {
+  @apply w-full h-1 bg-surfaceVariant;
+  @apply overflow-hidden relative;
+}
+
+.metro-progress-indeterminate::after {
+  content: '';
+  @apply absolute inset-0;
+  background-color: var(--metro-accent);
+  @apply w-1/3;
+  animation: metro-progress-slide 1.5s ease-in-out infinite;
+}
+
+@keyframes metro-progress-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+/* Progress Ring - Circular */
+.metro-progress-ring {
+  @apply w-12 h-12 sm:w-16 sm:h-16;
+  @apply border-[3px] border-surfaceVariant;
+  border-top-color: var(--metro-accent);
+  @apply rounded-full;
+  animation: metro-spin 1s linear infinite;
+}
+
+@keyframes metro-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Progress con texto */
+.metro-progress-with-label {
+  @apply flex flex-col gap-metro-xs;
+}
+
+.metro-progress-label {
+  @apply flex items-center justify-between;
+  @apply text-sm text-onSurfaceVariant;
+}
+
+.metro-progress-value {
+  @apply font-semibold;
+  color: var(--metro-accent);
+}

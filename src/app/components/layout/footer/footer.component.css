@@ -1,0 +1,74 @@
+/* =====================================================
+   footer.component.css - ACTUALIZADO Metro
+   ===================================================== */
+.metro-footer {
+  @apply bg-surfaceContainerHigh text-onSurface;
+  @apply border-t-2 border-outlineVariant mt-auto;
+}
+
+.footer-content {
+  @apply max-w-7xl mx-auto;
+  @apply px-metro-sm py-metro-lg;
+  @apply grid gap-metro-md;
+  @apply sm:px-metro-md sm:py-metro-xl sm:grid-cols-2 sm:gap-metro-lg;
+  @apply lg:px-metro-lg lg:py-metro-2xl lg:grid-cols-3 lg:gap-metro-2xl;
+}
+
+.footer-info {
+  @apply lg:col-span-1;
+}
+
+.footer-logo {
+  @apply flex items-center gap-metro-xs mb-metro-xs sm:mb-metro-sm;
+}
+
+.footer-title {
+  @apply text-base font-light tracking-tight text-onSurface lowercase;
+  @apply sm:text-lg;
+}
+
+.footer-description {
+  @apply text-sm text-onSurfaceVariant max-w-xs;
+  @apply sm:text-base;
+}
+
+.footer-links {
+  @apply grid grid-cols-1 gap-metro-md;
+  @apply sm:grid-cols-2 sm:col-span-1;
+  @apply lg:col-span-2;
+}
+
+.link-group {
+  @apply flex flex-col gap-metro-xs sm:gap-metro-sm;
+}
+
+.link-group-title {
+  @apply text-sm font-semibold tracking-tight text-onSurface uppercase;
+  @apply mb-[6px] sm:mb-metro-xs;
+}
+
+.footer-link {
+  @apply flex items-center gap-metro-xs;
+  @apply text-sm text-onSurfaceVariant;
+  @apply transition-colors duration-200 cursor-pointer;
+  @apply py-1;
+  @apply min-h-[32px];
+
+  &:hover {
+    color: var(--metro-accent);
+  }
+
+  &:active {
+    @apply opacity-80;
+  }
+}
+
+.footer-bottom {
+  @apply col-span-full pt-metro-md border-t-2 border-outlineVariant;
+  @apply sm:pt-metro-lg lg:pt-metro-xl;
+}
+
+.copyright {
+  @apply text-xs text-onSurfaceVariant text-center;
+  @apply sm:text-sm;
+}

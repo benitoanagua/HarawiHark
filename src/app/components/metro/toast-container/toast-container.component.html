@@ -1,0 +1,28 @@
+<!-- toast-container.component.html -->
+<div class="metro-toast-container">
+  @for (toast of toastService.toasts(); track toast.id) {
+    <div 
+      class="metro-toast"
+      [class]="'metro-toast-' + toast.type"
+      role="alert"
+    >
+      <span [class]="getIcon(toast.type) + ' metro-toast-icon'"></span>
+      
+      <div class="metro-toast-content">
+        <div class="metro-toast-title">{{ toast.title }}</div>
+        @if (toast.message) {
+          <div class="metro-toast-message">{{ toast.message }}</div>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="metro-toast-close"
+        (click)="onClose(toast.id)"
+        aria-label="Close notification"
+      >
+        <span class="icon-[iconoir--cancel]"></span>
+      </button>
+    </div>
+  }
+</div>

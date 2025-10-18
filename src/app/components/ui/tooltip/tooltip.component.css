@@ -1,0 +1,37 @@
+/* =====================================================
+   tooltip.component.css - Metro Tooltip
+   ===================================================== */
+.metro-tooltip {
+  @apply relative inline-block;
+
+  &:hover .tooltip-content {
+    @apply opacity-100 visible;
+  }
+}
+
+.tooltip-content {
+  @apply absolute z-50 px-metro-sm py-metro-xs;
+  @apply sm:px-metro-md sm:py-metro-xs;
+  @apply bg-surfaceContainerHigh text-onSurface;
+  @apply border-2 border-outlineVariant;
+  @apply text-xs sm:text-sm font-normal tracking-tight;
+  @apply opacity-0 invisible transition-all duration-200;
+  @apply whitespace-nowrap;
+  @apply rounded-none shadow-none;
+}
+
+.tooltip-top .tooltip-content {
+  @apply bottom-full left-1/2 transform -translate-x-1/2 mb-metro-xs;
+}
+
+.tooltip-bottom .tooltip-content {
+  @apply top-full left-1/2 transform -translate-x-1/2 mt-metro-xs;
+}
+
+.tooltip-left .tooltip-content {
+  @apply right-full top-1/2 transform -translate-y-1/2 mr-metro-xs;
+}
+
+.tooltip-right .tooltip-content {
+  @apply left-full top-1/2 transform -translate-y-1/2 ml-metro-xs;
+}

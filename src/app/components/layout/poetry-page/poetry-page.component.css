@@ -1,0 +1,135 @@
+/* poetry-page.component.css - VERSIÓN METRO UI */
+.poetry-page {
+  @apply min-h-screen bg-background text-onBackground;
+  @apply flex flex-col;
+  /* Espacio para AppBar en mobile */
+  @apply pb-[72px] sm:pb-[80px] lg:pb-0;
+}
+
+/* Section Content dentro de Panorama */
+.section-content {
+  @apply px-metro-sm py-metro-md;
+  @apply sm:px-metro-md sm:py-metro-lg;
+  @apply lg:px-0 lg:py-metro-xl;
+  @apply max-w-4xl mx-auto;
+}
+
+/* Hero Section */
+.hero-section {
+  @apply mb-metro-lg sm:mb-metro-xl lg:mb-metro-2xl;
+  @apply text-center;
+}
+
+.hero-icon-container {
+  @apply flex items-center justify-center gap-metro-xs sm:gap-metro-sm lg:gap-metro-md;
+  @apply mb-metro-sm sm:mb-metro-md lg:mb-metro-lg;
+}
+
+.hero-icon {
+  @apply text-2xl sm:text-3xl lg:text-6xl;
+  color: var(--metro-accent);
+}
+
+.hero-title {
+  @apply text-3xl font-light tracking-tight text-onBackground lowercase;
+  @apply sm:text-4xl lg:text-6xl;
+}
+
+.hero-subtitle {
+  @apply text-sm font-light text-onSurfaceVariant lowercase;
+  @apply sm:text-base lg:text-xl;
+  @apply mt-metro-xs;
+}
+
+/* Suggestions Wrapper */
+.suggestions-wrapper {
+  @apply mt-metro-md sm:mt-metro-lg;
+}
+
+/* Info Section */
+.info-section {
+  @apply mt-metro-lg sm:mt-metro-xl lg:mt-metro-2xl;
+  @apply p-metro-md sm:p-metro-lg lg:p-metro-xl;
+  background-color: var(--metro-accent-container);
+  color: var(--metro-accent-on-container);
+}
+
+.info-content {
+  @apply flex flex-col gap-metro-sm sm:gap-metro-md;
+  @apply sm:flex-row sm:items-start;
+}
+
+.info-icon {
+  @apply text-xl sm:text-2xl flex-shrink-0 mt-[2px];
+}
+
+.info-text {
+  @apply flex-1;
+}
+
+.info-title {
+  @apply font-semibold tracking-tight lowercase;
+  @apply text-base sm:text-lg;
+  @apply mb-metro-xs sm:mb-metro-sm;
+}
+
+.info-description {
+  @apply text-sm leading-relaxed opacity-90;
+  @apply mb-metro-sm sm:text-base;
+}
+
+.info-features {
+  @apply space-y-[6px] sm:space-y-metro-xs;
+}
+
+.info-features li {
+  @apply flex items-center gap-metro-xs sm:gap-metro-sm;
+  @apply text-sm sm:text-base;
+}
+
+.feature-icon {
+  @apply text-base sm:text-lg opacity-80 flex-shrink-0;
+}
+
+/* Analysis Loading */
+.analysis-loading {
+  @apply flex flex-col items-center justify-center;
+  @apply py-metro-2xl;
+  @apply gap-metro-md;
+}
+
+/* Analysis Content */
+.analysis-content {
+  @apply mt-metro-md sm:mt-metro-lg;
+}
+
+/* Analysis Actions */
+.analysis-actions {
+  @apply mt-metro-lg;
+  @apply flex flex-wrap gap-metro-xs sm:gap-metro-sm;
+}
+
+/* Empty Content */
+.empty-content {
+  @apply flex flex-col items-center justify-center;
+  @apply text-center gap-metro-md;
+  @apply py-metro-2xl;
+}
+
+.empty-icon {
+  @apply text-4xl lg:text-5xl text-onSurfaceVariant;
+}
+
+/* Quality Prompt */
+.quality-prompt {
+  @apply flex flex-col items-center justify-center;
+  @apply text-center;
+  @apply py-metro-xl;
+}
+
+/* History Placeholder */
+.history-placeholder {
+  @apply flex flex-col items-center justify-center;
+  @apply text-center;
+  @apply py-metro-2xl;
+}

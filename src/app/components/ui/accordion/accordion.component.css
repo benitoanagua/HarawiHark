@@ -1,0 +1,52 @@
+/* =====================================================
+   accordion.component.css - Metro UI Accordion
+   ===================================================== */
+.metro-accordion {
+  @apply bg-surface border-2 border-outlineVariant;
+}
+
+.metro-accordion-header {
+  @apply w-full flex items-center justify-between gap-metro-sm;
+  @apply px-metro-md py-metro-sm;
+  @apply sm:px-metro-lg sm:py-metro-md;
+  @apply bg-surface text-onSurface;
+  @apply transition-all duration-200 cursor-pointer;
+  /* Metro: touch target */
+  @apply min-h-[48px] sm:min-h-[56px];
+
+  &:hover {
+    @apply bg-surfaceVariant;
+  }
+
+  &:active {
+    @apply bg-surfaceContainerHigh;
+  }
+
+  &:focus-visible {
+    @apply outline outline-2 outline-offset-[-2px];
+    outline-color: var(--metro-accent);
+  }
+}
+
+.accordion-title-section {
+  @apply flex items-center gap-metro-xs sm:gap-metro-sm;
+}
+
+.accordion-icon {
+  @apply text-lg sm:text-xl;
+  color: var(--metro-accent);
+}
+
+.accordion-title {
+  @apply text-sm sm:text-base font-semibold tracking-tight text-onSurface;
+}
+
+.accordion-chevron {
+  @apply text-lg sm:text-xl text-onSurfaceVariant transition-transform duration-200;
+}
+
+.metro-accordion-content {
+  @apply px-metro-md py-metro-sm;
+  @apply sm:px-metro-lg sm:py-metro-md;
+  @apply border-t-2 border-outlineVariant bg-surfaceContainerLow;
+}

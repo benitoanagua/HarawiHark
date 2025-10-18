@@ -1,0 +1,62 @@
+/* =====================================================
+   input.component.css - Metro Input
+   ===================================================== */
+.input-wrapper {
+  @apply flex flex-col gap-[6px] sm:gap-metro-xs;
+}
+
+.input-label {
+  @apply text-sm font-semibold tracking-tight text-onSurface;
+  @apply sm:text-base;
+}
+
+.input-text,
+.input-textarea {
+  @apply w-full bg-surface text-onSurface border-2 border-outline;
+  @apply min-h-[48px];
+  @apply px-metro-sm py-metro-xs;
+  @apply sm:px-metro-md sm:py-metro-sm;
+  @apply font-normal text-base;
+  @apply transition-all duration-200;
+  @apply rounded-none shadow-none;
+
+  /* Metro: focus con borde más grueso */
+  &:focus {
+    @apply outline-none border-[3px];
+    border-color: var(--metro-accent);
+    /* Compensar border extra */
+    @apply px-[11px] py-[9px];
+    @apply sm:px-[11px] sm:py-[11px];
+  }
+
+  &:hover:not(:focus):not(:disabled) {
+    @apply border-onSurfaceVariant;
+  }
+
+  &:disabled {
+    @apply opacity-40 cursor-not-allowed bg-surfaceVariant;
+  }
+
+  &.input-error {
+    @apply border-error;
+
+    &:focus {
+      @apply border-error;
+    }
+  }
+
+  /* Metro: placeholder style */
+  &::placeholder {
+    @apply text-onSurfaceVariant opacity-50 italic;
+  }
+}
+
+.input-textarea {
+  @apply resize-none;
+  @apply min-h-[120px] sm:min-h-[160px];
+}
+
+.input-error-text {
+  @apply text-sm text-error;
+  @apply sm:text-base;
+}

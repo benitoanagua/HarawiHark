@@ -1,0 +1,45 @@
+/* =====================================================
+   select.component.css - Metro Select
+   ===================================================== */
+.select-wrapper {
+  @apply flex flex-col gap-[6px] sm:gap-metro-xs;
+  @apply relative;
+}
+
+.select-label {
+  @apply text-sm font-semibold tracking-tight text-onSurface;
+  @apply sm:text-base;
+}
+
+.select-base {
+  @apply w-full bg-surface text-onSurface border-2 border-outline;
+  @apply min-h-[48px];
+  @apply px-metro-sm py-metro-xs pr-metro-xl;
+  @apply sm:px-metro-md sm:py-metro-sm sm:pr-[48px];
+  @apply font-normal text-base;
+  @apply appearance-none cursor-pointer;
+  @apply transition-all duration-200;
+  @apply rounded-none shadow-none;
+
+  &:focus {
+    @apply outline-none border-[3px];
+    border-color: var(--metro-accent);
+    @apply px-[11px] py-[9px];
+    @apply sm:px-[11px] sm:py-[11px];
+  }
+
+  &:hover:not(:focus):not(:disabled) {
+    @apply border-onSurfaceVariant;
+  }
+
+  &:disabled {
+    @apply opacity-40 cursor-not-allowed bg-surfaceVariant;
+  }
+}
+
+.select-icon {
+  @apply absolute pointer-events-none;
+  @apply right-metro-sm top-[38px];
+  @apply sm:right-metro-md sm:top-[42px];
+  @apply text-onSurfaceVariant text-lg sm:text-xl;
+}

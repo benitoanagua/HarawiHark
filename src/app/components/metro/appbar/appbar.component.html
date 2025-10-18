@@ -1,0 +1,27 @@
+<!-- appbar.component.html -->
+<div 
+  class="metro-appbar"
+  [class.appbar-hidden]="hidden"
+>
+  <div class="appbar-start">
+    <ng-content select="[slot='start']" />
+  </div>
+
+  <div class="appbar-center">
+    @for (action of actions; track action.id) {
+      <button
+        type="button"
+        class="metro-command-button"
+        [disabled]="action.disabled"
+        (click)="onActionClick(action.id, action.disabled)"
+      >
+        <span [class]="action.icon + ' command-icon'"></span>
+        <span class="command-label">{{ action.label }}</span>
+      </button>
+    }
+  </div>
+
+  <div class="appbar-end">
+    <ng-content select="[slot='end']" />
+  </div>
+</div>

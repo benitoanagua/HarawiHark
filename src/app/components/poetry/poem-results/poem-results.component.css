@@ -1,0 +1,216 @@
+/* =====================================================
+   poem-results.component.css - Metro Results Display
+   ===================================================== */
+.results-container {
+  @apply flex flex-col gap-metro-sm sm:gap-metro-md lg:gap-metro-lg;
+}
+
+.section-title {
+  @apply text-base sm:text-lg font-semibold tracking-tight text-onSurface lowercase;
+  @apply mb-metro-sm sm:mb-metro-md;
+}
+
+/* Patterns Section */
+.patterns-section {
+  @apply p-metro-sm sm:p-metro-md;
+  background-color: var(--metro-accent-container);
+  border: 2px solid var(--metro-accent);
+}
+
+.patterns-list {
+  @apply flex flex-col gap-1;
+}
+
+.pattern-item {
+  @apply flex items-start gap-metro-xs sm:gap-metro-sm;
+  @apply text-xs sm:text-sm;
+  color: var(--metro-accent-on-container);
+}
+
+.pattern-icon {
+  color: var(--metro-accent);
+}
+
+/* Alliteration Section */
+.alliteration-section {
+  @apply p-metro-sm sm:p-metro-md;
+  @apply bg-inverseBlue border-2 border-inverseBlueContainer;
+}
+
+.alliteration-list {
+  @apply flex flex-col gap-1;
+}
+
+.alliteration-item {
+  @apply flex items-center gap-metro-xs sm:gap-metro-sm;
+}
+
+.alliteration-words {
+  @apply text-xs sm:text-sm text-onBlueContainer font-mono;
+}
+
+/* Line Analysis */
+.line-analysis-section {
+  @apply flex flex-col gap-metro-xs sm:gap-metro-sm;
+}
+
+.lines-container {
+  @apply flex flex-col gap-metro-xs sm:gap-metro-sm;
+}
+
+.line-card {
+  @apply p-metro-sm sm:p-metro-md lg:p-metro-lg;
+  @apply bg-surfaceVariant border-2 border-outline;
+  @apply flex flex-col gap-metro-xs sm:gap-metro-sm;
+}
+
+.line-header {
+  @apply flex items-center justify-between;
+  @apply flex-wrap gap-metro-xs;
+}
+
+.line-number {
+  @apply text-xs sm:text-sm font-semibold tracking-tight text-onSurfaceVariant uppercase;
+}
+
+.line-text {
+  @apply text-base sm:text-lg font-normal text-onSurface leading-relaxed;
+  @apply break-words;
+}
+
+.word-token {
+  @apply inline-block mr-1;
+}
+
+.word-clickable {
+  @apply cursor-pointer underline decoration-dotted decoration-1 underline-offset-2;
+  @apply transition-colors duration-200;
+  @apply px-0.5 py-1;
+
+  &:hover {
+    color: var(--metro-accent);
+    @apply decoration-solid decoration-2;
+  }
+
+  &:active {
+    @apply scale-95;
+  }
+}
+
+.line-alliterations {
+  @apply flex flex-wrap gap-1;
+}
+
+/* Syllable Breakdown */
+.syllable-breakdown {
+  @apply flex flex-wrap items-center gap-metro-xs;
+}
+
+.breakdown-label {
+  @apply text-xs text-onSurfaceVariant font-semibold uppercase;
+}
+
+.syllable-chips {
+  @apply flex flex-wrap gap-1;
+}
+
+.syllable-chip {
+  @apply text-xs px-2 py-1;
+  @apply bg-surfaceContainer text-onSurface border border-outlineVariant;
+  @apply font-medium;
+  @apply sm:text-sm;
+}
+
+/* Stress Pattern */
+.stress-pattern {
+  @apply flex items-center gap-metro-xs;
+  @apply text-xs text-onSurfaceVariant;
+}
+
+.stress-value {
+  @apply font-mono;
+}
+
+/* Word Details */
+.word-details {
+  @apply mt-metro-xs sm:mt-metro-sm;
+}
+
+.word-details-summary {
+  @apply text-xs sm:text-sm text-onSurfaceVariant cursor-pointer;
+  @apply transition-colors duration-200;
+  @apply py-2;
+
+  &:hover {
+    color: var(--metro-accent);
+  }
+}
+
+.word-details-content {
+  @apply mt-metro-xs sm:mt-metro-sm;
+  @apply p-metro-xs sm:p-metro-sm;
+  @apply bg-surface border-2 border-outline;
+  @apply flex flex-col gap-[6px] sm:gap-metro-xs;
+}
+
+.word-detail-item {
+  @apply flex flex-col gap-1;
+  @apply sm:flex-row sm:items-start sm:justify-between;
+  @apply text-xs sm:text-sm;
+}
+
+.word-detail-word {
+  @apply font-semibold text-onSurface;
+}
+
+.word-detail-meta {
+  @apply flex items-center gap-metro-xs sm:gap-metro-sm;
+  @apply text-onSurfaceVariant;
+}
+
+.word-detail-syllables {
+  @apply px-2 py-1 bg-surfaceVariant;
+}
+
+.word-detail-pos {
+  @apply px-2 py-1;
+  background-color: var(--metro-accent-container);
+  color: var(--metro-accent-on-container);
+}
+
+.word-detail-phones {
+  @apply font-mono text-xs;
+}
+
+/* Rhyme Section */
+.rhyme-section {
+  @apply p-metro-sm sm:p-metro-md;
+  @apply bg-inverseBlue border-2 border-inverseBlueContainer;
+}
+
+.rhyme-scheme {
+  @apply flex items-center gap-metro-xs sm:gap-metro-sm;
+}
+
+.rhyme-value {
+  @apply text-xl sm:text-2xl font-mono font-bold text-onBlueContainer tracking-widest;
+}
+
+/* Suggestions */
+.suggestions-section {
+  @apply flex flex-col gap-metro-xs;
+}
+
+.suggestions-list {
+  @apply space-y-1;
+}
+
+.suggestion-item {
+  @apply flex items-start gap-metro-xs;
+  @apply text-xs sm:text-sm text-onSurfaceVariant;
+}
+
+.suggestion-icon {
+  @apply text-base sm:text-lg flex-shrink-0 mt-0.5;
+  color: var(--metro-accent);
+}

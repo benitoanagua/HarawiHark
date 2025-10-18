@@ -1,0 +1,16 @@
+<!-- pivot.component.html -->
+<nav class="metro-pivot" role="tablist">
+  @for (item of items; track item.id) {
+    <button
+      type="button"
+      role="tab"
+      [class.metro-pivot-active]="selectedId === item.id"
+      [disabled]="item.disabled"
+      [attr.aria-selected]="selectedId === item.id"
+      (click)="select(item.id)"
+      class="metro-pivot-item"
+    >
+      {{ item.label }}
+    </button>
+  }
+</nav>

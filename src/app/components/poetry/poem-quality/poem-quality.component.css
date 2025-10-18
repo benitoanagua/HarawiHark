@@ -1,0 +1,112 @@
+/* =====================================================
+   poem-quality.component.css - Metro Quality Assessment
+   ===================================================== */
+.quality-container {
+  @apply flex flex-col gap-metro-md sm:gap-metro-lg;
+}
+
+.quality-header {
+  @apply flex items-start justify-between;
+}
+
+.quality-title {
+  @apply text-lg sm:text-xl font-light tracking-tight text-onSurface lowercase;
+  @apply mb-metro-xs;
+}
+
+.score-display {
+  @apply flex items-center gap-metro-xs sm:gap-metro-sm;
+}
+
+.score-number {
+  @apply text-2xl sm:text-3xl font-light text-onSurface;
+}
+
+.score-max {
+  @apply text-base sm:text-lg text-onSurfaceVariant;
+}
+
+.grade-badge {
+  @apply text-xs sm:text-sm;
+}
+
+.metrics-breakdown {
+  @apply flex flex-col gap-metro-sm sm:gap-metro-md;
+}
+
+.breakdown-title {
+  @apply text-base sm:text-lg font-semibold tracking-tight text-onSurface lowercase;
+}
+
+.metrics-grid {
+  @apply space-y-metro-xs sm:space-y-metro-sm;
+}
+
+.metric-item {
+  @apply flex flex-col gap-1;
+}
+
+.metric-header {
+  @apply flex justify-between items-center;
+}
+
+.metric-name {
+  @apply text-xs sm:text-sm font-medium text-onSurface capitalize;
+}
+
+.metric-score {
+  @apply text-xs sm:text-sm text-onSurfaceVariant;
+}
+
+.metric-bar {
+  @apply w-full h-1 sm:h-1.5 bg-surfaceVariant overflow-hidden;
+}
+
+.metric-fill {
+  @apply h-full transition-all duration-500 ease-out;
+}
+
+.metric-excellent {
+  @apply bg-inverseGreen;
+}
+
+.metric-good {
+  @apply bg-inverseBlue;
+}
+
+.metric-fair {
+  @apply bg-inverseYellow;
+}
+
+.metric-poor {
+  @apply bg-inverseRed;
+}
+
+.feedback-section {
+  @apply grid grid-cols-1 gap-metro-md;
+  @apply md:grid-cols-2 md:gap-metro-lg;
+}
+
+.strengths,
+.improvements {
+  @apply flex flex-col gap-metro-xs sm:gap-metro-sm;
+}
+
+.feedback-title {
+  @apply flex items-center gap-metro-xs;
+  @apply text-sm sm:text-base font-semibold tracking-tight text-onSurface lowercase;
+}
+
+.feedback-icon {
+  @apply text-base sm:text-lg;
+}
+
+.feedback-list {
+  @apply space-y-1;
+}
+
+.feedback-list li {
+  @apply text-xs sm:text-sm text-onSurfaceVariant;
+  @apply pl-metro-sm;
+  @apply list-disc;
+}

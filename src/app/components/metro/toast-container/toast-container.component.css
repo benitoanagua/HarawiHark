@@ -1,0 +1,86 @@
+/* toast-container.component.css */
+.metro-toast-container {
+  @apply fixed top-0 left-0 right-0;
+  @apply z-[200];
+  @apply flex flex-col gap-metro-xs;
+  @apply p-metro-sm;
+  @apply pointer-events-none;
+}
+
+.metro-toast {
+  @apply bg-surface text-onSurface border-2 border-outline;
+  @apply px-metro-md py-metro-sm;
+  @apply sm:px-metro-lg sm:py-metro-md;
+  @apply flex items-start gap-metro-sm;
+  @apply pointer-events-auto;
+  @apply shadow-none;
+  /* Animación entrada desde arriba */
+  animation: metro-slide-down 0.3s ease-out;
+  /* Límite de ancho */
+  @apply max-w-md mx-auto w-full;
+}
+
+@keyframes metro-slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.metro-toast-icon {
+  @apply text-2xl sm:text-3xl flex-shrink-0;
+}
+
+.metro-toast-content {
+  @apply flex-1 min-w-0;
+}
+
+.metro-toast-title {
+  @apply text-base sm:text-lg;
+  @apply font-semibold tracking-tight;
+  @apply mb-1;
+}
+
+.metro-toast-message {
+  @apply text-sm sm:text-base;
+  @apply opacity-80;
+}
+
+.metro-toast-close {
+  @apply flex-shrink-0;
+  @apply w-8 h-8 flex items-center justify-center;
+  @apply text-lg;
+  @apply transition-colors duration-200;
+  @apply cursor-pointer;
+  @apply border-0 bg-transparent;
+
+  &:hover {
+    @apply bg-surfaceVariant;
+  }
+
+  &:focus-visible {
+    @apply outline outline-2 outline-offset-2;
+    outline-color: var(--metro-accent);
+  }
+}
+
+/* Variantes de color Metro */
+.metro-toast-info {
+  @apply border-inverseBlue bg-inverseBlue text-onBlueContainer;
+}
+
+.metro-toast-success {
+  @apply border-inverseGreen bg-inverseGreen text-onGreenContainer;
+}
+
+.metro-toast-warning {
+  @apply border-inverseYellow bg-inverseYellow text-onYellowContainer;
+}
+
+.metro-toast-error {
+  @apply border-inverseRed bg-inverseRed text-onRedContainer;
+}

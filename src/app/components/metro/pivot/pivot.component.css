@@ -1,0 +1,53 @@
+/* pivot.component.css */
+.metro-pivot {
+  @apply flex border-b-2 border-outlineVariant bg-surface;
+  @apply overflow-x-auto overflow-y-hidden;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.metro-pivot-item {
+  @apply flex-shrink-0;
+  /* Metro: mucho padding horizontal para claridad */
+  @apply px-metro-lg py-metro-md;
+  @apply sm:px-metro-xl sm:py-metro-lg;
+  @apply bg-transparent text-onSurfaceVariant;
+  @apply border-b-[3px] border-transparent;
+  @apply font-light tracking-tight lowercase;
+  @apply text-xl sm:text-2xl lg:text-3xl;
+  @apply transition-colors duration-200;
+  @apply cursor-pointer;
+  @apply whitespace-nowrap;
+  scroll-snap-align: start;
+  /* Touch target mínimo */
+  @apply min-h-[56px] sm:min-h-[64px];
+
+  &:hover:not(.metro-pivot-active) {
+    @apply text-onSurface;
+  }
+
+  &:active {
+    color: var(--metro-accent);
+  }
+
+  &:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+}
+
+.metro-pivot-active {
+  @apply font-semibold;
+  border-bottom-color: var(--metro-accent);
+  color: var(--metro-accent);
+}
+
+/* Indicador de más contenido (opcional) */
+.metro-pivot::after {
+  content: '';
+  @apply flex-shrink-0 w-metro-md;
+}

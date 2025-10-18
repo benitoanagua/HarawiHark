@@ -1,0 +1,32 @@
+<!-- list-item.component.html -->
+<button
+  type="button"
+  class="metro-list-item"
+  [disabled]="disabled"
+  (click)="onClick()"
+>
+  @if (icon) {
+    <div class="metro-list-item-leading">
+      <span [class]="icon + ' metro-list-item-icon'"></span>
+    </div>
+  }
+
+  <div class="metro-list-item-content">
+    <span class="metro-list-item-title">{{ title }}</span>
+    @if (subtitle) {
+      <span class="metro-list-item-subtitle">{{ subtitle }}</span>
+    }
+  </div>
+
+  <div class="metro-list-item-trailing">
+    @if (badge) {
+      <span class="metro-list-item-badge">{{ badge }}</span>
+    }
+    @if (meta) {
+      <span class="metro-list-item-meta">{{ meta }}</span>
+    }
+    @if (showChevron) {
+      <span class="icon-[iconoir--nav-arrow-right] metro-list-item-chevron"></span>
+    }
+  </div>
+</button>

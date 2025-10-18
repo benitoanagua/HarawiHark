@@ -1,0 +1,77 @@
+/* appbar.component.css */
+.metro-appbar {
+  @apply fixed bottom-0 left-0 right-0;
+  @apply z-[60];
+  @apply bg-surface border-t-2 border-outlineVariant;
+  @apply px-metro-sm py-metro-sm;
+  @apply sm:px-metro-md sm:py-metro-sm;
+  /* Metro: altura consistente */
+  @apply h-[72px] sm:h-[80px];
+  @apply flex items-center justify-between;
+  /* Animación entrada desde abajo */
+  @apply transform transition-transform duration-300;
+
+  &.appbar-hidden {
+    @apply translate-y-full;
+  }
+}
+
+.appbar-start {
+  @apply flex items-center gap-metro-xs sm:gap-metro-sm;
+}
+
+.appbar-end {
+  @apply flex items-center gap-metro-xs sm:gap-metro-sm;
+}
+
+.appbar-center {
+  @apply flex-1 flex items-center justify-center;
+  @apply gap-metro-sm sm:gap-metro-md;
+}
+
+/* Command Button - Icono + Label vertical */
+.metro-command-button {
+  @apply flex flex-col items-center justify-center;
+  @apply w-[64px] h-[56px];
+  @apply sm:w-[72px] sm:h-[64px];
+  @apply bg-transparent text-onSurface;
+  @apply border-2 border-transparent;
+  @apply transition-all duration-200;
+  @apply cursor-pointer;
+
+  &:hover:not(:disabled) {
+    @apply bg-surfaceVariant;
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--metro-accent-container);
+    color: var(--metro-accent-on-container);
+    border-color: var(--metro-accent);
+  }
+
+  &:disabled {
+    @apply opacity-40 cursor-not-allowed;
+  }
+
+  &:focus-visible {
+    @apply outline outline-2 outline-offset-2;
+    outline-color: var(--metro-accent);
+  }
+}
+
+.command-icon {
+  @apply text-2xl sm:text-3xl mb-1;
+}
+
+.command-label {
+  @apply text-xs sm:text-sm;
+  @apply font-normal lowercase tracking-tight;
+  @apply truncate max-w-full;
+}
+
+/* Safe area para móviles con notch */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .metro-appbar {
+    padding-bottom: calc(var(--spacing-metro-sm) + env(safe-area-inset-bottom));
+  }
+}

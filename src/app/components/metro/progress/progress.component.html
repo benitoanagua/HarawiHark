@@ -1,0 +1,28 @@
+<!-- progress.component.html -->
+@if (type === 'bar') {
+  <div class="metro-progress-with-label">
+    @if (label) {
+      <div class="metro-progress-label">
+        <span>{{ label }}</span>
+        @if (value !== undefined) {
+          <span class="metro-progress-value">{{ value }}%</span>
+        }
+      </div>
+    }
+    
+    @if (value !== undefined) {
+      <div class="metro-progress">
+        <div 
+          class="metro-progress-bar" 
+          [style.width.%]="value"
+        ></div>
+      </div>
+    } @else {
+      <div class="metro-progress-indeterminate"></div>
+    }
+  </div>
+}
+
+@if (type === 'ring') {
+  <div class="metro-progress-ring"></div>
+}

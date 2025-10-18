@@ -1,25 +1,38 @@
 @import './styles/base.css';
 @import './styles/material-theme.css';
 @import './styles/terminal-theme.css';
-@import './app/components/accordion/accordion.component.css';
-@import './app/components/analysis-panel/analysis-panel.component.css';
-@import './app/components/badge/badge.component.css';
-@import './app/components/button/button.component.css';
-@import './app/components/card/card.component.css';
-@import './app/components/empty-state/empty-state.component.css';
-@import './app/components/footer/footer.component.css';
-@import './app/components/header/header.component.css';
-@import './app/components/input/input.component.css';
-@import './app/components/loading-spinner/loading-spinner.component.css';
-@import './app/components/meter-analysis-section/meter-analysis-section.component.css';
-@import './app/components/poem-editor/poem-editor.component.css';
-@import './app/components/poem-quality/poem-quality.component.css';
-@import './app/components/poem-results/poem-results.component.css';
-@import './app/components/poetry-page/poetry-page.component.css';
-@import './app/components/quick-stats-panel/quick-stats-panel.component.css';
-@import './app/components/select/select.component.css';
-@import './app/components/status-message/status-message.component.css';
-@import './app/components/tabs/tabs.component.css';
-@import './app/components/tooltip/tooltip.component.css';
+
+/* Metro Components */
+@import './app/components/metro/panorama/panorama.component.css';
+@import './app/components/metro/pivot/pivot.component.css';
+@import './app/components/metro/appbar/appbar.component.css';
+@import './app/components/metro/list-item/list-item.component.css';
+@import './app/components/metro/progress/progress.component.css';
+@import './app/components/metro/toast-container/toast-container.component.css';
+@import './app/components/metro/toggle/toggle.component.css';
+
+/* UI Components */
+@import './app/components/ui/accordion/accordion.component.css';
+@import './app/components/ui/analysis-panel/analysis-panel.component.css';
+@import './app/components/ui/badge/badge.component.css';
+@import './app/components/ui/button/button.component.css';
+@import './app/components/ui/card/card.component.css';
+@import './app/components/ui/input/input.component.css';
+@import './app/components/ui/select/select.component.css';
+@import './app/components/ui/tooltip/tooltip.component.css';
+
+/* Poetry Components */
+@import './app/components/poetry/poem-editor/poem-editor.component.css';
+@import './app/components/poetry/poem-quality/poem-quality.component.css';
+@import './app/components/poetry/poem-results/poem-results.component.css';
+@import './app/components/poetry/word-suggestions/word-suggestions.component.css';
+@import './app/components/poetry/meter-analysis-section/meter-analysis-section.component.css';
+@import './app/components/poetry/quick-stats-panel/quick-stats-panel.component.css';
+
+/* Layout Components */
+@import './app/components/layout/header/header.component.css';
+@import './app/components/layout/footer/footer.component.css';
+@import './app/components/layout/poetry-page/poetry-page.component.css';
+
+/* Theme Toggle */
 @import './app/components/theme-toggle/theme-toggle.component.css';
-@import './app/components/word-suggestions/word-suggestions.component.css';

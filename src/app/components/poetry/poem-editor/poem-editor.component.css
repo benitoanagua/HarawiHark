@@ -1,0 +1,58 @@
+/* =====================================================
+   poem-editor.component.css - Metro Poetry Editor
+   ===================================================== */
+.editor-container {
+  @apply flex flex-col gap-metro-md sm:gap-metro-lg;
+}
+
+.editor-header {
+  @apply flex flex-col gap-metro-xs;
+}
+
+.editor-title {
+  @apply text-2xl sm:text-3xl font-light tracking-tight text-onSurface lowercase;
+  @apply mb-metro-xs;
+}
+
+.editor-subtitle {
+  @apply text-sm sm:text-base text-onSurfaceVariant;
+}
+
+.form-section {
+  @apply flex flex-col gap-metro-sm;
+}
+
+.form-info {
+  @apply p-metro-sm sm:p-metro-md;
+  background-color: var(--metro-accent-container);
+  color: var(--metro-accent-on-container);
+}
+
+.form-info-header {
+  @apply flex items-center justify-between mb-metro-xs;
+}
+
+.form-pattern {
+  @apply text-sm sm:text-base font-semibold tracking-tight lowercase;
+}
+
+.form-lines {
+  @apply text-xs sm:text-sm;
+}
+
+.form-description {
+  @apply text-xs sm:text-sm;
+}
+
+.input-section {
+  @apply flex flex-col gap-metro-xs;
+}
+
+.input-stats {
+  @apply flex items-center justify-between text-xs sm:text-sm text-onSurfaceVariant;
+  @apply mt-metro-xs;
+}
+
+.actions-section {
+  @apply flex flex-wrap gap-metro-xs sm:gap-metro-sm;
+}
