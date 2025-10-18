@@ -4,8 +4,6 @@ import { PoetrySuggestionsService } from './poetry-suggestions.service';
 import { PoetryPatternsService } from './poetry-patterns.service';
 import { RhymeAnalysisService } from './rhyme-analysis.service';
 import { PoemQualityService, type QualityMetrics } from './poem-quality.service';
-import { PoemGeneratorService } from './poem-generator.service';
-import { MeterType } from './meter-analysis.service';
 import {
   MeterAnalysisService,
   type MeterAnalysis,
@@ -73,7 +71,6 @@ export class PoetryAnalyzerService {
   private readonly patterns = inject(PoetryPatternsService);
   private readonly rhymes = inject(RhymeAnalysisService);
   private readonly quality = inject(PoemQualityService);
-  private readonly generator = inject(PoemGeneratorService);
   private readonly meterService = inject(MeterAnalysisService);
   private readonly rita = inject(RitaService);
 
@@ -81,9 +78,7 @@ export class PoetryAnalyzerService {
   readonly result = signal<EnhancedPoetryResult | null>(null);
   readonly selectedWord = signal<string | null>(null);
   readonly wordAlternatives = signal<WordSuggestionData | null>(null);
-  readonly generatedPoem = signal<string[] | null>(null);
   readonly qualityMetrics = signal<QualityMetrics | null>(null);
-  readonly poemVariations = signal<string[][]>([]);
   readonly selectedForm = signal<string>('haiku');
   readonly poemText = signal<string>('');
   readonly rhythmSuggestions = signal<RhythmSuggestion[]>([]);
@@ -99,8 +94,8 @@ export class PoetryAnalyzerService {
 
       const lines = rawLines.map((line) => line.trim()).filter((line) => line.length > 0);
 
+      // Análisis dinámico basado en el poema actual
       const typos = await this.rita.detectTypos(lines);
-
       const meterAnalysis = this.meterService.detectMeter(lines);
       const rhythmSuggestions = this.meterService.generateRhythmSuggestions(
         lines,
@@ -134,6 +129,7 @@ export class PoetryAnalyzerService {
         })
       );
 
+      // Calcular calidad basada en el poema actual
       const quality = this.quality.assessQuality(
         lines,
         form.pattern,
@@ -221,7 +217,6 @@ export class PoetryAnalyzerService {
             this.wordAlternatives.set(alternatives);
           } catch (error) {
             console.warn('Error getting enhanced alternatives:', error);
-
             await this.selectWord(word);
           }
         }
@@ -267,41 +262,13 @@ export class PoetryAnalyzerService {
     }
   }
 
-  async generatePoem(formId: string): Promise<void> {
-    this.isLoading.set(true);
-
-    try {
-      const poem = await this.generator.generatePoem(formId);
-      this.generatedPoem.set(poem);
-
-      if (poem.length > 0) {
-        await this.analyze(formId, poem);
-      }
-    } catch (error) {
-      console.error('Error generating poem:', error);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  async generateVariations(): Promise<void> {
-    const currentResult = this.result();
-    if (!currentResult) return;
-
-    this.isLoading.set(true);
-    const variations: string[][] = [];
-
-    try {
-      for (const line of currentResult.lines) {
-        const lineVariations = await this.generator.generateVariations(line.text, line.expected);
-        variations.push(lineVariations);
-      }
-
-      this.poemVariations.set(variations);
-    } catch (error) {
-      console.error('Error generating variations:', error);
-    } finally {
-      this.isLoading.set(false);
+  loadExample(): void {
+    const formId = this.selectedForm();
+    const example = POETRY_EXAMPLES[formId];
+    if (example) {
+      this.poemText.set(example.join('\n'));
+      // Analizar automáticamente el ejemplo cargado
+      this.analyze(formId, example);
     }
   }
 
@@ -314,17 +281,6 @@ export class PoetryAnalyzerService {
 
     const metrics = this.quality.assessQuality(lines, pattern, result);
     this.qualityMetrics.set(metrics);
-  }
-
-  applyVariation(lineIndex: number, variation: string): void {
-    const result = this.result();
-    if (!result || lineIndex >= result.lines.length) return;
-
-    const updatedLines = [...result.lines.map((l) => l.text)];
-    updatedLines[lineIndex] = variation;
-
-    this.poemText.set(updatedLines.join('\n'));
-    this.analyze(result.form, updatedLines);
   }
 
   replaceWord(oldWord: string, newWord: string): void {
@@ -345,24 +301,15 @@ export class PoetryAnalyzerService {
     this.result.set(null);
     this.selectedWord.set(null);
     this.wordAlternatives.set(null);
-    this.generatedPoem.set(null);
     this.qualityMetrics.set(null);
-    this.poemVariations.set([]);
     this.rhythmSuggestions.set([]);
     this.poemText.set('');
-  }
-
-  loadExample(): void {
-    const formId = this.selectedForm();
-    const example = POETRY_EXAMPLES[formId];
-    if (example) {
-      this.poemText.set(example.join('\n'));
-    }
   }
 
   private detectPatterns(lines: EnhancedLineAnalysis[]): string[] {
     const patterns: string[] = [];
 
+    // Detectar patrones basados en el análisis real
     const stressPatterns = lines.map((l) => l.stresses).filter((s) => s);
     if (stressPatterns.length > 2) {
       const firstPattern = stressPatterns[0];
@@ -372,6 +319,7 @@ export class PoetryAnalyzerService {
       }
     }
 
+    // Detectar aliteraciones en el poema actual
     const linesWithAlliteration = lines.filter(
       (l) => l.alliterations && l.alliterations.length > 0
     );
@@ -383,6 +331,7 @@ export class PoetryAnalyzerService {
       );
     }
 
+    // Análisis de vocabulario del poema actual
     const allWords = lines.flatMap((l) => l.words);
     const nouns = allWords.filter((w) => w.pos.startsWith('nn')).length;
     const verbs = allWords.filter((w) => w.pos.startsWith('vb')).length;
@@ -403,17 +352,13 @@ export class PoetryAnalyzerService {
       patterns.push('Adverb-rich language (detailed action)');
     }
 
+    // Análisis de longitud de palabras
     const avgWordLength =
       allWords.reduce((sum, w) => sum + w.word.length, 0) / (allWords.length || 1);
     if (avgWordLength > 6) {
       patterns.push('Complex vocabulary (long words)');
     } else if (avgWordLength < 4) {
       patterns.push('Simple vocabulary (short words)');
-    }
-
-    const uniqueStressPatterns = new Set(stressPatterns);
-    if (uniqueStressPatterns.size === 1 && stressPatterns.length > 1) {
-      patterns.push('Perfect rhythmic consistency');
     }
 
     return patterns;
@@ -442,6 +387,7 @@ export class PoetryAnalyzerService {
   ): string[] {
     const suggestions: string[] = [];
 
+    // Sugerencias basadas en la estructura del poema actual
     if (lineAnalyses.length < pattern.length) {
       const missing = pattern.length - lineAnalyses.length;
       suggestions.push(`Add ${missing} more line${missing > 1 ? 's' : ''} to complete the pattern`);
@@ -450,6 +396,7 @@ export class PoetryAnalyzerService {
       suggestions.push(`Remove ${extra} line${extra > 1 ? 's' : ''} to match the pattern`);
     }
 
+    // Sugerencias rítmicas basadas en el análisis métrico
     if (meterAnalysis.consistency < 60) {
       suggestions.push(
         `Improve rhythm consistency: ${meterAnalysis.type} meter detected but inconsistent`
@@ -460,6 +407,7 @@ export class PoetryAnalyzerService {
       suggestions.push('Consider using a regular meter pattern for better poetic flow');
     }
 
+    // Sugerencias específicas por línea
     lineAnalyses.forEach((line, index) => {
       if (!line.match && index < pattern.length) {
         const lineSuggestions = this.rita.generateSuggestions(line.text, pattern[index]);
@@ -484,6 +432,7 @@ export class PoetryAnalyzerService {
       }
     });
 
+    // Sugerencias de dispositivos literarios
     const linesWithAlliteration = lineAnalyses.filter(
       (l) => l.alliterations && l.alliterations.length > 0
     );
@@ -528,16 +477,6 @@ export class PoetryAnalyzerService {
       overallAlliterations: [],
       detectedPatterns: [],
     };
-  }
-
-  getRhythmSuggestions(targetMeter?: MeterType): RhythmSuggestion[] {
-    const result = this.result();
-    if (!result) return [];
-
-    return this.meterService.generateRhythmSuggestions(
-      result.lines.map((l) => l.text),
-      targetMeter
-    );
   }
 
   isCompletePoem(): boolean {

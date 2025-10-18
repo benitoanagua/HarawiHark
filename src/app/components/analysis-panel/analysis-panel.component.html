@@ -1,0 +1,29 @@
+<app-card [padding]="compact ? 'small' : 'medium'">
+  <div class="analysis-panel">
+    <h3 class="panel-title">{{ title }}</h3>
+    
+    <div class="metrics-grid">
+      @for (metric of metrics; track metric.label) {
+        <div class="metric-item">
+          <div class="metric-header">
+            @if (metric.icon) {
+              <span [class]="metric.icon + ' metric-icon'"></span>
+            }
+            <span class="metric-label">{{ metric.label }}</span>
+            <span class="metric-value">{{ metric.value }}</span>
+          </div>
+          
+          @if (metric.maxValue && typeof metric.value === 'number') {
+            <div class="metric-progress">
+              <div 
+                class="metric-progress-bar"
+                [class]="getMetricVariant(metric)"
+                [style.width]="getProgressWidth(metric)"
+              ></div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</app-card>

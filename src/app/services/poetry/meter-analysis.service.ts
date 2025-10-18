@@ -51,6 +51,10 @@ export class MeterAnalysisService {
     const total = stressPatterns.length;
     const dominant = Object.entries(meterCounts).sort(([, a], [, b]) => b - a)[0];
 
+    if (!dominant) {
+      return this.getIrregularMeter();
+    }
+
     const [type, count] = dominant as [MeterType, number];
     const consistency = (count / total) * 100;
 
@@ -67,7 +71,7 @@ export class MeterAnalysisService {
     };
   }
 
-  private classifyStressPattern(stresses: number[]): MeterType {
+  private classifyStressPattern(stresses: number[]): MeterType | 'irregular' {
     if (stresses.length < 2) return 'irregular';
 
     const pairs: string[] = [];

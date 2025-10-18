@@ -10,7 +10,6 @@ import { PoemResultsComponent } from '../poem-results/poem-results.component';
 import { PoemQualityComponent } from '../poem-quality/poem-quality.component';
 import { WordSuggestionsComponent } from '../word-suggestions/word-suggestions.component';
 import { PoetryAnalyzerService } from '../../services/poetry';
-import { MeterAnalysisService } from '../../services/poetry/meter-analysis.service';
 
 @Component({
   selector: 'app-poetry-page',
@@ -31,10 +30,8 @@ import { MeterAnalysisService } from '../../services/poetry/meter-analysis.servi
 })
 export class PoetryPageComponent {
   readonly analyzer = inject(PoetryAnalyzerService);
-  readonly meterService = inject(MeterAnalysisService);
 
   readonly showQuality = signal(false);
-  readonly showVariations = signal(false);
   readonly showMeterAnalysis = signal(false);
 
   onWordSelected(word: string): void {
@@ -49,35 +46,42 @@ export class PoetryPageComponent {
     this.analyzer.selectWordEnhanced(null);
   }
 
-  onExportPoem(): void {
-    console.log('Export poem functionality');
+  async onExportPoem(): Promise<void> {
+    const result = this.analyzer.result();
+    if (!result) return;
+
+    const poemText = result.lines.map((line) => line.text).join('\n');
+    const formInfo = this.analyzer.selectedForm();
+
+    const exportText = `${formInfo.toUpperCase()} POEM\n\n${poemText}\n\n— Created with HarawiHark`;
+
+    try {
+      await navigator.clipboard.writeText(exportText);
+      // Podríamos mostrar una notificación aquí
+      console.log('Poem copied to clipboard');
+    } catch (error) {
+      console.error('Failed to copy poem to clipboard:', error);
+      this.fallbackCopyToClipboard(exportText);
+    }
   }
 
-  async onGeneratePoem(): Promise<void> {
-    const currentForm = this.analyzer.selectedForm() || 'haiku';
-    await this.analyzer.generatePoem(currentForm);
-  }
-
-  async onGenerateVariations(): Promise<void> {
-    await this.analyzer.generateVariations();
-    this.showVariations.set(true);
-  }
-
-  onUseVariation(lineIndex: number, variation: string): void {
-    this.analyzer.applyVariation(lineIndex, variation);
+  private fallbackCopyToClipboard(text: string): void {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      console.log('Poem copied to clipboard (fallback)');
+    } catch (error) {
+      console.error('Fallback copy failed:', error);
+    }
+    document.body.removeChild(textArea);
   }
 
   onAssessQuality(): void {
     this.analyzer.assessQuality();
     this.showQuality.set(true);
-  }
-
-  onUseGeneratedPoem(): void {
-    const generated = this.analyzer.generatedPoem();
-    if (generated) {
-      this.analyzer.poemText.set(generated.join('\n'));
-      this.analyzer.generatedPoem.set(null);
-    }
   }
 
   onShowMeterAnalysis(): void {

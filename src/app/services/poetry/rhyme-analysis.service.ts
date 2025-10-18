@@ -55,10 +55,6 @@ export class RhymeAnalysisService {
     return crossLineAlliterations;
   }
 
-  async assessRhymeQuality(word1: string, word2: string) {
-    return this.rita.analyzeRhymeQuality(word1, word2);
-  }
-
   detectRhymePattern(lines: string[]): { scheme: string; consistency: number } {
     const scheme = this.analyzeRhymeScheme(lines);
     const uniqueRhymes = new Set(scheme.split(''));

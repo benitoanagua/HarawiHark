@@ -1,0 +1,33 @@
+.metro-accordion {
+  @apply bg-surface border border-outlineVariant;
+}
+
+.metro-accordion-header {
+  @apply w-full flex items-center justify-between gap-3 
+         px-4 py-3 bg-surface text-onSurface
+         transition-all duration-200 cursor-pointer;
+
+  &:hover {
+    @apply bg-surfaceVariant;
+  }
+}
+
+.accordion-title-section {
+  @apply flex items-center gap-2;
+}
+
+.accordion-icon {
+  @apply text-lg text-primary;
+}
+
+.accordion-title {
+  @apply text-sm font-semibold tracking-tight text-onSurface;
+}
+
+.accordion-chevron {
+  @apply text-lg text-onSurfaceVariant transition-transform duration-200;
+}
+
+.metro-accordion-content {
+  @apply px-4 py-3 border-t border-outlineVariant bg-surfaceContainerLow;
+}

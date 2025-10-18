@@ -9,7 +9,7 @@
         <h1 class="hero-title">harawihark</h1>
       </div>
       <p class="hero-subtitle">
-        advanced syllable-meter checker with AI-powered suggestions
+        advanced syllable-meter checker with phonetic analysis
       </p>
     </div>
 
@@ -17,60 +17,6 @@
     <div class="editor-section">
       <app-poem-editor />
     </div>
-
-    <!-- Generation Actions (only show when no analysis result) -->
-    <div class="generation-actions" *ngIf="!analyzer.result()">
-      <div class="actions-grid">
-        <app-button
-          variant="secondary"
-          size="medium"
-          label="generate poem"
-          icon="icon-[iconoir--magic-wand]"
-          (clicked)="onGeneratePoem()"
-          [disabled]="analyzer.isLoading()"
-        />
-        
-        <app-button
-          variant="outline"
-          size="medium"
-          label="use template"
-          icon="icon-[iconoir--page]"
-          (clicked)="analyzer.loadExample()"
-        />
-      </div>
-    </div>
-
-    <!-- Generated Poem Section -->
-    @if (analyzer.generatedPoem(); as generated) {
-      <div class="generated-section">
-        <app-card padding="large">
-          <div class="generated-container">
-            <h3 class="generated-title">generated poem</h3>
-            <div class="generated-poem">
-              @for (line of generated; track $index) {
-                <p class="generated-line">{{ line }}</p>
-              }
-            </div>
-            <div class="generated-actions">
-              <app-button
-                variant="primary"
-                size="small"
-                label="use this poem"
-                icon="icon-[iconoir--check]"
-                (clicked)="onUseGeneratedPoem()"
-              />
-              <app-button
-                variant="outline"
-                size="small"
-                label="generate another"
-                icon="icon-[iconoir--refresh]"
-                (clicked)="onGeneratePoem()"
-              />
-            </div>
-          </div>
-        </app-card>
-      </div>
-    }
 
     <!-- Word Suggestions Section -->
     @if (analyzer.wordAlternatives(); as alternatives) {
@@ -118,11 +64,11 @@
           </app-card>
         </div>
 
-        <!-- Advanced Actions -->
-        <div class="advanced-actions">
+        <!-- Analysis Actions -->
+        <div class="analysis-actions">
           <div class="actions-row">
             <app-button
-              variant="secondary"
+              variant="primary"
               size="medium"
               label="assess quality"
               icon="icon-[iconoir--star]"
@@ -135,15 +81,6 @@
               label="analyze rhythm"
               icon="icon-[iconoir--music-double]"
               (clicked)="onShowMeterAnalysis()"
-            />
-            
-            <app-button
-              variant="outline"
-              size="medium"
-              label="generate variations"
-              icon="icon-[iconoir--view-grid]"
-              (clicked)="onGenerateVariations()"
-              [disabled]="analyzer.isLoading()"
             />
             
             <app-button
@@ -226,42 +163,6 @@
             </app-card>
           </div>
         }
-
-        <!-- Poem Variations Section -->
-        @if (showVariations() && analyzer.poemVariations().length > 0) {
-          <div class="variations-section">
-            <app-card padding="large">
-              <div class="variations-container">
-                <h3 class="variations-title">poem variations</h3>
-                <div class="variations-grid">
-                  @for (lineVariations of analyzer.poemVariations(); track $index; let i = $index) {
-                    <div class="line-variations">
-                      <h4 class="line-title">
-                        line {{ i + 1 }} alternatives
-                        <span class="original-syllables">
-                          ({{ analyzer.result()!.lines[i].expected }} syllables)
-                        </span>
-                      </h4>
-                      <div class="variation-list">
-                        @for (variation of lineVariations; track $index) {
-                          <div class="variation-item">
-                            <span class="variation-text">{{ variation }}</span>
-                            <app-button
-                              variant="outline"
-                              size="small"
-                              label="use"
-                              (clicked)="onUseVariation(i, variation)"
-                            />
-                          </div>
-                        }
-                      </div>
-                    </div>
-                  }
-                </div>
-              </div>
-            </app-card>
-          </div>
-        }
       </div>
     } @else {
       <!-- Empty State -->
@@ -271,17 +172,8 @@
             <span class="icon-[iconoir--flower] empty-icon"></span>
             <h3 class="empty-title">ready to analyze</h3>
             <p class="empty-description">
-              Write your poem or generate one to see syllable analysis and suggestions
+              Write your poem or load an example to see syllable analysis and suggestions
             </p>
-            <div class="empty-actions">
-              <app-button
-                variant="primary"
-                size="medium"
-                label="try an example"
-                icon="icon-[iconoir--page]"
-                (clicked)="analyzer.loadExample()"
-              />
-            </div>
           </div>
         </app-card>
       </div>
@@ -307,10 +199,6 @@
               Advanced meter analysis (iambic, trochaic, etc.)
             </li>
             <li>
-              <span class="icon-[iconoir--magic-wand] feature-icon"></span>
-              AI-powered word suggestions and variations
-            </li>
-            <li>
               <span class="icon-[iconoir--star] feature-icon"></span>
               Quality assessment with detailed metrics
             </li>
@@ -324,6 +212,5 @@
     </div>
   </section>
 
-    <app-footer />
-
+  <app-footer />
 </article>

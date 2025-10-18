@@ -1,0 +1,24 @@
+<div class="metro-accordion">
+  <button
+    type="button"
+    class="metro-accordion-header"
+    (click)="toggle()"
+    [attr.aria-expanded]="expanded"
+  >
+    <div class="accordion-title-section">
+      @if (icon) {
+        <span [class]="icon + ' accordion-icon'"></span>
+      }
+      <span class="accordion-title">{{ title }}</span>
+    </div>
+    <span 
+      [class]="'icon-[iconoir--nav-arrow-' + (expanded ? 'up' : 'down')] + ' accordion-chevron'"
+    ></span>
+  </button>
+  
+  @if (expanded) {
+    <div class="metro-accordion-content">
+      <ng-content />
+    </div>
+  }
+</div>
