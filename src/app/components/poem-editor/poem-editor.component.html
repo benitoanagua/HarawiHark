@@ -17,17 +17,15 @@
         [value]="selectedForm()"
         (selectChange)="onFormChange($event)"
       />
-      
+
       @if (currentForm(); as form) {
-        <div class="form-info">
-          <div class="form-info-header">
-            <span class="form-pattern">pattern: {{ form.pattern.join('-') }} syllables</span>
-            <span class="form-lines">{{ form.lines }} lines</span>
-          </div>
-          <p class="form-description">
-            {{ form.description }} · {{ form.origin }}
-          </p>
+      <div class="form-info">
+        <div class="form-info-header">
+          <span class="form-pattern">pattern: {{ form.pattern.join('-') }} syllables</span>
+          <span class="form-lines">{{ form.lines }} lines</span>
         </div>
+        <p class="form-description">{{ form.description }} · {{ form.origin }}</p>
+      </div>
       }
     </div>
 
@@ -42,7 +40,7 @@
         [value]="poemText()"
         (inputChange)="onTextChange($event)"
       />
-      
+
       <div class="input-stats">
         <span>{{ lineCount() }} lines</span>
         <span>{{ totalSyllables() }} total syllables</span>
@@ -59,7 +57,7 @@
         [disabled]="lineCount() === 0"
         (clicked)="analyze()"
       />
-      
+
       <app-button
         variant="secondary"
         size="medium"

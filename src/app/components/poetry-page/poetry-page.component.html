@@ -8,9 +8,7 @@
         <span class="icon-[iconoir--flower] hero-icon"></span>
         <h1 class="hero-title">harawihark</h1>
       </div>
-      <p class="hero-subtitle">
-        advanced syllable-meter checker with phonetic analysis
-      </p>
+      <p class="hero-subtitle">advanced syllable-meter checker with phonetic analysis</p>
     </div>
 
     <!-- Editor Section -->
@@ -20,163 +18,61 @@
 
     <!-- Word Suggestions Section -->
     @if (analyzer.wordAlternatives(); as alternatives) {
-      <div class="suggestions-section">
-        <app-word-suggestions
-          [data]="alternatives"
-          (replaceWord)="onReplaceWord($event)"
-          (closeSuggestions)="onCloseSuggestions()"
-        />
-      </div>
+    <div class="suggestions-section">
+      <app-word-suggestions [data]="alternatives" (replaceWord)="onReplaceWord($event)"
+        (closeSuggestions)="onCloseSuggestions()" />
+    </div>
     }
 
     <!-- Main Results Section -->
     @if (analyzer.result(); as result) {
-      <div class="results-section">
-        <app-poem-results
-          [result]="result"
-          (wordSelected)="onWordSelected($event)"
-        />
+    <div class="results-section">
+      <app-tabs [tabs]="analysisTabs()" [selectedTab]="selectedAnalysisTab()"
+        (tabChange)="onAnalysisTabChange($event)" />
 
-        <!-- Quick Stats -->
-        <div class="quick-stats">
-          <app-card padding="small">
-            <div class="stats-container">
-              @let stats = getQuickStats();
-              <div class="stat-item">
-                <span class="stat-label">total syllables</span>
-                <span class="stat-value">{{ stats.totalSyllables }}</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">avg per line</span>
-                <span class="stat-value">{{ stats.avgSyllablesPerLine }}</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">vocabulary</span>
-                <span class="stat-value">{{ stats.vocabularyRichness }}%</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">completion</span>
-                <span class="stat-value">
-                  {{ analyzer.isCompletePoem() ? '✓' : '✗' }}
-                </span>
-              </div>
-            </div>
-          </app-card>
+      @switch (selectedAnalysisTab()) { @case ('structure') {
+      <app-poem-results [result]="result" (wordSelected)="onWordSelected($event)" />
+      } @case ('rhythm') {
+      <app-meter-analysis-section [result]="result" />
+      } @case ('quality') { @if (analyzer.qualityMetrics()) {
+      <app-poem-quality [metrics]="analyzer.qualityMetrics()!" />
+      } @else {
+      <app-card padding="large">
+        <div class="text-center py-8">
+          <p class="text-onSurfaceVariant">Click "Assess Quality" to see quality metrics</p>
         </div>
+      </app-card>
+      } } @case ('stats') {
+      <app-quick-stats-panel [stats]="getQuickStats()" />
+      } }
 
-        <!-- Analysis Actions -->
-        <div class="analysis-actions">
-          <div class="actions-row">
-            <app-button
-              variant="primary"
-              size="medium"
-              label="assess quality"
-              icon="icon-[iconoir--star]"
-              (clicked)="onAssessQuality()"
-            />
-            
-            <app-button
-              variant="outline"
-              size="medium"
-              label="analyze rhythm"
-              icon="icon-[iconoir--music-double]"
-              (clicked)="onShowMeterAnalysis()"
-            />
-            
-            <app-button
-              variant="outline"
-              size="medium"
-              label="export poem"
-              icon="icon-[iconoir--cloud-download]"
-              (clicked)="onExportPoem()"
-            />
-          </div>
+      <!-- Botones de análisis manteniendo la funcionalidad existente -->
+      <div class="analysis-actions">
+        <div class="actions-row">
+          <app-button variant="primary" size="medium" label="assess quality" icon="icon-[iconoir--star]"
+            (clicked)="onAssessQuality()" />
+
+          <app-button variant="outline" size="medium" label="analyze rhythm" icon="icon-[iconoir--music-double]"
+            (clicked)="onShowMeterAnalysis()" />
+
+          <app-button variant="outline" size="medium" label="export poem" icon="icon-[iconoir--cloud-download]"
+            (clicked)="onExportPoem()" />
         </div>
-
-        <!-- Quality Assessment Section -->
-        @if (showQuality() && analyzer.qualityMetrics()) {
-          <div class="quality-section">
-            <app-poem-quality [metrics]="analyzer.qualityMetrics()!" />
-          </div>
-        }
-
-        <!-- Meter Analysis Section -->
-        @if (showMeterAnalysis() && analyzer.result()?.meterAnalysis) {
-          <div class="meter-analysis-section">
-            <app-card padding="large">
-              <div class="meter-analysis-container">
-                <h3 class="section-title">rhythm & meter analysis</h3>
-                
-                @if (analyzer.result()?.meterAnalysis; as meter) {
-                  <div class="meter-info">
-                    <div class="meter-header">
-                      <app-badge 
-                        [variant]="meter.consistency > 70 ? 'success' : meter.consistency > 40 ? 'warning' : 'error'"
-                        size="medium"
-                        icon="icon-[iconoir--music-double]"
-                      >
-                        {{ meter.type }} meter
-                      </app-badge>
-                      <span class="consistency-score">
-                        {{ meter.consistency.toFixed(0) }}% consistent
-                      </span>
-                    </div>
-                    
-                    <p class="meter-pattern">{{ meter.pattern }}</p>
-                    <p class="meter-description">{{ meter.description }}</p>
-                    
-                    @if (meter.examples.length > 0) {
-                      <div class="meter-examples">
-                        <h4>examples of {{ meter.type }} meter:</h4>
-                        <ul class="examples-list">
-                          @for (example of meter.examples; track $index) {
-                            <li class="example-item">{{ example }}</li>
-                          }
-                        </ul>
-                      </div>
-                    }
-                  </div>
-                }
-                
-                @if (analyzer.rhythmSuggestions().length > 0) {
-                  <div class="rhythm-suggestions">
-                    <h4 class="suggestions-title">rhythm suggestions</h4>
-                    <div class="suggestions-list">
-                      @for (suggestion of analyzer.rhythmSuggestions(); track $index) {
-                        <div class="suggestion-item">
-                          <span class="line-number">Line {{ suggestion.line }}</span>
-                          <div class="suggestion-content">
-                            <p class="suggestion-issue">{{ suggestion.issue }}</p>
-                            <p class="suggestion-text">{{ suggestion.suggestion }}</p>
-                          </div>
-                        </div>
-                      }
-                    </div>
-                  </div>
-                } @else {
-                  <div class="no-rhythm-suggestions">
-                    <span class="icon-[iconoir--check] no-suggestions-icon"></span>
-                    <p class="no-suggestions-text">Great rhythm consistency! No suggestions needed.</p>
-                  </div>
-                }
-              </div>
-            </app-card>
-          </div>
-        }
       </div>
+    </div>
     } @else {
-      <!-- Empty State -->
-      <div class="empty-state-section">
-        <app-card padding="large">
-          <div class="empty-content">
-            <span class="icon-[iconoir--flower] empty-icon"></span>
-            <h3 class="empty-title">ready to analyze</h3>
-            <p class="empty-description">
-              Write your poem or load an example to see syllable analysis and suggestions
-            </p>
-          </div>
-        </app-card>
-      </div>
+    <!-- Empty State -->
+    <div class="empty-state-section">
+      <app-card padding="large">
+        <div class="empty-content">
+          <span class="icon-[iconoir--flower] empty-icon"></span>
+          <h3 class="empty-title">ready to analyze</h3>
+          <p class="empty-description">
+            Write your poem or load an example to see syllable analysis and suggestions
+          </p>
+        </div>
+      </app-card>
+    </div>
     }
 
     <!-- Info Section -->
@@ -186,8 +82,8 @@
         <div class="info-text">
           <h4 class="info-title">how it works</h4>
           <p class="info-description">
-            Harawihark uses advanced phonetic analysis to count syllables accurately, 
-            detect rhyme schemes, and provide intelligent suggestions for improving your poetry.
+            Harawihark uses advanced phonetic analysis to count syllables accurately, detect rhyme
+            schemes, and provide intelligent suggestions for improving your poetry.
           </p>
           <ul class="info-features">
             <li>

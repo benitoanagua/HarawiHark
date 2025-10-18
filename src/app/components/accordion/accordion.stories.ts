@@ -70,7 +70,7 @@ export const Expanded: Story = {
   args: {
     title: 'rhyme scheme analysis',
     expanded: true,
-    icon: 'icon-[iconoir--music-notes]',
+    icon: 'icon-[iconoir--music-double-note]',
   },
   render: (args) => ({
     props: args,

@@ -1,0 +1,47 @@
+<app-card padding="medium">
+  <div class="stats-container">
+    <h3 class="stats-title">quick stats</h3>
+    
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-icon">
+          <span class="icon-[iconoir--sound-high]"></span>
+        </div>
+        <div class="stat-content">
+          <span class="stat-value">{{ stats.totalSyllables }}</span>
+          <span class="stat-label">total syllables</span>
+        </div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-icon">
+          <span class="icon-[iconoir--layout-left]"></span>
+        </div>
+        <div class="stat-content">
+          <span class="stat-value">{{ stats.avgSyllablesPerLine }}</span>
+          <span class="stat-label">avg per line</span>
+        </div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-icon">
+          <span class="icon-[iconoir--book-stack]"></span>
+        </div>
+        <div class="stat-content">
+          <span class="stat-value">{{ stats.vocabularyRichness }}%</span>
+          <span class="stat-label">vocabulary richness</span>
+        </div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-icon">
+          <span class="icon-[iconoir--check]"></span>
+        </div>
+        <div class="stat-content">
+          <span class="stat-value">{{ stats.patternMatch }}</span>
+          <span class="stat-label">pattern match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-card>

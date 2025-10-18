@@ -1007,6 +1007,61 @@
             "extends": []
         },
         {
+            "name": "QuickStats",
+            "id": "interface-QuickStats-adb9d00591ba62e85d96b36572bd9ee90487f799978398ea24a1c5c2540d976ad34f768888ebd52f01e34b9dda05e6936e6bcc7182796135f68827978d87ef23",
+            "file": "src/app/components/quick-stats-panel/quick-stats-panel.component.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { CardComponent } from '../card/card.component';\nimport { BadgeComponent } from '../badge/badge.component';\n\nexport interface QuickStats {\n  totalSyllables: number;\n  avgSyllablesPerLine: number;\n  vocabularyRichness: number;\n  patternMatch: string;\n}\n\n@Component({\n  selector: 'app-quick-stats-panel',\n  standalone: true,\n  imports: [CardComponent, BadgeComponent],\n  templateUrl: './quick-stats-panel.component.html',\n})\nexport class QuickStatsPanelComponent {\n  @Input({ required: true }) stats!: QuickStats;\n}\n",
+            "properties": [
+                {
+                    "name": "avgSyllablesPerLine",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                },
+                {
+                    "name": "patternMatch",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                },
+                {
+                    "name": "totalSyllables",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "vocabularyRichness",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        },
+        {
             "name": "RhymeMatch",
             "id": "interface-RhymeMatch-a8d9e2fad6c4a388a6d481d49cb9a00191fe1ccf051c90ecbeb8b39e2c70341564a50356d74e4613f40c81ce13642b2b73f0a0bd7fd868e7bb1083c41474df1c",
             "file": "src/app/services/poetry/rita.service.ts",
@@ -5426,6 +5481,67 @@
             "templateData": "<div class=\"spinner-wrapper\">\n  <div [class]=\"spinnerClasses\"></div>\n  @if (text) {\n    <p class=\"spinner-text\">{{ text }}</p>\n  }\n</div>"
         },
         {
+            "name": "MeterAnalysisSectionComponent",
+            "id": "component-MeterAnalysisSectionComponent-9f00e166e3e19d3629003d81337f3bf5f91c72287dd86cac17ed51823a28b986e023fc4f5256d558f8bd09ab287056621d5756e3672c8193bd7bae96ade5792c",
+            "file": "src/app/components/meter-analysis-section/meter-analysis-section.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-meter-analysis-section",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./meter-analysis-section.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "required": true,
+                    "name": "result",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "optional": false,
+                    "line": 14,
+                    "type": "EnhancedPoetryResult",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [
+                {
+                    "name": "CommonModule",
+                    "type": "module"
+                },
+                {
+                    "name": "CardComponent",
+                    "type": "component"
+                },
+                {
+                    "name": "BadgeComponent",
+                    "type": "component"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { CommonModule } from '@angular/common';\nimport { CardComponent } from '../card/card.component';\nimport { BadgeComponent } from '../badge/badge.component';\nimport { EnhancedPoetryResult } from '../../services/poetry';\n\n@Component({\n  selector: 'app-meter-analysis-section',\n  standalone: true,\n  imports: [CommonModule, CardComponent, BadgeComponent],\n  templateUrl: './meter-analysis-section.component.html',\n})\nexport class MeterAnalysisSectionComponent {\n  @Input({ required: true }) result!: EnhancedPoetryResult;\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<app-card padding=\"large\">\n  <div class=\"meter-analysis-container\">\n    <h3 class=\"section-title\">rhythm & meter analysis</h3>\n    \n    @if (result.meterAnalysis; as meter) {\n      <div class=\"meter-info\">\n        <div class=\"meter-header\">\n          <app-badge \n            [variant]=\"meter.consistency > 70 ? 'success' : meter.consistency > 40 ? 'warning' : 'error'\"\n            size=\"medium\"\n            icon=\"icon-[iconoir--music-double]\"\n          >\n            {{ meter.type }} meter\n          </app-badge>\n          <span class=\"consistency-score\">\n            {{ meter.consistency.toFixed(0) }}% consistent\n          </span>\n        </div>\n        \n        <p class=\"meter-pattern\">{{ meter.pattern }}</p>\n        <p class=\"meter-description\">{{ meter.description }}</p>\n        \n        @if (meter.examples.length > 0) {\n          <div class=\"meter-examples\">\n            <h4>examples of {{ meter.type }} meter:</h4>\n            <ul class=\"examples-list\">\n              @for (example of meter.examples; track $index) {\n                <li class=\"example-item\">{{ example }}</li>\n              }\n            </ul>\n          </div>\n        }\n      </div>\n    } @else {\n      <div class=\"no-meter-analysis\">\n        <span class=\"icon-[iconoir--music-off] no-meter-icon\"></span>\n        <p class=\"no-meter-text\">No consistent meter pattern detected</p>\n      </div>\n    }\n  </div>\n</app-card>"
+        },
+        {
             "name": "PoemEditorComponent",
             "id": "component-PoemEditorComponent-a56b44b571d9f11956ac64c2d44cdaa16514a066df6ee71d0e042c39fcddd2a5766a3a63cfdc0986277af1590531913ed1fa109dfcd2fbb705ddf4b9b15a8a30",
             "file": "src/app/components/poem-editor/poem-editor.component.ts",
@@ -5693,7 +5809,7 @@
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<app-card padding=\"large\">\n  <div class=\"editor-container\">\n    <!-- Header -->\n    <div class=\"editor-header\">\n      <h2 class=\"editor-title\">poetry analyzer</h2>\n      <p class=\"editor-subtitle\">\n        write your poem and get advanced syllable analysis with word suggestions\n      </p>\n    </div>\n\n    <!-- Form Selection -->\n    <div class=\"form-section\">\n      <app-select\n        id=\"poetry-form\"\n        label=\"poetry form\"\n        [options]=\"formOptions\"\n        [value]=\"selectedForm()\"\n        (selectChange)=\"onFormChange($event)\"\n      />\n      \n      @if (currentForm(); as form) {\n        <div class=\"form-info\">\n          <div class=\"form-info-header\">\n            <span class=\"form-pattern\">pattern: {{ form.pattern.join('-') }} syllables</span>\n            <span class=\"form-lines\">{{ form.lines }} lines</span>\n          </div>\n          <p class=\"form-description\">\n            {{ form.description }} · {{ form.origin }}\n          </p>\n        </div>\n      }\n    </div>\n\n    <!-- Poem Input -->\n    <div class=\"input-section\">\n      <app-input\n        id=\"poem-text\"\n        type=\"textarea\"\n        label=\"your poem\"\n        placeholder=\"write each line on a new line...\"\n        [rows]=\"8\"\n        [value]=\"poemText()\"\n        (inputChange)=\"onTextChange($event)\"\n      />\n      \n      <div class=\"input-stats\">\n        <span>{{ lineCount() }} lines</span>\n        <span>{{ totalSyllables() }} total syllables</span>\n      </div>\n    </div>\n\n    <!-- Actions -->\n    <div class=\"actions-section\">\n      <app-button\n        variant=\"primary\"\n        size=\"medium\"\n        label=\"analyze poem\"\n        icon=\"icon-[iconoir--search]\"\n        [disabled]=\"lineCount() === 0\"\n        (clicked)=\"analyze()\"\n      />\n      \n      <app-button\n        variant=\"secondary\"\n        size=\"medium\"\n        label=\"load example\"\n        icon=\"icon-[iconoir--page]\"\n        (clicked)=\"loadExample()\"\n      />\n      \n      <app-button\n        variant=\"outline\"\n        size=\"medium\"\n        label=\"clear\"\n        icon=\"icon-[iconoir--cancel]\"\n        (clicked)=\"clear()\"\n      />\n    </div>\n  </div>\n</app-card>"
+            "templateData": "<app-card padding=\"large\">\n  <div class=\"editor-container\">\n    <!-- Header -->\n    <div class=\"editor-header\">\n      <h2 class=\"editor-title\">poetry analyzer</h2>\n      <p class=\"editor-subtitle\">\n        write your poem and get advanced syllable analysis with word suggestions\n      </p>\n    </div>\n\n    <!-- Form Selection -->\n    <div class=\"form-section\">\n      <app-select\n        id=\"poetry-form\"\n        label=\"poetry form\"\n        [options]=\"formOptions\"\n        [value]=\"selectedForm()\"\n        (selectChange)=\"onFormChange($event)\"\n      />\n\n      @if (currentForm(); as form) {\n      <div class=\"form-info\">\n        <div class=\"form-info-header\">\n          <span class=\"form-pattern\">pattern: {{ form.pattern.join('-') }} syllables</span>\n          <span class=\"form-lines\">{{ form.lines }} lines</span>\n        </div>\n        <p class=\"form-description\">{{ form.description }} · {{ form.origin }}</p>\n      </div>\n      }\n    </div>\n\n    <!-- Poem Input -->\n    <div class=\"input-section\">\n      <app-input\n        id=\"poem-text\"\n        type=\"textarea\"\n        label=\"your poem\"\n        placeholder=\"write each line on a new line...\"\n        [rows]=\"8\"\n        [value]=\"poemText()\"\n        (inputChange)=\"onTextChange($event)\"\n      />\n\n      <div class=\"input-stats\">\n        <span>{{ lineCount() }} lines</span>\n        <span>{{ totalSyllables() }} total syllables</span>\n      </div>\n    </div>\n\n    <!-- Actions -->\n    <div class=\"actions-section\">\n      <app-button\n        variant=\"primary\"\n        size=\"medium\"\n        label=\"analyze poem\"\n        icon=\"icon-[iconoir--search]\"\n        [disabled]=\"lineCount() === 0\"\n        (clicked)=\"analyze()\"\n      />\n\n      <app-button\n        variant=\"secondary\"\n        size=\"medium\"\n        label=\"load example\"\n        icon=\"icon-[iconoir--page]\"\n        (clicked)=\"loadExample()\"\n      />\n      \n      <app-button\n        variant=\"outline\"\n        size=\"medium\"\n        label=\"clear\"\n        icon=\"icon-[iconoir--cancel]\"\n        (clicked)=\"clear()\"\n      />\n    </div>\n  </div>\n</app-card>\n"
         },
         {
             "name": "PoemQualityComponent",
@@ -5968,7 +6084,7 @@
         },
         {
             "name": "PoetryPageComponent",
-            "id": "component-PoetryPageComponent-773db5c69e0e0e656d1555b7c316c7d46e8fd0fd6f33adc4ae4412775745cb653c1cd6753a2f1b3489a9ab58428165e7e46ad3caf5b9d0623aa43860af138884",
+            "id": "component-PoetryPageComponent-16461c5d05d2a4dcd0e8777a450accaf3583557eadfa5f779d736406b7042e395e7878ce0c840b40c6f8880e3214457bc19da6ef6929223a414e7217dc9726cf",
             "file": "src/app/components/poetry-page/poetry-page.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -5987,6 +6103,20 @@
             "outputsClass": [],
             "propertiesClass": [
                 {
+                    "name": "analysisTabs",
+                    "defaultValue": "signal<Tab[]>([\n    { id: 'structure', label: 'structure', icon: 'icon-[iconoir--layout-left]' },\n    { id: 'rhythm', label: 'rhythm', icon: 'icon-[iconoir--music-double]' },\n    { id: 'quality', label: 'quality', icon: 'icon-[iconoir--star]' },\n    { id: 'stats', label: 'stats', icon: 'icon-[iconoir--dashboard]' },\n  ])",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 41,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
                     "name": "analyzer",
                     "defaultValue": "inject(PoetryAnalyzerService)",
                     "deprecated": false,
@@ -5995,35 +6125,21 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 32,
+                    "line": 38,
                     "modifierKind": [
                         148
                     ]
                 },
                 {
-                    "name": "showMeterAnalysis",
-                    "defaultValue": "signal(false)",
+                    "name": "selectedAnalysisTab",
+                    "defaultValue": "signal('structure')",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 35,
-                    "modifierKind": [
-                        148
-                    ]
-                },
-                {
-                    "name": "showQuality",
-                    "defaultValue": "signal(false)",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 34,
+                    "line": 40,
                     "modifierKind": [
                         148
                     ]
@@ -6043,7 +6159,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 68,
+                    "line": 82,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "modifierKind": [
@@ -6067,9 +6183,37 @@
                     "optional": false,
                     "returnType": "any",
                     "typeParameters": [],
-                    "line": 91,
+                    "line": 105,
                     "deprecated": false,
                     "deprecationMessage": ""
+                },
+                {
+                    "name": "onAnalysisTabChange",
+                    "args": [
+                        {
+                            "name": "tabId",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 48,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "tabId",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
                 },
                 {
                     "name": "onAssessQuality",
@@ -6077,7 +6221,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 82,
+                    "line": 96,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -6087,7 +6231,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 45,
+                    "line": 60,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -6097,7 +6241,7 @@
                     "optional": false,
                     "returnType": "Promise<void>",
                     "typeParameters": [],
-                    "line": 49,
+                    "line": 64,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "modifierKind": [
@@ -6117,7 +6261,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 41,
+                    "line": 56,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -6138,7 +6282,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 87,
+                    "line": 101,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -6155,7 +6299,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 37,
+                    "line": 52,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -6216,17 +6360,86 @@
                 {
                     "name": "WordSuggestionsComponent",
                     "type": "component"
+                },
+                {
+                    "name": "QuickStatsPanelComponent",
+                    "type": "component"
+                },
+                {
+                    "name": "MeterAnalysisSectionComponent",
+                    "type": "component"
+                },
+                {
+                    "name": "TabsComponent",
+                    "type": "component"
                 }
             ],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, inject, signal } from '@angular/core';\nimport { BadgeComponent } from '../badge/badge.component';\nimport { ButtonComponent } from '../button/button.component';\nimport { CardComponent } from '../card/card.component';\nimport { HeaderComponent } from '../header/header.component';\nimport { FooterComponent } from '../footer/footer.component';\nimport { PoemEditorComponent } from '../poem-editor/poem-editor.component';\nimport { PoemResultsComponent } from '../poem-results/poem-results.component';\nimport { PoemQualityComponent } from '../poem-quality/poem-quality.component';\nimport { WordSuggestionsComponent } from '../word-suggestions/word-suggestions.component';\nimport { PoetryAnalyzerService } from '../../services/poetry';\n\n@Component({\n  selector: 'app-poetry-page',\n  standalone: true,\n  imports: [\n    CommonModule,\n    BadgeComponent,\n    ButtonComponent,\n    CardComponent,\n    HeaderComponent,\n    FooterComponent,\n    PoemEditorComponent,\n    PoemResultsComponent,\n    PoemQualityComponent,\n    WordSuggestionsComponent,\n  ],\n  templateUrl: './poetry-page.component.html',\n})\nexport class PoetryPageComponent {\n  readonly analyzer = inject(PoetryAnalyzerService);\n\n  readonly showQuality = signal(false);\n  readonly showMeterAnalysis = signal(false);\n\n  onWordSelected(word: string): void {\n    this.analyzer.selectWordEnhanced(word);\n  }\n\n  onReplaceWord(newWord: string): void {\n    this.analyzer.replaceWord(this.analyzer.wordAlternatives()?.original || '', newWord);\n  }\n\n  onCloseSuggestions(): void {\n    this.analyzer.selectWordEnhanced(null);\n  }\n\n  async onExportPoem(): Promise<void> {\n    const result = this.analyzer.result();\n    if (!result) return;\n\n    const poemText = result.lines.map((line) => line.text).join('\\n');\n    const formInfo = this.analyzer.selectedForm();\n\n    const exportText = `${formInfo.toUpperCase()} POEM\\n\\n${poemText}\\n\\n— Created with HarawiHark`;\n\n    try {\n      await navigator.clipboard.writeText(exportText);\n      // Podríamos mostrar una notificación aquí\n      console.log('Poem copied to clipboard');\n    } catch (error) {\n      console.error('Failed to copy poem to clipboard:', error);\n      this.fallbackCopyToClipboard(exportText);\n    }\n  }\n\n  private fallbackCopyToClipboard(text: string): void {\n    const textArea = document.createElement('textarea');\n    textArea.value = text;\n    document.body.appendChild(textArea);\n    textArea.select();\n    try {\n      document.execCommand('copy');\n      console.log('Poem copied to clipboard (fallback)');\n    } catch (error) {\n      console.error('Fallback copy failed:', error);\n    }\n    document.body.removeChild(textArea);\n  }\n\n  onAssessQuality(): void {\n    this.analyzer.assessQuality();\n    this.showQuality.set(true);\n  }\n\n  onShowMeterAnalysis(): void {\n    this.showMeterAnalysis.set(true);\n  }\n\n  getQuickStats() {\n    return this.analyzer.getQuickStats();\n  }\n}\n",
+            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, inject, signal } from '@angular/core';\nimport { BadgeComponent } from '../badge/badge.component';\nimport { ButtonComponent } from '../button/button.component';\nimport { CardComponent } from '../card/card.component';\nimport { HeaderComponent } from '../header/header.component';\nimport { FooterComponent } from '../footer/footer.component';\nimport { PoemEditorComponent } from '../poem-editor/poem-editor.component';\nimport { PoemResultsComponent } from '../poem-results/poem-results.component';\nimport { PoemQualityComponent } from '../poem-quality/poem-quality.component';\nimport { WordSuggestionsComponent } from '../word-suggestions/word-suggestions.component';\nimport { QuickStatsPanelComponent } from '../quick-stats-panel/quick-stats-panel.component';\nimport { MeterAnalysisSectionComponent } from '../meter-analysis-section/meter-analysis-section.component';\nimport { TabsComponent, Tab } from '../tabs/tabs.component';\nimport { PoetryAnalyzerService } from '../../services/poetry';\n\n@Component({\n  selector: 'app-poetry-page',\n  standalone: true,\n  imports: [\n    CommonModule,\n    BadgeComponent,\n    ButtonComponent,\n    CardComponent,\n    HeaderComponent,\n    FooterComponent,\n    PoemEditorComponent,\n    PoemResultsComponent,\n    PoemQualityComponent,\n    WordSuggestionsComponent,\n    QuickStatsPanelComponent,\n    MeterAnalysisSectionComponent,\n    TabsComponent,\n  ],\n  templateUrl: './poetry-page.component.html',\n})\nexport class PoetryPageComponent {\n  readonly analyzer = inject(PoetryAnalyzerService);\n\n  readonly selectedAnalysisTab = signal('structure');\n  readonly analysisTabs = signal<Tab[]>([\n    { id: 'structure', label: 'structure', icon: 'icon-[iconoir--layout-left]' },\n    { id: 'rhythm', label: 'rhythm', icon: 'icon-[iconoir--music-double]' },\n    { id: 'quality', label: 'quality', icon: 'icon-[iconoir--star]' },\n    { id: 'stats', label: 'stats', icon: 'icon-[iconoir--dashboard]' },\n  ]);\n\n  onAnalysisTabChange(tabId: string): void {\n    this.selectedAnalysisTab.set(tabId);\n  }\n\n  onWordSelected(word: string): void {\n    this.analyzer.selectWordEnhanced(word);\n  }\n\n  onReplaceWord(newWord: string): void {\n    this.analyzer.replaceWord(this.analyzer.wordAlternatives()?.original || '', newWord);\n  }\n\n  onCloseSuggestions(): void {\n    this.analyzer.selectWordEnhanced(null);\n  }\n\n  async onExportPoem(): Promise<void> {\n    const result = this.analyzer.result();\n    if (!result) return;\n\n    const poemText = result.lines.map((line) => line.text).join('\\n');\n    const formInfo = this.analyzer.selectedForm();\n\n    const exportText = `${formInfo.toUpperCase()} POEM\\n\\n${poemText}\\n\\n— Created with HarawiHark`;\n\n    try {\n      await navigator.clipboard.writeText(exportText);\n      console.log('Poem copied to clipboard');\n    } catch (error) {\n      console.error('Failed to copy poem to clipboard:', error);\n      this.fallbackCopyToClipboard(exportText);\n    }\n  }\n\n  private fallbackCopyToClipboard(text: string): void {\n    const textArea = document.createElement('textarea');\n    textArea.value = text;\n    document.body.appendChild(textArea);\n    textArea.select();\n    try {\n      document.execCommand('copy');\n      console.log('Poem copied to clipboard (fallback)');\n    } catch (error) {\n      console.error('Fallback copy failed:', error);\n    }\n    document.body.removeChild(textArea);\n  }\n\n  onAssessQuality(): void {\n    this.analyzer.assessQuality();\n    this.selectedAnalysisTab.set('quality');\n  }\n\n  onShowMeterAnalysis(): void {\n    this.selectedAnalysisTab.set('rhythm');\n  }\n\n  getQuickStats() {\n    const stats = this.analyzer.getQuickStats();\n    return {\n      ...stats,\n      patternMatch: this.analyzer.isCompletePoem() ? 'Perfect' : 'Partial',\n    };\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<article class=\"page-container\">\n  <app-header />\n\n  <section class=\"page-content\">\n    <!-- Hero Section -->\n    <div class=\"hero-section\">\n      <div class=\"hero-icon-container\">\n        <span class=\"icon-[iconoir--flower] hero-icon\"></span>\n        <h1 class=\"hero-title\">harawihark</h1>\n      </div>\n      <p class=\"hero-subtitle\">\n        advanced syllable-meter checker with phonetic analysis\n      </p>\n    </div>\n\n    <!-- Editor Section -->\n    <div class=\"editor-section\">\n      <app-poem-editor />\n    </div>\n\n    <!-- Word Suggestions Section -->\n    @if (analyzer.wordAlternatives(); as alternatives) {\n      <div class=\"suggestions-section\">\n        <app-word-suggestions\n          [data]=\"alternatives\"\n          (replaceWord)=\"onReplaceWord($event)\"\n          (closeSuggestions)=\"onCloseSuggestions()\"\n        />\n      </div>\n    }\n\n    <!-- Main Results Section -->\n    @if (analyzer.result(); as result) {\n      <div class=\"results-section\">\n        <app-poem-results\n          [result]=\"result\"\n          (wordSelected)=\"onWordSelected($event)\"\n        />\n\n        <!-- Quick Stats -->\n        <div class=\"quick-stats\">\n          <app-card padding=\"small\">\n            <div class=\"stats-container\">\n              @let stats = getQuickStats();\n              <div class=\"stat-item\">\n                <span class=\"stat-label\">total syllables</span>\n                <span class=\"stat-value\">{{ stats.totalSyllables }}</span>\n              </div>\n              <div class=\"stat-item\">\n                <span class=\"stat-label\">avg per line</span>\n                <span class=\"stat-value\">{{ stats.avgSyllablesPerLine }}</span>\n              </div>\n              <div class=\"stat-item\">\n                <span class=\"stat-label\">vocabulary</span>\n                <span class=\"stat-value\">{{ stats.vocabularyRichness }}%</span>\n              </div>\n              <div class=\"stat-item\">\n                <span class=\"stat-label\">completion</span>\n                <span class=\"stat-value\">\n                  {{ analyzer.isCompletePoem() ? '✓' : '✗' }}\n                </span>\n              </div>\n            </div>\n          </app-card>\n        </div>\n\n        <!-- Analysis Actions -->\n        <div class=\"analysis-actions\">\n          <div class=\"actions-row\">\n            <app-button\n              variant=\"primary\"\n              size=\"medium\"\n              label=\"assess quality\"\n              icon=\"icon-[iconoir--star]\"\n              (clicked)=\"onAssessQuality()\"\n            />\n            \n            <app-button\n              variant=\"outline\"\n              size=\"medium\"\n              label=\"analyze rhythm\"\n              icon=\"icon-[iconoir--music-double]\"\n              (clicked)=\"onShowMeterAnalysis()\"\n            />\n            \n            <app-button\n              variant=\"outline\"\n              size=\"medium\"\n              label=\"export poem\"\n              icon=\"icon-[iconoir--cloud-download]\"\n              (clicked)=\"onExportPoem()\"\n            />\n          </div>\n        </div>\n\n        <!-- Quality Assessment Section -->\n        @if (showQuality() && analyzer.qualityMetrics()) {\n          <div class=\"quality-section\">\n            <app-poem-quality [metrics]=\"analyzer.qualityMetrics()!\" />\n          </div>\n        }\n\n        <!-- Meter Analysis Section -->\n        @if (showMeterAnalysis() && analyzer.result()?.meterAnalysis) {\n          <div class=\"meter-analysis-section\">\n            <app-card padding=\"large\">\n              <div class=\"meter-analysis-container\">\n                <h3 class=\"section-title\">rhythm & meter analysis</h3>\n                \n                @if (analyzer.result()?.meterAnalysis; as meter) {\n                  <div class=\"meter-info\">\n                    <div class=\"meter-header\">\n                      <app-badge \n                        [variant]=\"meter.consistency > 70 ? 'success' : meter.consistency > 40 ? 'warning' : 'error'\"\n                        size=\"medium\"\n                        icon=\"icon-[iconoir--music-double]\"\n                      >\n                        {{ meter.type }} meter\n                      </app-badge>\n                      <span class=\"consistency-score\">\n                        {{ meter.consistency.toFixed(0) }}% consistent\n                      </span>\n                    </div>\n                    \n                    <p class=\"meter-pattern\">{{ meter.pattern }}</p>\n                    <p class=\"meter-description\">{{ meter.description }}</p>\n                    \n                    @if (meter.examples.length > 0) {\n                      <div class=\"meter-examples\">\n                        <h4>examples of {{ meter.type }} meter:</h4>\n                        <ul class=\"examples-list\">\n                          @for (example of meter.examples; track $index) {\n                            <li class=\"example-item\">{{ example }}</li>\n                          }\n                        </ul>\n                      </div>\n                    }\n                  </div>\n                }\n                \n                @if (analyzer.rhythmSuggestions().length > 0) {\n                  <div class=\"rhythm-suggestions\">\n                    <h4 class=\"suggestions-title\">rhythm suggestions</h4>\n                    <div class=\"suggestions-list\">\n                      @for (suggestion of analyzer.rhythmSuggestions(); track $index) {\n                        <div class=\"suggestion-item\">\n                          <span class=\"line-number\">Line {{ suggestion.line }}</span>\n                          <div class=\"suggestion-content\">\n                            <p class=\"suggestion-issue\">{{ suggestion.issue }}</p>\n                            <p class=\"suggestion-text\">{{ suggestion.suggestion }}</p>\n                          </div>\n                        </div>\n                      }\n                    </div>\n                  </div>\n                } @else {\n                  <div class=\"no-rhythm-suggestions\">\n                    <span class=\"icon-[iconoir--check] no-suggestions-icon\"></span>\n                    <p class=\"no-suggestions-text\">Great rhythm consistency! No suggestions needed.</p>\n                  </div>\n                }\n              </div>\n            </app-card>\n          </div>\n        }\n      </div>\n    } @else {\n      <!-- Empty State -->\n      <div class=\"empty-state-section\">\n        <app-card padding=\"large\">\n          <div class=\"empty-content\">\n            <span class=\"icon-[iconoir--flower] empty-icon\"></span>\n            <h3 class=\"empty-title\">ready to analyze</h3>\n            <p class=\"empty-description\">\n              Write your poem or load an example to see syllable analysis and suggestions\n            </p>\n          </div>\n        </app-card>\n      </div>\n    }\n\n    <!-- Info Section -->\n    <div class=\"info-section\">\n      <div class=\"info-content\">\n        <span class=\"icon-[iconoir--light-bulb] info-icon\"></span>\n        <div class=\"info-text\">\n          <h4 class=\"info-title\">how it works</h4>\n          <p class=\"info-description\">\n            Harawihark uses advanced phonetic analysis to count syllables accurately, \n            detect rhyme schemes, and provide intelligent suggestions for improving your poetry.\n          </p>\n          <ul class=\"info-features\">\n            <li>\n              <span class=\"icon-[iconoir--sound-high] feature-icon\"></span>\n              Real-time syllable counting with RiTa.js\n            </li>\n            <li>\n              <span class=\"icon-[iconoir--music-double] feature-icon\"></span>\n              Advanced meter analysis (iambic, trochaic, etc.)\n            </li>\n            <li>\n              <span class=\"icon-[iconoir--star] feature-icon\"></span>\n              Quality assessment with detailed metrics\n            </li>\n            <li>\n              <span class=\"icon-[iconoir--book-stack] feature-icon\"></span>\n              8 different poetic forms supported\n            </li>\n          </ul>\n        </div>\n      </div>\n    </div>\n  </section>\n\n  <app-footer />\n</article>"
+            "templateData": "<article class=\"page-container\">\n  <app-header />\n\n  <section class=\"page-content\">\n    <!-- Hero Section -->\n    <div class=\"hero-section\">\n      <div class=\"hero-icon-container\">\n        <span class=\"icon-[iconoir--flower] hero-icon\"></span>\n        <h1 class=\"hero-title\">harawihark</h1>\n      </div>\n      <p class=\"hero-subtitle\">advanced syllable-meter checker with phonetic analysis</p>\n    </div>\n\n    <!-- Editor Section -->\n    <div class=\"editor-section\">\n      <app-poem-editor />\n    </div>\n\n    <!-- Word Suggestions Section -->\n    @if (analyzer.wordAlternatives(); as alternatives) {\n    <div class=\"suggestions-section\">\n      <app-word-suggestions [data]=\"alternatives\" (replaceWord)=\"onReplaceWord($event)\"\n        (closeSuggestions)=\"onCloseSuggestions()\" />\n    </div>\n    }\n\n    <!-- Main Results Section -->\n    @if (analyzer.result(); as result) {\n    <div class=\"results-section\">\n      <app-tabs [tabs]=\"analysisTabs()\" [selectedTab]=\"selectedAnalysisTab()\"\n        (tabChange)=\"onAnalysisTabChange($event)\" />\n\n      @switch (selectedAnalysisTab()) { @case ('structure') {\n      <app-poem-results [result]=\"result\" (wordSelected)=\"onWordSelected($event)\" />\n      } @case ('rhythm') {\n      <app-meter-analysis-section [result]=\"result\" />\n      } @case ('quality') { @if (analyzer.qualityMetrics()) {\n      <app-poem-quality [metrics]=\"analyzer.qualityMetrics()!\" />\n      } @else {\n      <app-card padding=\"large\">\n        <div class=\"text-center py-8\">\n          <p class=\"text-onSurfaceVariant\">Click \"Assess Quality\" to see quality metrics</p>\n        </div>\n      </app-card>\n      } } @case ('stats') {\n      <app-quick-stats-panel [stats]=\"getQuickStats()\" />\n      } }\n\n      <!-- Botones de análisis manteniendo la funcionalidad existente -->\n      <div class=\"analysis-actions\">\n        <div class=\"actions-row\">\n          <app-button variant=\"primary\" size=\"medium\" label=\"assess quality\" icon=\"icon-[iconoir--star]\"\n            (clicked)=\"onAssessQuality()\" />\n\n          <app-button variant=\"outline\" size=\"medium\" label=\"analyze rhythm\" icon=\"icon-[iconoir--music-double]\"\n            (clicked)=\"onShowMeterAnalysis()\" />\n\n          <app-button variant=\"outline\" size=\"medium\" label=\"export poem\" icon=\"icon-[iconoir--cloud-download]\"\n            (clicked)=\"onExportPoem()\" />\n        </div>\n      </div>\n    </div>\n    } @else {\n    <!-- Empty State -->\n    <div class=\"empty-state-section\">\n      <app-card padding=\"large\">\n        <div class=\"empty-content\">\n          <span class=\"icon-[iconoir--flower] empty-icon\"></span>\n          <h3 class=\"empty-title\">ready to analyze</h3>\n          <p class=\"empty-description\">\n            Write your poem or load an example to see syllable analysis and suggestions\n          </p>\n        </div>\n      </app-card>\n    </div>\n    }\n\n    <!-- Info Section -->\n    <div class=\"info-section\">\n      <div class=\"info-content\">\n        <span class=\"icon-[iconoir--light-bulb] info-icon\"></span>\n        <div class=\"info-text\">\n          <h4 class=\"info-title\">how it works</h4>\n          <p class=\"info-description\">\n            Harawihark uses advanced phonetic analysis to count syllables accurately, detect rhyme\n            schemes, and provide intelligent suggestions for improving your poetry.\n          </p>\n          <ul class=\"info-features\">\n            <li>\n              <span class=\"icon-[iconoir--sound-high] feature-icon\"></span>\n              Real-time syllable counting with RiTa.js\n            </li>\n            <li>\n              <span class=\"icon-[iconoir--music-double] feature-icon\"></span>\n              Advanced meter analysis (iambic, trochaic, etc.)\n            </li>\n            <li>\n              <span class=\"icon-[iconoir--star] feature-icon\"></span>\n              Quality assessment with detailed metrics\n            </li>\n            <li>\n              <span class=\"icon-[iconoir--book-stack] feature-icon\"></span>\n              8 different poetic forms supported\n            </li>\n          </ul>\n        </div>\n      </div>\n    </div>\n  </section>\n\n  <app-footer />\n</article>"
+        },
+        {
+            "name": "QuickStatsPanelComponent",
+            "id": "component-QuickStatsPanelComponent-adb9d00591ba62e85d96b36572bd9ee90487f799978398ea24a1c5c2540d976ad34f768888ebd52f01e34b9dda05e6936e6bcc7182796135f68827978d87ef23",
+            "file": "src/app/components/quick-stats-panel/quick-stats-panel.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-quick-stats-panel",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./quick-stats-panel.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "required": true,
+                    "name": "stats",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "optional": false,
+                    "line": 19,
+                    "type": "QuickStats",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [
+                {
+                    "name": "CardComponent",
+                    "type": "component"
+                },
+                {
+                    "name": "BadgeComponent",
+                    "type": "component"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { CardComponent } from '../card/card.component';\nimport { BadgeComponent } from '../badge/badge.component';\n\nexport interface QuickStats {\n  totalSyllables: number;\n  avgSyllablesPerLine: number;\n  vocabularyRichness: number;\n  patternMatch: string;\n}\n\n@Component({\n  selector: 'app-quick-stats-panel',\n  standalone: true,\n  imports: [CardComponent, BadgeComponent],\n  templateUrl: './quick-stats-panel.component.html',\n})\nexport class QuickStatsPanelComponent {\n  @Input({ required: true }) stats!: QuickStats;\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<app-card padding=\"medium\">\n  <div class=\"stats-container\">\n    <h3 class=\"stats-title\">quick stats</h3>\n    \n    <div class=\"stats-grid\">\n      <div class=\"stat-item\">\n        <div class=\"stat-icon\">\n          <span class=\"icon-[iconoir--sound-high]\"></span>\n        </div>\n        <div class=\"stat-content\">\n          <span class=\"stat-value\">{{ stats.totalSyllables }}</span>\n          <span class=\"stat-label\">total syllables</span>\n        </div>\n      </div>\n      \n      <div class=\"stat-item\">\n        <div class=\"stat-icon\">\n          <span class=\"icon-[iconoir--layout-left]\"></span>\n        </div>\n        <div class=\"stat-content\">\n          <span class=\"stat-value\">{{ stats.avgSyllablesPerLine }}</span>\n          <span class=\"stat-label\">avg per line</span>\n        </div>\n      </div>\n      \n      <div class=\"stat-item\">\n        <div class=\"stat-icon\">\n          <span class=\"icon-[iconoir--book-stack]\"></span>\n        </div>\n        <div class=\"stat-content\">\n          <span class=\"stat-value\">{{ stats.vocabularyRichness }}%</span>\n          <span class=\"stat-label\">vocabulary richness</span>\n        </div>\n      </div>\n      \n      <div class=\"stat-item\">\n        <div class=\"stat-icon\">\n          <span class=\"icon-[iconoir--check]\"></span>\n        </div>\n        <div class=\"stat-content\">\n          <span class=\"stat-value\">{{ stats.patternMatch }}</span>\n          <span class=\"stat-label\">pattern match</span>\n        </div>\n      </div>\n    </div>\n  </div>\n</app-card>"
         },
         {
             "name": "SelectComponent",
@@ -8526,6 +8739,15 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/components/meter-analysis-section/meter-analysis-section.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "MeterAnalysisSectionComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/components/poem-editor/poem-editor.component.ts",
                 "type": "component",
                 "linktype": "component",
@@ -8558,7 +8780,25 @@
                 "linktype": "component",
                 "name": "PoetryPageComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/12",
+                "coverageCount": "0/13",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/quick-stats-panel/quick-stats-panel.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "QuickStatsPanelComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/quick-stats-panel/quick-stats-panel.component.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "QuickStats",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
                 "status": "low"
             },
             {

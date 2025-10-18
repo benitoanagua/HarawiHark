@@ -50,7 +50,7 @@ export const RhythmAnalysis: Story = {
         label: 'Meter Type',
         value: 'Iambic',
         variant: 'default',
-        icon: 'icon-[iconoir--music-notes]',
+        icon: 'icon-[iconoir--music-double-note]',
       },
       { label: 'Consistency', value: 85, maxValue: 100, variant: 'success' },
       { label: 'Stress Pattern', value: '0/1', variant: 'default' },
@@ -129,7 +129,7 @@ export const MultiplePanels: Story = {
         <app-analysis-panel
           title="rhythm"
           [metrics]="[
-            { label: 'Meter Type', value: 'Iambic', variant: 'default', icon: 'icon-[iconoir--music-notes]' },
+            { label: 'Meter Type', value: 'Iambic', variant: 'default', icon: 'icon-[iconoir--music-double-note]' },
             { label: 'Consistency', value: 85, maxValue: 100, variant: 'success' },
             { label: 'Stress Pattern', value: '0/1', variant: 'default' },
             { label: 'Score', value: 'A', variant: 'success' }

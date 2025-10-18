@@ -11,10 +11,12 @@
 @import './app/components/header/header.component.css';
 @import './app/components/input/input.component.css';
 @import './app/components/loading-spinner/loading-spinner.component.css';
+@import './app/components/meter-analysis-section/meter-analysis-section.component.css';
 @import './app/components/poem-editor/poem-editor.component.css';
 @import './app/components/poem-quality/poem-quality.component.css';
 @import './app/components/poem-results/poem-results.component.css';
 @import './app/components/poetry-page/poetry-page.component.css';
+@import './app/components/quick-stats-panel/quick-stats-panel.component.css';
 @import './app/components/select/select.component.css';
 @import './app/components/status-message/status-message.component.css';
 @import './app/components/tabs/tabs.component.css';

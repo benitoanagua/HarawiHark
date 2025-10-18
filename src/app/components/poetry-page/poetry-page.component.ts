@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { BadgeComponent } from '../badge/badge.component';
 import { ButtonComponent } from '../button/button.component';
 import { CardComponent } from '../card/card.component';
 import { HeaderComponent } from '../header/header.component';
@@ -9,6 +8,9 @@ import { PoemEditorComponent } from '../poem-editor/poem-editor.component';
 import { PoemResultsComponent } from '../poem-results/poem-results.component';
 import { PoemQualityComponent } from '../poem-quality/poem-quality.component';
 import { WordSuggestionsComponent } from '../word-suggestions/word-suggestions.component';
+import { QuickStatsPanelComponent } from '../quick-stats-panel/quick-stats-panel.component';
+import { MeterAnalysisSectionComponent } from '../meter-analysis-section/meter-analysis-section.component';
+import { TabsComponent, Tab } from '../tabs/tabs.component';
 import { PoetryAnalyzerService } from '../../services/poetry';
 
 @Component({
@@ -16,7 +18,6 @@ import { PoetryAnalyzerService } from '../../services/poetry';
   standalone: true,
   imports: [
     CommonModule,
-    BadgeComponent,
     ButtonComponent,
     CardComponent,
     HeaderComponent,
@@ -25,14 +26,26 @@ import { PoetryAnalyzerService } from '../../services/poetry';
     PoemResultsComponent,
     PoemQualityComponent,
     WordSuggestionsComponent,
+    QuickStatsPanelComponent,
+    MeterAnalysisSectionComponent,
+    TabsComponent,
   ],
   templateUrl: './poetry-page.component.html',
 })
 export class PoetryPageComponent {
   readonly analyzer = inject(PoetryAnalyzerService);
 
-  readonly showQuality = signal(false);
-  readonly showMeterAnalysis = signal(false);
+  readonly selectedAnalysisTab = signal('structure');
+  readonly analysisTabs = signal<Tab[]>([
+    { id: 'structure', label: 'structure', icon: 'icon-[iconoir--layout-left]' },
+    { id: 'rhythm', label: 'rhythm', icon: 'icon-[iconoir--music-double]' },
+    { id: 'quality', label: 'quality', icon: 'icon-[iconoir--star]' },
+    { id: 'stats', label: 'stats', icon: 'icon-[iconoir--dashboard]' },
+  ]);
+
+  onAnalysisTabChange(tabId: string): void {
+    this.selectedAnalysisTab.set(tabId);
+  }
 
   onWordSelected(word: string): void {
     this.analyzer.selectWordEnhanced(word);
@@ -57,7 +70,6 @@ export class PoetryPageComponent {
 
     try {
       await navigator.clipboard.writeText(exportText);
-      // Podríamos mostrar una notificación aquí
       console.log('Poem copied to clipboard');
     } catch (error) {
       console.error('Failed to copy poem to clipboard:', error);
@@ -81,14 +93,18 @@ export class PoetryPageComponent {
 
   onAssessQuality(): void {
     this.analyzer.assessQuality();
-    this.showQuality.set(true);
+    this.selectedAnalysisTab.set('quality');
   }
 
   onShowMeterAnalysis(): void {
-    this.showMeterAnalysis.set(true);
+    this.selectedAnalysisTab.set('rhythm');
   }
 
   getQuickStats() {
-    return this.analyzer.getQuickStats();
+    const stats = this.analyzer.getQuickStats();
+    return {
+      ...stats,
+      patternMatch: this.analyzer.isCompletePoem() ? 'Perfect' : 'Partial',
+    };
   }
 }

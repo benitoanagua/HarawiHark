@@ -1,0 +1,41 @@
+<app-card padding="large">
+  <div class="meter-analysis-container">
+    <h3 class="section-title">rhythm & meter analysis</h3>
+    
+    @if (result.meterAnalysis; as meter) {
+      <div class="meter-info">
+        <div class="meter-header">
+          <app-badge 
+            [variant]="meter.consistency > 70 ? 'success' : meter.consistency > 40 ? 'warning' : 'error'"
+            size="medium"
+            icon="icon-[iconoir--music-double]"
+          >
+            {{ meter.type }} meter
+          </app-badge>
+          <span class="consistency-score">
+            {{ meter.consistency.toFixed(0) }}% consistent
+          </span>
+        </div>
+        
+        <p class="meter-pattern">{{ meter.pattern }}</p>
+        <p class="meter-description">{{ meter.description }}</p>
+        
+        @if (meter.examples.length > 0) {
+          <div class="meter-examples">
+            <h4>examples of {{ meter.type }} meter:</h4>
+            <ul class="examples-list">
+              @for (example of meter.examples; track $index) {
+                <li class="example-item">{{ example }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="no-meter-analysis">
+        <span class="icon-[iconoir--music-note-solid] no-meter-icon"></span>
+        <p class="no-meter-text">No consistent meter pattern detected</p>
+      </div>
+    }
+  </div>
+</app-card>

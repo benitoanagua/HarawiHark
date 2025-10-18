@@ -232,3 +232,19 @@
 .quality-section {
   @apply transition-opacity duration-300 ease-in-out;
 }
+
+.tabs-section {
+  @apply mb-4;
+}
+
+.results-section {
+  @apply space-y-4;
+}
+
+.analysis-actions {
+  @apply mt-4;
+}
+
+.actions-row {
+  @apply flex flex-wrap gap-2;
+}

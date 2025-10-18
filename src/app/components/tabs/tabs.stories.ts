@@ -18,7 +18,7 @@ type Story = StoryObj<TabsComponent>;
 
 const analysisTabs: Tab[] = [
   { id: 'structure', label: 'structure', icon: 'icon-[iconoir--layout-left]' },
-  { id: 'rhythm', label: 'rhythm', icon: 'icon-[iconoir--music-notes]' },
+  { id: 'rhythm', label: 'rhythm', icon: 'icon-[iconoir--music-double-note]' },
   { id: 'quality', label: 'quality', icon: 'icon-[iconoir--star]' },
   { id: 'suggestions', label: 'suggestions', icon: 'icon-[iconoir--light-bulb]' },
 ];

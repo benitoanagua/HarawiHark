@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { CardComponent } from '../card/card.component';
 
 export interface AnalysisMetric {
   label: string;
@@ -11,6 +12,7 @@ export interface AnalysisMetric {
 @Component({
   selector: 'app-analysis-panel',
   standalone: true,
+  imports: [CardComponent],
   templateUrl: './analysis-panel.component.html',
 })
 export class AnalysisPanelComponent {
