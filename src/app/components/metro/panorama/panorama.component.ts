@@ -1,11 +1,5 @@
-// panorama.component.ts
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface PanoramaSection {
-  id: string;
-  title: string;
-}
 
 @Component({
   selector: 'app-panorama',
@@ -13,6 +7,4 @@ export interface PanoramaSection {
   imports: [CommonModule],
   templateUrl: './panorama.component.html',
 })
-export class PanoramaComponent {
-  @Input() sections: PanoramaSection[] = [];
-}
+export class PanoramaComponent {}

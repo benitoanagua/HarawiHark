@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import {
   PanoramaComponent,
-  type PanoramaSection,
   PivotComponent,
   type PivotItem,
   AppBarComponent,
@@ -53,13 +52,6 @@ import { PoetryAnalyzerService, ToastService } from '../../../services';
 export class PoetryPageComponent {
   readonly analyzer = inject(PoetryAnalyzerService);
   private readonly toastService = inject(ToastService);
-
-  // Panorama Sections
-  readonly panoramaSections: PanoramaSection[] = [
-    { id: 'editor', title: 'analyze' },
-    { id: 'results', title: 'results' },
-    { id: 'history', title: 'history' },
-  ];
 
   // Analysis Tabs (usando Pivot)
   readonly analysisTabs = signal<PivotItem[]>([

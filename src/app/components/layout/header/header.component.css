@@ -8,7 +8,7 @@
   @apply px-4 py-3 min-h-16;
   @apply sm:px-6 sm:py-4 sm:min-h-18;
   @apply lg:px-8 lg:py-5 lg:min-h-20;
-  @apply max-w-7xl mx-auto;
+  @apply container mx-auto;
 }
 
 .logo-section {

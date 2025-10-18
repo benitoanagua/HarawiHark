@@ -1,11 +1,3 @@
-<!-- panorama.component.html -->
-<div class="metro-panorama">
-  @for (section of sections; track section.id) {
-    <section class="metro-panorama-section">
-      <h2 class="metro-panorama-header">{{ section.title }}</h2>
-      <div class="metro-panorama-content">
-        <ng-content [select]="'[data-section=\'' + section.id + '\']'" />
-      </div>
-    </section>
-  }
+<div class="panorama-container">
+  <ng-content />
 </div>

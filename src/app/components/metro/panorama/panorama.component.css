@@ -1,33 +1,12 @@
-.metro-panorama {
-  @apply overflow-x-auto overflow-y-hidden flex gap-0;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
+.panorama-container {
+  @apply container mx-auto px-4 py-6;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  /* Mobile */
+  @apply sm:px-6 sm:py-8;
 
-  /* Desktop: Sin scroll horizontal */
-  @apply lg:overflow-x-visible lg:grid lg:grid-cols-3 lg:gap-6;
-}
+  /* Desktop */
+  @apply lg:px-8 lg:py-10;
 
-.metro-panorama-section {
-  @apply flex-shrink-0 w-[92vw] px-4;
-  @apply sm:w-[48vw] sm:px-6;
-  @apply lg:w-auto lg:flex-shrink lg:px-0;
-  scroll-snap-align: start;
-}
-
-.metro-panorama-header {
-  @apply text-4xl font-light tracking-tight lowercase text-onSurface;
-  @apply mb-6 pr-8;
-  @apply sm:text-5xl sm:mb-8;
-  @apply lg:text-6xl lg:mb-10;
-}
-
-.metro-panorama-content {
-  @apply flex flex-col gap-4;
-  @apply sm:gap-6;
-  @apply lg:gap-8;
+  /* Basic styling */
+  @apply bg-transparent;
 }
