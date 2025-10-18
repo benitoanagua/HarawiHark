@@ -24,6 +24,7 @@
   @apply p-4 bg-blueContainer text-onBlueContainer;
   @apply sm:p-6 lg:p-8;
 }
+
 .form-info-header {
   @apply flex items-center justify-between mb-2;
 }
@@ -42,12 +43,115 @@
 }
 
 .input-section {
-  @apply flex flex-col gap-2;
+  @apply flex flex-col gap-3;
 }
 
-.input-stats {
-  @apply flex items-center justify-between text-xs text-onSurfaceVariant mt-2;
-  @apply sm:text-sm lg:text-base;
+/* 🎯 FASE 3: Stats mejorados con progreso */
+.input-stats-enhanced {
+  @apply flex flex-col gap-3 p-4 bg-surfaceVariant border-2 border-outlineVariant;
+  @apply sm:p-5 lg:p-6;
+}
+
+.stat-group {
+  @apply flex items-center gap-2 text-sm;
+  @apply sm:text-base lg:text-lg;
+}
+
+.stat-label {
+  @apply text-onSurfaceVariant font-medium uppercase tracking-wider text-xs;
+  @apply sm:text-sm;
+}
+
+.stat-value {
+  @apply text-onSurface font-bold text-xl;
+  @apply sm:text-2xl lg:text-3xl;
+}
+
+.stat-target {
+  @apply text-onSurfaceVariant text-lg;
+  @apply sm:text-xl lg:text-2xl;
+}
+
+.syllable-progress-bar {
+  @apply w-full h-2 bg-surface overflow-hidden border border-outline;
+  @apply sm:h-3 lg:h-4;
+}
+
+.progress-fill {
+  @apply h-full transition-all duration-500 ease-out bg-primary;
+
+  &.complete {
+    @apply bg-green;
+  }
+
+  &.over {
+    @apply bg-red;
+  }
+}
+
+/* 🎯 FASE 3: Validación visual por línea */
+.line-validator {
+  @apply p-4 bg-surfaceContainerLow border-2 border-outlineVariant;
+  @apply sm:p-6 lg:p-8;
+}
+
+.validator-title {
+  @apply text-base font-semibold tracking-tight lowercase text-onSurface mb-4;
+  @apply sm:text-lg lg:text-xl;
+}
+
+.validation-grid {
+  @apply space-y-2 sm:space-y-3;
+}
+
+.validation-row {
+  @apply flex items-center gap-2 p-2 bg-surface border border-outlineVariant;
+  @apply transition-all duration-200;
+  @apply sm:gap-3 sm:p-3;
+
+  &.correct {
+    @apply border-green bg-greenContainer;
+  }
+
+  &.over {
+    @apply border-red bg-redContainer;
+  }
+}
+
+.line-num {
+  @apply text-xs font-bold text-onSurfaceVariant w-6 text-center;
+  @apply sm:text-sm sm:w-8;
+}
+
+.syllable-bar {
+  @apply flex-1 h-2 bg-surfaceVariant overflow-hidden border border-outline;
+  @apply sm:h-3;
+}
+
+.syllable-fill {
+  @apply h-full transition-all duration-300 ease-out;
+
+  &.correct {
+    @apply bg-green;
+  }
+
+  &.over {
+    @apply bg-red;
+  }
+
+  &.under {
+    @apply bg-yellow;
+  }
+}
+
+.syllable-count {
+  @apply text-xs font-mono text-onSurface w-12 text-right;
+  @apply sm:text-sm sm:w-16;
+}
+
+.status-icon {
+  @apply text-base w-6 flex items-center justify-center;
+  @apply sm:text-lg sm:w-8;
 }
 
 .actions-section {

@@ -1,13 +1,36 @@
-<div class="poetry-page">
+<div class="poetry-page" [class.results-highlight]="recentlyAnalyzed()">
   <!-- Toast Notifications -->
   <app-toast-container />
 
   <!-- Header -->
   <app-header />
 
+  <!-- Navegación rápida flotante (solo mobile) -->
+  <div class="quick-nav-buttons">
+    <button
+      class="nav-pill"
+      [class.active]="currentSection() === 'editor'"
+      (click)="onQuickNav('editor')"
+      aria-label="Go to editor"
+    >
+      <span class="icon-[iconoir--edit-pencil]"></span>
+      <span>editor</span>
+    </button>
+
+    <button
+      class="nav-pill"
+      [class.active]="currentSection() === 'results'"
+      [disabled]="!hasResults()"
+      (click)="onQuickNav('results')"
+      aria-label="Go to results"
+    >
+      <span class="icon-[iconoir--page-search]"></span>
+      <span>results</span>
+    </button>
+  </div>
+
   <!-- Panorama: Secciones Principales -->
   <app-panorama>
-    
     <!-- SECTION: Editor -->
     <div data-section="editor">
       <div class="section-content">
@@ -32,8 +55,8 @@
             <div class="info-text">
               <h4 class="info-title">how it works</h4>
               <p class="info-description">
-                Harawihark uses advanced phonetic analysis to count syllables accurately,
-                detect rhyme schemes, and provide intelligent suggestions.
+                Harawihark uses advanced phonetic analysis to count syllables accurately, detect
+                rhyme schemes, and provide intelligent suggestions.
               </p>
               <ul class="info-features">
                 <li>
@@ -60,17 +83,42 @@
     </div>
 
     <!-- SECTION: Results -->
-    <div data-section="results">
+    <div data-section="results" [class.section-highlight]="recentlyAnalyzed()">
       <div class="section-content">
         @if (hasResults()) {
-          <!-- Analysis in Progress -->
+          <!-- States de loading con etapas -->
           @if (isAnalyzing()) {
-            <div class="analysis-loading">
-              <app-progress type="ring" />
-              <p class="metro-body">Analyzing your poem...</p>
-            </div>
+            <app-card padding="large">
+              <div class="analysis-loading">
+                <div class="analysis-stages">
+                  <div class="stage" [class.active]="currentStage() === 'syllables'">
+                    <span class="icon-[iconoir--sound-high] stage-icon"></span>
+                    <span class="stage-label">counting syllables</span>
+                    @if (currentStage() === 'syllables') {
+                      <app-progress type="bar" />
+                    }
+                  </div>
+
+                  <div class="stage" [class.active]="currentStage() === 'rhythm'">
+                    <span class="icon-[iconoir--music-double] stage-icon"></span>
+                    <span class="stage-label">analyzing rhythm</span>
+                    @if (currentStage() === 'rhythm') {
+                      <app-progress type="bar" />
+                    }
+                  </div>
+
+                  <div class="stage" [class.active]="currentStage() === 'patterns'">
+                    <span class="icon-[iconoir--sparks] stage-icon"></span>
+                    <span class="stage-label">detecting patterns</span>
+                    @if (currentStage() === 'patterns') {
+                      <app-progress type="bar" />
+                    }
+                  </div>
+                </div>
+              </div>
+            </app-card>
           } @else {
-            <!-- Pivot Tabs para Analysis Views -->
+            <!-- Pivot Tabs -->
             <app-pivot
               [items]="analysisTabs()"
               [selectedId]="selectedAnalysisTab()"
@@ -95,8 +143,8 @@
                   } @else {
                     <app-card padding="large">
                       <div class="quality-prompt">
-                        <span class="icon-[iconoir--star] text-4xl mb-metro-md"></span>
-                        <p class="metro-body mb-metro-md">
+                        <span class="icon-[iconoir--star] text-4xl mb-4"></span>
+                        <p class="text-base mb-6 text-onSurfaceVariant">
                           Click "Assess Quality" to see detailed quality metrics
                         </p>
                         <app-button
@@ -138,20 +186,44 @@
             </div>
           }
         } @else {
-          <!-- Empty State -->
+          <!-- Empty State Mejorado -->
           <app-card padding="large">
-            <div class="empty-content">
+            <div class="empty-state-rich">
               <span class="icon-[iconoir--flower] empty-icon"></span>
-              <h3 class="metro-header-4">ready to analyze</h3>
-              <p class="metro-body">
+              <h3 class="empty-title">ready to analyze poetry</h3>
+              <p class="empty-description">
                 Write your poem in the editor or load an example to see analysis
               </p>
+
+              <div class="forms-showcase">
+                <h4 class="forms-title">try these poetic forms:</h4>
+                <div class="forms-grid">
+                  <button class="form-card" (click)="loadFormExample('haiku')">
+                    <span class="form-name">haiku</span>
+                    <span class="form-pattern">5-7-5</span>
+                  </button>
+
+                  <button class="form-card" (click)="loadFormExample('tanka')">
+                    <span class="form-name">tanka</span>
+                    <span class="form-pattern">5-7-5-7-7</span>
+                  </button>
+
+                  <button class="form-card" (click)="loadFormExample('limerick')">
+                    <span class="form-name">limerick</span>
+                    <span class="form-pattern">8-8-5-5-8</span>
+                  </button>
+
+                  <button class="form-card" (click)="loadFormExample('cinquain')">
+                    <span class="form-name">cinquain</span>
+                    <span class="form-pattern">2-4-6-8-2</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </app-card>
         }
       </div>
     </div>
-
   </app-panorama>
 
   <!-- Footer -->

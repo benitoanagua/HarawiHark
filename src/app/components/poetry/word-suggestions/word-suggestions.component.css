@@ -23,11 +23,12 @@
   @apply sm:w-8 sm:h-8 lg:w-9 lg:h-9;
 
   &:hover {
-    @apply bg-surfaceContainerHigh;
+    @apply bg-surfaceContainerHigh scale-110;
   }
 
   &:active {
-    @apply scale-95;
+    @apply scale-90;
+    animation: tap-feedback 0.2s ease-out;
   }
 
   &:focus-visible {
@@ -35,23 +36,51 @@
   }
 }
 
+@keyframes tap-feedback {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(0.98);
+  }
+}
+
 .close-icon {
   @apply text-lg sm:text-xl lg:text-2xl;
 }
 
+/* 🎯 FASE 3: Scroll horizontal en mobile, grid en desktop */
 .alternatives-list {
-  @apply space-y-2 sm:space-y-3;
+  @apply flex overflow-x-auto snap-x snap-mandatory gap-3 pb-2;
+  @apply md:grid md:grid-cols-2 md:overflow-visible md:pb-0;
+  @apply lg:grid-cols-3 lg:gap-4;
+
+  /* Ocultar scrollbar en mobile */
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .alternative-item {
+  @apply flex-shrink-0 w-[85vw] snap-start;
   @apply flex flex-col gap-2;
   @apply sm:flex-row sm:items-center sm:justify-between sm:gap-3;
+  @apply md:w-auto md:flex-shrink;
   @apply p-2 bg-surface border-2 border-outlineVariant;
   @apply transition-all duration-200;
   @apply sm:p-3 lg:p-4;
 
   &:hover {
-    @apply bg-surfaceVariant;
+    @apply bg-surfaceVariant scale-[1.02] shadow-lg;
+    @apply border-primary;
+  }
+
+  &:active {
+    @apply scale-95;
   }
 }
 
@@ -94,6 +123,17 @@
 .no-alternatives-icon {
   @apply text-3xl text-onSurfaceVariant;
   @apply sm:text-4xl lg:text-5xl;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .no-alternatives-text {

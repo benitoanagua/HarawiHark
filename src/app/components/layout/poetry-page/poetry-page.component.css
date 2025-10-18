@@ -1,28 +1,44 @@
 .poetry-page {
   @apply min-h-screen bg-background text-onBackground flex flex-col;
   @apply pb-20 sm:pb-24 lg:pb-0;
+  @apply transition-all duration-500;
 }
 
-/* 🎯 LAYOUT SIDE-BY-SIDE EN DESKTOP */
+/* Highlight de resultados recientes */
+.poetry-page.results-highlight {
+  @apply relative;
+}
+
+.section-highlight {
+  @apply relative;
+  animation: section-pulse 1s ease-out;
+}
+
+@keyframes section-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.002);
+  }
+}
+
+/* Layout Side-by-Side en Desktop */
 .page-container {
   @apply flex-1;
-
-  /* Desktop: Layout 50/50 */
   @apply lg:flex lg:min-h-[calc(100vh-80px)];
 }
 
 .editor-section {
   @apply flex-1;
-
-  /* Desktop: 50% width + scroll independiente */
   @apply lg:w-1/2 lg:max-w-[50%] lg:border-r lg:border-outlineVariant;
   @apply lg:overflow-y-auto lg:h-[calc(100vh-80px)];
 }
 
 .results-section {
   @apply flex-1;
-
-  /* Desktop: 50% width + scroll independiente */
   @apply lg:w-1/2 lg:max-w-[50%] lg:overflow-y-auto;
   @apply lg:h-[calc(100vh-80px)];
 }
@@ -31,14 +47,89 @@
   @apply py-6 sm:py-8 lg:py-12;
 }
 
-.editor-content {
-  @apply max-w-2xl mx-auto;
-  @apply lg:mx-0 lg:max-w-none lg:pr-4;
+/* Navegación rápida flotante */
+.quick-nav-buttons {
+  @apply fixed bottom-20 right-4 z-40 flex flex-col gap-2;
+  @apply sm:bottom-24 sm:right-6;
+  @apply lg:hidden;
 }
 
-.results-content {
-  @apply max-w-4xl mx-auto;
-  @apply lg:mx-0 lg:max-w-none;
+.nav-pill {
+  @apply bg-primary text-onPrimary px-4 py-3;
+  @apply flex items-center gap-2 text-sm font-semibold tracking-tight;
+  @apply transition-all duration-200 shadow-lg border-0;
+  @apply min-w-[100px] justify-start;
+
+  &.active {
+    @apply bg-primaryContainer text-onPrimaryContainer scale-105;
+    @apply outline outline-2 outline-primary;
+  }
+
+  &:hover:not(:disabled) {
+    @apply scale-105 shadow-xl;
+  }
+
+  &:active:not(:disabled) {
+    @apply scale-95;
+  }
+
+  &:disabled {
+    @apply opacity-40 cursor-not-allowed scale-100;
+  }
+
+  &:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+/* Estados de análisis con etapas */
+.analysis-loading {
+  @apply flex flex-col items-center justify-center py-12 gap-8;
+  @apply sm:py-16 lg:py-20;
+}
+
+.analysis-stages {
+  @apply w-full max-w-md flex flex-col gap-4;
+}
+
+.stage {
+  @apply flex items-center gap-3 p-4 bg-surfaceVariant;
+  @apply border-2 border-outlineVariant;
+  @apply transition-all duration-300 opacity-40;
+
+  &.active {
+    @apply opacity-100 bg-primaryContainer border-primary;
+    @apply scale-105 shadow-lg;
+  }
+}
+
+.stage-icon {
+  @apply text-2xl text-onSurfaceVariant flex-shrink-0;
+  @apply sm:text-3xl;
+
+  .stage.active & {
+    @apply text-primary;
+    animation: icon-pulse 1s ease-in-out infinite;
+  }
+}
+
+@keyframes icon-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.stage-label {
+  @apply flex-1 text-sm font-semibold tracking-tight text-onSurfaceVariant;
+  @apply sm:text-base;
+
+  .stage.active & {
+    @apply text-onPrimaryContainer;
+  }
 }
 
 /* Info Section */
@@ -82,15 +173,12 @@
   @apply text-lg opacity-80 flex-shrink-0;
 }
 
-/* Analysis States */
+/* Suggestions */
 .suggestions-wrapper {
   @apply mt-6 sm:mt-8;
 }
 
-.analysis-loading {
-  @apply flex flex-col items-center justify-center py-16 gap-6;
-}
-
+/* Analysis Content */
 .analysis-content {
   @apply mt-6 sm:mt-8;
 }
@@ -99,19 +187,81 @@
   @apply mt-8 flex flex-wrap gap-2 sm:gap-3;
 }
 
-.empty-content {
-  @apply flex flex-col items-center justify-center text-center gap-6 py-16;
+/* Empty State Mejorado */
+.empty-state-rich {
+  @apply flex flex-col items-center justify-center text-center gap-6 py-12;
 }
 
 .empty-icon {
   @apply text-5xl text-onSurfaceVariant;
   @apply lg:text-6xl;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.empty-title {
+  @apply text-2xl font-light tracking-tight text-onSurface lowercase;
+  @apply sm:text-3xl;
+}
+
+.empty-description {
+  @apply text-base text-onSurfaceVariant max-w-md;
+  @apply sm:text-lg;
+}
+
+.forms-showcase {
+  @apply mt-8 w-full max-w-2xl;
+}
+
+.forms-title {
+  @apply text-lg font-semibold tracking-tight text-onSurface lowercase mb-4;
+  @apply sm:text-xl;
+}
+
+.forms-grid {
+  @apply grid grid-cols-2 gap-3;
+  @apply sm:gap-4 lg:grid-cols-4;
+}
+
+.form-card {
+  @apply p-4 bg-surfaceVariant border-2 border-outlineVariant;
+  @apply flex flex-col items-center gap-2;
+  @apply transition-all duration-200 cursor-pointer;
+  @apply sm:p-6;
+
+  &:hover {
+    @apply bg-surfaceContainerHigh border-primary scale-105;
+    @apply shadow-lg;
+  }
+
+  &:active {
+    @apply scale-95;
+  }
+
+  &:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+.form-name {
+  @apply text-sm font-semibold tracking-tight text-onSurface lowercase;
+  @apply sm:text-base;
+}
+
+.form-pattern {
+  @apply text-xs text-onSurfaceVariant font-mono;
+  @apply sm:text-sm;
 }
 
 .quality-prompt {
-  @apply flex flex-col items-center justify-center text-center py-12;
-}
-
-.history-placeholder {
-  @apply flex flex-col items-center justify-center text-center py-16;
+  @apply flex flex-col items-center justify-center text-center py-12 gap-4;
 }

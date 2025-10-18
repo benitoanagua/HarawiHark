@@ -19,13 +19,13 @@
       />
 
       @if (currentForm(); as form) {
-      <div class="form-info">
-        <div class="form-info-header">
-          <span class="form-pattern">pattern: {{ form.pattern.join('-') }} syllables</span>
-          <span class="form-lines">{{ form.lines }} lines</span>
+        <div class="form-info">
+          <div class="form-info-header">
+            <span class="form-pattern">pattern: {{ form.pattern.join('-') }} syllables</span>
+            <span class="form-lines">{{ form.lines }} lines</span>
+          </div>
+          <p class="form-description">{{ form.description }} · {{ form.origin }}</p>
         </div>
-        <p class="form-description">{{ form.description }} · {{ form.origin }}</p>
-      </div>
       }
     </div>
 
@@ -41,11 +41,69 @@
         (inputChange)="onTextChange($event)"
       />
 
-      <div class="input-stats">
-        <span>{{ lineCount() }} lines</span>
-        <span>{{ totalSyllables() }} total syllables</span>
+      <!-- Contadores mejorados con progreso -->
+      <div class="input-stats-enhanced">
+        <div class="stat-group">
+          <span class="stat-label">lines</span>
+          <span class="stat-value">{{ lineCount() }}</span>
+          <span class="stat-target">/{{ currentForm().lines || '?' }}</span>
+        </div>
+
+        <div class="stat-group">
+          <span class="stat-label">syllables</span>
+          <span class="stat-value">{{ totalSyllables() }}</span>
+          <span class="stat-target">/{{ expectedSyllables() }}</span>
+        </div>
+
+        <!-- Barra de progreso visual -->
+        <div class="syllable-progress-bar">
+          <div
+            class="progress-fill"
+            [style.width.%]="syllableProgress()"
+            [class.complete]="syllableProgress() === 100"
+            [class.over]="syllableProgress() > 100"
+          ></div>
+        </div>
       </div>
     </div>
+
+    <!-- Validación visual por línea -->
+    @if (liveLineAnalysis().length > 0) {
+      <div class="line-validator">
+        <h4 class="validator-title">live validation</h4>
+        <div class="validation-grid">
+          @for (line of liveLineAnalysis(); track line.lineNumber) {
+            <div class="validation-row" [class.correct]="line.isCorrect" [class.over]="line.isOver">
+              <span class="line-num">{{ line.lineNumber }}</span>
+
+              <div class="syllable-bar">
+                <div
+                  class="syllable-fill"
+                  [style.width.%]="Math.min(line.progress, 100)"
+                  [class.correct]="line.isCorrect"
+                  [class.over]="line.isOver"
+                  [class.under]="!line.isCorrect && !line.isOver"
+                ></div>
+              </div>
+
+              <span class="syllable-count">
+                {{ line.currentSyllables }}/{{ line.expectedSyllables }}
+              </span>
+
+              <span class="status-icon">
+                @if (line.isCorrect) {
+                  <span class="icon-[iconoir--check] text-green"></span>
+                } @else if (line.isOver) {
+                  <span class="icon-[iconoir--warning-triangle] text-red"></span>
+                } @else {
+                  <span class="icon-[iconoir--minus] text-yellow"></span>
+                }
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+    }
 
     <!-- Actions -->
     <div class="actions-section">
@@ -65,7 +123,7 @@
         icon="icon-[iconoir--page]"
         (clicked)="loadExample()"
       />
-      
+
       <app-button
         variant="outline"
         size="medium"
