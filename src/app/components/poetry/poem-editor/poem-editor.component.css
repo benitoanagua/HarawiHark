@@ -1,39 +1,36 @@
-/* =====================================================
-   poem-editor.component.css - Metro Poetry Editor
-   ===================================================== */
 .editor-container {
-  @apply flex flex-col gap-metro-md sm:gap-metro-lg;
+  @apply flex flex-col gap-6 sm:gap-8 lg:gap-10;
 }
 
 .editor-header {
-  @apply flex flex-col gap-metro-xs;
+  @apply flex flex-col gap-2;
 }
 
 .editor-title {
-  @apply text-2xl sm:text-3xl font-light tracking-tight text-onSurface lowercase;
-  @apply mb-metro-xs;
+  @apply text-3xl font-light tracking-tight lowercase text-onSurface mb-2;
+  @apply sm:text-4xl lg:text-5xl;
 }
 
 .editor-subtitle {
-  @apply text-sm sm:text-base text-onSurfaceVariant;
+  @apply text-sm text-onSurfaceVariant;
+  @apply sm:text-base lg:text-lg;
 }
 
 .form-section {
-  @apply flex flex-col gap-metro-sm;
+  @apply flex flex-col gap-3 sm:gap-4;
 }
 
 .form-info {
-  @apply p-metro-sm sm:p-metro-md;
-  background-color: var(--metro-accent-container);
-  color: var(--metro-accent-on-container);
+  @apply p-4 bg-blueContainer text-onBlueContainer;
+  @apply sm:p-6 lg:p-8;
 }
-
 .form-info-header {
-  @apply flex items-center justify-between mb-metro-xs;
+  @apply flex items-center justify-between mb-2;
 }
 
 .form-pattern {
-  @apply text-sm sm:text-base font-semibold tracking-tight lowercase;
+  @apply text-sm font-semibold tracking-tight lowercase;
+  @apply sm:text-base lg:text-lg;
 }
 
 .form-lines {
@@ -41,18 +38,18 @@
 }
 
 .form-description {
-  @apply text-xs sm:text-sm;
+  @apply text-xs sm:text-sm lg:text-base;
 }
 
 .input-section {
-  @apply flex flex-col gap-metro-xs;
+  @apply flex flex-col gap-2;
 }
 
 .input-stats {
-  @apply flex items-center justify-between text-xs sm:text-sm text-onSurfaceVariant;
-  @apply mt-metro-xs;
+  @apply flex items-center justify-between text-xs text-onSurfaceVariant mt-2;
+  @apply sm:text-sm lg:text-base;
 }
 
 .actions-section {
-  @apply flex flex-wrap gap-metro-xs sm:gap-metro-sm;
+  @apply flex flex-wrap gap-2 sm:gap-3 lg:gap-4;
 }

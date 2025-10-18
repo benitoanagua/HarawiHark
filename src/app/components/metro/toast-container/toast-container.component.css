@@ -1,22 +1,15 @@
 .metro-toast-container {
-  @apply fixed top-0 left-0 right-0;
-  @apply z-[200];
-  @apply flex flex-col gap-metro-xs;
-  @apply p-metro-sm;
-  @apply pointer-events-none;
+  @apply fixed top-0 left-0 right-0 z-[200];
+  @apply flex flex-col gap-2 p-4 pointer-events-none;
+  @apply sm:gap-3 sm:p-6;
 }
 
 .metro-toast {
   @apply bg-surface text-onSurface border-2 border-outline;
-  @apply px-metro-md py-metro-sm;
-  @apply sm:px-metro-lg sm:py-metro-md;
-  @apply flex items-start gap-metro-sm;
-  @apply pointer-events-auto;
-  @apply shadow-none;
-  /* Animación entrada desde arriba */
-  animation: metro-slide-down 0.3s ease-out;
-  /* Límite de ancho */
+  @apply px-4 py-3 flex items-start gap-3 pointer-events-auto;
   @apply max-w-md mx-auto w-full;
+  @apply sm:px-6 sm:py-4 sm:gap-4;
+  animation: metro-slide-down 0.3s ease-out;
 }
 
 @keyframes metro-slide-down {
@@ -31,7 +24,8 @@
 }
 
 .metro-toast-icon {
-  @apply text-2xl sm:text-3xl flex-shrink-0;
+  @apply text-2xl flex-shrink-0;
+  @apply sm:text-3xl;
 }
 
 .metro-toast-content {
@@ -39,22 +33,18 @@
 }
 
 .metro-toast-title {
-  @apply text-base sm:text-lg;
-  @apply font-semibold tracking-tight;
-  @apply mb-1;
+  @apply text-base font-semibold tracking-tight mb-1;
+  @apply sm:text-lg;
 }
 
 .metro-toast-message {
-  @apply text-sm sm:text-base;
-  @apply opacity-80;
+  @apply text-sm opacity-80;
+  @apply sm:text-base;
 }
 
 .metro-toast-close {
-  @apply flex-shrink-0;
-  @apply w-8 h-8 flex items-center justify-center;
-  @apply text-lg;
-  @apply transition-colors duration-200;
-  @apply cursor-pointer;
+  @apply flex-shrink-0 w-8 h-8 flex items-center justify-center;
+  @apply text-lg transition-colors duration-200 cursor-pointer;
   @apply border-0 bg-transparent;
 
   &:hover {
@@ -62,24 +52,23 @@
   }
 
   &:focus-visible {
-    @apply outline outline-2 outline-offset-2;
-    outline-color: var(--metro-accent);
+    @apply outline outline-2 outline-offset-2 outline-primary;
   }
 }
 
-/* Variantes de color Metro */
+/* Variantes de color usando terminal colors */
 .metro-toast-info {
-  @apply border-inverseBlue bg-inverseBlue text-onBlueContainer;
+  @apply border-blue bg-blueContainer text-onBlueContainer;
 }
 
 .metro-toast-success {
-  @apply border-inverseGreen bg-inverseGreen text-onGreenContainer;
+  @apply border-green bg-greenContainer text-onGreenContainer;
 }
 
 .metro-toast-warning {
-  @apply border-inverseYellow bg-inverseYellow text-onYellowContainer;
+  @apply border-yellow bg-yellowContainer text-onYellowContainer;
 }
 
 .metro-toast-error {
-  @apply border-inverseRed bg-inverseRed text-onRedContainer;
+  @apply border-red bg-redContainer text-onRedContainer;
 }

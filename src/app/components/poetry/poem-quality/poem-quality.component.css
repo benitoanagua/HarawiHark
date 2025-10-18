@@ -1,8 +1,5 @@
-/* =====================================================
-   poem-quality.component.css - Metro Quality Assessment
-   ===================================================== */
 .quality-container {
-  @apply flex flex-col gap-metro-md sm:gap-metro-lg;
+  @apply flex flex-col gap-4 sm:gap-6 lg:gap-8;
 }
 
 .quality-header {
@@ -10,36 +7,39 @@
 }
 
 .quality-title {
-  @apply text-lg sm:text-xl font-light tracking-tight text-onSurface lowercase;
-  @apply mb-metro-xs;
+  @apply text-lg font-light tracking-tight text-onSurface lowercase mb-2;
+  @apply sm:text-xl lg:text-2xl;
 }
 
 .score-display {
-  @apply flex items-center gap-metro-xs sm:gap-metro-sm;
+  @apply flex items-center gap-2 sm:gap-3;
 }
 
 .score-number {
-  @apply text-2xl sm:text-3xl font-light text-onSurface;
+  @apply text-2xl font-light text-onSurface;
+  @apply sm:text-3xl lg:text-4xl;
 }
 
 .score-max {
-  @apply text-base sm:text-lg text-onSurfaceVariant;
+  @apply text-base text-onSurfaceVariant;
+  @apply sm:text-lg lg:text-xl;
 }
 
 .grade-badge {
-  @apply text-xs sm:text-sm;
+  @apply text-xs sm:text-sm lg:text-base;
 }
 
 .metrics-breakdown {
-  @apply flex flex-col gap-metro-sm sm:gap-metro-md;
+  @apply flex flex-col gap-3 sm:gap-4;
 }
 
 .breakdown-title {
-  @apply text-base sm:text-lg font-semibold tracking-tight text-onSurface lowercase;
+  @apply text-base font-semibold tracking-tight text-onSurface lowercase;
+  @apply sm:text-lg lg:text-xl;
 }
 
 .metrics-grid {
-  @apply space-y-metro-xs sm:space-y-metro-sm;
+  @apply space-y-2 sm:space-y-3 lg:space-y-4;
 }
 
 .metric-item {
@@ -51,15 +51,18 @@
 }
 
 .metric-name {
-  @apply text-xs sm:text-sm font-medium text-onSurface capitalize;
+  @apply text-xs font-medium text-onSurface capitalize;
+  @apply sm:text-sm lg:text-base;
 }
 
 .metric-score {
-  @apply text-xs sm:text-sm text-onSurfaceVariant;
+  @apply text-xs text-onSurfaceVariant;
+  @apply sm:text-sm lg:text-base;
 }
 
 .metric-bar {
-  @apply w-full h-1 sm:h-1.5 bg-surfaceVariant overflow-hidden;
+  @apply w-full h-1 bg-surfaceVariant overflow-hidden;
+  @apply sm:h-1.5 lg:h-2;
 }
 
 .metric-fill {
@@ -67,38 +70,39 @@
 }
 
 .metric-excellent {
-  @apply bg-inverseGreen;
+  @apply bg-green;
 }
 
 .metric-good {
-  @apply bg-inverseBlue;
+  @apply bg-blue;
 }
 
 .metric-fair {
-  @apply bg-inverseYellow;
+  @apply bg-yellow;
 }
 
 .metric-poor {
-  @apply bg-inverseRed;
+  @apply bg-red;
 }
 
 .feedback-section {
-  @apply grid grid-cols-1 gap-metro-md;
-  @apply md:grid-cols-2 md:gap-metro-lg;
+  @apply grid grid-cols-1 gap-4;
+  @apply md:grid-cols-2 md:gap-6 lg:gap-8;
 }
 
 .strengths,
 .improvements {
-  @apply flex flex-col gap-metro-xs sm:gap-metro-sm;
+  @apply flex flex-col gap-2 sm:gap-3;
 }
 
 .feedback-title {
-  @apply flex items-center gap-metro-xs;
-  @apply text-sm sm:text-base font-semibold tracking-tight text-onSurface lowercase;
+  @apply flex items-center gap-2;
+  @apply text-sm font-semibold tracking-tight text-onSurface lowercase;
+  @apply sm:text-base lg:text-lg;
 }
 
 .feedback-icon {
-  @apply text-base sm:text-lg;
+  @apply text-base sm:text-lg lg:text-xl;
 }
 
 .feedback-list {
@@ -106,7 +110,6 @@
 }
 
 .feedback-list li {
-  @apply text-xs sm:text-sm text-onSurfaceVariant;
-  @apply pl-metro-sm;
-  @apply list-disc;
+  @apply text-xs text-onSurfaceVariant pl-4 list-disc;
+  @apply sm:text-sm lg:text-base;
 }

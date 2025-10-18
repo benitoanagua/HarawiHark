@@ -1,14 +1,17 @@
 .metro-toggle-wrapper {
-  @apply flex items-center gap-metro-sm;
+  @apply flex items-center gap-3 sm:gap-4;
 }
 
 .metro-toggle {
-  @apply relative inline-flex items-center;
-  @apply w-14 h-8 sm:w-16 sm:h-9;
-  @apply bg-surfaceVariant border-2 border-outline;
-  @apply transition-colors duration-200;
-  @apply cursor-pointer;
-  @apply flex-shrink-0;
+  @apply relative inline-flex items-center flex-shrink-0;
+  @apply w-14 h-8 bg-surfaceVariant border-2 border-outline;
+  @apply transition-colors duration-200 cursor-pointer;
+
+  /* Tablet */
+  @apply sm:w-16 sm:h-9;
+
+  /* Desktop */
+  @apply lg:w-18 lg:h-10;
 }
 
 .metro-toggle-input {
@@ -16,21 +19,18 @@
 }
 
 .metro-toggle-slider {
-  @apply absolute left-0 top-0 bottom-0;
-  @apply w-1/2 bg-onSurfaceVariant;
-  @apply transition-transform duration-200 ease-out;
+  @apply absolute left-0 top-0 bottom-0 w-1/2;
+  @apply bg-onSurfaceVariant transition-transform duration-200 ease-out;
   @apply pointer-events-none;
 }
 
 /* Estado Checked */
 .metro-toggle-input:checked + .metro-toggle {
-  background-color: var(--metro-accent-container);
-  border-color: var(--metro-accent);
+  @apply bg-primaryContainer border-primary;
 }
 
 .metro-toggle-input:checked + .metro-toggle .metro-toggle-slider {
-  @apply translate-x-full;
-  background-color: var(--metro-accent);
+  @apply translate-x-full bg-primary;
 }
 
 /* Estado Disabled */
@@ -44,13 +44,10 @@
 
 /* Estado Focus */
 .metro-toggle-input:focus-visible + .metro-toggle {
-  @apply outline outline-2 outline-offset-2;
-  outline-color: var(--metro-accent);
+  @apply outline outline-2 outline-offset-2 outline-primary;
 }
 
 .metro-toggle-label {
-  @apply text-base sm:text-lg;
-  @apply font-normal tracking-tight;
-  @apply cursor-pointer;
-  @apply select-none;
+  @apply text-base font-normal tracking-tight cursor-pointer select-none;
+  @apply sm:text-lg lg:text-xl;
 }

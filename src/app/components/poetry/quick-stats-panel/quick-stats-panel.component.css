@@ -4,18 +4,24 @@
 
 .stats-title {
   @apply text-lg font-light tracking-tight text-onSurface lowercase;
+  @apply sm:text-xl lg:text-2xl;
 }
 
 .stats-grid {
-  @apply grid grid-cols-2 gap-4;
+  @apply grid grid-cols-2 gap-3;
+  @apply sm:gap-4 lg:gap-6;
 }
 
 .stat-item {
-  @apply flex items-center gap-3 p-3 bg-surfaceVariant border border-outlineVariant;
+  @apply flex items-center gap-2 p-3;
+  @apply bg-surfaceVariant border border-outlineVariant;
+  @apply sm:gap-3 sm:p-4 lg:p-5;
 }
 
 .stat-icon {
-  @apply w-8 h-8 flex items-center justify-center bg-primary text-onPrimary text-lg;
+  @apply w-8 h-8 flex items-center justify-center;
+  @apply bg-primary text-onPrimary text-lg;
+  @apply sm:w-10 sm:h-10 sm:text-xl lg:w-12 lg:h-12 lg:text-2xl;
 }
 
 .stat-content {
@@ -24,8 +30,10 @@
 
 .stat-value {
   @apply text-base font-semibold text-onSurface;
+  @apply sm:text-lg lg:text-xl;
 }
 
 .stat-label {
   @apply text-xs text-onSurfaceVariant uppercase tracking-wide;
+  @apply sm:text-sm;
 }

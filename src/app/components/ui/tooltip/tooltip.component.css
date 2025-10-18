@@ -1,6 +1,3 @@
-/* =====================================================
-   tooltip.component.css - Metro Tooltip
-   ===================================================== */
 .metro-tooltip {
   @apply relative inline-block;
 
@@ -10,28 +7,31 @@
 }
 
 .tooltip-content {
-  @apply absolute z-50 px-metro-sm py-metro-xs;
-  @apply sm:px-metro-md sm:py-metro-xs;
-  @apply bg-surfaceContainerHigh text-onSurface;
+  @apply absolute z-50;
+  @apply px-3 py-1.5 bg-surfaceContainerHigh text-onSurface;
   @apply border-2 border-outlineVariant;
-  @apply text-xs sm:text-sm font-normal tracking-tight;
-  @apply opacity-0 invisible transition-all duration-200;
-  @apply whitespace-nowrap;
-  @apply rounded-none shadow-none;
+  @apply text-xs font-normal tracking-tight;
+  @apply opacity-0 invisible transition-all duration-200 whitespace-nowrap;
+
+  /* Tablet */
+  @apply sm:px-4 sm:py-2 sm:text-sm;
+
+  /* Desktop */
+  @apply lg:text-base;
 }
 
 .tooltip-top .tooltip-content {
-  @apply bottom-full left-1/2 transform -translate-x-1/2 mb-metro-xs;
+  @apply bottom-full left-1/2 transform -translate-x-1/2 mb-2;
 }
 
 .tooltip-bottom .tooltip-content {
-  @apply top-full left-1/2 transform -translate-x-1/2 mt-metro-xs;
+  @apply top-full left-1/2 transform -translate-x-1/2 mt-2;
 }
 
 .tooltip-left .tooltip-content {
-  @apply right-full top-1/2 transform -translate-y-1/2 mr-metro-xs;
+  @apply right-full top-1/2 transform -translate-y-1/2 mr-2;
 }
 
 .tooltip-right .tooltip-content {
-  @apply left-full top-1/2 transform -translate-y-1/2 ml-metro-xs;
+  @apply left-full top-1/2 transform -translate-y-1/2 ml-2;
 }

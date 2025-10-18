@@ -1,24 +1,19 @@
-/* =====================================================
-   badge.component.css - Metro Badge
-   ===================================================== */
 .badge-default,
 .badge-info,
 .badge-success,
 .badge-warning,
 .badge-error {
-  @apply inline-flex items-center gap-1;
-  @apply font-semibold tracking-tight border-2;
-  @apply rounded-none shadow-none;
+  @apply inline-flex items-center gap-1 font-semibold tracking-tight border-2;
 }
 
 .badge-small {
   @apply text-xs px-2 py-[2px];
-  @apply sm:px-[10px] sm:py-1;
+  @apply sm:px-2.5 sm:py-1 sm:text-sm;
 }
 
 .badge-medium {
-  @apply text-sm px-[10px] py-1;
-  @apply sm:px-metro-sm sm:py-[6px];
+  @apply text-sm px-3 py-1;
+  @apply sm:px-4 sm:py-1.5 sm:text-base;
 }
 
 .badge-default {
@@ -26,17 +21,17 @@
 }
 
 .badge-info {
-  @apply bg-inverseBlue text-onBlueContainer border-inverseBlueContainer;
+  @apply bg-blueContainer text-onBlueContainer border-blue;
 }
 
 .badge-success {
-  @apply bg-inverseGreen text-onGreenContainer border-inverseGreenContainer;
+  @apply bg-greenContainer text-onGreenContainer border-green;
 }
 
 .badge-warning {
-  @apply bg-inverseYellow text-onYellowContainer border-inverseYellowContainer;
+  @apply bg-yellowContainer text-onYellowContainer border-yellow;
 }
 
 .badge-error {
-  @apply bg-inverseRed text-onRedContainer border-inverseRedContainer;
+  @apply bg-redContainer text-onRedContainer border-red;
 }

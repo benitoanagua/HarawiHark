@@ -3,50 +3,45 @@
   @apply overflow-x-auto overflow-y-hidden;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
-  -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
     display: none;
   }
+
+  /* Desktop: Grid automático */
+  @apply lg:overflow-x-visible lg:grid lg:auto-cols-fr lg:grid-flow-col;
 }
 
 .metro-pivot-item {
-  @apply flex-shrink-0;
-  /* Metro: mucho padding horizontal para claridad */
-  @apply px-metro-lg py-metro-md;
-  @apply sm:px-metro-xl sm:py-metro-lg;
-  @apply bg-transparent text-onSurfaceVariant;
-  @apply border-b-[3px] border-transparent;
-  @apply font-light tracking-tight lowercase;
-  @apply text-xl sm:text-2xl lg:text-3xl;
-  @apply transition-colors duration-200;
-  @apply cursor-pointer;
-  @apply whitespace-nowrap;
+  @apply flex-shrink-0 px-6 py-4 bg-transparent text-onSurfaceVariant;
+  @apply border-b-[3px] border-transparent font-light tracking-tight lowercase;
+  @apply text-xl transition-colors duration-200 cursor-pointer;
+  @apply whitespace-nowrap min-h-14;
   scroll-snap-align: start;
-  /* Touch target mínimo */
-  @apply min-h-[56px] sm:min-h-[64px];
 
-  &:hover:not(.metro-pivot-active) {
+  /* Tablet */
+  @apply sm:px-8 sm:py-6 sm:text-2xl sm:min-h-16;
+
+  /* Desktop */
+  @apply lg:flex-shrink lg:text-center lg:text-3xl lg:min-h-18;
+
+  &:hover:not(.metro-pivot-active):not(:disabled) {
     @apply text-onSurface;
   }
 
-  &:active {
-    color: var(--metro-accent);
+  &:active:not(:disabled) {
+    @apply text-primary;
   }
 
   &:disabled {
-    @apply opacity-50 cursor-not-allowed;
+    @apply opacity-40 cursor-not-allowed;
+  }
+
+  &:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary;
   }
 }
 
 .metro-pivot-active {
-  @apply font-semibold;
-  border-bottom-color: var(--metro-accent);
-  color: var(--metro-accent);
-}
-
-/* Indicador de más contenido (opcional) */
-.metro-pivot::after {
-  content: '';
-  @apply flex-shrink-0 w-metro-md;
+  @apply font-semibold border-b-primary text-primary;
 }

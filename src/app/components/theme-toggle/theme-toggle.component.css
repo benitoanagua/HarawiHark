@@ -1,7 +1,8 @@
 .theme-toggle-wrapper {
-  @apply flex items-center gap-metro-xs;
+  @apply flex items-center gap-2 sm:gap-3;
 }
 
 .theme-icon {
-  @apply text-xl text-onSurface;
+  @apply text-xl sm:text-2xl text-onSurface;
+  @apply transition-colors duration-200;
 }

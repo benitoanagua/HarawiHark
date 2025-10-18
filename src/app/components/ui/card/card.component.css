@@ -1,46 +1,37 @@
-/* =====================================================
-   card.component.css - Metro Card
-   ===================================================== */
 .card-default {
   @apply bg-surface text-onSurface border-2 border-outlineVariant;
   @apply transition-all duration-200;
-  @apply rounded-none shadow-none;
 }
 
 .card-elevated {
-  @apply bg-surface text-onSurface border-0;
-  /* Metro excepción: sombra muy sutil */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  @apply bg-surfaceContainerHigh text-onSurface border-0 shadow-sm;
   @apply transition-all duration-200;
 }
 
-/* Padding Metro - Múltiplos de 12px */
 .card-padding-none {
   @apply p-0;
 }
 
 .card-padding-small {
-  @apply p-metro-sm sm:p-metro-md;
+  @apply p-4 sm:p-6 lg:p-8;
 }
 
 .card-padding-medium {
-  @apply p-metro-md sm:p-metro-lg lg:p-metro-xl;
+  @apply p-6 sm:p-8 lg:p-10;
 }
 
 .card-padding-large {
-  @apply p-metro-lg sm:p-metro-xl lg:p-metro-2xl;
+  @apply p-8 sm:p-10 lg:p-12;
 }
 
 .clickable {
-  @apply cursor-pointer;
-  @apply min-h-[44px];
+  @apply cursor-pointer min-h-11;
 
   &:hover {
     @apply bg-surfaceVariant;
   }
 
   &:active {
-    @apply scale-[0.98];
-    @apply bg-surfaceContainerHigh;
+    @apply scale-98 bg-surfaceContainerHigh;
   }
 }

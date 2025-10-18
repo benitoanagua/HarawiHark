@@ -1,17 +1,11 @@
-/* =====================================================
-   footer.component.css - ACTUALIZADO Metro
-   ===================================================== */
 .metro-footer {
-  @apply bg-surfaceContainerHigh text-onSurface;
-  @apply border-t-2 border-outlineVariant mt-auto;
+  @apply bg-surfaceVariant text-onSurface border-t border-outlineVariant mt-auto;
 }
 
 .footer-content {
-  @apply max-w-7xl mx-auto;
-  @apply px-metro-sm py-metro-lg;
-  @apply grid gap-metro-md;
-  @apply sm:px-metro-md sm:py-metro-xl sm:grid-cols-2 sm:gap-metro-lg;
-  @apply lg:px-metro-lg lg:py-metro-2xl lg:grid-cols-3 lg:gap-metro-2xl;
+  @apply max-w-7xl mx-auto px-4 py-12;
+  @apply sm:px-6 sm:py-16 sm:grid sm:grid-cols-2 sm:gap-8;
+  @apply lg:px-8 lg:py-20 lg:grid-cols-3 lg:gap-12;
 }
 
 .footer-info {
@@ -19,43 +13,41 @@
 }
 
 .footer-logo {
-  @apply flex items-center gap-metro-xs mb-metro-xs sm:mb-metro-sm;
+  @apply flex items-center gap-3 mb-4 sm:mb-6;
 }
 
 .footer-title {
-  @apply text-base font-light tracking-tight text-onSurface lowercase;
-  @apply sm:text-lg;
+  @apply text-lg font-light tracking-tight lowercase text-onSurface;
+  @apply sm:text-xl lg:text-2xl;
 }
 
 .footer-description {
   @apply text-sm text-onSurfaceVariant max-w-xs;
-  @apply sm:text-base;
+  @apply sm:text-base lg:text-lg;
 }
 
 .footer-links {
-  @apply grid grid-cols-1 gap-metro-md;
+  @apply grid grid-cols-1 gap-6;
   @apply sm:grid-cols-2 sm:col-span-1;
-  @apply lg:col-span-2;
+  @apply lg:col-span-2 lg:gap-8;
 }
 
 .link-group {
-  @apply flex flex-col gap-metro-xs sm:gap-metro-sm;
+  @apply flex flex-col gap-2 sm:gap-3;
 }
 
 .link-group-title {
-  @apply text-sm font-semibold tracking-tight text-onSurface uppercase;
-  @apply mb-[6px] sm:mb-metro-xs;
+  @apply text-sm font-semibold tracking-tight text-onSurface uppercase mb-2;
+  @apply sm:text-base;
 }
 
 .footer-link {
-  @apply flex items-center gap-metro-xs;
-  @apply text-sm text-onSurfaceVariant;
-  @apply transition-colors duration-200 cursor-pointer;
-  @apply py-1;
-  @apply min-h-[32px];
+  @apply flex items-center gap-3 text-sm text-onSurfaceVariant;
+  @apply transition-colors duration-200 cursor-pointer py-2 min-h-8;
+  @apply sm:text-base;
 
   &:hover {
-    color: var(--metro-accent);
+    @apply text-primary;
   }
 
   &:active {
@@ -64,8 +56,8 @@
 }
 
 .footer-bottom {
-  @apply col-span-full pt-metro-md border-t-2 border-outlineVariant;
-  @apply sm:pt-metro-lg lg:pt-metro-xl;
+  @apply col-span-full pt-6 border-t border-outlineVariant;
+  @apply sm:pt-8 lg:pt-12;
 }
 
 .copyright {

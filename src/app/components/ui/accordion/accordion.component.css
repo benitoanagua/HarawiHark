@@ -1,18 +1,18 @@
-/* =====================================================
-   accordion.component.css - Metro UI Accordion
-   ===================================================== */
 .metro-accordion {
   @apply bg-surface border-2 border-outlineVariant;
 }
 
 .metro-accordion-header {
-  @apply w-full flex items-center justify-between gap-metro-sm;
-  @apply px-metro-md py-metro-sm;
-  @apply sm:px-metro-lg sm:py-metro-md;
-  @apply bg-surface text-onSurface;
+  @apply w-full flex items-center justify-between gap-3;
+  @apply px-4 py-3 bg-surface text-onSurface;
   @apply transition-all duration-200 cursor-pointer;
-  /* Metro: touch target */
-  @apply min-h-[48px] sm:min-h-[56px];
+  @apply min-h-12;
+
+  /* Tablet */
+  @apply sm:px-6 sm:py-4 sm:gap-4 sm:min-h-14;
+
+  /* Desktop */
+  @apply lg:px-8 lg:py-5 lg:min-h-16;
 
   &:hover {
     @apply bg-surfaceVariant;
@@ -23,30 +23,30 @@
   }
 
   &:focus-visible {
-    @apply outline outline-2 outline-offset-[-2px];
-    outline-color: var(--metro-accent);
+    @apply outline outline-2 outline-offset-[-2px] outline-primary;
   }
 }
 
 .accordion-title-section {
-  @apply flex items-center gap-metro-xs sm:gap-metro-sm;
+  @apply flex items-center gap-2 sm:gap-3;
 }
 
 .accordion-icon {
-  @apply text-lg sm:text-xl;
-  color: var(--metro-accent);
+  @apply text-lg text-primary;
+  @apply sm:text-xl lg:text-2xl;
 }
 
 .accordion-title {
-  @apply text-sm sm:text-base font-semibold tracking-tight text-onSurface;
+  @apply text-sm font-semibold tracking-tight text-onSurface;
+  @apply sm:text-base lg:text-lg;
 }
 
 .accordion-chevron {
-  @apply text-lg sm:text-xl text-onSurfaceVariant transition-transform duration-200;
+  @apply text-lg text-onSurfaceVariant transition-transform duration-200;
+  @apply sm:text-xl lg:text-2xl;
 }
 
 .metro-accordion-content {
-  @apply px-metro-md py-metro-sm;
-  @apply sm:px-metro-lg sm:py-metro-md;
-  @apply border-t-2 border-outlineVariant bg-surfaceContainerLow;
+  @apply px-4 py-3 border-t-2 border-outlineVariant bg-surfaceContainerLow;
+  @apply sm:px-6 sm:py-4 lg:px-8 lg:py-5;
 }

@@ -1,18 +1,18 @@
 .metro-list {
-  @apply divide-y-2 divide-outlineVariant;
-  @apply border-y-2 border-outlineVariant;
+  @apply divide-y-2 divide-outlineVariant border-y-2 border-outlineVariant;
 }
 
 .metro-list-item {
-  @apply flex items-center justify-between;
-  @apply px-metro-sm py-metro-md;
-  @apply sm:px-metro-md sm:py-metro-lg;
-  @apply bg-surface text-onSurface;
-  @apply transition-colors duration-200;
-  @apply cursor-pointer;
-  @apply w-full text-left;
-  /* Metro: altura mínima touch-friendly */
-  @apply min-h-[72px] sm:min-h-[80px];
+  @apply flex items-center justify-between w-full text-left;
+  @apply px-4 py-4 bg-surface text-onSurface;
+  @apply transition-colors duration-200 cursor-pointer;
+  @apply min-h-[72px];
+
+  /* Tablet */
+  @apply sm:px-6 sm:py-5 sm:min-h-[80px];
+
+  /* Desktop */
+  @apply lg:px-8 lg:py-6 lg:min-h-[88px];
 
   &:hover:not(:disabled) {
     @apply bg-surfaceVariant;
@@ -27,44 +27,41 @@
   }
 
   &:focus-visible {
-    @apply outline outline-2 outline-offset-[-2px];
-    outline-color: var(--metro-accent);
+    @apply outline outline-2 outline-offset-[-2px] outline-primary;
   }
 }
 
 .metro-list-item-leading {
-  @apply flex-shrink-0 mr-metro-sm sm:mr-metro-md;
+  @apply flex-shrink-0 mr-3 sm:mr-4 lg:mr-6;
 }
 
 .metro-list-item-icon {
-  @apply text-3xl sm:text-4xl text-onSurfaceVariant;
+  @apply text-3xl text-onSurfaceVariant;
+  @apply sm:text-4xl lg:text-5xl;
 }
 
 .metro-list-item-content {
-  @apply flex-1 flex flex-col gap-1;
-  @apply min-w-0; /* Permite truncate */
+  @apply flex-1 flex flex-col gap-1 min-w-0;
 }
 
 .metro-list-item-title {
-  @apply text-lg sm:text-xl;
-  @apply font-semibold tracking-tight;
-  @apply truncate;
+  @apply text-lg font-semibold tracking-tight truncate;
+  @apply sm:text-xl lg:text-2xl;
 }
 
 .metro-list-item-subtitle {
-  @apply text-sm sm:text-base;
-  @apply opacity-60;
-  @apply truncate;
+  @apply text-sm opacity-60 truncate;
+  @apply sm:text-base;
 }
 
 .metro-list-item-trailing {
-  @apply flex-shrink-0 ml-metro-sm sm:ml-metro-md;
-  @apply flex items-center gap-metro-xs;
+  @apply flex-shrink-0 ml-3 flex items-center gap-2;
+  @apply sm:ml-4 sm:gap-3 lg:ml-6;
 }
 
 .metro-list-item-chevron {
-  @apply text-2xl sm:text-3xl text-onSurfaceVariant;
-  @apply transform transition-transform duration-200;
+  @apply text-2xl text-onSurfaceVariant transform transition-transform duration-200;
+  @apply sm:text-3xl lg:text-4xl;
 
   .metro-list-item:hover:not(:disabled) & {
     @apply translate-x-1;
@@ -73,14 +70,12 @@
 
 .metro-list-item-meta {
   @apply text-sm text-onSurfaceVariant;
+  @apply sm:text-base;
 }
 
-/* List Item con Badge */
 .metro-list-item-badge {
   @apply inline-flex items-center justify-center;
-  @apply w-6 h-6 sm:w-7 sm:h-7;
-  @apply text-xs sm:text-sm font-semibold;
-  @apply rounded-full;
-  background-color: var(--metro-accent);
-  color: var(--metro-accent-on);
+  @apply w-6 h-6 text-xs font-semibold rounded-full;
+  @apply bg-primary text-onPrimary;
+  @apply sm:w-7 sm:h-7 sm:text-sm;
 }

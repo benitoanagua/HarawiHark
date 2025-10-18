@@ -1,14 +1,9 @@
-/* =====================================================
-   button.component.css - Metro Button
-   ===================================================== */
 .btn-base {
-  @apply border-0 cursor-pointer font-semibold tracking-tight;
+  @apply border-0 cursor-pointer font-semibold tracking-tight lowercase;
   @apply transition-all duration-200 flex items-center justify-center gap-2;
-  @apply rounded-none shadow-none;
 
   &:focus-visible {
-    @apply outline outline-2 outline-offset-2;
-    outline-color: var(--metro-accent);
+    @apply outline outline-2 outline-offset-2 outline-primary;
   }
 
   &:disabled {
@@ -20,49 +15,40 @@
   }
 }
 
-/* Tamaños Metro - Touch friendly */
 .btn-small {
-  @apply px-metro-md py-metro-sm text-sm;
-  @apply min-h-[44px];
-
-  @apply lg:px-metro-sm lg:py-[6px] lg:text-xs lg:min-h-[36px];
+  @apply px-4 py-2 text-sm min-h-11;
+  @apply sm:px-5 sm:py-2.5 sm:text-base sm:min-h-12;
+  @apply lg:px-6 lg:py-3 lg:text-lg lg:min-h-13;
 }
 
 .btn-medium {
-  @apply px-metro-lg py-metro-sm text-base;
-  @apply min-h-[48px];
-
-  @apply lg:px-metro-md lg:py-metro-sm lg:text-sm lg:min-h-[44px];
+  @apply px-6 py-3 text-base min-h-12;
+  @apply sm:px-7 sm:py-3.5 sm:text-lg sm:min-h-13;
+  @apply lg:px-8 lg:py-4 lg:text-xl lg:min-h-14;
 }
 
 .btn-large {
-  @apply px-metro-xl py-metro-md text-lg;
-  @apply min-h-[56px];
-
-  @apply lg:px-metro-lg lg:py-metro-md lg:text-base lg:min-h-[52px];
+  @apply px-8 py-4 text-lg min-h-14;
+  @apply sm:px-10 sm:py-5 sm:text-xl sm:min-h-16;
+  @apply lg:px-12 lg:py-6 lg:text-2xl lg:min-h-18;
 }
 
-/* Primary - Metro Accent */
 .btn-primary {
-  background-color: var(--metro-accent);
-  color: var(--metro-accent-on);
+  @apply bg-primary text-onPrimary;
 
   &:hover:not(:disabled) {
-    background-color: var(--metro-accent-container);
-    color: var(--metro-accent-on-container);
+    @apply bg-primaryContainer text-onPrimaryContainer;
   }
 }
 
-/* Secondary - Metro Neutral */
 .btn-secondary {
-  @apply bg-surfaceVariant text-onSurfaceVariant;
+  @apply bg-secondaryContainer text-onSecondaryContainer;
 
   &:hover:not(:disabled) {
-    @apply bg-surfaceContainerHigh;
+    @apply bg-secondary text-onSecondary;
   }
 }
 
-/* Outline - Metro Border */
 .btn-outline {
   @apply bg-transparent ring-2 ring-inset ring-outline text-onSurface;
 
@@ -71,7 +57,6 @@
   }
 
   &:active:not(:disabled) {
-    ring-color: var(--metro-accent);
-    color: var(--metro-accent);
+    @apply ring-primary text-primary;
   }
 }

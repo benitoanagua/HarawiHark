@@ -1,20 +1,14 @@
-/* =====================================================
-   header.component.css - ACTUALIZADO Metro
-   ===================================================== */
 .metro-header {
-  @apply bg-surface text-onSurface border-b-2 border-outlineVariant;
-  @apply sticky top-0 z-[50];
-  @apply transition-all duration-200;
+  @apply bg-surface text-onSurface border-b border-outlineVariant;
+  @apply sticky top-0 z-50 transition-all duration-200;
 }
 
 .header-content {
   @apply flex justify-between items-center;
-  @apply px-metro-sm py-metro-xs;
-  @apply sm:px-metro-md sm:py-metro-sm;
-  @apply lg:px-metro-lg lg:py-metro-sm;
+  @apply px-4 py-3 min-h-16;
+  @apply sm:px-6 sm:py-4 sm:min-h-18;
+  @apply lg:px-8 lg:py-5 lg:min-h-20;
   @apply max-w-7xl mx-auto;
-  /* Metro: altura mínima consistente */
-  @apply min-h-[56px] sm:min-h-[64px];
 }
 
 .logo-section {
@@ -22,39 +16,34 @@
 }
 
 .logo-wrapper {
-  @apply flex items-center gap-2 sm:gap-metro-sm;
+  @apply flex items-center gap-3 sm:gap-4 lg:gap-5;
 }
 
 .logo-title {
-  /* Metro: tipografía ligera y lowercase */
-  @apply text-base font-light tracking-tight text-onSurface lowercase;
-  @apply sm:text-lg lg:text-2xl;
+  @apply text-lg font-light tracking-tight lowercase text-onSurface;
   @apply transition-colors duration-200;
+  @apply sm:text-xl lg:text-3xl;
 }
 
 .nav-section {
-  @apply flex items-center gap-2 sm:gap-metro-sm lg:gap-metro-md;
+  @apply flex items-center gap-2 sm:gap-3 lg:gap-4;
 }
 
 .github-link {
-  /* Metro: cuadrado perfecto */
-  @apply w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12;
-  @apply flex items-center justify-center;
-  @apply bg-surfaceVariant text-onSurfaceVariant border-2 border-outline;
+  @apply w-10 h-10 flex items-center justify-center;
+  @apply bg-surfaceVariant text-onSurfaceVariant border border-outline;
   @apply transition-all duration-200 cursor-pointer;
+  @apply sm:w-11 sm:h-11 lg:w-12 lg:h-12;
 
   &:hover {
     @apply bg-surfaceContainerHigh scale-105;
   }
 
   &:active {
-    @apply scale-95;
-    background-color: var(--metro-accent-container);
-    color: var(--metro-accent-on-container);
+    @apply scale-95 bg-primaryContainer text-primary;
   }
 
   &:focus-visible {
-    @apply outline outline-2 outline-offset-2;
-    outline-color: var(--metro-accent);
+    @apply outline outline-2 outline-offset-2 outline-primary;
   }
 }
