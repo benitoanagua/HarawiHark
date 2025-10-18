@@ -6,6 +6,7 @@
     @apply antialiased;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-family: 'Segoe UI', system-ui, sans-serif;
   }
 
   body {
