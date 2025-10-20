@@ -669,6 +669,91 @@
             "extends": []
         },
         {
+            "name": "LineData",
+            "id": "interface-LineData-37d48f33eba6c5623d25c8f76e5e975918d9aedf3a02260f8aea6fd0400a4cf0e5b27179cd2a277af437f90a7a908c660fa6c2993a0cfacc7ac99b75a262e23e",
+            "file": "src/app/components/ui/multiline-input/multiline-input.component.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import {\n  Component,\n  Input,\n  Output,\n  EventEmitter,\n  forwardRef,\n  ElementRef,\n  ViewChild,\n  HostListener,\n  signal,\n  computed,\n  OnInit,\n  inject,\n} from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\nimport { CommonModule } from '@angular/common';\nimport { RitaService } from '../../../services/poetry/rita.service';\n\nexport interface LineData {\n  text: string;\n  number: number;\n  focused: boolean;\n  syllables: number;\n  expectedSyllables: number;\n  isCorrect: boolean;\n  isOver: boolean;\n}\n\nexport interface SyllableSegment {\n  index: number;\n  filled: boolean;\n}\n\n@Component({\n  selector: 'app-multiline-input',\n  standalone: true,\n  imports: [CommonModule],\n  templateUrl: './multiline-input.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => MultilineInputComponent),\n      multi: true,\n    },\n  ],\n})\nexport class MultilineInputComponent implements ControlValueAccessor, OnInit {\n  @ViewChild('linesContainer') linesContainer!: ElementRef<HTMLDivElement>;\n\n  @Input() label = '';\n  @Input() placeholder = 'Write your poem line by line...';\n  @Input() error = '';\n  @Input() disabled = false;\n  @Input() rows = 12;\n  @Input() id = 'multiline-input';\n  @Input() showLineNumbers = true;\n  @Input() showLineValidation = false;\n  @Input() expectedPattern: number[] = [];\n  @Input() fontSizeClass = 'text-base'; // Clase por defecto\n\n  private readonly rita = inject(RitaService);\n\n  readonly lines = signal<LineData[]>([]);\n  readonly focusedLineIndex = signal<number | null>(null);\n\n  readonly poemText = computed(() =>\n    this.lines()\n      .map((l) => l.text)\n      .join('\\n')\n  );\n\n  @Input()\n  get value(): string {\n    return this.poemText();\n  }\n  set value(val: string) {\n    this.initializeLines(val || '');\n    this.onChange(this.poemText());\n  }\n\n  @Output() valueChange = new EventEmitter<string>();\n  @Output() inputBlur = new EventEmitter<void>();\n  @Output() lineFocus = new EventEmitter<{ index: number; text: string }>();\n  @Output() lineValidationChange = new EventEmitter<LineData[]>();\n\n  private onChange: (value: string) => void = () => {};\n  private onTouched: () => void = () => {};\n\n  ngOnInit() {\n    this.initializeLines('');\n  }\n\n  private initializeLines(text: string): void {\n    const linesArray = text.split('\\n');\n    const total = this.rows; // Número fijo de líneas\n    const result: LineData[] = [];\n\n    for (let i = 0; i < total; i++) {\n      const expectedSyllables = this.expectedPattern[i] || 0;\n      result.push({\n        text: linesArray[i] || '',\n        number: i + 1,\n        focused: false,\n        syllables: 0,\n        expectedSyllables,\n        isCorrect: false,\n        isOver: false,\n      });\n    }\n    this.lines.set(result);\n    this.updateLineValidation();\n  }\n\n  writeValue(value: string): void {\n    this.initializeLines(value || '');\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onLineInput(index: number, text: string): void {\n    const updated = [...this.lines()];\n    updated[index].text = text;\n\n    // Actualizar validación de sílabas usando RiTa\n    if (this.showLineValidation) {\n      this.updateLineSyllables(updated[index]);\n    }\n\n    this.lines.set(updated);\n    this.emitChanges();\n    this.updateLineValidation();\n  }\n\n  onLineFocus(index: number): void {\n    this.focusedLineIndex.set(index);\n    this.lineFocus.emit({ index, text: this.lines()[index].text });\n  }\n\n  onLineBlur(): void {\n    this.focusedLineIndex.set(null);\n    this.onTouched();\n    this.inputBlur.emit();\n  }\n\n  @HostListener('keydown', ['$event'])\n  handleKeyboardNavigation(event: KeyboardEvent): void {\n    const current = this.focusedLineIndex();\n    if (current === null) return;\n\n    const lines = this.lines();\n\n    switch (event.key) {\n      case 'ArrowUp':\n        event.preventDefault();\n        if (current > 0) this.focusLine(current - 1);\n        break;\n\n      case 'ArrowDown':\n        event.preventDefault();\n        if (current < lines.length - 1) this.focusLine(current + 1);\n        break;\n\n      case 'Enter':\n        if (!event.shiftKey) {\n          event.preventDefault();\n          // No agregar nuevas líneas automáticamente\n          if (current < lines.length - 1) {\n            this.focusLine(current + 1);\n          }\n        }\n        break;\n\n      case 'Tab':\n        event.preventDefault();\n        this.insertTextAtCursor('  ');\n        break;\n    }\n  }\n\n  private focusLine(index: number): void {\n    const input = document.getElementById(`${this.id}-line-${index}`) as HTMLInputElement;\n    if (!input) return;\n\n    input.focus();\n    this.focusedLineIndex.set(index);\n  }\n\n  private insertTextAtCursor(text: string): void {\n    const current = this.focusedLineIndex();\n    if (current === null) return;\n\n    const input = document.getElementById(`${this.id}-line-${current}`) as HTMLInputElement;\n    if (!input) return;\n\n    const start = input.selectionStart || 0;\n    const end = input.selectionEnd || 0;\n    const currentText = this.lines()[current].text;\n\n    const newText = currentText.substring(0, start) + text + currentText.substring(end);\n\n    const updated = [...this.lines()];\n    updated[current].text = newText;\n\n    if (this.showLineValidation) {\n      this.updateLineSyllables(updated[current]);\n    }\n\n    this.lines.set(updated);\n    this.emitChanges();\n    this.updateLineValidation();\n\n    setTimeout(() => {\n      input.focus();\n      input.setSelectionRange(start + text.length, start + text.length);\n    });\n  }\n\n  private updateLineSyllables(line: LineData): void {\n    if (!line.text.trim()) {\n      line.syllables = 0;\n      line.isCorrect = false;\n      line.isOver = false;\n      return;\n    }\n\n    // Usar RiTa para análisis real de sílabas\n    const analysis = this.rita.analyzeLine(line.text);\n    line.syllables = analysis.syllables;\n    line.isCorrect = line.syllables === line.expectedSyllables;\n    line.isOver = line.syllables > line.expectedSyllables;\n  }\n\n  private updateLineValidation(): void {\n    if (this.showLineValidation) {\n      const lines = this.lines();\n      lines.forEach((line) => {\n        if (line.text.trim()) {\n          this.updateLineSyllables(line);\n        }\n      });\n      this.lineValidationChange.emit(lines);\n    }\n  }\n\n  private emitChanges(): void {\n    this.onChange(this.poemText());\n    this.valueChange.emit(this.poemText());\n  }\n\n  // Método para generar segmentos de sílabas\n  getSyllableSegments(line: LineData): SyllableSegment[] {\n    const segments: SyllableSegment[] = [];\n    const expected = line.expectedSyllables;\n    const current = line.syllables;\n\n    for (let i = 0; i < expected; i++) {\n      segments.push({\n        index: i,\n        filled: i < current,\n      });\n    }\n\n    return segments;\n  }\n\n  clear(): void {\n    this.initializeLines('');\n    this.emitChanges();\n    this.focusLine(0);\n  }\n\n  focus(): void {\n    this.focusLine(0);\n  }\n}\n",
+            "properties": [
+                {
+                    "name": "expectedSyllables",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 24
+                },
+                {
+                    "name": "focused",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 22
+                },
+                {
+                    "name": "isCorrect",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 25
+                },
+                {
+                    "name": "isOver",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 26
+                },
+                {
+                    "name": "number",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 21
+                },
+                {
+                    "name": "syllables",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 23
+                },
+                {
+                    "name": "text",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        },
+        {
             "name": "MeterAnalysis",
             "id": "interface-MeterAnalysis-9f2e5258c8513a233d7e44d78b9506fca3eaeaafe3f4b50c162e9e041de2e3840e9864cfac6cecc24684c7a1eef955a1eafc933f527dada08a89fe2e14324029",
             "file": "src/app/models/poetry.model.ts",
@@ -1419,6 +1504,41 @@
                     "optional": false,
                     "description": "",
                     "line": 6
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        },
+        {
+            "name": "SyllableSegment",
+            "id": "interface-SyllableSegment-37d48f33eba6c5623d25c8f76e5e975918d9aedf3a02260f8aea6fd0400a4cf0e5b27179cd2a277af437f90a7a908c660fa6c2993a0cfacc7ac99b75a262e23e",
+            "file": "src/app/components/ui/multiline-input/multiline-input.component.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import {\n  Component,\n  Input,\n  Output,\n  EventEmitter,\n  forwardRef,\n  ElementRef,\n  ViewChild,\n  HostListener,\n  signal,\n  computed,\n  OnInit,\n  inject,\n} from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\nimport { CommonModule } from '@angular/common';\nimport { RitaService } from '../../../services/poetry/rita.service';\n\nexport interface LineData {\n  text: string;\n  number: number;\n  focused: boolean;\n  syllables: number;\n  expectedSyllables: number;\n  isCorrect: boolean;\n  isOver: boolean;\n}\n\nexport interface SyllableSegment {\n  index: number;\n  filled: boolean;\n}\n\n@Component({\n  selector: 'app-multiline-input',\n  standalone: true,\n  imports: [CommonModule],\n  templateUrl: './multiline-input.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => MultilineInputComponent),\n      multi: true,\n    },\n  ],\n})\nexport class MultilineInputComponent implements ControlValueAccessor, OnInit {\n  @ViewChild('linesContainer') linesContainer!: ElementRef<HTMLDivElement>;\n\n  @Input() label = '';\n  @Input() placeholder = 'Write your poem line by line...';\n  @Input() error = '';\n  @Input() disabled = false;\n  @Input() rows = 12;\n  @Input() id = 'multiline-input';\n  @Input() showLineNumbers = true;\n  @Input() showLineValidation = false;\n  @Input() expectedPattern: number[] = [];\n  @Input() fontSizeClass = 'text-base'; // Clase por defecto\n\n  private readonly rita = inject(RitaService);\n\n  readonly lines = signal<LineData[]>([]);\n  readonly focusedLineIndex = signal<number | null>(null);\n\n  readonly poemText = computed(() =>\n    this.lines()\n      .map((l) => l.text)\n      .join('\\n')\n  );\n\n  @Input()\n  get value(): string {\n    return this.poemText();\n  }\n  set value(val: string) {\n    this.initializeLines(val || '');\n    this.onChange(this.poemText());\n  }\n\n  @Output() valueChange = new EventEmitter<string>();\n  @Output() inputBlur = new EventEmitter<void>();\n  @Output() lineFocus = new EventEmitter<{ index: number; text: string }>();\n  @Output() lineValidationChange = new EventEmitter<LineData[]>();\n\n  private onChange: (value: string) => void = () => {};\n  private onTouched: () => void = () => {};\n\n  ngOnInit() {\n    this.initializeLines('');\n  }\n\n  private initializeLines(text: string): void {\n    const linesArray = text.split('\\n');\n    const total = this.rows; // Número fijo de líneas\n    const result: LineData[] = [];\n\n    for (let i = 0; i < total; i++) {\n      const expectedSyllables = this.expectedPattern[i] || 0;\n      result.push({\n        text: linesArray[i] || '',\n        number: i + 1,\n        focused: false,\n        syllables: 0,\n        expectedSyllables,\n        isCorrect: false,\n        isOver: false,\n      });\n    }\n    this.lines.set(result);\n    this.updateLineValidation();\n  }\n\n  writeValue(value: string): void {\n    this.initializeLines(value || '');\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onLineInput(index: number, text: string): void {\n    const updated = [...this.lines()];\n    updated[index].text = text;\n\n    // Actualizar validación de sílabas usando RiTa\n    if (this.showLineValidation) {\n      this.updateLineSyllables(updated[index]);\n    }\n\n    this.lines.set(updated);\n    this.emitChanges();\n    this.updateLineValidation();\n  }\n\n  onLineFocus(index: number): void {\n    this.focusedLineIndex.set(index);\n    this.lineFocus.emit({ index, text: this.lines()[index].text });\n  }\n\n  onLineBlur(): void {\n    this.focusedLineIndex.set(null);\n    this.onTouched();\n    this.inputBlur.emit();\n  }\n\n  @HostListener('keydown', ['$event'])\n  handleKeyboardNavigation(event: KeyboardEvent): void {\n    const current = this.focusedLineIndex();\n    if (current === null) return;\n\n    const lines = this.lines();\n\n    switch (event.key) {\n      case 'ArrowUp':\n        event.preventDefault();\n        if (current > 0) this.focusLine(current - 1);\n        break;\n\n      case 'ArrowDown':\n        event.preventDefault();\n        if (current < lines.length - 1) this.focusLine(current + 1);\n        break;\n\n      case 'Enter':\n        if (!event.shiftKey) {\n          event.preventDefault();\n          // No agregar nuevas líneas automáticamente\n          if (current < lines.length - 1) {\n            this.focusLine(current + 1);\n          }\n        }\n        break;\n\n      case 'Tab':\n        event.preventDefault();\n        this.insertTextAtCursor('  ');\n        break;\n    }\n  }\n\n  private focusLine(index: number): void {\n    const input = document.getElementById(`${this.id}-line-${index}`) as HTMLInputElement;\n    if (!input) return;\n\n    input.focus();\n    this.focusedLineIndex.set(index);\n  }\n\n  private insertTextAtCursor(text: string): void {\n    const current = this.focusedLineIndex();\n    if (current === null) return;\n\n    const input = document.getElementById(`${this.id}-line-${current}`) as HTMLInputElement;\n    if (!input) return;\n\n    const start = input.selectionStart || 0;\n    const end = input.selectionEnd || 0;\n    const currentText = this.lines()[current].text;\n\n    const newText = currentText.substring(0, start) + text + currentText.substring(end);\n\n    const updated = [...this.lines()];\n    updated[current].text = newText;\n\n    if (this.showLineValidation) {\n      this.updateLineSyllables(updated[current]);\n    }\n\n    this.lines.set(updated);\n    this.emitChanges();\n    this.updateLineValidation();\n\n    setTimeout(() => {\n      input.focus();\n      input.setSelectionRange(start + text.length, start + text.length);\n    });\n  }\n\n  private updateLineSyllables(line: LineData): void {\n    if (!line.text.trim()) {\n      line.syllables = 0;\n      line.isCorrect = false;\n      line.isOver = false;\n      return;\n    }\n\n    // Usar RiTa para análisis real de sílabas\n    const analysis = this.rita.analyzeLine(line.text);\n    line.syllables = analysis.syllables;\n    line.isCorrect = line.syllables === line.expectedSyllables;\n    line.isOver = line.syllables > line.expectedSyllables;\n  }\n\n  private updateLineValidation(): void {\n    if (this.showLineValidation) {\n      const lines = this.lines();\n      lines.forEach((line) => {\n        if (line.text.trim()) {\n          this.updateLineSyllables(line);\n        }\n      });\n      this.lineValidationChange.emit(lines);\n    }\n  }\n\n  private emitChanges(): void {\n    this.onChange(this.poemText());\n    this.valueChange.emit(this.poemText());\n  }\n\n  // Método para generar segmentos de sílabas\n  getSyllableSegments(line: LineData): SyllableSegment[] {\n    const segments: SyllableSegment[] = [];\n    const expected = line.expectedSyllables;\n    const current = line.syllables;\n\n    for (let i = 0; i < expected; i++) {\n      segments.push({\n        index: i,\n        filled: i < current,\n      });\n    }\n\n    return segments;\n  }\n\n  clear(): void {\n    this.initializeLines('');\n    this.emitChanges();\n    this.focusLine(0);\n  }\n\n  focus(): void {\n    this.focusLine(0);\n  }\n}\n",
+            "properties": [
+                {
+                    "name": "filled",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 31
+                },
+                {
+                    "name": "index",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 30
                 }
             ],
             "indexSignatures": [],
@@ -6092,6 +6212,806 @@
             "templateData": "<app-card padding=\"large\">\n  <div class=\"meter-analysis-container\">\n    <h3 class=\"section-title\">rhythm & meter analysis</h3>\n    \n    @if (result.meterAnalysis; as meter) {\n      <div class=\"meter-info\">\n        <div class=\"meter-header\">\n          <app-badge \n            [variant]=\"meter.consistency > 70 ? 'success' : meter.consistency > 40 ? 'warning' : 'error'\"\n            size=\"medium\"\n            icon=\"icon-[iconoir--music-note]\"\n          >\n            {{ meter.type }} meter\n          </app-badge>\n          <span class=\"consistency-score\">\n            {{ meter.consistency.toFixed(0) }}% consistent\n          </span>\n        </div>\n        \n        <p class=\"meter-pattern\">{{ meter.pattern }}</p>\n        <p class=\"meter-description\">{{ meter.description }}</p>\n        \n        @if (meter.examples.length > 0) {\n          <div class=\"meter-examples\">\n            <h4>examples of {{ meter.type }} meter:</h4>\n            <ul class=\"examples-list\">\n              @for (example of meter.examples; track $index) {\n                <li class=\"example-item\">{{ example }}</li>\n              }\n            </ul>\n          </div>\n        }\n      </div>\n    } @else {\n      <div class=\"no-meter-analysis\">\n        <span class=\"icon-[iconoir--music-note-solid] no-meter-icon\"></span>\n        <p class=\"no-meter-text\">No consistent meter pattern detected</p>\n      </div>\n    }\n  </div>\n</app-card>"
         },
         {
+            "name": "MultilineInputComponent",
+            "id": "component-MultilineInputComponent-37d48f33eba6c5623d25c8f76e5e975918d9aedf3a02260f8aea6fd0400a4cf0e5b27179cd2a277af437f90a7a908c660fa6c2993a0cfacc7ac99b75a262e23e",
+            "file": "src/app/components/ui/multiline-input/multiline-input.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [
+                {
+                    "name": ")"
+                }
+            ],
+            "selector": "app-multiline-input",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./multiline-input.component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "disabled",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 53,
+                    "type": "boolean",
+                    "decorators": []
+                },
+                {
+                    "name": "error",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 52,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "expectedPattern",
+                    "defaultValue": "[]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 58,
+                    "type": "number[]",
+                    "decorators": []
+                },
+                {
+                    "name": "fontSizeClass",
+                    "defaultValue": "'text-base'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 59,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "id",
+                    "defaultValue": "'multiline-input'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 55,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "label",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 50,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "placeholder",
+                    "defaultValue": "'Write your poem line by line...'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 51,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "rows",
+                    "defaultValue": "12",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 54,
+                    "type": "number",
+                    "decorators": []
+                },
+                {
+                    "name": "showLineNumbers",
+                    "defaultValue": "true",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 56,
+                    "type": "boolean",
+                    "decorators": []
+                },
+                {
+                    "name": "showLineValidation",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 57,
+                    "type": "boolean",
+                    "decorators": []
+                },
+                {
+                    "name": "value",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 73,
+                    "type": "string",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "inputBlur",
+                    "defaultValue": "new EventEmitter<void>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 82,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "lineFocus",
+                    "defaultValue": "new EventEmitter<{ index: number; text: string }>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 83,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "lineValidationChange",
+                    "defaultValue": "new EventEmitter<LineData[]>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 84,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "valueChange",
+                    "defaultValue": "new EventEmitter<string>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 81,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [
+                {
+                    "name": "focusedLineIndex",
+                    "defaultValue": "signal<number | null>(null)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 64,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "lines",
+                    "defaultValue": "signal<LineData[]>([])",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 63,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "linesContainer",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ElementRef<HTMLDivElement>",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 48,
+                    "decorators": [
+                        {
+                            "name": "ViewChild",
+                            "stringifiedArguments": "'linesContainer'"
+                        }
+                    ],
+                    "modifierKind": [
+                        171
+                    ]
+                },
+                {
+                    "name": "onChange",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "function",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 86,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "onTouched",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "function",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 87,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "poemText",
+                    "defaultValue": "computed(() =>\n    this.lines()\n      .map((l) => l.text)\n      .join('\\n')\n  )",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 66,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "rita",
+                    "defaultValue": "inject(RitaService)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 61,
+                    "modifierKind": [
+                        123,
+                        148
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "clear",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 276,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "emitChanges",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 255,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "focus",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 282,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "focusLine",
+                    "args": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 190,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getSyllableSegments",
+                    "args": [
+                        {
+                            "name": "line",
+                            "type": "LineData",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "SyllableSegment[]",
+                    "typeParameters": [],
+                    "line": 261,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "line",
+                            "type": "LineData",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "handleKeyboardNavigation",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "KeyboardEvent",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 156,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "decorators": [
+                        {
+                            "name": "HostListener",
+                            "stringifiedArguments": "'keydown', ['$event']"
+                        }
+                    ],
+                    "modifierKind": [
+                        171
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "event",
+                            "type": "KeyboardEvent",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "initializeLines",
+                    "args": [
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 93,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "insertTextAtCursor",
+                    "args": [
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 198,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 89,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onLineBlur",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 149,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onLineFocus",
+                    "args": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 144,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "onLineInput",
+                    "args": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 130,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnChange",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "value",
+                                    "type": "string",
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ]
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 118,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "value",
+                                    "type": "string",
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ],
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnTouched",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": []
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 122,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [],
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "setDisabledState",
+                    "args": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 126,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "updateLineSyllables",
+                    "args": [
+                        {
+                            "name": "line",
+                            "type": "LineData",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 228,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "line",
+                            "type": "LineData",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "updateLineValidation",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 243,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "writeValue",
+                    "args": [
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 114,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [
+                {
+                    "name": "keydown",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "KeyboardEvent",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "argsDecorator": [
+                        "$event"
+                    ],
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 156
+                }
+            ],
+            "standalone": true,
+            "imports": [
+                {
+                    "name": "CommonModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import {\n  Component,\n  Input,\n  Output,\n  EventEmitter,\n  forwardRef,\n  ElementRef,\n  ViewChild,\n  HostListener,\n  signal,\n  computed,\n  OnInit,\n  inject,\n} from '@angular/core';\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';\nimport { CommonModule } from '@angular/common';\nimport { RitaService } from '../../../services/poetry/rita.service';\n\nexport interface LineData {\n  text: string;\n  number: number;\n  focused: boolean;\n  syllables: number;\n  expectedSyllables: number;\n  isCorrect: boolean;\n  isOver: boolean;\n}\n\nexport interface SyllableSegment {\n  index: number;\n  filled: boolean;\n}\n\n@Component({\n  selector: 'app-multiline-input',\n  standalone: true,\n  imports: [CommonModule],\n  templateUrl: './multiline-input.component.html',\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => MultilineInputComponent),\n      multi: true,\n    },\n  ],\n})\nexport class MultilineInputComponent implements ControlValueAccessor, OnInit {\n  @ViewChild('linesContainer') linesContainer!: ElementRef<HTMLDivElement>;\n\n  @Input() label = '';\n  @Input() placeholder = 'Write your poem line by line...';\n  @Input() error = '';\n  @Input() disabled = false;\n  @Input() rows = 12;\n  @Input() id = 'multiline-input';\n  @Input() showLineNumbers = true;\n  @Input() showLineValidation = false;\n  @Input() expectedPattern: number[] = [];\n  @Input() fontSizeClass = 'text-base'; // Clase por defecto\n\n  private readonly rita = inject(RitaService);\n\n  readonly lines = signal<LineData[]>([]);\n  readonly focusedLineIndex = signal<number | null>(null);\n\n  readonly poemText = computed(() =>\n    this.lines()\n      .map((l) => l.text)\n      .join('\\n')\n  );\n\n  @Input()\n  get value(): string {\n    return this.poemText();\n  }\n  set value(val: string) {\n    this.initializeLines(val || '');\n    this.onChange(this.poemText());\n  }\n\n  @Output() valueChange = new EventEmitter<string>();\n  @Output() inputBlur = new EventEmitter<void>();\n  @Output() lineFocus = new EventEmitter<{ index: number; text: string }>();\n  @Output() lineValidationChange = new EventEmitter<LineData[]>();\n\n  private onChange: (value: string) => void = () => {};\n  private onTouched: () => void = () => {};\n\n  ngOnInit() {\n    this.initializeLines('');\n  }\n\n  private initializeLines(text: string): void {\n    const linesArray = text.split('\\n');\n    const total = this.rows; // Número fijo de líneas\n    const result: LineData[] = [];\n\n    for (let i = 0; i < total; i++) {\n      const expectedSyllables = this.expectedPattern[i] || 0;\n      result.push({\n        text: linesArray[i] || '',\n        number: i + 1,\n        focused: false,\n        syllables: 0,\n        expectedSyllables,\n        isCorrect: false,\n        isOver: false,\n      });\n    }\n    this.lines.set(result);\n    this.updateLineValidation();\n  }\n\n  writeValue(value: string): void {\n    this.initializeLines(value || '');\n  }\n\n  registerOnChange(fn: (value: string) => void): void {\n    this.onChange = fn;\n  }\n\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  setDisabledState(isDisabled: boolean): void {\n    this.disabled = isDisabled;\n  }\n\n  onLineInput(index: number, text: string): void {\n    const updated = [...this.lines()];\n    updated[index].text = text;\n\n    // Actualizar validación de sílabas usando RiTa\n    if (this.showLineValidation) {\n      this.updateLineSyllables(updated[index]);\n    }\n\n    this.lines.set(updated);\n    this.emitChanges();\n    this.updateLineValidation();\n  }\n\n  onLineFocus(index: number): void {\n    this.focusedLineIndex.set(index);\n    this.lineFocus.emit({ index, text: this.lines()[index].text });\n  }\n\n  onLineBlur(): void {\n    this.focusedLineIndex.set(null);\n    this.onTouched();\n    this.inputBlur.emit();\n  }\n\n  @HostListener('keydown', ['$event'])\n  handleKeyboardNavigation(event: KeyboardEvent): void {\n    const current = this.focusedLineIndex();\n    if (current === null) return;\n\n    const lines = this.lines();\n\n    switch (event.key) {\n      case 'ArrowUp':\n        event.preventDefault();\n        if (current > 0) this.focusLine(current - 1);\n        break;\n\n      case 'ArrowDown':\n        event.preventDefault();\n        if (current < lines.length - 1) this.focusLine(current + 1);\n        break;\n\n      case 'Enter':\n        if (!event.shiftKey) {\n          event.preventDefault();\n          // No agregar nuevas líneas automáticamente\n          if (current < lines.length - 1) {\n            this.focusLine(current + 1);\n          }\n        }\n        break;\n\n      case 'Tab':\n        event.preventDefault();\n        this.insertTextAtCursor('  ');\n        break;\n    }\n  }\n\n  private focusLine(index: number): void {\n    const input = document.getElementById(`${this.id}-line-${index}`) as HTMLInputElement;\n    if (!input) return;\n\n    input.focus();\n    this.focusedLineIndex.set(index);\n  }\n\n  private insertTextAtCursor(text: string): void {\n    const current = this.focusedLineIndex();\n    if (current === null) return;\n\n    const input = document.getElementById(`${this.id}-line-${current}`) as HTMLInputElement;\n    if (!input) return;\n\n    const start = input.selectionStart || 0;\n    const end = input.selectionEnd || 0;\n    const currentText = this.lines()[current].text;\n\n    const newText = currentText.substring(0, start) + text + currentText.substring(end);\n\n    const updated = [...this.lines()];\n    updated[current].text = newText;\n\n    if (this.showLineValidation) {\n      this.updateLineSyllables(updated[current]);\n    }\n\n    this.lines.set(updated);\n    this.emitChanges();\n    this.updateLineValidation();\n\n    setTimeout(() => {\n      input.focus();\n      input.setSelectionRange(start + text.length, start + text.length);\n    });\n  }\n\n  private updateLineSyllables(line: LineData): void {\n    if (!line.text.trim()) {\n      line.syllables = 0;\n      line.isCorrect = false;\n      line.isOver = false;\n      return;\n    }\n\n    // Usar RiTa para análisis real de sílabas\n    const analysis = this.rita.analyzeLine(line.text);\n    line.syllables = analysis.syllables;\n    line.isCorrect = line.syllables === line.expectedSyllables;\n    line.isOver = line.syllables > line.expectedSyllables;\n  }\n\n  private updateLineValidation(): void {\n    if (this.showLineValidation) {\n      const lines = this.lines();\n      lines.forEach((line) => {\n        if (line.text.trim()) {\n          this.updateLineSyllables(line);\n        }\n      });\n      this.lineValidationChange.emit(lines);\n    }\n  }\n\n  private emitChanges(): void {\n    this.onChange(this.poemText());\n    this.valueChange.emit(this.poemText());\n  }\n\n  // Método para generar segmentos de sílabas\n  getSyllableSegments(line: LineData): SyllableSegment[] {\n    const segments: SyllableSegment[] = [];\n    const expected = line.expectedSyllables;\n    const current = line.syllables;\n\n    for (let i = 0; i < expected; i++) {\n      segments.push({\n        index: i,\n        filled: i < current,\n      });\n    }\n\n    return segments;\n  }\n\n  clear(): void {\n    this.initializeLines('');\n    this.emitChanges();\n    this.focusLine(0);\n  }\n\n  focus(): void {\n    this.focusLine(0);\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "implements": [
+                "ControlValueAccessor",
+                "OnInit"
+            ],
+            "accessors": {
+                "value": {
+                    "name": "value",
+                    "setSignature": {
+                        "name": "value",
+                        "type": "void",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "args": [
+                            {
+                                "name": "val",
+                                "type": "string",
+                                "deprecated": false,
+                                "deprecationMessage": ""
+                            }
+                        ],
+                        "returnType": "void",
+                        "line": 76,
+                        "jsdoctags": [
+                            {
+                                "name": "val",
+                                "type": "string",
+                                "deprecated": false,
+                                "deprecationMessage": "",
+                                "tagName": {
+                                    "text": "param"
+                                }
+                            }
+                        ]
+                    },
+                    "getSignature": {
+                        "name": "value",
+                        "type": "string",
+                        "returnType": "string",
+                        "line": 73
+                    }
+                }
+            },
+            "templateData": "<div class=\"multiline-input-wrapper\">\n  <div class=\"notebook-editor\" [class.disabled]=\"disabled\" [class]=\"fontSizeClass\">\n    <!-- Contenedor de líneas - ocupa todo el espacio -->\n    <div #linesContainer class=\"lines-container\">\n      @for (line of lines(); track line.number; let index = $index) {\n        <div class=\"line-row\" \n             [class.focused]=\"focusedLineIndex() === index\">\n          \n          <!-- Número de línea -->\n          @if (showLineNumbers) {\n            <div class=\"line-number\">{{ line.number }}</div>\n          }\n\n          <div class=\"line-input-container\">\n            <!-- Input de texto con clase responsiva -->\n            <input\n              [id]=\"id + '-line-' + index\"\n              type=\"text\"\n              class=\"line-input\"\n              [placeholder]=\"index === 0 ? placeholder : 'Continue writing...'\"\n              [value]=\"line.text\"\n              [disabled]=\"disabled\"\n              (input)=\"onLineInput(index, $any($event.target).value)\"\n              (focus)=\"onLineFocus(index)\"\n              (blur)=\"onLineBlur()\"\n              autocomplete=\"off\"\n              spellcheck=\"false\"\n              [class]=\"fontSizeClass\"\n            />\n\n            <!-- Validación visual sutil con barras de sílabas -->\n            @if (showLineValidation && line.expectedSyllables > 0) {\n              <div class=\"syllable-validation\">\n                <div class=\"syllable-bars\">\n                  @for (segment of getSyllableSegments(line); track $index) {\n                    <div class=\"syllable-bar\" \n                         [class.filled]=\"segment.filled\"\n                         [class.empty]=\"!segment.filled\"\n                         [class.perfect]=\"line.isCorrect\"\n                         [class.over]=\"line.isOver\">\n                    </div>\n                  }\n                </div>\n                <div class=\"syllable-count\" [class]=\"fontSizeClass\">\n                  {{ line.syllables }}/{{ line.expectedSyllables }}\n                </div>\n              </div>\n            }\n          </div>\n        </div>\n      }\n    </div>\n  </div>\n\n  @if (error) {\n    <span class=\"input-error-text\">{{ error }}</span>\n  }\n</div>"
+        },
+        {
             "name": "PanoramaComponent",
             "id": "component-PanoramaComponent-a1689931c14e935a7481b4adaa02a5edff65eca0a7ab2e641c04ffe1bb373885104f71cba98d07777c9ede7cd4f309dc9f9c452586819008afacf75b1d4ef5ee",
             "file": "src/app/components/metro/panorama/panorama.component.ts",
@@ -6234,7 +7154,7 @@
         },
         {
             "name": "PoemEditorComponent",
-            "id": "component-PoemEditorComponent-75f25bc29725897cb41c49966db99e3b94683a0f6eba57ace6ed9b31d406ef75488e2120401b10defedd592bbd8852a89d6f82c33efe94ea762324c82196bcbb",
+            "id": "component-PoemEditorComponent-d19e158adea379695585b25311477e31ff0cf30e9b8721a0ca667d2c68f4022326f6c960d722466c7aa9dc3de6df462c758b28d13c796c089421c3966ffaa8fc",
             "file": "src/app/components/poetry/poem-editor/poem-editor.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -6261,7 +7181,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 13,
+                    "line": 15,
                     "modifierKind": [
                         123,
                         148
@@ -6276,7 +7196,49 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 21,
+                    "line": 23,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "currentPattern",
+                    "defaultValue": "computed(() => {\n    const form = this.currentForm();\n    return form ? form.pattern : [];\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 26,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "editorHeight",
+                    "defaultValue": "signal('100%')",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 65,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "expectedLines",
+                    "defaultValue": "computed(() => {\n    const form = this.currentForm();\n    return form ? form.lines : 3;\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 32,
                     "modifierKind": [
                         148
                     ]
@@ -6290,7 +7252,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 36,
+                    "line": 53,
                     "modifierKind": [
                         148
                     ]
@@ -6304,7 +7266,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 17,
+                    "line": 19,
                     "modifierKind": [
                         148
                     ]
@@ -6318,35 +7280,21 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 27,
+                    "line": 45,
                     "modifierKind": [
                         148
                     ]
                 },
                 {
                     "name": "lines",
-                    "defaultValue": "computed(() =>\n    this.poemText()\n      .split('\\n')\n      .filter((line) => line.trim().length > 0)\n  )",
+                    "defaultValue": "computed(() =>\n    this.poemText()\n      .split('\\n')\n      .slice(0, this.expectedLines()) // Solo considerar las líneas esperadas\n      .filter((line) => line.trim().length > 0)\n  )",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 22,
-                    "modifierKind": [
-                        148
-                    ]
-                },
-                {
-                    "name": "liveLineAnalysis",
-                    "defaultValue": "computed(() => {\n    const form = this.currentForm();\n    if (!form) return [];\n\n    return this.lines().map((line, index) => {\n      const analysis = this.analyzer['rita'].analyzeLine(line);\n      const expected = form.pattern[index] ?? 0;\n      const syllables = analysis.syllables;\n\n      return {\n        lineNumber: index + 1,\n        text: line,\n        currentSyllables: syllables,\n        expectedSyllables: expected,\n        isCorrect: syllables === expected,\n        isOver: syllables > expected,\n        progress: expected > 0 ? (syllables / expected) * 100 : 0,\n      };\n    });\n  })",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 48,
+                    "line": 38,
                     "modifierKind": [
                         148
                     ]
@@ -6360,7 +7308,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 16,
+                    "line": 18,
                     "modifierKind": [
                         148
                     ]
@@ -6374,7 +7322,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 14,
+                    "line": 16,
                     "modifierKind": [
                         123,
                         148
@@ -6389,7 +7337,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 19,
+                    "line": 21,
                     "modifierKind": [
                         148
                     ]
@@ -6403,21 +7351,21 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 18,
+                    "line": 20,
                     "modifierKind": [
                         148
                     ]
                 },
                 {
                     "name": "syllableProgress",
-                    "defaultValue": "computed(() => {\n    const total = this.totalSyllables();\n    const expected = this.expectedSyllables();\n    return expected > 0 ? Math.min((total / expected) * 100, 100) : 0;\n  })",
+                    "defaultValue": "computed(() => {\n    const total = this.totalSyllables();\n    const expected = this.expectedSyllables();\n    return expected > 0 ? (total / expected) * 100 : 0;\n  })",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 41,
+                    "line": 58,
                     "modifierKind": [
                         148
                     ]
@@ -6431,7 +7379,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 30,
+                    "line": 47,
                     "modifierKind": [
                         148
                     ]
@@ -6439,12 +7387,25 @@
             ],
             "methodsClass": [
                 {
+                    "name": "adjustEditorHeight",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 145,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
                     "name": "analyze",
                     "args": [],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 94,
+                    "line": 132,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -6454,7 +7415,37 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 88,
+                    "line": 127,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "getCurrentPlaceholder",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "string",
+                    "typeParameters": [],
+                    "line": 160,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "getResponsiveFontClass",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "string",
+                    "typeParameters": [],
+                    "line": 155,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "isReadyForAnalysis",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "boolean",
+                    "typeParameters": [],
+                    "line": 140,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -6464,7 +7455,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 79,
+                    "line": 115,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -6481,7 +7472,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 69,
+                    "line": 89,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -6509,7 +7500,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 74,
+                    "line": 108,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -6523,6 +7514,19 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "updateEditorForForm",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 94,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ]
                 }
             ],
             "deprecated": false,
@@ -6532,11 +7536,11 @@
             "standalone": true,
             "imports": [
                 {
-                    "name": "SelectComponent",
-                    "type": "component"
+                    "name": "CommonModule",
+                    "type": "module"
                 },
                 {
-                    "name": "InputComponent",
+                    "name": "SelectComponent",
                     "type": "component"
                 },
                 {
@@ -6546,17 +7550,29 @@
                 {
                     "name": "CardComponent",
                     "type": "component"
+                },
+                {
+                    "name": "MultilineInputComponent",
+                    "type": "component"
                 }
             ],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, signal, computed, inject } from '@angular/core';\nimport { SelectComponent, InputComponent, ButtonComponent, CardComponent } from '../../ui';\nimport { POETRY_FORM_OPTIONS, POETRY_EXAMPLES } from '../../../data/poetry-forms.data';\nimport { PoetryAnalyzerService, PoetryPatternsService } from '../../../services';\n\n@Component({\n  selector: 'app-poem-editor',\n  standalone: true,\n  imports: [SelectComponent, InputComponent, ButtonComponent, CardComponent],\n  templateUrl: './poem-editor.component.html',\n})\nexport class PoemEditorComponent {\n  private readonly analyzer = inject(PoetryAnalyzerService);\n  private readonly patterns = inject(PoetryPatternsService);\n\n  readonly Math = Math;\n  readonly formOptions = POETRY_FORM_OPTIONS;\n  readonly selectedForm = signal('haiku');\n  readonly poemText = signal('');\n\n  readonly currentForm = computed(() => this.patterns.getFormInfo(this.selectedForm()));\n  readonly lines = computed(() =>\n    this.poemText()\n      .split('\\n')\n      .filter((line) => line.trim().length > 0)\n  );\n  readonly lineCount = computed(() => this.lines().length);\n\n  // Contadores mejorados en tiempo real\n  readonly totalSyllables = computed(() => {\n    return this.lines().reduce((total, line) => {\n      return total + this.analyzer['rita'].analyzeLine(line).syllables;\n    }, 0);\n  });\n\n  readonly expectedSyllables = computed(() => {\n    const form = this.currentForm();\n    return form ? form.pattern.reduce((sum: number, n: number) => sum + n, 0) : 0;\n  });\n\n  readonly syllableProgress = computed(() => {\n    const total = this.totalSyllables();\n    const expected = this.expectedSyllables();\n    return expected > 0 ? Math.min((total / expected) * 100, 100) : 0;\n  });\n\n  // Análisis por línea en tiempo real\n  readonly liveLineAnalysis = computed(() => {\n    const form = this.currentForm();\n    if (!form) return [];\n\n    return this.lines().map((line, index) => {\n      const analysis = this.analyzer['rita'].analyzeLine(line);\n      const expected = form.pattern[index] ?? 0;\n      const syllables = analysis.syllables;\n\n      return {\n        lineNumber: index + 1,\n        text: line,\n        currentSyllables: syllables,\n        expectedSyllables: expected,\n        isCorrect: syllables === expected,\n        isOver: syllables > expected,\n        progress: expected > 0 ? (syllables / expected) * 100 : 0,\n      };\n    });\n  });\n\n  onFormChange(formId: string): void {\n    this.selectedForm.set(formId);\n    this.analyzer.selectedForm.set(formId);\n  }\n\n  onTextChange(text: string): void {\n    this.poemText.set(text);\n    this.analyzer.poemText.set(text);\n  }\n\n  loadExample(): void {\n    const formId = this.selectedForm();\n    const example = POETRY_EXAMPLES[formId];\n    if (example) {\n      this.poemText.set(example.join('\\n'));\n      this.analyzer.poemText.set(example.join('\\n'));\n    }\n  }\n\n  clear(): void {\n    this.poemText.set('');\n    this.analyzer.poemText.set('');\n    this.analyzer.clear();\n  }\n\n  analyze(): void {\n    const formId = this.selectedForm();\n    const lines = this.lines();\n\n    if (lines.length === 0) return;\n\n    this.analyzer.analyze(formId, lines);\n  }\n}\n",
+            "sourceCode": "import { Component, signal, computed, inject, effect } from '@angular/core';\nimport { SelectComponent, ButtonComponent, CardComponent } from '../../ui';\nimport { MultilineInputComponent } from '../../ui/multiline-input/multiline-input.component';\nimport { POETRY_FORM_OPTIONS, POETRY_EXAMPLES } from '../../../data/poetry-forms.data';\nimport { PoetryAnalyzerService, PoetryPatternsService } from '../../../services';\nimport { CommonModule } from '@angular/common';\n\n@Component({\n  selector: 'app-poem-editor',\n  standalone: true,\n  imports: [CommonModule, SelectComponent, ButtonComponent, CardComponent, MultilineInputComponent],\n  templateUrl: './poem-editor.component.html',\n})\nexport class PoemEditorComponent {\n  private readonly analyzer = inject(PoetryAnalyzerService);\n  private readonly patterns = inject(PoetryPatternsService);\n\n  readonly Math = Math;\n  readonly formOptions = POETRY_FORM_OPTIONS;\n  readonly selectedForm = signal('haiku');\n  readonly poemText = signal('');\n\n  readonly currentForm = computed(() => this.patterns.getFormInfo(this.selectedForm()));\n\n  // Pattern para el multiline input - número fijo de líneas\n  readonly currentPattern = computed(() => {\n    const form = this.currentForm();\n    return form ? form.pattern : [];\n  });\n\n  // Número fijo de líneas según la forma poética\n  readonly expectedLines = computed(() => {\n    const form = this.currentForm();\n    return form ? form.lines : 3;\n  });\n\n  // Stats en tiempo real\n  readonly lines = computed(() =>\n    this.poemText()\n      .split('\\n')\n      .slice(0, this.expectedLines()) // Solo considerar las líneas esperadas\n      .filter((line) => line.trim().length > 0)\n  );\n\n  readonly lineCount = computed(() => this.lines().length);\n\n  readonly totalSyllables = computed(() => {\n    return this.lines().reduce((total, line) => {\n      return total + this.analyzer['rita'].analyzeLine(line).syllables;\n    }, 0);\n  });\n\n  readonly expectedSyllables = computed(() => {\n    const form = this.currentForm();\n    return form ? form.pattern.reduce((sum: number, n: number) => sum + n, 0) : 0;\n  });\n\n  readonly syllableProgress = computed(() => {\n    const total = this.totalSyllables();\n    const expected = this.expectedSyllables();\n    return expected > 0 ? (total / expected) * 100 : 0;\n  });\n\n  // Estado para controlar la altura del editor\n  readonly editorHeight = signal('100%');\n\n  constructor() {\n    // Efecto: Sincronizar cuando cambia la forma poética\n    effect(() => {\n      const formId = this.selectedForm();\n      this.analyzer.selectedForm.set(formId);\n      // Actualizar placeholder y contenido cuando cambia el formulario\n      this.updateEditorForForm();\n    });\n\n    // Efecto: Sincronizar texto con analyzer\n    effect(() => {\n      const text = this.poemText();\n      this.analyzer.poemText.set(text);\n    });\n\n    // Efecto: Ajustar altura cuando cambia el formulario\n    effect(() => {\n      const form = this.currentForm();\n      this.adjustEditorHeight();\n    });\n  }\n\n  onFormChange(formId: string): void {\n    this.selectedForm.set(formId);\n    // El efecto automáticamente actualizará el editor\n  }\n\n  private updateEditorForForm(): void {\n    // Actualizar el placeholder y resetear el texto si está vacío\n    const currentText = this.poemText();\n    if (!currentText.trim()) {\n      // Si el editor está vacío, cargar ejemplo automáticamente\n      this.loadExample();\n    }\n\n    // Forzar recálculo de altura después del cambio\n    setTimeout(() => {\n      this.adjustEditorHeight();\n    }, 100);\n  }\n\n  onTextChange(text: string): void {\n    // Mantener solo el número esperado de líneas\n    const lines = text.split('\\n');\n    const trimmedText = lines.slice(0, this.expectedLines()).join('\\n');\n    this.poemText.set(trimmedText);\n  }\n\n  loadExample(): void {\n    const formId = this.selectedForm();\n    const example = POETRY_EXAMPLES[formId];\n\n    if (example) {\n      this.poemText.set(example.join('\\n'));\n    } else {\n      // Si no hay ejemplo, limpiar el editor\n      this.poemText.set('');\n    }\n  }\n\n  clear(): void {\n    this.poemText.set('');\n    this.analyzer.clear();\n  }\n\n  analyze(): void {\n    const lines = this.lines();\n    if (lines.length === 0) return;\n\n    this.analyzer.analyze(this.selectedForm(), lines);\n  }\n\n  // Método para verificar si está listo para análisis\n  isReadyForAnalysis(): boolean {\n    return this.lineCount() > 0;\n  }\n\n  // Método para ajustar la altura del editor\n  private adjustEditorHeight(): void {\n    // Calcular altura basada en el número de líneas esperadas\n    const lines = this.expectedLines();\n    const baseHeight = 52; // altura base por línea\n    const calculatedHeight = Math.max(240, lines * baseHeight); // altura mínima de 240px\n\n    this.editorHeight.set(`${calculatedHeight}px`);\n  }\n\n  // Método para obtener la clase de tamaño de fuente responsiva\n  getResponsiveFontClass(): string {\n    return 'responsive-font';\n  }\n\n  // Método para obtener el placeholder actualizado\n  getCurrentPlaceholder(): string {\n    const form = this.currentForm();\n    return form ? `Write your ${form.name} here...` : 'Write your poem here...';\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 65
+            },
             "extends": [],
-            "templateData": "<app-card padding=\"large\">\n  <div class=\"editor-container\">\n    <!-- Header -->\n    <div class=\"editor-header\">\n      <h2 class=\"editor-title\">poetry analyzer</h2>\n      <p class=\"editor-subtitle\">\n        write your poem and get advanced syllable analysis with word suggestions\n      </p>\n    </div>\n\n    <!-- Form Selection -->\n    <div class=\"form-section\">\n      <app-select\n        id=\"poetry-form\"\n        label=\"poetry form\"\n        [options]=\"formOptions\"\n        [value]=\"selectedForm()\"\n        (selectChange)=\"onFormChange($event)\"\n      />\n\n      @if (currentForm(); as form) {\n        <div class=\"form-info\">\n          <div class=\"form-info-header\">\n            <span class=\"form-pattern\">pattern: {{ form.pattern.join('-') }} syllables</span>\n            <span class=\"form-lines\">{{ form.lines }} lines</span>\n          </div>\n          <p class=\"form-description\">{{ form.description }} · {{ form.origin }}</p>\n        </div>\n      }\n    </div>\n\n    <!-- Poem Input -->\n    <div class=\"input-section\">\n      <app-input\n        id=\"poem-text\"\n        type=\"textarea\"\n        label=\"your poem\"\n        placeholder=\"write each line on a new line...\"\n        [rows]=\"8\"\n        [value]=\"poemText()\"\n        (inputChange)=\"onTextChange($event)\"\n      />\n\n      <!-- Contadores mejorados con progreso -->\n      <div class=\"input-stats-enhanced\">\n        <div class=\"stat-group\">\n          <span class=\"stat-label\">lines</span>\n          <span class=\"stat-value\">{{ lineCount() }}</span>\n          <span class=\"stat-target\">/{{ currentForm().lines || '?' }}</span>\n        </div>\n\n        <div class=\"stat-group\">\n          <span class=\"stat-label\">syllables</span>\n          <span class=\"stat-value\">{{ totalSyllables() }}</span>\n          <span class=\"stat-target\">/{{ expectedSyllables() }}</span>\n        </div>\n\n        <!-- Barra de progreso visual -->\n        <div class=\"syllable-progress-bar\">\n          <div\n            class=\"progress-fill\"\n            [style.width.%]=\"syllableProgress()\"\n            [class.complete]=\"syllableProgress() === 100\"\n            [class.over]=\"syllableProgress() > 100\"\n          ></div>\n        </div>\n      </div>\n    </div>\n\n    <!-- Validación visual por línea -->\n    @if (liveLineAnalysis().length > 0) {\n      <div class=\"line-validator\">\n        <h4 class=\"validator-title\">live validation</h4>\n        <div class=\"validation-grid\">\n          @for (line of liveLineAnalysis(); track line.lineNumber) {\n            <div class=\"validation-row\" [class.correct]=\"line.isCorrect\" [class.over]=\"line.isOver\">\n              <span class=\"line-num\">{{ line.lineNumber }}</span>\n\n              <div class=\"syllable-bar\">\n                <div\n                  class=\"syllable-fill\"\n                  [style.width.%]=\"Math.min(line.progress, 100)\"\n                  [class.correct]=\"line.isCorrect\"\n                  [class.over]=\"line.isOver\"\n                  [class.under]=\"!line.isCorrect && !line.isOver\"\n                ></div>\n              </div>\n\n              <span class=\"syllable-count\">\n                {{ line.currentSyllables }}/{{ line.expectedSyllables }}\n              </span>\n\n              <span class=\"status-icon\">\n                @if (line.isCorrect) {\n                  <span class=\"icon-[iconoir--check] text-green\"></span>\n                } @else if (line.isOver) {\n                  <span class=\"icon-[iconoir--warning-triangle] text-red\"></span>\n                } @else {\n                  <span class=\"icon-[iconoir--minus] text-yellow\"></span>\n                }\n              </span>\n            </div>\n          }\n        </div>\n      </div>\n    }\n\n    <!-- Actions -->\n    <div class=\"actions-section\">\n      <app-button\n        variant=\"primary\"\n        size=\"medium\"\n        label=\"analyze poem\"\n        icon=\"icon-[iconoir--search]\"\n        [disabled]=\"lineCount() === 0\"\n        (clicked)=\"analyze()\"\n      />\n\n      <app-button\n        variant=\"secondary\"\n        size=\"medium\"\n        label=\"load example\"\n        icon=\"icon-[iconoir--page]\"\n        (clicked)=\"loadExample()\"\n      />\n\n      <app-button\n        variant=\"outline\"\n        size=\"medium\"\n        label=\"clear\"\n        icon=\"icon-[iconoir--cancel]\"\n        (clicked)=\"clear()\"\n      />\n    </div>\n  </div>\n</app-card>"
+            "templateData": "<app-card padding=\"large\" class=\"editor-card\">\n  <div class=\"editor-container\">\n    \n    <!-- Header minimalista -->\n    <header class=\"editor-header\">\n      <h1 class=\"editor-title\">poetry editor</h1>\n      <div class=\"form-selector\">\n        <app-select\n          id=\"poetry-form\"\n          [options]=\"formOptions\"\n          [value]=\"selectedForm()\"\n          (selectChange)=\"onFormChange($event)\"\n        />\n      </div>\n    </header>\n\n    <!-- Stats panel muy sutil -->\n    <div class=\"stats-panel-minimal\">\n      <div class=\"stat-minimal\">\n        <span class=\"stat-minimal-value\">{{ lineCount() }}</span>\n        <span class=\"stat-minimal-label\">lines</span>\n      </div>\n      <div class=\"stat-minimal\">\n        <span class=\"stat-minimal-value\">{{ totalSyllables() }}</span>\n        <span class=\"stat-minimal-label\">syllables</span>\n      </div>\n      <div class=\"stat-minimal\">\n        <span class=\"stat-minimal-value\">{{ Math.min(syllableProgress(), 100).toFixed(0) }}%</span>\n        <span class=\"stat-minimal-label\">complete</span>\n      </div>\n    </div>\n\n    <!-- Editor Multiline - Altura dinámica y 100% ancho -->\n    <section class=\"editor-section\" [style.height]=\"editorHeight()\">\n      <app-multiline-input\n        id=\"poem-editor\"\n        [placeholder]=\"getCurrentPlaceholder()\"\n        [rows]=\"expectedLines()\"\n        [value]=\"poemText()\"\n        [showLineNumbers]=\"true\"\n        [showLineValidation]=\"true\"\n        [expectedPattern]=\"currentPattern()\"\n        (valueChange)=\"onTextChange($event)\"\n        [class]=\"getResponsiveFontClass()\"\n      />\n    </section>\n\n    <!-- Actions footer - Siempre visible y sincronizado -->\n    <footer class=\"editor-actions\">\n      <app-button\n        variant=\"primary\"\n        size=\"medium\"\n        label=\"analyze\"\n        icon=\"icon-[iconoir--search]\"\n        [disabled]=\"!isReadyForAnalysis()\"\n        (clicked)=\"analyze()\"\n      />\n\n      <app-button\n        variant=\"outline\"\n        size=\"medium\"\n        label=\"example\"\n        icon=\"icon-[iconoir--page]\"\n        (clicked)=\"loadExample()\"\n      />\n\n      <app-button\n        variant=\"outline\"\n        size=\"medium\"\n        label=\"clear\"\n        icon=\"icon-[iconoir--cancel]\"\n        (clicked)=\"clear()\"\n      />\n    </footer>\n\n  </div>\n</app-card>"
         },
         {
             "name": "PoemQualityComponent",
@@ -10216,7 +11232,7 @@
                 "linktype": "component",
                 "name": "PoemEditorComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/19",
+                "coverageCount": "0/27",
                 "status": "low"
             },
             {
@@ -10334,6 +11350,33 @@
                 "name": "InputComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/20",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/ui/multiline-input/multiline-input.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "MultilineInputComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/42",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/ui/multiline-input/multiline-input.component.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "LineData",
+                "coveragePercent": 0,
+                "coverageCount": "0/8",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/ui/multiline-input/multiline-input.component.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "SyllableSegment",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
                 "status": "low"
             },
             {

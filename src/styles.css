@@ -18,6 +18,7 @@
 @import './app/components/ui/button/button.component.css';
 @import './app/components/ui/card/card.component.css';
 @import './app/components/ui/input/input.component.css';
+@import './app/components/ui/multiline-input/multiline-input.component.css';
 @import './app/components/ui/select/select.component.css';
 @import './app/components/ui/tooltip/tooltip.component.css';
 

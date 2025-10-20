@@ -1,0 +1,58 @@
+<div class="multiline-input-wrapper">
+  <div class="notebook-editor" [class.disabled]="disabled" [class]="fontSizeClass">
+    <!-- Contenedor de líneas - ocupa todo el espacio -->
+    <div #linesContainer class="lines-container">
+      @for (line of lines(); track line.number; let index = $index) {
+        <div class="line-row" 
+             [class.focused]="focusedLineIndex() === index">
+          
+          <!-- Número de línea -->
+          @if (showLineNumbers) {
+            <div class="line-number">{{ line.number }}</div>
+          }
+
+          <div class="line-input-container">
+            <!-- Input de texto con clase responsiva -->
+            <input
+              [id]="id + '-line-' + index"
+              type="text"
+              class="line-input"
+              [placeholder]="index === 0 ? placeholder : 'Continue writing...'"
+              [value]="line.text"
+              [disabled]="disabled"
+              (input)="onLineInput(index, $any($event.target).value)"
+              (focus)="onLineFocus(index)"
+              (blur)="onLineBlur()"
+              autocomplete="off"
+              spellcheck="false"
+              [class]="fontSizeClass"
+            />
+
+            <!-- Validación visual sutil con barras de sílabas -->
+            @if (showLineValidation && line.expectedSyllables > 0) {
+              <div class="syllable-validation">
+                <div class="syllable-bars">
+                  @for (segment of getSyllableSegments(line); track $index) {
+                    <div class="syllable-bar" 
+                         [class.filled]="segment.filled"
+                         [class.empty]="!segment.filled"
+                         [class.perfect]="line.isCorrect"
+                         [class.over]="line.isOver">
+                    </div>
+                  }
+                </div>
+                <div class="syllable-count" [class]="fontSizeClass">
+                  {{ line.syllables }}/{{ line.expectedSyllables }}
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (error) {
+    <span class="input-error-text">{{ error }}</span>
+  }
+</div>

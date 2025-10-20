@@ -4,5 +4,6 @@ export * from './badge/badge.component';
 export * from './button/button.component';
 export * from './card/card.component';
 export * from './input/input.component';
+export * from './multiline-input/multiline-input.component';
 export * from './select/select.component';
 export * from './tooltip/tooltip.component';

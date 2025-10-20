@@ -1,159 +1,101 @@
-.editor-container {
-  @apply flex flex-col gap-6 sm:gap-8 lg:gap-10;
+:host {
+  @apply block w-full h-full;
 }
 
+.editor-card {
+  @apply w-full h-full min-h-[600px] flex flex-col;
+}
+
+.editor-container {
+  @apply flex flex-col h-full w-full grid-rows-[auto_auto_1fr_auto] gap-4;
+  @apply min-h-0; /* Permite que los hijos se ajusten correctamente */
+}
+
+/* Header minimalista */
 .editor-header {
-  @apply flex flex-col gap-2;
+  @apply flex items-center justify-between pb-4 border-b border-outlineVariant w-full;
+  @apply flex-shrink-0; /* Evita que crezca */
 }
 
 .editor-title {
-  @apply text-3xl font-light tracking-tight lowercase text-onSurface mb-2;
-  @apply sm:text-4xl lg:text-5xl;
+  @apply text-xl font-semibold tracking-tight text-onSurface;
+  @apply sm:text-2xl;
 }
 
-.editor-subtitle {
-  @apply text-sm text-onSurfaceVariant;
-  @apply sm:text-base lg:text-lg;
+.form-selector {
+  @apply w-48;
+
+  @media (min-width: 768px) {
+    @apply w-56;
+  }
 }
 
-.form-section {
-  @apply flex flex-col gap-3 sm:gap-4;
+/* Stats panel minimalista */
+.stats-panel-minimal {
+  @apply flex justify-center gap-6 py-2 w-full;
+  @apply flex-shrink-0; /* Evita que crezca */
 }
 
-.form-info {
-  @apply p-4 bg-blueContainer text-onBlueContainer;
-  @apply sm:p-6 lg:p-8;
+.stat-minimal {
+  @apply flex flex-col items-center;
 }
 
-.form-info-header {
-  @apply flex items-center justify-between mb-2;
+.stat-minimal-value {
+  @apply text-sm font-semibold text-onSurface;
+  @apply sm:text-base;
 }
 
-.form-pattern {
-  @apply text-sm font-semibold tracking-tight lowercase;
-  @apply sm:text-base lg:text-lg;
-}
-
-.form-lines {
-  @apply text-xs sm:text-sm;
-}
-
-.form-description {
-  @apply text-xs sm:text-sm lg:text-base;
-}
-
-.input-section {
-  @apply flex flex-col gap-3;
-}
-
-/* 🎯 FASE 3: Stats mejorados con progreso */
-.input-stats-enhanced {
-  @apply flex flex-col gap-3 p-4 bg-surfaceVariant border-2 border-outlineVariant;
-  @apply sm:p-5 lg:p-6;
-}
-
-.stat-group {
-  @apply flex items-center gap-2 text-sm;
-  @apply sm:text-base lg:text-lg;
-}
-
-.stat-label {
-  @apply text-onSurfaceVariant font-medium uppercase tracking-wider text-xs;
+.stat-minimal-label {
+  @apply text-xs text-onSurfaceVariant uppercase tracking-wider;
   @apply sm:text-sm;
 }
 
-.stat-value {
-  @apply text-onSurface font-bold text-xl;
-  @apply sm:text-2xl lg:text-3xl;
+/* Editor section - Altura dinámica y 100% ancho */
+.editor-section {
+  @apply flex-1 min-h-0 w-full; /* Permite que crezca pero con mínimo 0 y 100% ancho */
+  @apply transition-all duration-300 ease-in-out; /* Transición suave */
 }
 
-.stat-target {
-  @apply text-onSurfaceVariant text-lg;
-  @apply sm:text-xl lg:text-2xl;
-}
+/* Clase para fuentes responsivas */
+.responsive-font {
+  @apply text-base; /* Tamaño base para mobile */
 
-.syllable-progress-bar {
-  @apply w-full h-2 bg-surface overflow-hidden border border-outline;
-  @apply sm:h-3 lg:h-4;
-}
-
-.progress-fill {
-  @apply h-full transition-all duration-500 ease-out bg-primary;
-
-  &.complete {
-    @apply bg-green;
+  @media (min-width: 768px) {
+    @apply text-lg; /* Tamaño aumentado para desktop */
   }
 
-  &.over {
-    @apply bg-red;
+  @media (min-width: 1024px) {
+    @apply text-xl; /* Tamaño aún mayor para pantallas grandes */
   }
 }
 
-/* 🎯 FASE 3: Validación visual por línea */
-.line-validator {
-  @apply p-4 bg-surfaceContainerLow border-2 border-outlineVariant;
-  @apply sm:p-6 lg:p-8;
+/* Actions footer - Siempre visible y sincronizado */
+.editor-actions {
+  @apply flex justify-end gap-2 pt-4 border-t border-outlineVariant w-full;
+  @apply sm:gap-3;
+  @apply flex-shrink-0; /* Evita que crezca - crucial para sincronización */
 }
 
-.validator-title {
-  @apply text-base font-semibold tracking-tight lowercase text-onSurface mb-4;
-  @apply sm:text-lg lg:text-xl;
-}
-
-.validation-grid {
-  @apply space-y-2 sm:space-y-3;
-}
-
-.validation-row {
-  @apply flex items-center gap-2 p-2 bg-surface border border-outlineVariant;
-  @apply transition-all duration-200;
-  @apply sm:gap-3 sm:p-3;
-
-  &.correct {
-    @apply border-green bg-greenContainer;
+/* Responsive */
+@media (max-width: 640px) {
+  .editor-header {
+    @apply flex-col items-start gap-3;
   }
 
-  &.over {
-    @apply border-red bg-redContainer;
+  .form-selector {
+    @apply w-full;
+  }
+
+  .stats-panel-minimal {
+    @apply gap-4;
+  }
+
+  .editor-actions {
+    @apply justify-center;
   }
 }
 
-.line-num {
-  @apply text-xs font-bold text-onSurfaceVariant w-6 text-center;
-  @apply sm:text-sm sm:w-8;
-}
-
-.syllable-bar {
-  @apply flex-1 h-2 bg-surfaceVariant overflow-hidden border border-outline;
-  @apply sm:h-3;
-}
-
-.syllable-fill {
-  @apply h-full transition-all duration-300 ease-out;
-
-  &.correct {
-    @apply bg-green;
-  }
-
-  &.over {
-    @apply bg-red;
-  }
-
-  &.under {
-    @apply bg-yellow;
-  }
-}
-
-.syllable-count {
-  @apply text-xs font-mono text-onSurface w-12 text-right;
-  @apply sm:text-sm sm:w-16;
-}
-
-.status-icon {
-  @apply text-base w-6 flex items-center justify-center;
-  @apply sm:text-lg sm:w-8;
-}
-
-.actions-section {
-  @apply flex flex-wrap gap-2 sm:gap-3 lg:gap-4;
+/* Asegurar que el contenedor principal ocupe el 100% del espacio disponible */
+:host {
+  @apply block w-full h-full;
 }

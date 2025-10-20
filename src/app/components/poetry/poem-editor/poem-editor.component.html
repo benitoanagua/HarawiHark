@@ -1,125 +1,65 @@
-<app-card padding="large">
+<app-card padding="large" class="editor-card">
   <div class="editor-container">
-    <!-- Header -->
-    <div class="editor-header">
-      <h2 class="editor-title">poetry analyzer</h2>
-      <p class="editor-subtitle">
-        write your poem and get advanced syllable analysis with word suggestions
-      </p>
+    
+    <!-- Header minimalista -->
+    <header class="editor-header">
+      <h1 class="editor-title">poetry editor</h1>
+      <div class="form-selector">
+        <app-select
+          id="poetry-form"
+          [options]="formOptions"
+          [value]="selectedForm()"
+          (selectChange)="onFormChange($event)"
+        />
+      </div>
+    </header>
+
+    <!-- Stats panel muy sutil -->
+    <div class="stats-panel-minimal">
+      <div class="stat-minimal">
+        <span class="stat-minimal-value">{{ lineCount() }}</span>
+        <span class="stat-minimal-label">lines</span>
+      </div>
+      <div class="stat-minimal">
+        <span class="stat-minimal-value">{{ totalSyllables() }}</span>
+        <span class="stat-minimal-label">syllables</span>
+      </div>
+      <div class="stat-minimal">
+        <span class="stat-minimal-value">{{ Math.min(syllableProgress(), 100).toFixed(0) }}%</span>
+        <span class="stat-minimal-label">complete</span>
+      </div>
     </div>
 
-    <!-- Form Selection -->
-    <div class="form-section">
-      <app-select
-        id="poetry-form"
-        label="poetry form"
-        [options]="formOptions"
-        [value]="selectedForm()"
-        (selectChange)="onFormChange($event)"
-      />
-
-      @if (currentForm(); as form) {
-        <div class="form-info">
-          <div class="form-info-header">
-            <span class="form-pattern">pattern: {{ form.pattern.join('-') }} syllables</span>
-            <span class="form-lines">{{ form.lines }} lines</span>
-          </div>
-          <p class="form-description">{{ form.description }} · {{ form.origin }}</p>
-        </div>
-      }
-    </div>
-
-    <!-- Poem Input -->
-    <div class="input-section">
-      <app-input
-        id="poem-text"
-        type="textarea"
-        label="your poem"
-        placeholder="write each line on a new line..."
-        [rows]="8"
+    <!-- Editor Multiline - Altura dinámica y 100% ancho -->
+    <section class="editor-section" [style.height]="editorHeight()">
+      <app-multiline-input
+        id="poem-editor"
+        [placeholder]="getCurrentPlaceholder()"
+        [rows]="expectedLines()"
         [value]="poemText()"
-        (inputChange)="onTextChange($event)"
+        [showLineNumbers]="true"
+        [showLineValidation]="true"
+        [expectedPattern]="currentPattern()"
+        (valueChange)="onTextChange($event)"
+        [class]="getResponsiveFontClass()"
       />
+    </section>
 
-      <!-- Contadores mejorados con progreso -->
-      <div class="input-stats-enhanced">
-        <div class="stat-group">
-          <span class="stat-label">lines</span>
-          <span class="stat-value">{{ lineCount() }}</span>
-          <span class="stat-target">/{{ currentForm().lines || '?' }}</span>
-        </div>
-
-        <div class="stat-group">
-          <span class="stat-label">syllables</span>
-          <span class="stat-value">{{ totalSyllables() }}</span>
-          <span class="stat-target">/{{ expectedSyllables() }}</span>
-        </div>
-
-        <!-- Barra de progreso visual -->
-        <div class="syllable-progress-bar">
-          <div
-            class="progress-fill"
-            [style.width.%]="syllableProgress()"
-            [class.complete]="syllableProgress() === 100"
-            [class.over]="syllableProgress() > 100"
-          ></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Validación visual por línea -->
-    @if (liveLineAnalysis().length > 0) {
-      <div class="line-validator">
-        <h4 class="validator-title">live validation</h4>
-        <div class="validation-grid">
-          @for (line of liveLineAnalysis(); track line.lineNumber) {
-            <div class="validation-row" [class.correct]="line.isCorrect" [class.over]="line.isOver">
-              <span class="line-num">{{ line.lineNumber }}</span>
-
-              <div class="syllable-bar">
-                <div
-                  class="syllable-fill"
-                  [style.width.%]="Math.min(line.progress, 100)"
-                  [class.correct]="line.isCorrect"
-                  [class.over]="line.isOver"
-                  [class.under]="!line.isCorrect && !line.isOver"
-                ></div>
-              </div>
-
-              <span class="syllable-count">
-                {{ line.currentSyllables }}/{{ line.expectedSyllables }}
-              </span>
-
-              <span class="status-icon">
-                @if (line.isCorrect) {
-                  <span class="icon-[iconoir--check] text-green"></span>
-                } @else if (line.isOver) {
-                  <span class="icon-[iconoir--warning-triangle] text-red"></span>
-                } @else {
-                  <span class="icon-[iconoir--minus] text-yellow"></span>
-                }
-              </span>
-            </div>
-          }
-        </div>
-      </div>
-    }
-
-    <!-- Actions -->
-    <div class="actions-section">
+    <!-- Actions footer - Siempre visible y sincronizado -->
+    <footer class="editor-actions">
       <app-button
         variant="primary"
         size="medium"
-        label="analyze poem"
+        label="analyze"
         icon="icon-[iconoir--search]"
-        [disabled]="lineCount() === 0"
+        [disabled]="!isReadyForAnalysis()"
         (clicked)="analyze()"
       />
 
       <app-button
-        variant="secondary"
+        variant="outline"
         size="medium"
-        label="load example"
+        label="example"
         icon="icon-[iconoir--page]"
         (clicked)="loadExample()"
       />
@@ -131,6 +71,7 @@
         icon="icon-[iconoir--cancel]"
         (clicked)="clear()"
       />
-    </div>
+    </footer>
+
   </div>
 </app-card>

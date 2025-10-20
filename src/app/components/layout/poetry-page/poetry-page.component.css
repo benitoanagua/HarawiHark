@@ -25,22 +25,9 @@
   }
 }
 
-/* Layout Side-by-Side en Desktop */
-.page-container {
-  @apply flex-1;
-  @apply lg:flex lg:min-h-[calc(100vh-80px)];
-}
-
 .editor-section {
-  @apply flex-1;
-  @apply lg:w-1/2 lg:max-w-[50%] lg:border-r lg:border-outlineVariant;
-  @apply lg:overflow-y-auto lg:h-[calc(100vh-80px)];
-}
-
-.results-section {
-  @apply flex-1;
-  @apply lg:w-1/2 lg:max-w-[50%] lg:overflow-y-auto;
-  @apply lg:h-[calc(100vh-80px)];
+  @apply flex-1 lg:border-r lg:border-outlineVariant;
+  /* @apply lg:overflow-y-auto lg:h-[calc(100vh-80px)]; */
 }
 
 .section-content {
