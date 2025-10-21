@@ -1,7 +1,7 @@
 import { Component, signal, computed, inject, effect } from '@angular/core';
 import { SelectComponent, ButtonComponent, CardComponent, MultilineInputComponent } from '../../ui';
-import { POETRY_FORM_OPTIONS, POETRY_EXAMPLES } from '../../../data/poetry-forms.data';
-import { PoetryAnalyzerService, PoetryPatternsService, ToastService } from '../../../services';
+import { POETRY_FORM_OPTIONS } from '../../../data/poetry-forms.data';
+import { PoetryAnalyzerService, ToastService, StateService } from '../../../services';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,32 +12,18 @@ import { CommonModule } from '@angular/common';
 })
 export class PoemEditorComponent {
   private readonly analyzer = inject(PoetryAnalyzerService);
-  private readonly patterns = inject(PoetryPatternsService);
   private readonly toastService = inject(ToastService);
+  private readonly stateService = inject(StateService);
 
   readonly Math = Math;
   readonly formOptions = POETRY_FORM_OPTIONS;
-  readonly selectedForm = signal('haiku');
-  readonly poemText = signal('');
 
-  readonly currentForm = computed(() => this.patterns.getFormInfo(this.selectedForm()));
-
-  readonly currentPattern = computed(() => {
-    const form = this.currentForm();
-    return form ? form.pattern : [];
-  });
-
-  readonly expectedLines = computed(() => {
-    const form = this.currentForm();
-    return form ? form.lines : 3;
-  });
-
-  readonly lines = computed(() =>
-    this.poemText()
-      .split('\n')
-      .slice(0, this.expectedLines())
-      .filter((line) => line.trim().length > 0)
-  );
+  readonly selectedForm = this.stateService.selectedForm;
+  readonly poemText = this.stateService.poemText;
+  readonly currentForm = this.stateService.currentForm;
+  readonly currentPattern = this.stateService.currentPattern;
+  readonly expectedLines = this.stateService.expectedLines;
+  readonly lines = this.stateService.lines;
 
   readonly lineCount = computed(() => this.lines().length);
 
@@ -64,7 +50,6 @@ export class PoemEditorComponent {
     effect(() => {
       const formId = this.selectedForm();
       this.analyzer.selectedForm.set(formId);
-
       this.updateEditorForForm();
     });
 
@@ -74,13 +59,12 @@ export class PoemEditorComponent {
     });
 
     effect(() => {
-      const form = this.currentForm();
       this.adjustEditorHeight();
     });
   }
 
   onFormChange(formId: string): void {
-    this.selectedForm.set(formId);
+    this.stateService.setSelectedForm(formId);
   }
 
   private updateEditorForForm(): void {
@@ -97,25 +81,17 @@ export class PoemEditorComponent {
   onTextChange(text: string): void {
     const lines = text.split('\n');
     const trimmedText = lines.slice(0, this.expectedLines()).join('\n');
-    this.poemText.set(trimmedText);
+    this.stateService.setPoemText(trimmedText);
   }
 
   loadExample(): void {
-    const formId = this.selectedForm();
-    const example = POETRY_EXAMPLES[formId];
-
-    if (example) {
-      this.poemText.set(example.join('\n'));
-      this.toastService.success('Example Loaded', `Loaded ${formId} example`);
-    } else {
-      this.poemText.set('');
-      this.toastService.warning('No Example', `No example available for ${formId}`);
-    }
+    this.stateService.loadExample();
+    this.toastService.success('Example Loaded', `Loaded ${this.selectedForm()} example`);
   }
 
   clear(): void {
     const hadContent = this.poemText().length > 0;
-    this.poemText.set('');
+    this.stateService.clear();
     this.analyzer.clear();
 
     if (hadContent) {
@@ -131,7 +107,11 @@ export class PoemEditorComponent {
     }
 
     this.toastService.info('Analyzing Poem', 'Processing your poetry...');
-    this.analyzer.analyze(this.selectedForm(), lines);
+    this.stateService.setIsAnalyzing(true);
+    this.analyzer.analyze(this.selectedForm(), lines).finally(() => {
+      this.stateService.setIsAnalyzing(false);
+      this.stateService.setHasResults(true);
+    });
   }
 
   async onCopyPoem(): Promise<void> {

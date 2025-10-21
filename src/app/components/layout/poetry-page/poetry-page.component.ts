@@ -20,7 +20,7 @@ import {
 } from '../../poetry';
 import { CardComponent } from '../../ui';
 import { HeaderComponent, FooterComponent } from '../../layout';
-import { PoetryAnalyzerService, ToastService } from '../../../services';
+import { PoetryAnalyzerService, ToastService, StateService } from '../../../services';
 
 @Component({
   selector: 'app-poetry-page',
@@ -47,6 +47,7 @@ import { PoetryAnalyzerService, ToastService } from '../../../services';
 export class PoetryPageComponent {
   readonly analyzer = inject(PoetryAnalyzerService);
   private readonly toastService = inject(ToastService);
+  private readonly stateService = inject(StateService);
 
   readonly loadingState = signal<'idle' | 'analyzing' | 'loading-example' | 'assessing'>('idle');
   readonly currentStage = signal<'syllables' | 'rhythm' | 'patterns' | null>(null);
@@ -62,11 +63,32 @@ export class PoetryPageComponent {
   ]);
   readonly selectedAnalysisTab = signal('structure');
 
-  readonly appBarActions: AppBarAction[] = [
-    { id: 'analyze', icon: 'icon-[iconoir--search]', label: 'analyze' },
-    { id: 'example', icon: 'icon-[iconoir--page]', label: 'example' },
-    { id: 'clear', icon: 'icon-[iconoir--cancel]', label: 'clear' },
-  ];
+  readonly appBarActions = computed<AppBarAction[]>(() => [
+    {
+      id: 'analyze',
+      icon: 'icon-[iconoir--search]',
+      label: 'analyze',
+      disabled: this.stateService.lines().length === 0 || this.stateService.isAnalyzing(),
+    },
+    {
+      id: 'example',
+      icon: 'icon-[iconoir--page]',
+      label: 'example',
+      disabled: this.stateService.isAnalyzing(),
+    },
+    {
+      id: 'clear',
+      icon: 'icon-[iconoir--cancel]',
+      label: 'clear',
+      disabled: this.stateService.poemText().length === 0 || this.stateService.isAnalyzing(),
+    },
+    {
+      id: 'copy',
+      icon: 'icon-[iconoir--copy]',
+      label: 'copy',
+      disabled: this.stateService.poemText().length === 0 || this.stateService.isAnalyzing(),
+    },
+  ]);
 
   readonly hasResults = computed(() => this.analyzer.result() !== null);
   readonly isAnalyzing = computed(() => this.loadingState() !== 'idle');
@@ -122,23 +144,14 @@ export class PoetryPageComponent {
 
   private async analyzeWithStages(formId: string, lines: string[]): Promise<void> {
     this.loadingState.set('analyzing');
-
-    this.currentStage.set('syllables');
-    this.toastService.info('Stage 1/3', 'Counting syllables...');
-    await this.delay(600);
-
-    this.currentStage.set('rhythm');
-    this.toastService.info('Stage 2/3', 'Analyzing rhythm...');
-    await this.delay(600);
-
-    this.currentStage.set('patterns');
-    this.toastService.info('Stage 3/3', 'Detecting patterns...');
-    await this.delay(400);
+    this.stateService.setIsAnalyzing(true);
 
     await this.analyzer.analyze(formId, lines);
 
     this.currentStage.set(null);
     this.loadingState.set('idle');
+    this.stateService.setIsAnalyzing(false);
+    this.stateService.setHasResults(true);
     this.toastService.success('Analysis Complete', 'Check results below');
     this.navigateWithHighlight('results');
   }
@@ -160,12 +173,15 @@ export class PoetryPageComponent {
       case 'clear':
         this.handleClear();
         break;
+
+      case 'copy':
+        this.handleCopy();
+        break;
     }
   }
 
   private handleAnalyze(): void {
-    const text = this.analyzer.poemText();
-    const lines = text.split('\n').filter((line) => line.trim().length > 0);
+    const lines = this.stateService.lines();
 
     if (lines.length === 0) {
       this.toastService.warning('Empty Poem', 'Write something first');
@@ -173,22 +189,18 @@ export class PoetryPageComponent {
       return;
     }
 
-    const formId = this.analyzer.selectedForm();
+    const formId = this.stateService.selectedForm();
     this.analyzeWithStages(formId, lines);
   }
 
   private handleLoadExample(): void {
     this.loadingState.set('loading-example');
-    const formId = this.analyzer.selectedForm();
+    const formId = this.stateService.selectedForm();
 
-    this.analyzer.loadExample();
+    this.stateService.loadExample();
 
     setTimeout(() => {
-      const lines = this.analyzer
-        .poemText()
-        .split('\n')
-        .filter((line) => line.trim().length > 0);
-
+      const lines = this.stateService.lines();
       if (lines.length > 0) {
         this.analyzeWithStages(formId, lines);
       }
@@ -198,18 +210,40 @@ export class PoetryPageComponent {
   }
 
   private handleClear(): void {
-    const hasContent = this.analyzer.poemText().length > 0 || this.hasResults();
+    const hasContent = this.stateService.poemText().length > 0 || this.hasResults();
 
     if (hasContent) {
       if (this.confirmClear()) {
+        this.stateService.clear();
         this.analyzer.clear();
         this.loadingState.set('idle');
         this.currentStage.set(null);
+        this.stateService.setIsAnalyzing(false);
         this.toastService.info('Cleared', 'Editor and results cleared');
         this.navigateToSection('editor');
       }
     } else {
       this.toastService.info('Already Empty', 'Nothing to clear');
+    }
+  }
+
+  private async handleCopy(): Promise<void> {
+    const text = this.stateService.poemText().trim();
+
+    if (!text) {
+      this.toastService.warning('Empty Poem', 'Nothing to copy');
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(text);
+      const lineCount = this.stateService.lines().length;
+      const syllableCount = this.analyzer.getQuickStats().totalSyllables;
+
+      this.toastService.success('Poem Copied!', `${lineCount} lines, ${syllableCount} syllables`);
+    } catch (err) {
+      console.error('Failed to copy poem: ', err);
+      this.toastService.error('Copy Failed', 'Could not copy to clipboard');
     }
   }
 
@@ -252,7 +286,7 @@ export class PoetryPageComponent {
   }
 
   loadFormExample(formId: string): void {
-    this.analyzer.selectedForm.set(formId);
+    this.stateService.setSelectedForm(formId);
     this.handleLoadExample();
   }
 
@@ -280,5 +314,9 @@ export class PoetryPageComponent {
 
   onQuickNav(section: 'editor' | 'results'): void {
     this.navigateToSection(section);
+  }
+
+  get appBarActionsValue(): AppBarAction[] {
+    return this.appBarActions();
   }
 }

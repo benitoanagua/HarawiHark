@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, inject, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { StateService } from '../../../services/';
 
 export interface SelectOption {
   value: string;
@@ -19,7 +20,9 @@ export interface SelectOption {
     },
   ],
 })
-export class SelectComponent implements ControlValueAccessor {
+export class SelectComponent implements ControlValueAccessor, OnInit {
+  private readonly stateService = inject(StateService);
+
   @Input() options: SelectOption[] = [];
   @Input() label = '';
   @Input() disabled = false;
@@ -45,6 +48,12 @@ export class SelectComponent implements ControlValueAccessor {
     // Placeholder for ControlValueAccessor
   };
 
+  ngOnInit() {
+    if (this.id === 'poetry-form') {
+      this._value = this.stateService.selectedForm();
+    }
+  }
+
   writeValue(value: string): void {
     this._value = value || '';
   }
@@ -66,6 +75,10 @@ export class SelectComponent implements ControlValueAccessor {
     this._value = target.value;
     this.onChange(this._value);
     this.selectChange.emit(this._value);
+
+    if (this.id === 'poetry-form') {
+      this.stateService.setSelectedForm(this._value);
+    }
   }
 
   onBlur(): void {

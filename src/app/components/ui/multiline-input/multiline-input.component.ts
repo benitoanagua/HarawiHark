@@ -11,10 +11,11 @@ import {
   computed,
   OnInit,
   inject,
+  effect,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RitaService } from '../../../services/poetry/rita.service';
+import { RitaService, StateService } from '../../../services/';
 
 export interface LineData {
   text: string;
@@ -59,6 +60,7 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
   @Input() fontSizeClass = 'text-base';
 
   private readonly rita = inject(RitaService);
+  private readonly stateService = inject(StateService);
 
   readonly lines = signal<LineData[]>([]);
   readonly focusedLineIndex = signal<number | null>(null);
@@ -92,11 +94,31 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
 
   ngOnInit() {
     this.initializeLines('');
+
+    effect(() => {
+      const pattern = this.stateService.currentPattern();
+      if (pattern.length > 0) {
+        this.expectedPattern = pattern;
+        this.rows = this.stateService.expectedLines();
+
+        const sharedText = this.stateService.poemText();
+        if (sharedText && sharedText !== this.poemText()) {
+          this.initializeLines(sharedText);
+        }
+      }
+    });
+
+    effect(() => {
+      const sharedText = this.stateService.poemText();
+      if (sharedText && sharedText !== this.poemText()) {
+        this.initializeLines(sharedText);
+      }
+    });
   }
 
   private initializeLines(text: string): void {
     const linesArray = text.split('\n');
-    const total = this.rows; // Número fijo de líneas
+    const total = this.rows;
     const result: LineData[] = [];
 
     for (let i = 0; i < total; i++) {
@@ -135,7 +157,6 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
     const updated = [...this.lines()];
     updated[index].text = text;
 
-    // Actualizar validación de sílabas usando RiTa
     if (this.showLineValidation) {
       this.updateLineSyllables(updated[index]);
     }
@@ -143,6 +164,8 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
     this.lines.set(updated);
     this.emitChanges();
     this.updateLineValidation();
+
+    this.stateService.updatePoemLines(updated.map((line) => line.text));
   }
 
   onLineFocus(index: number): void {
@@ -177,7 +200,7 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
       case 'Enter':
         if (!event.shiftKey) {
           event.preventDefault();
-          // No agregar nuevas líneas automáticamente
+
           if (current < lines.length - 1) {
             this.focusLine(current + 1);
           }
@@ -237,7 +260,6 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
       return;
     }
 
-    // Usar RiTa para análisis real de sílabas
     const analysis = this.rita.analyzeLine(line.text);
     line.syllables = analysis.syllables;
     line.isCorrect = line.syllables === line.expectedSyllables;
@@ -261,7 +283,6 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
     this.valueChange.emit(this.poemText());
   }
 
-  // Método para generar segmentos de sílabas
   getSyllableSegments(line: LineData): SyllableSegment[] {
     const segments: SyllableSegment[] = [];
     const expected = line.expectedSyllables;
@@ -296,5 +317,10 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
 
   focus(): void {
     this.focusLine(0);
+  }
+
+  setText(text: string): void {
+    this.initializeLines(text);
+    this.emitChanges();
   }
 }
