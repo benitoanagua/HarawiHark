@@ -104,6 +104,8 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
         const sharedText = this.stateService.poemText();
         if (sharedText && sharedText !== this.poemText()) {
           this.initializeLines(sharedText);
+        } else if (!this.poemText().trim()) {
+          this.initializeLines('');
         }
       }
     });

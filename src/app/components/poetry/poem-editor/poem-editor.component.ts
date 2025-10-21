@@ -87,6 +87,10 @@ export class PoemEditorComponent {
   loadExample(): void {
     this.stateService.loadExample();
     this.toastService.success('Example Loaded', `Loaded ${this.selectedForm()} example`);
+
+    setTimeout(() => {
+      this.adjustEditorHeight();
+    }, 100);
   }
 
   clear(): void {
@@ -97,6 +101,10 @@ export class PoemEditorComponent {
     if (hadContent) {
       this.toastService.info('Editor Cleared', 'All content has been removed');
     }
+
+    setTimeout(() => {
+      this.adjustEditorHeight();
+    }, 50);
   }
 
   analyze(): void {
@@ -108,6 +116,7 @@ export class PoemEditorComponent {
 
     this.toastService.info('Analyzing Poem', 'Processing your poetry...');
     this.stateService.setIsAnalyzing(true);
+
     this.analyzer.analyze(this.selectedForm(), lines).finally(() => {
       this.stateService.setIsAnalyzing(false);
       this.stateService.setHasResults(true);

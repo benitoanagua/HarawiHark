@@ -12,7 +12,6 @@ export interface AppState {
   providedIn: 'root',
 })
 export class StateService {
-  // Estado centralizado
   private readonly state = signal<AppState>({
     selectedForm: 'haiku',
     poemText: '',
@@ -20,13 +19,10 @@ export class StateService {
     hasResults: false,
   });
 
-  // Señales públicas
   readonly selectedForm = computed(() => this.state().selectedForm);
   readonly poemText = computed(() => this.state().poemText);
   readonly isAnalyzing = computed(() => this.state().isAnalyzing);
   readonly hasResults = computed(() => this.state().hasResults);
-
-  // Computed values
   readonly currentForm = computed(() => POETRY_FORMS[this.selectedForm()]);
   readonly currentPattern = computed(() => this.currentForm()?.pattern || []);
   readonly expectedLines = computed(() => this.currentForm()?.lines || 3);
@@ -38,9 +34,16 @@ export class StateService {
       .filter((line) => line.trim().length > 0)
   );
 
-  // Métodos para actualizar estado
   setSelectedForm(formId: string): void {
-    this.state.update((state) => ({ ...state, selectedForm: formId }));
+    this.state.update((state) => ({
+      ...state,
+      selectedForm: formId,
+    }));
+
+    const currentText = this.state().poemText.trim();
+    if (!currentText) {
+      this.loadExample();
+    }
   }
 
   setPoemText(text: string): void {
@@ -55,7 +58,6 @@ export class StateService {
     this.state.update((state) => ({ ...state, hasResults }));
   }
 
-  // Acciones compartidas
   loadExample(): void {
     const formId = this.selectedForm();
     const example = POETRY_EXAMPLES[formId];
@@ -69,7 +71,6 @@ export class StateService {
     this.setHasResults(false);
   }
 
-  // Sincronización para multiline-input
   updatePoemLines(lines: string[]): void {
     const text = lines.join('\n');
     this.setPoemText(text);

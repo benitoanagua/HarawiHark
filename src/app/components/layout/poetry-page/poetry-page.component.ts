@@ -204,6 +204,7 @@ export class PoetryPageComponent {
       if (lines.length > 0) {
         this.analyzeWithStages(formId, lines);
       }
+      this.loadingState.set('idle');
     }, 300);
 
     this.toastService.success('Example Loaded', 'Analyzing automatically...');

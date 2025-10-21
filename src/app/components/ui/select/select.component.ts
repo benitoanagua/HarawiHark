@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, forwardRef, inject, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, inject, effect } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { StateService } from '../../../services/';
 
@@ -20,7 +20,7 @@ export interface SelectOption {
     },
   ],
 })
-export class SelectComponent implements ControlValueAccessor, OnInit {
+export class SelectComponent implements ControlValueAccessor {
   private readonly stateService = inject(StateService);
 
   @Input() options: SelectOption[] = [];
@@ -48,10 +48,15 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
     // Placeholder for ControlValueAccessor
   };
 
-  ngOnInit() {
-    if (this.id === 'poetry-form') {
-      this._value = this.stateService.selectedForm();
-    }
+  constructor() {
+    effect(() => {
+      if (this.id === 'poetry-form') {
+        const selectedForm = this.stateService.selectedForm();
+        if (this._value !== selectedForm) {
+          this._value = selectedForm;
+        }
+      }
+    });
   }
 
   writeValue(value: string): void {
