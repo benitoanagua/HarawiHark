@@ -18,7 +18,7 @@ import {
   QuickStatsPanelComponent,
   MeterAnalysisSectionComponent,
 } from '../../poetry';
-import { ButtonComponent, CardComponent } from '../../ui';
+import { CardComponent } from '../../ui';
 import { HeaderComponent, FooterComponent } from '../../layout';
 import { PoetryAnalyzerService, ToastService } from '../../../services';
 
@@ -38,7 +38,6 @@ import { PoetryAnalyzerService, ToastService } from '../../../services';
     WordSuggestionsComponent,
     QuickStatsPanelComponent,
     MeterAnalysisSectionComponent,
-    ButtonComponent,
     CardComponent,
     HeaderComponent,
     FooterComponent,
@@ -55,7 +54,6 @@ export class PoetryPageComponent {
   readonly currentSection = signal<'editor' | 'results'>('editor');
   readonly recentlyAnalyzed = signal(false);
 
-  // Analysis Tabs
   readonly analysisTabs = signal<PivotItem[]>([
     { id: 'structure', label: 'structure' },
     { id: 'rhythm', label: 'rhythm' },
@@ -125,25 +123,20 @@ export class PoetryPageComponent {
   private async analyzeWithStages(formId: string, lines: string[]): Promise<void> {
     this.loadingState.set('analyzing');
 
-    // Etapa 1: Syllables
     this.currentStage.set('syllables');
     this.toastService.info('Stage 1/3', 'Counting syllables...');
     await this.delay(600);
 
-    // Etapa 2: Rhythm
     this.currentStage.set('rhythm');
     this.toastService.info('Stage 2/3', 'Analyzing rhythm...');
     await this.delay(600);
 
-    // Etapa 3: Patterns
     this.currentStage.set('patterns');
     this.toastService.info('Stage 3/3', 'Detecting patterns...');
     await this.delay(400);
 
-    // Ejecutar análisis real
     await this.analyzer.analyze(formId, lines);
 
-    // Completar
     this.currentStage.set(null);
     this.loadingState.set('idle');
     this.toastService.success('Analysis Complete', 'Check results below');
@@ -188,10 +181,8 @@ export class PoetryPageComponent {
     this.loadingState.set('loading-example');
     const formId = this.analyzer.selectedForm();
 
-    // Cargar ejemplo
     this.analyzer.loadExample();
 
-    // Auto-analizar después de cargar
     setTimeout(() => {
       const lines = this.analyzer
         .poemText()
@@ -222,7 +213,6 @@ export class PoetryPageComponent {
     }
   }
 
-  // Análisis manual desde botón (no AppBar)
   onAnalyze(): void {
     this.handleAnalyze();
   }
@@ -259,23 +249,6 @@ export class PoetryPageComponent {
     } catch {
       this.toastService.error('Export Failed', 'Could not copy to clipboard');
     }
-  }
-
-  onAssessQuality(): void {
-    this.loadingState.set('assessing');
-    this.toastService.info('Quality Assessment', 'Analyzing poem quality...');
-
-    setTimeout(() => {
-      this.analyzer.assessQuality();
-      this.selectedAnalysisTab.set('quality');
-      this.loadingState.set('idle');
-      this.toastService.success('Assessment Complete', 'Quality metrics ready');
-    }, 800);
-  }
-
-  onShowMeterAnalysis(): void {
-    this.selectedAnalysisTab.set('rhythm');
-    this.toastService.info('Rhythm Analysis', 'Showing meter analysis...');
   }
 
   loadFormExample(formId: string): void {

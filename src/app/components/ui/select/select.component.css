@@ -37,7 +37,7 @@
 
 .select-icon {
   @apply absolute pointer-events-none;
-  @apply right-4 top-[38px] text-lg text-onSurfaceVariant;
-  @apply sm:right-5 sm:top-[42px] sm:text-xl;
-  @apply lg:right-6 lg:top-[46px] lg:text-2xl;
+  @apply right-4 top-1/2 transform -translate-y-1/2;
+  @apply text-lg text-onSurfaceVariant;
+  @apply sm:right-5 sm:text-xl lg:right-6 lg:text-2xl;
 }

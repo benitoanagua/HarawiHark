@@ -1,7 +1,6 @@
 <app-card padding="large" class="editor-card">
   <div class="editor-container">
     
-    <!-- Header minimalista -->
     <header class="editor-header">
       <h1 class="editor-title">poetry editor</h1>
       <div class="form-selector">
@@ -14,7 +13,6 @@
       </div>
     </header>
 
-    <!-- Stats panel muy sutil -->
     <div class="stats-panel-minimal">
       <div class="stat-minimal">
         <span class="stat-minimal-value">{{ lineCount() }}</span>
@@ -30,7 +28,6 @@
       </div>
     </div>
 
-    <!-- Editor Multiline - Altura dinámica y 100% ancho -->
     <section class="editor-section" [style.height]="editorHeight()">
       <app-multiline-input
         id="poem-editor"
@@ -45,7 +42,6 @@
       />
     </section>
 
-    <!-- Actions footer - Siempre visible y sincronizado -->
     <footer class="editor-actions">
       <app-button
         variant="primary"
@@ -70,6 +66,14 @@
         label="clear"
         icon="icon-[iconoir--cancel]"
         (clicked)="clear()"
+      />
+
+      <app-button
+        variant="outline"
+        size="medium"
+        label="copy"
+        icon="icon-[iconoir--copy]"
+        (clicked)="onCopyPoem()"
       />
     </footer>
 

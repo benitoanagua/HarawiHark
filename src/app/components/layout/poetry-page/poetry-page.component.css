@@ -1,3 +1,7 @@
+:host {
+  @apply block w-full h-full;
+}
+
 .poetry-page {
   @apply min-h-screen bg-background text-onBackground flex flex-col;
   @apply pb-20 sm:pb-24 lg:pb-0;
@@ -27,7 +31,6 @@
 
 .editor-section {
   @apply flex-1 lg:border-r lg:border-outlineVariant;
-  /* @apply lg:overflow-y-auto lg:h-[calc(100vh-80px)]; */
 }
 
 .section-content {
@@ -167,11 +170,7 @@
 
 /* Analysis Content */
 .analysis-content {
-  @apply mt-6 sm:mt-8;
-}
-
-.analysis-actions {
-  @apply mt-8 flex flex-wrap gap-2 sm:gap-3;
+  @apply mt-6 sm:mt-8 mb-8 sm:mb-12 lg:mb-16;
 }
 
 /* Empty State Mejorado */

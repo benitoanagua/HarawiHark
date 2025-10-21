@@ -23,11 +23,7 @@
 }
 
 .form-selector {
-  @apply w-48;
-
-  @media (min-width: 768px) {
-    @apply w-56;
-  }
+  @apply min-w-2xs;
 }
 
 /* Stats panel minimalista */

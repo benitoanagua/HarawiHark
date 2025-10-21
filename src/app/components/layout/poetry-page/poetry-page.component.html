@@ -1,11 +1,8 @@
 <div class="poetry-page" [class.results-highlight]="recentlyAnalyzed()">
-  <!-- Toast Notifications -->
   <app-toast-container />
 
-  <!-- Header -->
   <app-header />
 
-  <!-- Navegación rápida flotante (solo mobile) -->
   <div class="quick-nav-buttons">
     <button
       class="nav-pill"
@@ -29,15 +26,11 @@
     </button>
   </div>
 
-  <!-- Panorama: Secciones Principales -->
   <app-panorama>
-    <!-- SECTION: Editor -->
     <div data-section="editor">
       <div class="section-content">
-        <!-- Editor -->
         <app-poem-editor />
 
-        <!-- Word Suggestions -->
         @if (analyzer.wordAlternatives(); as alternatives) {
           <div class="suggestions-wrapper">
             <app-word-suggestions
@@ -48,7 +41,6 @@
           </div>
         }
 
-        <!-- Info Section -->
         <div class="info-section">
           <div class="info-content">
             <span class="icon-[iconoir--light-bulb] info-icon"></span>
@@ -82,11 +74,9 @@
       </div>
     </div>
 
-    <!-- SECTION: Results -->
     <div data-section="results" [class.section-highlight]="recentlyAnalyzed()">
       <div class="section-content">
         @if (hasResults()) {
-          <!-- States de loading con etapas -->
           @if (isAnalyzing()) {
             <app-card padding="large">
               <div class="analysis-loading">
@@ -118,14 +108,12 @@
               </div>
             </app-card>
           } @else {
-            <!-- Pivot Tabs -->
             <app-pivot
               [items]="analysisTabs()"
               [selectedId]="selectedAnalysisTab()"
               (selectedChange)="onAnalysisTabChange($event)"
             />
 
-            <!-- Analysis Content -->
             <div class="analysis-content">
               @switch (selectedAnalysisTab()) {
                 @case ('structure') {
@@ -145,14 +133,8 @@
                       <div class="quality-prompt">
                         <span class="icon-[iconoir--star] text-4xl mb-4"></span>
                         <p class="text-base mb-6 text-onSurfaceVariant">
-                          Click "Assess Quality" to see detailed quality metrics
+                          Select the Quality tab to see detailed quality metrics
                         </p>
-                        <app-button
-                          variant="primary"
-                          label="assess quality"
-                          icon="icon-[iconoir--star]"
-                          (clicked)="onAssessQuality()"
-                        />
                       </div>
                     </app-card>
                   }
@@ -163,30 +145,8 @@
               }
             </div>
 
-            <!-- Analysis Actions -->
-            <div class="analysis-actions">
-              <app-button
-                variant="primary"
-                label="assess quality"
-                icon="icon-[iconoir--star]"
-                (clicked)="onAssessQuality()"
-              />
-              <app-button
-                variant="outline"
-                label="analyze rhythm"
-                icon="icon-[iconoir--music-note]"
-                (clicked)="onShowMeterAnalysis()"
-              />
-              <app-button
-                variant="outline"
-                label="export poem"
-                icon="icon-[iconoir--cloud-download]"
-                (clicked)="onExportPoem()"
-              />
-            </div>
           }
         } @else {
-          <!-- Empty State Mejorado -->
           <app-card padding="large">
             <div class="empty-state-rich">
               <span class="icon-[iconoir--flower] empty-icon"></span>
@@ -226,10 +186,8 @@
     </div>
   </app-panorama>
 
-  <!-- Footer -->
   <app-footer />
 
-  <!-- AppBar (Solo visible en mobile) -->
   <app-appbar
     class="lg:hidden"
     [actions]="appBarActions"
