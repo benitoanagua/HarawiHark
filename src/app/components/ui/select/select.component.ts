@@ -63,9 +63,8 @@ export class SelectComponent implements ControlValueAccessor {
   private isInternalUpdate = false;
 
   constructor() {
-    // Sincronizar con el estado SOLO para poetry-form
-    effect(() => {
-      if (this.id === 'poetry-form') {
+    if (this.id === 'poetry-form-selector') {
+      effect(() => {
         const selectedForm = this.stateService.selectedForm();
 
         if (this._value !== selectedForm && !this.isInternalUpdate) {
@@ -74,10 +73,10 @@ export class SelectComponent implements ControlValueAccessor {
             new: selectedForm,
           });
           this._value = selectedForm;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
         }
-      }
-    });
+      });
+    }
   }
 
   writeValue(value: string): void {
@@ -106,7 +105,6 @@ export class SelectComponent implements ControlValueAccessor {
 
     console.log('🔴 Select changed:', { old: this._value, new: newValue });
 
-    // Prevenir loop infinito
     if (this._value === newValue) {
       console.log('🔴 Same value, ignoring');
       return;
@@ -117,15 +115,14 @@ export class SelectComponent implements ControlValueAccessor {
     this.onChange(this._value);
     this.selectChange.emit(this._value);
 
-    // Solo actualizar estado si es el select de poetry-form
-    if (this.id === 'poetry-form') {
+    if (this.id === 'poetry-form-selector') {
       console.log('🔴 Updating state service');
       this.stateService.setSelectedForm(this._value);
     }
 
     setTimeout(() => {
       this.isInternalUpdate = false;
-    }, 50);
+    }, 0);
   }
 
   onBlur(): void {

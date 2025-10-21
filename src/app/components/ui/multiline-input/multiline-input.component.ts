@@ -95,7 +95,7 @@ export class MultilineInputComponent implements ControlValueAccessor {
   constructor() {
     this.initializeLines('');
 
-    // ✅ Effect DEBE estar en constructor, no en ngOnInit
+    // ✅ Effect para sincronizar con el estado
     effect(() => {
       const pattern = this.stateService.currentPattern();
       const newRows = this.stateService.expectedLines();
@@ -107,8 +107,11 @@ export class MultilineInputComponent implements ControlValueAccessor {
         rows: newRows,
         textLength: sharedText.length,
         shouldLoadExample,
+        currentRows: this.rows,
+        currentPattern: this.expectedPattern,
       });
 
+      // Actualizar patrón y número de líneas SIEMPRE que cambie el formulario
       if (pattern.length > 0) {
         this.expectedPattern = pattern;
         this.rows = newRows;
@@ -124,6 +127,10 @@ export class MultilineInputComponent implements ControlValueAccessor {
         // Sincronizar con el texto compartido solo si cambió externamente
         if (!this.isInternalUpdate && sharedText !== this.poemText()) {
           console.log('🟣 Syncing text from state');
+          this.initializeLines(sharedText);
+        } else {
+          // Si el texto no cambió pero el patrón sí, re-inicializar líneas
+          console.log('🟣 Reinitializing lines with new pattern');
           this.initializeLines(sharedText);
         }
       }

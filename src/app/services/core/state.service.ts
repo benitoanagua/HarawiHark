@@ -40,7 +40,6 @@ export class StateService {
   );
 
   setSelectedForm(formId: string): void {
-    // Prevenir llamadas duplicadas
     if (this.isUpdatingFromInternal || this.state().selectedForm === formId) {
       console.log('🔵 StateService.setSelectedForm - SKIPPED (duplicate or updating):', formId);
       return;
@@ -50,18 +49,19 @@ export class StateService {
     console.log('🔵 StateService.setSelectedForm:', formId);
 
     const currentText = this.state().poemText.trim();
+    const hasContent = currentText.length > 0;
 
     this.state.update((state) => ({
       ...state,
       selectedForm: formId,
-      shouldLoadExample: currentText.length === 0,
+      shouldLoadExample: !hasContent,
     }));
 
-    console.log('🔵 State updated:', this.state());
+    console.log('🔵 State updated:', this.state(), 'hasContent:', hasContent);
 
     setTimeout(() => {
       this.isUpdatingFromInternal = false;
-    }, 100);
+    }, 10);
   }
 
   setPoemText(text: string): void {
