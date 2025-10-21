@@ -9,7 +9,6 @@ import {
   HostListener,
   signal,
   computed,
-  OnInit,
   inject,
   effect,
 } from '@angular/core';
@@ -45,7 +44,7 @@ export interface SyllableSegment {
     },
   ],
 })
-export class MultilineInputComponent implements ControlValueAccessor, OnInit {
+export class MultilineInputComponent implements ControlValueAccessor {
   @ViewChild('linesContainer') linesContainer!: ElementRef<HTMLDivElement>;
 
   @Input() label = '';
@@ -93,15 +92,22 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
   };
   private isInternalUpdate = false;
 
-  ngOnInit() {
+  constructor() {
     this.initializeLines('');
 
-    // Efecto para cambios de patrón y texto compartido
+    // ✅ Effect DEBE estar en constructor, no en ngOnInit
     effect(() => {
       const pattern = this.stateService.currentPattern();
       const newRows = this.stateService.expectedLines();
       const sharedText = this.stateService.poemText();
       const shouldLoadExample = this.stateService.shouldLoadExample();
+
+      console.log('🟣 MultilineInput effect:', {
+        pattern,
+        rows: newRows,
+        textLength: sharedText.length,
+        shouldLoadExample,
+      });
 
       if (pattern.length > 0) {
         this.expectedPattern = pattern;
@@ -109,6 +115,7 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
 
         // Si debemos cargar ejemplo
         if (shouldLoadExample) {
+          console.log('🟣 Loading example...');
           this.stateService.loadExample();
           this.stateService.consumeLoadExample();
           return;
@@ -116,6 +123,7 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
 
         // Sincronizar con el texto compartido solo si cambió externamente
         if (!this.isInternalUpdate && sharedText !== this.poemText()) {
+          console.log('🟣 Syncing text from state');
           this.initializeLines(sharedText);
         }
       }

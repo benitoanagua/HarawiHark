@@ -49,17 +49,20 @@ export class PoemEditorComponent {
   constructor() {
     effect(() => {
       const formId = this.selectedForm();
+      console.log('🟢 PoemEditor effect - selectedForm:', formId);
       this.analyzer.selectedForm.set(formId);
       this.adjustEditorHeight();
     });
 
     effect(() => {
       const text = this.poemText();
+      console.log('🟢 PoemEditor effect - poemText length:', text.length);
       this.analyzer.poemText.set(text);
     });
   }
 
   onFormChange(formId: string): void {
+    console.log('🟢 PoemEditor.onFormChange:', formId);
     this.stateService.setSelectedForm(formId);
   }
 
@@ -81,7 +84,6 @@ export class PoemEditorComponent {
   clear(): void {
     const hadContent = this.poemText().length > 0;
 
-    // CLEAR completo sin cargar ejemplos
     this.stateService.clear();
     this.analyzer.clear();
 

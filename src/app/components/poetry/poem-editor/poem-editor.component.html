@@ -5,7 +5,7 @@
       <h1 class="editor-title">poetry editor</h1>
       <div class="form-selector">
         <app-select
-          id="poetry-form"
+          [id]="'poetry-form-selector'"
           [options]="formOptions"
           [value]="selectedForm()"
           (selectChange)="onFormChange($event)"

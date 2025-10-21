@@ -13,7 +13,7 @@
   >
     <option value="" disabled>select an option</option>
     @for (option of options; track option.value) {
-      <option [value]="option.value">
+      <option [value]="option.value" [selected]="_value === option.value">
         {{ option.label }}
         @if (option.description) {
           - {{ option.description }}

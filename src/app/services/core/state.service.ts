@@ -40,16 +40,28 @@ export class StateService {
   );
 
   setSelectedForm(formId: string): void {
-    if (this.isUpdatingFromInternal) return;
+    // Prevenir llamadas duplicadas
+    if (this.isUpdatingFromInternal || this.state().selectedForm === formId) {
+      console.log('🔵 StateService.setSelectedForm - SKIPPED (duplicate or updating):', formId);
+      return;
+    }
+
+    this.isUpdatingFromInternal = true;
+    console.log('🔵 StateService.setSelectedForm:', formId);
 
     const currentText = this.state().poemText.trim();
 
     this.state.update((state) => ({
       ...state,
       selectedForm: formId,
-      // Solo cargar ejemplo si NO hay texto actual
       shouldLoadExample: currentText.length === 0,
     }));
+
+    console.log('🔵 State updated:', this.state());
+
+    setTimeout(() => {
+      this.isUpdatingFromInternal = false;
+    }, 100);
   }
 
   setPoemText(text: string): void {
