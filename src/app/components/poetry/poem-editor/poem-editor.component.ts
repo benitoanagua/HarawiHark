@@ -50,32 +50,17 @@ export class PoemEditorComponent {
     effect(() => {
       const formId = this.selectedForm();
       this.analyzer.selectedForm.set(formId);
-      this.updateEditorForForm();
+      this.adjustEditorHeight();
     });
 
     effect(() => {
       const text = this.poemText();
       this.analyzer.poemText.set(text);
     });
-
-    effect(() => {
-      this.adjustEditorHeight();
-    });
   }
 
   onFormChange(formId: string): void {
     this.stateService.setSelectedForm(formId);
-  }
-
-  private updateEditorForForm(): void {
-    const currentText = this.poemText();
-    if (!currentText.trim()) {
-      this.loadExample();
-    }
-
-    setTimeout(() => {
-      this.adjustEditorHeight();
-    }, 100);
   }
 
   onTextChange(text: string): void {
@@ -95,6 +80,8 @@ export class PoemEditorComponent {
 
   clear(): void {
     const hadContent = this.poemText().length > 0;
+
+    // CLEAR completo sin cargar ejemplos
     this.stateService.clear();
     this.analyzer.clear();
 

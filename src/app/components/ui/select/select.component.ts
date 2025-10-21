@@ -1,4 +1,13 @@
-import { Component, Input, Output, EventEmitter, forwardRef, inject, effect } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  forwardRef,
+  inject,
+  effect,
+  OnInit,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { StateService } from '../../../services/';
 
@@ -20,7 +29,7 @@ export interface SelectOption {
     },
   ],
 })
-export class SelectComponent implements ControlValueAccessor {
+export class SelectComponent implements ControlValueAccessor, OnInit {
   private readonly stateService = inject(StateService);
 
   @Input() options: SelectOption[] = [];
@@ -33,8 +42,10 @@ export class SelectComponent implements ControlValueAccessor {
     return this._value;
   }
   set value(val: string) {
-    this._value = val || '';
-    this.onChange(this._value);
+    if (this._value !== val) {
+      this._value = val || '';
+      this.onChange(this._value);
+    }
   }
 
   _value = '';
@@ -47,12 +58,23 @@ export class SelectComponent implements ControlValueAccessor {
   private onTouched: () => void = () => {
     // Placeholder for ControlValueAccessor
   };
+  private isInternalUpdate = false;
+
+  ngOnInit() {
+    // Sincronizar valor inicial del select con el estado
+    if (this.id === 'poetry-form') {
+      const selectedForm = this.stateService.selectedForm();
+      if (this._value !== selectedForm) {
+        this._value = selectedForm;
+      }
+    }
+  }
 
   constructor() {
     effect(() => {
       if (this.id === 'poetry-form') {
         const selectedForm = this.stateService.selectedForm();
-        if (this._value !== selectedForm) {
+        if (this._value !== selectedForm && !this.isInternalUpdate) {
           this._value = selectedForm;
         }
       }
@@ -60,7 +82,9 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   writeValue(value: string): void {
-    this._value = value || '';
+    if (!this.isInternalUpdate) {
+      this._value = value || '';
+    }
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -76,6 +100,7 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   onSelectChange(event: Event): void {
+    this.isInternalUpdate = true;
     const target = event.target as HTMLSelectElement;
     this._value = target.value;
     this.onChange(this._value);
@@ -84,6 +109,10 @@ export class SelectComponent implements ControlValueAccessor {
     if (this.id === 'poetry-form') {
       this.stateService.setSelectedForm(this._value);
     }
+
+    setTimeout(() => {
+      this.isInternalUpdate = false;
+    }, 0);
   }
 
   onBlur(): void {

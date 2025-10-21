@@ -91,29 +91,33 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
   private onTouched: () => void = () => {
     // Placeholder for ControlValueAccessor
   };
+  private isInternalUpdate = false;
 
   ngOnInit() {
     this.initializeLines('');
 
+    // Efecto para cambios de patrón y texto compartido
     effect(() => {
       const pattern = this.stateService.currentPattern();
+      const newRows = this.stateService.expectedLines();
+      const sharedText = this.stateService.poemText();
+      const shouldLoadExample = this.stateService.shouldLoadExample();
+
       if (pattern.length > 0) {
         this.expectedPattern = pattern;
-        this.rows = this.stateService.expectedLines();
+        this.rows = newRows;
 
-        const sharedText = this.stateService.poemText();
-        if (sharedText && sharedText !== this.poemText()) {
-          this.initializeLines(sharedText);
-        } else if (!this.poemText().trim()) {
-          this.initializeLines('');
+        // Si debemos cargar ejemplo
+        if (shouldLoadExample) {
+          this.stateService.loadExample();
+          this.stateService.consumeLoadExample();
+          return;
         }
-      }
-    });
 
-    effect(() => {
-      const sharedText = this.stateService.poemText();
-      if (sharedText && sharedText !== this.poemText()) {
-        this.initializeLines(sharedText);
+        // Sincronizar con el texto compartido solo si cambió externamente
+        if (!this.isInternalUpdate && sharedText !== this.poemText()) {
+          this.initializeLines(sharedText);
+        }
       }
     });
   }
@@ -125,22 +129,28 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
 
     for (let i = 0; i < total; i++) {
       const expectedSyllables = this.expectedPattern[i] || 0;
+      const lineText = linesArray[i] || '';
+      const syllables = lineText ? this.rita.analyzeLine(lineText).syllables : 0;
+
       result.push({
-        text: linesArray[i] || '',
+        text: lineText,
         number: i + 1,
         focused: false,
-        syllables: 0,
+        syllables,
         expectedSyllables,
-        isCorrect: false,
-        isOver: false,
+        isCorrect: syllables === expectedSyllables && syllables > 0,
+        isOver: syllables > expectedSyllables,
       });
     }
+
     this.lines.set(result);
     this.updateLineValidation();
   }
 
   writeValue(value: string): void {
-    this.initializeLines(value || '');
+    if (!this.isInternalUpdate) {
+      this.initializeLines(value || '');
+    }
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -156,6 +166,8 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
   }
 
   onLineInput(index: number, text: string): void {
+    this.isInternalUpdate = true;
+
     const updated = [...this.lines()];
     updated[index].text = text;
 
@@ -167,7 +179,12 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
     this.emitChanges();
     this.updateLineValidation();
 
+    // Actualizar el estado compartido
     this.stateService.updatePoemLines(updated.map((line) => line.text));
+
+    setTimeout(() => {
+      this.isInternalUpdate = false;
+    }, 0);
   }
 
   onLineFocus(index: number): void {
@@ -202,7 +219,6 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
       case 'Enter':
         if (!event.shiftKey) {
           event.preventDefault();
-
           if (current < lines.length - 1) {
             this.focusLine(current + 1);
           }

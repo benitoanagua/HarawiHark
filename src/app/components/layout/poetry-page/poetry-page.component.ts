@@ -156,10 +156,6 @@ export class PoetryPageComponent {
     this.navigateWithHighlight('results');
   }
 
-  private delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   onAppBarAction(actionId: string): void {
     switch (actionId) {
       case 'analyze':
@@ -287,8 +283,13 @@ export class PoetryPageComponent {
   }
 
   loadFormExample(formId: string): void {
+    // Cambiar el formulario seleccionado
     this.stateService.setSelectedForm(formId);
-    this.handleLoadExample();
+
+    // Cargar el ejemplo
+    setTimeout(() => {
+      this.handleLoadExample();
+    }, 100);
   }
 
   getQuickStats() {

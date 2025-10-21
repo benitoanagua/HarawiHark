@@ -6,6 +6,7 @@ export interface AppState {
   poemText: string;
   isAnalyzing: boolean;
   hasResults: boolean;
+  shouldLoadExample: boolean;
 }
 
 @Injectable({
@@ -17,12 +18,16 @@ export class StateService {
     poemText: '',
     isAnalyzing: false,
     hasResults: false,
+    shouldLoadExample: false,
   });
+
+  private isUpdatingFromInternal = false;
 
   readonly selectedForm = computed(() => this.state().selectedForm);
   readonly poemText = computed(() => this.state().poemText);
   readonly isAnalyzing = computed(() => this.state().isAnalyzing);
   readonly hasResults = computed(() => this.state().hasResults);
+  readonly shouldLoadExample = computed(() => this.state().shouldLoadExample);
   readonly currentForm = computed(() => POETRY_FORMS[this.selectedForm()]);
   readonly currentPattern = computed(() => this.currentForm()?.pattern || []);
   readonly expectedLines = computed(() => this.currentForm()?.lines || 3);
@@ -35,19 +40,28 @@ export class StateService {
   );
 
   setSelectedForm(formId: string): void {
+    if (this.isUpdatingFromInternal) return;
+
+    const currentText = this.state().poemText.trim();
+
     this.state.update((state) => ({
       ...state,
       selectedForm: formId,
+      // Solo cargar ejemplo si NO hay texto actual
+      shouldLoadExample: currentText.length === 0,
     }));
-
-    const currentText = this.state().poemText.trim();
-    if (!currentText) {
-      this.loadExample();
-    }
   }
 
   setPoemText(text: string): void {
-    this.state.update((state) => ({ ...state, poemText: text }));
+    this.isUpdatingFromInternal = true;
+    this.state.update((state) => ({
+      ...state,
+      poemText: text,
+      shouldLoadExample: false,
+    }));
+    setTimeout(() => {
+      this.isUpdatingFromInternal = false;
+    }, 0);
   }
 
   setIsAnalyzing(analyzing: boolean): void {
@@ -63,16 +77,29 @@ export class StateService {
     const example = POETRY_EXAMPLES[formId];
     if (example) {
       this.setPoemText(example.join('\n'));
+      this.state.update((state) => ({ ...state, shouldLoadExample: false }));
     }
   }
 
   clear(): void {
-    this.setPoemText('');
-    this.setHasResults(false);
+    this.isUpdatingFromInternal = true;
+    this.state.update((state) => ({
+      ...state,
+      poemText: '',
+      hasResults: false,
+      shouldLoadExample: false,
+    }));
+    setTimeout(() => {
+      this.isUpdatingFromInternal = false;
+    }, 0);
   }
 
   updatePoemLines(lines: string[]): void {
     const text = lines.join('\n');
     this.setPoemText(text);
+  }
+
+  consumeLoadExample(): void {
+    this.state.update((state) => ({ ...state, shouldLoadExample: false }));
   }
 }
