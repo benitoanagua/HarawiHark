@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: './e2e-tests',
   outputDir: './test-results/artifacts',
   snapshotDir: './test-results/snapshots',
 
@@ -19,15 +19,25 @@ export default defineConfig({
     baseURL: 'http://localhost:4200',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    video: process.env.CI ? 'off' : 'retain-on-failure',
   },
 
   projects: [
     {
-      name: 'chromium',
+      name: 'brave',
       use: {
         ...devices['Desktop Chrome'],
-        // Usar Chrome del sistema en lugar de descargar
         channel: 'chrome',
+        launchOptions: {
+          executablePath: '/usr/bin/brave',
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-web-security',
+            '--disable-features=VizDisplayCompositor',
+            '--disable-background-timer-throttling',
+          ],
+        },
       },
     },
   ],
