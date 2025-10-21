@@ -56,7 +56,7 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
   @Input() showLineNumbers = true;
   @Input() showLineValidation = false;
   @Input() expectedPattern: number[] = [];
-  @Input() fontSizeClass = 'text-base'; // Clase por defecto
+  @Input() fontSizeClass = 'text-base';
 
   private readonly rita = inject(RitaService);
 
@@ -83,8 +83,12 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
   @Output() lineFocus = new EventEmitter<{ index: number; text: string }>();
   @Output() lineValidationChange = new EventEmitter<LineData[]>();
 
-  private onChange: (value: string) => void = () => {};
-  private onTouched: () => void = () => {};
+  private onChange: (value: string) => void = () => {
+    // Placeholder for ControlValueAccessor
+  };
+  private onTouched: () => void = () => {
+    // Placeholder for ControlValueAccessor
+  };
 
   ngOnInit() {
     this.initializeLines('');
@@ -271,6 +275,17 @@ export class MultilineInputComponent implements ControlValueAccessor, OnInit {
     }
 
     return segments;
+  }
+
+  getSyllableCountClass(line: LineData): string {
+    if (line.syllables === 0) return 'syllable-count-empty';
+    if (line.syllables === line.expectedSyllables) return 'syllable-count-perfect';
+    if (line.syllables > line.expectedSyllables) return 'syllable-count-over';
+
+    const progress = (line.syllables / line.expectedSyllables) * 100;
+    if (progress >= 75) return 'syllable-count-close';
+    if (progress >= 50) return 'syllable-count-medium';
+    return 'syllable-count-low';
   }
 
   clear(): void {

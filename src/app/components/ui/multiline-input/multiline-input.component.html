@@ -1,18 +1,16 @@
 <div class="multiline-input-wrapper">
   <div class="notebook-editor" [class.disabled]="disabled" [class]="fontSizeClass">
-    <!-- Contenedor de líneas - ocupa todo el espacio -->
     <div #linesContainer class="lines-container">
       @for (line of lines(); track line.number; let index = $index) {
         <div class="line-row" 
              [class.focused]="focusedLineIndex() === index">
           
-          <!-- Número de línea -->
-          @if (showLineNumbers) {
-            <div class="line-number">{{ line.number }}</div>
-          }
+          <div class="syllable-count" 
+               [class]="getSyllableCountClass(line)">
+            {{ line.syllables }}/{{ line.expectedSyllables }}
+          </div>
 
           <div class="line-input-container">
-            <!-- Input de texto con clase responsiva -->
             <input
               [id]="id + '-line-' + index"
               type="text"
@@ -27,25 +25,6 @@
               spellcheck="false"
               [class]="fontSizeClass"
             />
-
-            <!-- Validación visual sutil con barras de sílabas -->
-            @if (showLineValidation && line.expectedSyllables > 0) {
-              <div class="syllable-validation">
-                <div class="syllable-bars">
-                  @for (segment of getSyllableSegments(line); track $index) {
-                    <div class="syllable-bar" 
-                         [class.filled]="segment.filled"
-                         [class.empty]="!segment.filled"
-                         [class.perfect]="line.isCorrect"
-                         [class.over]="line.isOver">
-                    </div>
-                  }
-                </div>
-                <div class="syllable-count" [class]="fontSizeClass">
-                  {{ line.syllables }}/{{ line.expectedSyllables }}
-                </div>
-              </div>
-            }
           </div>
         </div>
       }
