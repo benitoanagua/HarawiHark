@@ -1,4 +1,4 @@
-import { captureVideo } from './video-capture';
+import { captureVideo, VideoCapture } from './video-capture';
 import { captureScreenshots } from './screenshot-capture';
 import { Command } from 'commander';
 
@@ -18,6 +18,7 @@ program
   .option('-t, --duration <seconds>', 'Video duration', '15')
   .option('-b, --browser <browser>', 'Browser: brave, chrome, firefox', 'brave')
   .option('--no-interactions', 'Skip demo interactions', false)
+  .option('--advanced', 'Use advanced demo with full workflow', false)
   .action(async (options) => {
     console.log('🎬 Starting poetry editor video capture...');
 
@@ -28,6 +29,7 @@ program
       duration: parseInt(options.duration) * 1000,
       browserType: options.browser,
       showInteractions: options.interactions,
+      includeAdvancedDemo: options.advanced,
     });
 
     if (result.success) {
@@ -77,6 +79,7 @@ program
   .option('-u, --url <url>', 'Application URL', 'http://localhost:4200')
   .option('-o, --output-dir <dir>', 'Output directory', 'angular-captures/demo')
   .option('-b, --browser <browser>', 'Browser: brave, chrome, firefox', 'brave')
+  .option('--advanced', 'Use advanced demo with full workflow (30s)', false)
   .action(async (options) => {
     console.log('🚀 Starting complete application demo capture...');
 
@@ -85,8 +88,9 @@ program
       url: options.url,
       outputDir: `${options.outputDir}/videos`,
       browserType: options.browser,
-      duration: 20000,
+      duration: options.advanced ? 30000 : 20000,
       showInteractions: true,
+      includeAdvancedDemo: options.advanced,
     });
 
     console.log('\n📸 Capturing comprehensive screenshots...');
@@ -104,6 +108,9 @@ program
 
     if (videoResult.success && screenshotResult.success) {
       console.log('🎉 Complete demo captured successfully!');
+      console.log(`\n📁 Output locations:`);
+      console.log(`   Videos: ${options.outputDir}/videos`);
+      console.log(`   Screenshots: ${options.outputDir}/screenshots`);
     } else {
       console.log('❌ Demo capture completed with errors');
       process.exit(1);
@@ -113,20 +120,40 @@ program
 program
   .command('quick')
   .description('Quick capture of application overview')
-  .action(async () => {
+  .option('-b, --browser <browser>', 'Browser: brave, chrome, firefox', 'brave')
+  .action(async (options) => {
     console.log('⚡ Quick capturing application overview...');
 
     const result = await captureScreenshots({
       url: 'http://localhost:4200',
       multiple: true,
       captureInteractions: true,
-      browserType: 'brave',
+      browserType: options.browser,
     });
 
     if (result.success) {
       console.log(`✅ Quick capture completed: ${result.sections?.length} screenshots`);
     } else {
       console.error('❌ Quick capture failed:', result.error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('full-demo')
+  .description('Extended demo with complete workflow (30s video + all screenshots)')
+  .option('-u, --url <url>', 'Application URL', 'http://localhost:4200')
+  .option('-b, --browser <browser>', 'Browser: brave, chrome, firefox', 'brave')
+  .action(async () => {
+    console.log('🎯 Starting FULL application demo with advanced interactions...');
+
+    const result = await VideoCapture.captureFullDemo();
+
+    if (result.success) {
+      console.log(`✅ Full demo video captured: ${result.outputPath}`);
+      console.log(`⏱️ Duration: ${Math.round(result.duration / 1000)}s`);
+    } else {
+      console.error('❌ Full demo capture failed:', result.error);
       process.exit(1);
     }
   });

@@ -1,5 +1,6 @@
 import { chromium, Browser, BrowserContext, Page, LaunchOptions } from 'playwright';
 import { BROWSER_CONFIG, SHARED_CONFIG, BrowserConfig } from '../../../playwright.config';
+import { SELECTORS, TestHelpers } from '../../e2e/selectors';
 
 export interface BrowserLaunchOptions {
   headless?: boolean;
@@ -11,6 +12,9 @@ export interface BrowserLaunchOptions {
 }
 
 export class BrowserManager {
+  /**
+   * Lanza el navegador con la configuración especificada
+   */
   static async launchBrowser(
     options: BrowserLaunchOptions = {}
   ): Promise<{ browser: Browser; context: BrowserContext; page: Page }> {
@@ -47,7 +51,6 @@ export class BrowserManager {
       viewport,
       baseURL: SHARED_CONFIG.baseURL,
       ignoreHTTPSErrors: true,
-
       trace: SHARED_CONFIG.trace,
       screenshot: SHARED_CONFIG.screenshot,
       ...(recordVideo && {
@@ -59,18 +62,19 @@ export class BrowserManager {
     };
 
     const context = await browser.newContext(contextOptions);
-
     context.setDefaultTimeout(timeout);
     context.setDefaultNavigationTimeout(timeout);
 
     const page = await context.newPage();
-
     page.setDefaultTimeout(timeout);
     page.setDefaultNavigationTimeout(timeout);
 
     return { browser, context, page };
   }
 
+  /**
+   * Navega de forma segura a la URL especificada
+   */
   static async safeNavigate(page: Page, url: string, timeout = 30000): Promise<boolean> {
     try {
       console.log(`🌐 Navigating to: ${url}`);
@@ -80,7 +84,7 @@ export class BrowserManager {
       });
 
       await page
-        .waitForSelector('app-poem-editor', { timeout: 10000 })
+        .waitForSelector(SELECTORS.EDITOR.CONTAINER, { timeout: 10000 })
         .catch(() => page.waitForSelector('app-root', { timeout: 5000 }));
 
       console.log('✅ Application loaded successfully');
@@ -91,11 +95,13 @@ export class BrowserManager {
     }
   }
 
+  /**
+   * Espera a que la aplicación esté completamente cargada y lista
+   */
   static async waitForAppReady(page: Page, timeout = 15000): Promise<boolean> {
     try {
-      await page.waitForSelector('app-poem-editor', { timeout });
-
-      await page.waitForSelector('#poetry-form-selector', { timeout: 10000 });
+      await page.waitForSelector(SELECTORS.EDITOR.CONTAINER, { timeout });
+      await page.waitForSelector(SELECTORS.FORM_SELECTOR, { timeout: 10000 });
       await page.waitForSelector('.editor-actions', { timeout: 5000 });
 
       console.log('✅ Poetry editor application ready');
@@ -106,6 +112,9 @@ export class BrowserManager {
     }
   }
 
+  /**
+   * Limpia recursos del navegador
+   */
   static async cleanup(browser?: Browser, context?: BrowserContext): Promise<void> {
     try {
       if (context) {
@@ -121,141 +130,74 @@ export class BrowserManager {
     }
   }
 
-  static async robustClick(page: Page, selectors: string[], timeout = 5000): Promise<boolean> {
-    for (const selector of selectors) {
-      try {
-        const element = page.locator(selector);
-        if (await element.isVisible({ timeout: 2000 })) {
-          await element.click({ timeout });
-          await page.waitForTimeout(500);
-          return true;
-        }
-      } catch {
-        continue;
-      }
-    }
-
-    for (const selector of selectors) {
-      try {
-        const element = page.locator(selector);
-        if (await element.isVisible({ timeout: 2000 })) {
-          await element.click({ force: true });
-          await page.waitForTimeout(500);
-          return true;
-        }
-      } catch {
-        continue;
-      }
-    }
-
-    console.warn(`❌ All click attempts failed for selectors: ${selectors.join(', ')}`);
-    return false;
-  }
-
+  /**
+   * ⚡ REFACTORIZADO: Realiza acciones de demostración del editor usando TestHelpers
+   * Esto muestra las capacidades de la aplicación en videos/screenshots
+   */
   static async performEditorActions(page: Page): Promise<void> {
-    console.log('🔄 Performing poetry editor actions...');
+    console.log('🔄 Performing poetry editor actions using TestHelpers...');
 
     try {
-      const navSelectors = [
-        '.nav-pill:has-text("results")',
-        '.nav-pill:has-text("editor")',
-        '.quick-nav-buttons button:has-text("results")',
-        '.quick-nav-buttons button:has-text("editor")',
-        'button:has-text("results")',
-        'button:has-text("editor")',
+      const forms = [
+        SELECTORS.FORM_OPTIONS.TANKA,
+        SELECTORS.FORM_OPTIONS.LIMERICK,
+        SELECTORS.FORM_OPTIONS.HAIKU,
       ];
 
-      for (const selector of navSelectors) {
-        if (await this.robustClick(page, [selector])) {
-          await this.wait(1500);
-          console.log(`✅ Clicked navigation: ${selector}`);
-          break;
-        }
+      for (const form of forms) {
+        await TestHelpers.selectPoetryForm(page, form);
+        await this.wait(1200);
+        console.log(`✅ Form changed to: ${form}`);
       }
 
-      const formSelect = page.locator('#poetry-form-selector');
-      if (await formSelect.isVisible()) {
-        const forms = ['tanka', 'limerick', 'haiku'];
-        for (const form of forms) {
-          await formSelect.selectOption({ value: form });
-          await this.wait(1200);
-          console.log(`✅ Form changed to: ${form}`);
-        }
+      const testLines = [
+        'Ancient pond so still',
+        'A frog jumps into water',
+        'Splash breaks silence',
+      ];
 
-        await formSelect.selectOption({ value: 'haiku' });
-        await this.wait(1000);
-      }
-
-      const firstLineInput = page.locator('#poem-editor-line-0');
-      if (await firstLineInput.isVisible()) {
-        const sampleLines = [
-          'Moonlight shines on water',
-          'Soft breeze through the trees',
-          'Nature speaks in whispers',
-        ];
-
-        for (const line of sampleLines) {
-          await firstLineInput.fill(line);
-          await this.wait(800);
-        }
+      const firstLine = page.locator(SELECTORS.EDITOR.LINE_INPUT(0));
+      if (await firstLine.isVisible({ timeout: 2000 })) {
+        await TestHelpers.fillPoemLines(page, testLines);
+        await this.wait(1500);
         console.log('✅ Sample poem written');
 
-        await firstLineInput.fill('');
+        await firstLine.fill('');
         await this.wait(500);
       }
 
-      const buttonActions = [
-        { text: 'example', wait: 2500 },
-        { text: 'analyze', wait: 4000 },
-        { text: 'clear', wait: 1500 },
-      ];
+      await TestHelpers.loadExample(page);
+      console.log('✅ Example loaded');
 
-      for (const action of buttonActions) {
-        const buttonSelectors = [
-          `.editor-actions button:has-text("${action.text}")`,
-          `button:has-text("${action.text}"):not(.metro-command-button)`,
-          `button:has-text("${action.text}")`,
-        ];
-
-        let clicked = false;
-        for (const selector of buttonSelectors) {
-          const button = page.locator(selector).first();
-          if ((await button.isVisible({ timeout: 2000 })) && (await button.isEnabled())) {
-            await button.click();
-            await this.wait(action.wait);
-            console.log(`✅ Button clicked: ${action.text}`);
-            clicked = true;
-            break;
-          }
-        }
-
-        if (!clicked) {
-          console.log(`⚠️ Could not click button: ${action.text}`);
-        }
+      const analyzeButton = page.locator(SELECTORS.BUTTONS.ANALYZE).first();
+      if ((await analyzeButton.isVisible({ timeout: 2000 })) && (await analyzeButton.isEnabled())) {
+        await analyzeButton.click();
+        await this.wait(4000);
+        console.log('✅ Analysis triggered');
       }
 
-      if (await page.locator('app-poem-results').isVisible({ timeout: 3000 })) {
-        console.log('✅ Results section is visible, navigating...');
-        const resultsNavSelectors = [
-          '.nav-pill:has-text("results")',
-          '.quick-nav-buttons button:has-text("results")',
-          'button:has-text("results")',
-        ];
+      const clearButton = page.locator(SELECTORS.BUTTONS.CLEAR).first();
+      if ((await clearButton.isVisible({ timeout: 2000 })) && (await clearButton.isEnabled())) {
+        await clearButton.click();
 
-        for (const selector of resultsNavSelectors) {
-          if (await this.robustClick(page, [selector])) {
-            await this.wait(2000);
-            console.log('✅ Navigated to results section');
-            break;
-          }
+        try {
+          await page.waitForSelector('button:has-text("OK"), button:has-text("Confirm")', {
+            timeout: 1000,
+          });
+          await page.click('button:has-text("OK"), button:has-text("Confirm")');
+        } catch {
+          // Nothing
         }
+
+        await this.wait(1000);
+        console.log('✅ Editor cleared');
       }
 
-      await page.evaluate(() => window.scrollTo(0, 300));
+      await page.evaluate(() => window.scrollTo({ top: 300, behavior: 'smooth' }));
       await this.wait(800);
-      await page.evaluate(() => window.scrollTo(0, 600));
+      await page.evaluate(() => window.scrollTo({ top: 600, behavior: 'smooth' }));
       await this.wait(800);
-      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
       await this.wait(800);
 
       console.log('✅ All editor actions completed successfully');
@@ -267,10 +209,16 @@ export class BrowserManager {
     }
   }
 
+  /**
+   * Espera un número específico de milisegundos
+   */
   static async wait(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
+  /**
+   * Toma un screenshot de la página actual
+   */
   static async takeScreenshot(page: Page, name: string, path: string): Promise<boolean> {
     try {
       await page.screenshot({

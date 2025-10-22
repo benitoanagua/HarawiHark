@@ -4,6 +4,7 @@ import type { CaptureOptions, CaptureResult } from './types';
 import { BrowserManager } from './browser-utils';
 import { Browser, BrowserContext, Page } from 'playwright';
 import { SHARED_CONFIG } from '../../../playwright.config';
+import { SELECTORS, TestHelpers } from '../../e2e/selectors';
 
 interface ScreenshotCaptureOptions extends CaptureOptions {
   multiple?: boolean;
@@ -126,8 +127,8 @@ export class ScreenshotCapture {
     const sections = [
       { name: 'fullpage', selector: 'body', fullPage: true },
       { name: 'header', selector: 'app-header', fullPage: false },
-      { name: 'editor', selector: 'app-poem-editor', fullPage: false },
-      { name: 'results', selector: 'app-poem-results', fullPage: false },
+      { name: 'editor', selector: SELECTORS.EDITOR.CONTAINER, fullPage: false },
+      { name: 'results', selector: SELECTORS.RESULTS.CONTAINER, fullPage: false },
       { name: 'analysis-tabs', selector: '.metro-pivot', fullPage: false },
       { name: 'analysis-tabs-alt', selector: '[role="tablist"]', fullPage: false },
       { name: 'quick-nav', selector: '.quick-nav-buttons', fullPage: false },
@@ -179,6 +180,9 @@ export class ScreenshotCapture {
     }
   }
 
+  /**
+   * ⚡ REFACTORIZADO: Usa TestHelpers y SELECTORS
+   */
   private async captureInteractionStates(
     page: Page,
     outputDir: string,
@@ -187,11 +191,17 @@ export class ScreenshotCapture {
     console.log('🔄 Capturing interaction states...');
 
     try {
-      const formSelect = page.locator('#poetry-form-selector');
-      if (await formSelect.isVisible()) {
-        const forms = ['tanka', 'limerick', 'cinquain'];
+      const formSelect = page.locator(SELECTORS.FORM_SELECTOR);
+
+      if (await formSelect.isVisible({ timeout: 2000 })) {
+        const forms = [
+          SELECTORS.FORM_OPTIONS.TANKA,
+          SELECTORS.FORM_OPTIONS.LIMERICK,
+          SELECTORS.FORM_OPTIONS.CINQUAIN,
+        ];
+
         for (const form of forms) {
-          await formSelect.selectOption({ value: form });
+          await TestHelpers.selectPoetryForm(page, form);
           await BrowserManager.wait(1500);
 
           const screenshotPath = join(
@@ -202,106 +212,95 @@ export class ScreenshotCapture {
           await page.screenshot({
             path: screenshotPath,
             fullPage: this.options.fullPage,
+            type: this.options.screenshotType as 'png' | 'jpeg',
+            ...(this.options.screenshotType === 'jpeg' && { quality: this.options.quality }),
           });
 
           results.push({ name: `form-${form}`, path: screenshotPath });
           console.log(`✅ Form ${form} captured`);
         }
 
-        await formSelect.selectOption({ value: 'haiku' });
+        await TestHelpers.selectPoetryForm(page, SELECTORS.FORM_OPTIONS.HAIKU);
         await BrowserManager.wait(1000);
       }
 
-      const exampleButtonSelectors = [
-        '.editor-actions button:has-text("example")',
-        'button:has-text("example"):not(.metro-command-button)',
-        'button:has-text("example")',
-      ];
+      await TestHelpers.loadExample(page);
+      await BrowserManager.wait(3000);
 
-      let exampleLoaded = false;
-      for (const selector of exampleButtonSelectors) {
-        const exampleButton = page.locator(selector).first();
-        if (
-          (await exampleButton.isVisible({ timeout: 2000 })) &&
-          (await exampleButton.isEnabled())
-        ) {
-          await exampleButton.click();
-          await BrowserManager.wait(3000);
+      const examplePath = join(
+        outputDir,
+        `with-example-${Date.now()}.${this.options.screenshotType}`
+      );
 
-          const screenshotPath = join(
+      await page.screenshot({
+        path: examplePath,
+        fullPage: this.options.fullPage,
+        type: this.options.screenshotType as 'png' | 'jpeg',
+        ...(this.options.screenshotType === 'jpeg' && { quality: this.options.quality }),
+      });
+
+      results.push({ name: 'with-example', path: examplePath });
+      console.log('✅ Example loaded state captured');
+
+      const analyzeButton = page.locator(SELECTORS.BUTTONS.ANALYZE).first();
+      if ((await analyzeButton.isVisible({ timeout: 2000 })) && (await analyzeButton.isEnabled())) {
+        await analyzeButton.click();
+        console.log('🔍 Analysis started, waiting for results...');
+        await BrowserManager.wait(6000);
+
+        const resultsVisible = await page
+          .locator(SELECTORS.RESULTS.CONTAINER)
+          .isVisible({ timeout: 3000 })
+          .catch(() => false);
+
+        if (resultsVisible) {
+          console.log('✅ Results are visible');
+
+          const resultsPath = join(
             outputDir,
-            `with-example-${Date.now()}.${this.options.screenshotType}`
+            `with-results-${Date.now()}.${this.options.screenshotType}`
           );
 
           await page.screenshot({
-            path: screenshotPath,
+            path: resultsPath,
             fullPage: this.options.fullPage,
+            type: this.options.screenshotType as 'png' | 'jpeg',
+            ...(this.options.screenshotType === 'jpeg' && { quality: this.options.quality }),
           });
 
-          results.push({ name: 'with-example', path: screenshotPath });
-          console.log('✅ Example loaded state captured');
-          exampleLoaded = true;
-          break;
-        }
-      }
+          results.push({ name: 'with-results', path: resultsPath });
+          console.log('✅ Results captured');
 
-      if (!exampleLoaded) {
-        console.log('⚠️ Could not load example for screenshot');
-      }
+          const analysisTabs = ['structure', 'rhythm', 'quality', 'stats'];
+          for (const tab of analysisTabs) {
+            try {
+              const tabButton = page.locator(`.metro-pivot-item:has-text("${tab}")`);
+              if (await tabButton.isVisible({ timeout: 2000 })) {
+                await tabButton.click();
+                await BrowserManager.wait(1500);
 
-      const resultsNavSelectors = [
-        '.nav-pill:has-text("results")',
-        '.quick-nav-buttons button:has-text("results")',
-        'button:has-text("results")',
-      ];
+                const tabPath = join(
+                  outputDir,
+                  `tab-${tab}-${Date.now()}.${this.options.screenshotType}`
+                );
 
-      let resultsNavigated = false;
-      for (const selector of resultsNavSelectors) {
-        const resultsNav = page.locator(selector);
-        if (await resultsNav.isVisible({ timeout: 2000 })) {
-          await resultsNav.click();
-          await BrowserManager.wait(2000);
+                await page.screenshot({
+                  path: tabPath,
+                  fullPage: this.options.fullPage,
+                  type: this.options.screenshotType as 'png' | 'jpeg',
+                  ...(this.options.screenshotType === 'jpeg' && { quality: this.options.quality }),
+                });
 
-          await page
-            .waitForSelector('app-poem-results, [class*="result"], [class*="analysis"]', {
-              timeout: 5000,
-            })
-            .catch(() => console.log('Results not loaded after navigation'));
-
-          const screenshotPath = join(
-            outputDir,
-            `results-section-${Date.now()}.${this.options.screenshotType}`
-          );
-
-          await page.screenshot({
-            path: screenshotPath,
-            fullPage: this.options.fullPage,
-          });
-
-          results.push({ name: 'results-section', path: screenshotPath });
-          console.log('✅ Results section captured');
-          resultsNavigated = true;
-
-          const editorNavSelectors = [
-            '.nav-pill:has-text("editor")',
-            '.quick-nav-buttons button:has-text("editor")',
-            'button:has-text("editor")',
-          ];
-
-          for (const editorSelector of editorNavSelectors) {
-            const editorNav = page.locator(editorSelector);
-            if (await editorNav.isVisible({ timeout: 2000 })) {
-              await editorNav.click();
-              await BrowserManager.wait(1000);
-              break;
+                results.push({ name: `tab-${tab}`, path: tabPath });
+                console.log(`✅ Tab ${tab} captured`);
+              }
+            } catch (error) {
+              console.log(`⚠️ Could not capture tab ${tab}`, error);
             }
           }
-          break;
+        } else {
+          console.log('⚠️ Results not visible after analysis');
         }
-      }
-
-      if (!resultsNavigated) {
-        console.log('⚠️ Could not navigate to results section');
       }
     } catch (error) {
       console.log(

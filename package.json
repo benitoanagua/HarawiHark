@@ -15,8 +15,13 @@
     "storybook": "ng run harawihark:storybook",
     "build-storybook": "ng run harawihark:build-storybook",
     "capture:video": "tsx src/lib/capture/cli.ts video",
+    "capture:video:advanced": "tsx src/lib/capture/cli.ts video --advanced",
+    "capture:video:quick": "tsx src/lib/capture/cli.ts video --duration 10",
     "capture:screenshots": "tsx src/lib/capture/cli.ts screenshots",
+    "capture:screenshots:jpeg": "tsx src/lib/capture/cli.ts screenshots --format jpeg",
     "capture:demo": "tsx src/lib/capture/cli.ts demo",
+    "capture:demo:advanced": "tsx src/lib/capture/cli.ts demo --advanced",
+    "capture:full-demo": "tsx src/lib/capture/cli.ts full-demo",
     "capture:quick": "tsx src/lib/capture/cli.ts quick",
     "capture:all": "npm run capture:demo",
     "test:e2e": "playwright test",
@@ -25,7 +30,11 @@
     "test:e2e:debug": "playwright test --headed --debug",
     "test:e2e:ci": "playwright test --reporter=github --project=brave",
     "test:e2e:report": "playwright show-report test-results/html-report",
-    "test:e2e:all-browsers": "playwright test --project=all"
+    "test:e2e:all-browsers": "playwright test --project=all",
+    "clean": "rm -rf dist node_modules/.cache .angular",
+    "clean:captures": "rm -rf angular-captures",
+    "clean:test": "rm -rf test-results",
+    "clean:all": "npm run clean && npm run clean:captures && npm run clean:test"
   },
   "prettier": {
     "printWidth": 100,

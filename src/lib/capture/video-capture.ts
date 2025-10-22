@@ -4,11 +4,13 @@ import type { CaptureOptions, CaptureResult } from './types';
 import { BrowserManager } from './browser-utils';
 import { Browser, BrowserContext, Page } from 'playwright';
 import { SHARED_CONFIG } from '../../../playwright.config';
+import { SELECTORS, TestHelpers } from '../../e2e/selectors';
 
 interface VideoCaptureOptions extends Omit<CaptureOptions, 'multiple'> {
   duration?: number;
   browserType?: 'brave' | 'chrome' | 'firefox';
   showInteractions?: boolean;
+  includeAdvancedDemo?: boolean;
 }
 
 export class VideoCapture {
@@ -25,6 +27,7 @@ export class VideoCapture {
       browserType: options.browserType || 'brave',
       mode: options.mode || 'full',
       showInteractions: options.showInteractions ?? true,
+      includeAdvancedDemo: options.includeAdvancedDemo ?? false,
     };
   }
 
@@ -41,6 +44,7 @@ export class VideoCapture {
     console.log(`⏱️ Duration: ${this.options.duration}ms`);
     console.log(`🌐 Browser: ${this.options.browserType}`);
     console.log(`🖥️ Viewport: ${this.options.viewport.width}x${this.options.viewport.height}`);
+    console.log(`🎯 Interactions: ${this.options.showInteractions ? 'Enabled' : 'Disabled'}`);
 
     let browser: Browser | undefined;
     let context: BrowserContext | undefined;
@@ -60,10 +64,6 @@ export class VideoCapture {
       context = browserSetup.context;
       page = browserSetup.page;
 
-      if (context) {
-        await context.route('**/*.{png,jpg,jpeg,svg,gif,webp}', (route) => route.abort());
-      }
-
       const navigationSuccess = await BrowserManager.safeNavigate(page, this.options.url);
       if (!navigationSuccess) {
         throw new Error('Failed to navigate to application');
@@ -73,11 +73,18 @@ export class VideoCapture {
       await BrowserManager.wait(this.options.delay);
 
       if (this.options.showInteractions) {
-        await BrowserManager.performEditorActions(page);
+        if (this.options.includeAdvancedDemo) {
+          await this.performAdvancedDemo(page);
+        } else {
+          await BrowserManager.performEditorActions(page);
+        }
       }
 
-      const remainingTime = this.options.duration - (Date.now() - startTime);
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = this.options.duration - elapsedTime;
+
       if (remainingTime > 0) {
+        console.log(`⏳ Recording for ${Math.round(remainingTime / 1000)}s more...`);
         await BrowserManager.wait(remainingTime);
       }
 
@@ -86,9 +93,13 @@ export class VideoCapture {
       const duration = Date.now() - startTime;
       const outputPath = await this.findLatestVideoFile(outputDir);
 
-      console.log('✅ Video recorded successfully');
-      console.log(`📊 Capture duration: ${duration}ms`);
-      console.log(`💾 Output: ${outputPath}`);
+      if (outputPath) {
+        console.log('✅ Video recorded successfully');
+        console.log(`📊 Capture duration: ${duration}ms`);
+        console.log(`💾 Output: ${outputPath}`);
+      } else {
+        console.log('⚠️ Video file not found, but capture completed');
+      }
 
       return {
         success: true,
@@ -113,11 +124,119 @@ export class VideoCapture {
     }
   }
 
+  /**
+   * ⚡ NUEVO: Demo avanzada que muestra más características
+   */
+  private async performAdvancedDemo(page: Page): Promise<void> {
+    console.log('🎯 Performing advanced demo with full workflow...');
+
+    try {
+      const forms = [
+        { id: SELECTORS.FORM_OPTIONS.HAIKU, wait: 1500 },
+        { id: SELECTORS.FORM_OPTIONS.TANKA, wait: 1500 },
+        { id: SELECTORS.FORM_OPTIONS.LIMERICK, wait: 1500 },
+      ];
+
+      for (const form of forms) {
+        await TestHelpers.selectPoetryForm(page, form.id);
+        await BrowserManager.wait(form.wait);
+        console.log(`✅ Demo: Form ${form.id}`);
+      }
+
+      await TestHelpers.selectPoetryForm(page, SELECTORS.FORM_OPTIONS.HAIKU);
+      await BrowserManager.wait(1000);
+
+      const demoPoem = [
+        'Silent morning light',
+        'Cherry blossoms gently fall',
+        'Spring awakens slow',
+      ];
+
+      await TestHelpers.fillPoemLines(page, demoPoem);
+      await BrowserManager.wait(2000);
+      console.log('✅ Demo: Custom poem written');
+
+      const analyzeButton = page.locator(SELECTORS.BUTTONS.ANALYZE).first();
+      if ((await analyzeButton.isVisible()) && (await analyzeButton.isEnabled())) {
+        await analyzeButton.click();
+        console.log('🔍 Demo: Analysis started');
+
+        await BrowserManager.wait(6000);
+
+        const resultsVisible = await page
+          .locator(SELECTORS.RESULTS.CONTAINER)
+          .isVisible({ timeout: 3000 })
+          .catch(() => false);
+
+        if (resultsVisible) {
+          console.log('✅ Demo: Results displayed');
+
+          await page.evaluate(() => {
+            const results = document.querySelector('app-poem-results');
+            if (results) {
+              results.scrollTo({ top: 200, behavior: 'smooth' });
+            }
+          });
+          await BrowserManager.wait(1500);
+
+          await page.evaluate(() => {
+            const results = document.querySelector('app-poem-results');
+            if (results) {
+              results.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          });
+          await BrowserManager.wait(1000);
+
+          const tabs = ['structure', 'rhythm', 'quality'];
+          for (const tab of tabs) {
+            try {
+              const tabButton = page.locator(`.metro-pivot-item:has-text("${tab}")`);
+              if (await tabButton.isVisible({ timeout: 2000 })) {
+                await tabButton.click();
+                await BrowserManager.wait(2000);
+                console.log(`✅ Demo: Switched to ${tab} tab`);
+              }
+            } catch {
+              console.log(`⚠️ Demo: Tab ${tab} not available`);
+            }
+          }
+        }
+      }
+
+      const copyButton = page.locator(SELECTORS.BUTTONS.COPY).first();
+      if ((await copyButton.isVisible()) && (await copyButton.isEnabled())) {
+        await copyButton.click();
+        await BrowserManager.wait(1500);
+        console.log('✅ Demo: Copy function');
+      }
+
+      await TestHelpers.loadExample(page);
+      await BrowserManager.wait(2000);
+      console.log('✅ Demo: Official example loaded');
+
+      await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'smooth' }));
+      await BrowserManager.wait(1000);
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      await BrowserManager.wait(1000);
+
+      console.log('✅ Advanced demo completed successfully');
+    } catch (error) {
+      console.log(
+        '⚠️ Some advanced demo actions failed:',
+        error instanceof Error ? error.message : error
+      );
+    }
+  }
+
+  /**
+   * Busca el archivo de video más reciente en el directorio de salida
+   */
   private async findLatestVideoFile(outputDir: string): Promise<string> {
     try {
       const fs = await import('fs/promises');
 
       if (!existsSync(outputDir)) {
+        console.log('⚠️ Output directory does not exist');
         return '';
       }
 
@@ -132,7 +251,7 @@ export class VideoCapture {
         }));
 
       if (videoFiles.length === 0) {
-        console.log('❌ No video files found in directory');
+        console.log('⚠️ No video files found in directory');
         return '';
       }
 
@@ -146,14 +265,21 @@ export class VideoCapture {
       filesWithStats.sort((a, b) => b.time.getTime() - a.time.getTime());
 
       const latestFile = filesWithStats[0]?.path || '';
-      console.log(`📹 Latest video file: ${latestFile}`);
+
+      if (latestFile) {
+        console.log(`📹 Latest video file: ${latestFile}`);
+      }
+
       return latestFile;
     } catch (error) {
-      console.warn('❌ Error finding video file:', error);
+      console.warn('⚠️ Error finding video file:', error);
       return '';
     }
   }
 
+  /**
+   * Captura rápida de video con configuración predeterminada
+   */
   static async quickCapture(
     url: string = SHARED_CONFIG.baseURL,
     duration = 15000
@@ -167,8 +293,25 @@ export class VideoCapture {
     return await capture.capture();
   }
 
+  /**
+   * Captura de demo básica (15 segundos con interacciones estándar)
+   */
   static async captureDemo(): Promise<CaptureResult> {
     return await this.quickCapture(SHARED_CONFIG.baseURL, 20000);
+  }
+
+  /**
+   * Captura de demo completa (30 segundos con workflow completo)
+   */
+  static async captureFullDemo(): Promise<CaptureResult> {
+    const capture = new VideoCapture({
+      url: SHARED_CONFIG.baseURL,
+      duration: 30000,
+      browserType: 'brave',
+      showInteractions: true,
+      includeAdvancedDemo: true,
+    });
+    return await capture.capture();
   }
 }
 
