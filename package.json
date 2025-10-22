@@ -18,11 +18,12 @@
     "capture:screenshots": "tsx src/lib/capture/cli.ts screenshots",
     "capture:interactive": "tsx src/lib/capture/cli.ts interactive",
     "test:e2e": "playwright test",
-    "test:e2e:core": "playwright test e2e-tests/poetry-editor.spec.ts e2e-tests/poetry-workflow.spec.ts e2e-tests/state-integration.spec.ts",
+    "test:e2e:core": "playwright test e2e-tests/poetry-editor.spec.ts e2e-tests/poetry-workflow.spec.ts e2e-tests/state-integration.spec.ts --project=brave",
     "test:e2e:dev": "playwright test --ui",
     "test:e2e:debug": "playwright test --headed --debug",
-    "test:e2e:ci": "playwright test --reporter=github",
-    "test:e2e:report": "playwright show-report test-results/html-report"
+    "test:e2e:ci": "playwright test --reporter=github --project=brave",
+    "test:e2e:report": "playwright show-report test-results/html-report",
+    "test:e2e:all-browsers": "playwright test --project=all"
   },
   "prettier": {
     "printWidth": 100,

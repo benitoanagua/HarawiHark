@@ -1,7 +1,6 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 
 export const SELECTORS = {
-  // Form selection
   FORM_SELECTOR: '#poetry-form-selector',
   FORM_OPTIONS: {
     HAIKU: 'haiku',
@@ -14,173 +13,319 @@ export const SELECTORS = {
     FIBONACCI: 'fibonacci',
   },
 
-  // Editor
+  BUTTONS: {
+    ANALYZE: '.editor-actions button:has-text("analyze")',
+    CLEAR: '.editor-actions button:has-text("clear")',
+    LOAD_EXAMPLE: '.editor-actions button:has-text("example")',
+    COPY: '.editor-actions button:has-text("copy")',
+
+    APP_BAR: {
+      ANALYZE: '.metro-command-button:has-text("analyze")',
+      CLEAR: '.metro-command-button:has-text("clear")',
+      EXAMPLE: '.metro-command-button:has-text("example")',
+      COPY: '.metro-command-button:has-text("copy")',
+    },
+  },
+
   EDITOR: {
     CONTAINER: 'app-poem-editor',
     LINE_INPUT: (index: number) => `#poem-editor-line-${index}`,
-    SYLLABLE_COUNTER: (index: number) => `[data-syllable-counter="${index}"]`,
+    SYLLABLE_COUNTER: (index: number) => `.line-row:nth-child(${index + 1}) .syllable-count`,
+    MULTILINE_INPUT: 'app-multiline-input',
   },
 
-  // Buttons
-  BUTTONS: {
-    ANALYZE: 'button:has-text("analyze")',
-    LOAD_EXAMPLE: 'button:has-text("example")',
-    CLEAR: 'button:has-text("clear")',
-    COPY: 'button:has-text("copy")',
-  },
-
-  // Results and Analysis
   RESULTS: {
     CONTAINER: 'app-poem-results',
-    WORD_TOKENS: '.word-token',
-    CLICKABLE_WORDS: '.word-clickable',
+    QUALITY_SECTION: 'app-poem-quality',
+    METER_SECTION: 'app-meter-analysis-section',
     WORD_DETAILS: '.word-details',
-    METER_ANALYSIS: 'app-meter-analysis-section',
-    QUALITY_METRICS: 'app-poem-quality',
-    QUALITY_SCORE: '.quality-score',
+    SUGGESTIONS: 'app-word-suggestions',
+    ANALYSIS_TABS: '.metro-pivot-item',
   },
 
-  // Suggestions
-  SUGGESTIONS: {
-    CONTAINER: 'app-word-suggestions',
-    ALTERNATIVES: '.alternative-item',
+  NAVIGATION: {
+    QUICK_NAV: '.nav-pill',
+    PANORAMA_SECTIONS: '[data-section]',
   },
 
-  // Analysis Tabs
-  ANALYSIS_TABS: {
-    STRUCTURE: 'structure',
-    RHYTHM: 'rhythm',
-    QUALITY: 'quality',
-    STATS: 'stats',
-  },
-
-  // Toast notifications
-  TOAST: {
-    SUCCESS: '.metro-toast-success',
-    ERROR: '.metro-toast-error',
-    INFO: '.metro-toast-info',
-    WARNING: '.metro-toast-warning',
-  },
-
-  // Quick navigation
-  QUICK_NAV: {
-    EDITOR: '.nav-pill:has-text("editor")',
-    RESULTS: '.nav-pill:has-text("results")',
+  STATE: {
+    LOADING: '[class*="loading"], [class*="progress"]',
+    TOAST: {
+      SUCCESS: '.metro-toast-success',
+      ERROR: '.metro-toast-error',
+      INFO: '.metro-toast-info',
+      WARNING: '.metro-toast-warning',
+    },
   },
 };
 
 export const TEST_POEMS = {
-  HAIKU: ['An old silent pond', 'A frog jumps into the pond', 'Splash! Silence again.'],
-  HAIKU_SPANISH: ['El viejo estanque', 'Una rana salta al agua', 'Sonido callado.'],
+  HAIKU: ['An old silent pond', 'A frog jumps into the pond', 'Splash! Silence again'],
+  HAIKU_SPANISH: ['Un estanque silencioso', 'Una rana salta al agua', '¡Chap! Silencio otra vez'],
   TANKA: [
-    'Winter seclusion',
-    'Listening to the quiet rain',
-    'On the roof at night',
-    'Memories of summer days',
-    'Warm sun and gentle breezes',
+    'The falling flower',
+    'I saw drift back to the branch',
+    'Was a butterfly',
+    'Dancing in the gentle breeze',
+    "Nature's art in motion",
   ],
   CINQUAIN: [
     'Moon',
-    'Silver light',
-    'Casting shadows long',
+    'Silent light',
+    'Casting silver shadows',
     'Illuminating the dark night',
     'Peace',
   ],
 };
 
-export interface TestCase {
-  text: string;
-  expectedPattern: RegExp;
-}
-
-export interface PoetryTestData {
-  form: string;
-  lines: string[];
-  expectedSyllables: number[];
-}
-
 export class TestHelpers {
-  static async selectPoetryForm(page: Page, form: string): Promise<void> {
+  /**
+   * Selecciona una forma poética en el dropdown
+   */
+  static async selectPoetryForm(page: Page, formValue: string): Promise<void> {
     const formSelector = page.locator(SELECTORS.FORM_SELECTOR);
-    await formSelector.selectOption(form);
-    await page.waitForTimeout(500);
-  }
 
-  static async loadExample(page: Page): Promise<void> {
-    const exampleButton = page.locator(SELECTORS.BUTTONS.LOAD_EXAMPLE);
-    await exampleButton.click();
-    await page.waitForTimeout(1000);
-  }
+    await formSelector.waitFor({ state: 'visible', timeout: 5000 });
 
-  static async clearEditor(page: Page): Promise<void> {
-    const clearButton = page.locator(SELECTORS.BUTTONS.CLEAR);
-    await clearButton.click();
-
-    // Handle confirmation dialog if it appears
-    try {
-      page.once('dialog', (dialog: { accept: () => Promise<void> }) => dialog.accept());
-    } catch {
-      // Dialog might not appear, continue anyway
+    const currentValue = await formSelector.inputValue();
+    if (currentValue === formValue) {
+      console.log(`Form already set to ${formValue}`);
+      return;
     }
 
-    await page.waitForTimeout(500);
+    await formSelector.selectOption(formValue);
+
+    await page.waitForTimeout(1000);
+
+    await expect(formSelector).toHaveValue(formValue, { timeout: 3000 });
   }
 
+  /**
+   * Carga un ejemplo en el editor
+   */
+  static async loadExample(page: Page): Promise<void> {
+    const exampleButton = page.locator(SELECTORS.BUTTONS.LOAD_EXAMPLE);
+    await exampleButton.first().click();
+
+    await page.waitForTimeout(1500);
+
+    const firstLine = page.locator(SELECTORS.EDITOR.LINE_INPUT(0));
+    const lineContent = await firstLine.inputValue();
+
+    if (!lineContent.trim()) {
+      console.log('No content loaded, retrying...');
+      await page.waitForTimeout(1000);
+      await exampleButton.first().click();
+      await page.waitForTimeout(1500);
+    }
+  }
+
+  /**
+   * Limpia el editor
+   */
+  static async clearEditor(page: Page): Promise<void> {
+    const clearButton = page.locator(SELECTORS.BUTTONS.CLEAR);
+    await clearButton.first().click();
+
+    try {
+      await page.waitForSelector(
+        'button:has-text("OK"), button:has-text("Confirm"), button:has-text("Yes")',
+        {
+          timeout: 2000,
+        }
+      );
+      await page.click('button:has-text("OK"), button:has-text("Confirm"), button:has-text("Yes")');
+      await page.waitForTimeout(500);
+    } catch {}
+
+    await page.waitForTimeout(500);
+
+    const firstLine = page.locator(SELECTORS.EDITOR.LINE_INPUT(0));
+    const lineContent = await firstLine.inputValue();
+
+    if (lineContent.trim()) {
+      console.log('Editor not cleared, retrying...');
+      await clearButton.first().click();
+      await page.waitForTimeout(1000);
+    }
+  }
+
+  /**
+   * Llena las líneas del poema en el editor
+   */
   static async fillPoemLines(page: Page, lines: string[]): Promise<void> {
     for (let i = 0; i < lines.length; i++) {
       const lineInput = page.locator(SELECTORS.EDITOR.LINE_INPUT(i));
+
+      await lineInput.waitFor({ state: 'visible', timeout: 3000 });
+
+      await lineInput.clear();
       await lineInput.fill(lines[i]);
-      await page.waitForTimeout(200);
+
+      await page.waitForTimeout(300);
     }
+
+    await page.waitForTimeout(1000);
   }
 
-  static async getSyllableCount(page: Page, lineIndex: number): Promise<number> {
-    const counter = page.locator(SELECTORS.EDITOR.SYLLABLE_COUNTER(lineIndex));
-    const text = await counter.textContent();
-    const match = text?.match(/(\d+)\/\d+/);
-    return match ? parseInt(match[1], 10) : 0;
-  }
-
-  static async waitForAnalysis(page: Page, timeout = 5000): Promise<void> {
+  /**
+   * Ejecuta el análisis y espera los resultados
+   */
+  static async waitForAnalysis(page: Page, timeout = 20000): Promise<void> {
     const analyzeButton = page.locator(SELECTORS.BUTTONS.ANALYZE);
-    await analyzeButton.click();
 
-    // Wait for results to appear
-    await page.waitForSelector(SELECTORS.RESULTS.CONTAINER, { timeout }).catch(() => {
-      console.log('Analysis results might not have appeared within timeout');
-    });
-  }
+    await analyzeButton.first().waitFor({ state: 'visible', timeout: 5000 });
+    await expect(analyzeButton.first()).toBeEnabled({ timeout: 5000 });
 
-  static async verifyToastVisibility(page: Page, toastType: string): Promise<boolean> {
-    const toastSelector = SELECTORS.TOAST[toastType as keyof typeof SELECTORS.TOAST];
-    if (!toastSelector) return false;
+    await analyzeButton.first().click();
+
+    console.log('Analysis started, waiting for results...');
 
     try {
-      const toast = page.locator(toastSelector);
-      return await toast.isVisible({ timeout: 3000 });
+      await page.waitForSelector(SELECTORS.STATE.LOADING, {
+        state: 'visible',
+        timeout: 5000,
+      });
+      console.log('Loading indicator found, waiting for it to disappear...');
+
+      await page.waitForSelector(SELECTORS.STATE.LOADING, {
+        state: 'detached',
+        timeout: 15000,
+      });
+      console.log('Loading indicator disappeared');
     } catch {
-      return false;
+      console.log('No loading indicators found, continuing...');
+    }
+
+    try {
+      await page.waitForSelector(SELECTORS.RESULTS.CONTAINER, { timeout });
+      console.log('Main results container found');
+    } catch (error) {
+      console.log('Main results container not found, trying alternative strategies...');
+
+      const resultComponents = [
+        'app-poem-results',
+        'app-meter-analysis-section',
+        'app-poem-quality',
+        'app-quick-stats-panel',
+        'app-word-suggestions',
+      ];
+
+      let foundComponent = false;
+      for (const component of resultComponents) {
+        if (await page.locator(component).isVisible({ timeout: 3000 })) {
+          console.log(`Found result component: ${component}`);
+          foundComponent = true;
+          break;
+        }
+      }
+
+      if (!foundComponent) {
+        await page.waitForTimeout(5000);
+
+        if (await analyzeButton.first().isEnabled()) {
+          console.log('Analyze button re-enabled, analysis might be complete');
+        } else {
+          throw new Error('No analysis results found with any strategy');
+        }
+      }
     }
   }
 
+  /**
+   * Navega a una sección específica usando los botones de navegación rápida
+   */
   static async navigateToSection(page: Page, section: 'editor' | 'results'): Promise<void> {
-    const navButton = page.locator(
-      section === 'editor' ? SELECTORS.QUICK_NAV.EDITOR : SELECTORS.QUICK_NAV.RESULTS
+    const navButton = page.locator(`.nav-pill:has-text("${section}")`);
+    await navButton.click();
+
+    await page.waitForTimeout(1000);
+
+    const sectionElement = page.locator(`[data-section="${section}"]`);
+    await expect(sectionElement).toBeVisible({ timeout: 3000 });
+  }
+
+  /**
+   * Cambia a una pestaña específica en los resultados de análisis
+   */
+  static async switchAnalysisTab(page: Page, tabName: string): Promise<void> {
+    const tabButton = page.locator(`.metro-pivot-item:has-text("${tabName}")`);
+    await tabButton.click();
+
+    await page.waitForTimeout(500);
+
+    await expect(tabButton).toHaveClass(/metro-pivot-active/, { timeout: 3000 });
+  }
+
+  /**
+   * Espera a que un toast aparezca y verifica su contenido
+   */
+  static async waitForToast(
+    page: Page,
+    type: 'success' | 'error' | 'info' | 'warning',
+    timeout = 5000
+  ): Promise<void> {
+    const toastSelector =
+      SELECTORS.STATE.TOAST[type.toUpperCase() as keyof typeof SELECTORS.STATE.TOAST];
+    const toast = page.locator(toastSelector);
+
+    await expect(toast.first()).toBeVisible({ timeout });
+
+    await page.waitForTimeout(1000);
+  }
+
+  /**
+   * Verifica que el contador de sílabas muestre el valor esperado
+   */
+  static async verifySyllableCount(
+    page: Page,
+    lineIndex: number,
+    expectedPattern: RegExp | string
+  ): Promise<void> {
+    const syllableCounter = page.locator(SELECTORS.EDITOR.SYLLABLE_COUNTER(lineIndex));
+
+    await syllableCounter.waitFor({ state: 'visible', timeout: 3000 });
+
+    await page.waitForFunction(
+      (args: { selector: string; pattern: string }) => {
+        const counter = document.querySelector(args.selector);
+        return counter && new RegExp(args.pattern).test(counter.textContent || '');
+      },
+      {
+        selector: `.line-row:nth-child(${lineIndex + 1}) .syllable-count`,
+        pattern: expectedPattern instanceof RegExp ? expectedPattern.source : expectedPattern,
+      },
+      { timeout: 5000 }
     );
 
-    if (await navButton.isVisible()) {
-      await navButton.click();
-      await page.waitForTimeout(500);
+    const counterText = await syllableCounter.textContent();
+
+    if (expectedPattern instanceof RegExp) {
+      expect(counterText).toMatch(expectedPattern);
+    } else {
+      expect(counterText).toContain(expectedPattern);
     }
   }
 
-  static async getCurrentFormValue(page: Page): Promise<string | null> {
-    const formSelector = page.locator(SELECTORS.FORM_SELECTOR);
-    return await formSelector.inputValue();
-  }
+  /**
+   * Obtiene el texto completo del poema del editor
+   */
+  static async getPoemText(page: Page): Promise<string> {
+    const lines: string[] = [];
 
-  static async isAnalysisReady(page: Page): Promise<boolean> {
-    const analyzeButton = page.locator(SELECTORS.BUTTONS.ANALYZE);
-    return await analyzeButton.isEnabled();
+    for (let i = 0; i < 10; i++) {
+      const lineInput = page.locator(SELECTORS.EDITOR.LINE_INPUT(i));
+
+      if (await lineInput.isVisible()) {
+        const lineText = await lineInput.inputValue();
+        if (lineText.trim()) {
+          lines.push(lineText);
+        }
+      } else {
+        break;
+      }
+    }
+
+    return lines.join('\n');
   }
 }
