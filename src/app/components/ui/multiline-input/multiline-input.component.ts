@@ -4,8 +4,6 @@ import {
   Output,
   EventEmitter,
   forwardRef,
-  ElementRef,
-  ViewChild,
   HostListener,
   signal,
   computed,
@@ -45,8 +43,6 @@ export interface SyllableSegment {
   ],
 })
 export class MultilineInputComponent implements ControlValueAccessor {
-  @ViewChild('linesContainer') linesContainer!: ElementRef<HTMLDivElement>;
-
   @Input() label = '';
   @Input() placeholder = 'Write your poem line by line...';
   @Input() error = '';
@@ -95,43 +91,26 @@ export class MultilineInputComponent implements ControlValueAccessor {
   constructor() {
     this.initializeLines('');
 
-    // ✅ Effect para sincronizar con el estado
     effect(() => {
       const pattern = this.stateService.currentPattern();
       const newRows = this.stateService.expectedLines();
       const sharedText = this.stateService.poemText();
       const shouldLoadExample = this.stateService.shouldLoadExample();
 
-      console.log('🟣 MultilineInput effect:', {
-        pattern,
-        rows: newRows,
-        textLength: sharedText.length,
-        shouldLoadExample,
-        currentRows: this.rows,
-        currentPattern: this.expectedPattern,
-      });
-
-      // Actualizar patrón y número de líneas SIEMPRE que cambie el formulario
       if (pattern.length > 0) {
         this.expectedPattern = pattern;
         this.rows = newRows;
 
-        // Si debemos cargar ejemplo
         if (shouldLoadExample) {
-          console.log('🟣 Loading example...');
           this.stateService.loadExample();
           this.stateService.consumeLoadExample();
           return;
         }
 
-        // Sincronizar con el texto compartido solo si cambió externamente
         if (!this.isInternalUpdate && sharedText !== this.poemText()) {
-          console.log('🟣 Syncing text from state');
           this.initializeLines(sharedText);
         } else {
-          // Si el texto no cambió pero el patrón sí, re-inicializar líneas
-          console.log('🟣 Reinitializing lines with new pattern');
-          this.initializeLines(sharedText);
+          this.initializeLines(this.poemText());
         }
       }
     });
@@ -194,7 +173,6 @@ export class MultilineInputComponent implements ControlValueAccessor {
     this.emitChanges();
     this.updateLineValidation();
 
-    // Actualizar el estado compartido
     this.stateService.updatePoemLines(updated.map((line) => line.text));
 
     setTimeout(() => {

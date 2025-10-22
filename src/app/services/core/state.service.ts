@@ -41,12 +41,10 @@ export class StateService {
 
   setSelectedForm(formId: string): void {
     if (this.isUpdatingFromInternal || this.state().selectedForm === formId) {
-      console.log('🔵 StateService.setSelectedForm - SKIPPED (duplicate or updating):', formId);
       return;
     }
 
     this.isUpdatingFromInternal = true;
-    console.log('🔵 StateService.setSelectedForm:', formId);
 
     const currentText = this.state().poemText.trim();
     const hasContent = currentText.length > 0;
@@ -56,8 +54,6 @@ export class StateService {
       selectedForm: formId,
       shouldLoadExample: !hasContent,
     }));
-
-    console.log('🔵 State updated:', this.state(), 'hasContent:', hasContent);
 
     setTimeout(() => {
       this.isUpdatingFromInternal = false;

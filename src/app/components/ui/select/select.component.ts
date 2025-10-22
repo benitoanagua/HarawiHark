@@ -68,10 +68,6 @@ export class SelectComponent implements ControlValueAccessor {
         const selectedForm = this.stateService.selectedForm();
 
         if (this._value !== selectedForm && !this.isInternalUpdate) {
-          console.log('🔴 Select effect - updating from state:', {
-            old: this._value,
-            new: selectedForm,
-          });
           this._value = selectedForm;
           this.cdr.detectChanges();
         }
@@ -103,10 +99,7 @@ export class SelectComponent implements ControlValueAccessor {
     const target = event.target as HTMLSelectElement;
     const newValue = target.value;
 
-    console.log('🔴 Select changed:', { old: this._value, new: newValue });
-
     if (this._value === newValue) {
-      console.log('🔴 Same value, ignoring');
       return;
     }
 
@@ -116,7 +109,6 @@ export class SelectComponent implements ControlValueAccessor {
     this.selectChange.emit(this._value);
 
     if (this.id === 'poetry-form-selector') {
-      console.log('🔴 Updating state service');
       this.stateService.setSelectedForm(this._value);
     }
 

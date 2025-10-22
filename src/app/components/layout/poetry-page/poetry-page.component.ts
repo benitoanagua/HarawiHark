@@ -283,10 +283,8 @@ export class PoetryPageComponent {
   }
 
   loadFormExample(formId: string): void {
-    // Cambiar el formulario seleccionado
     this.stateService.setSelectedForm(formId);
 
-    // Cargar el ejemplo
     setTimeout(() => {
       this.handleLoadExample();
     }, 100);

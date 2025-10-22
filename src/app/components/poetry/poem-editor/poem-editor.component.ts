@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject, effect } from '@angular/core';
+import { Component, computed, inject, effect } from '@angular/core';
 import { SelectComponent, ButtonComponent, CardComponent, MultilineInputComponent } from '../../ui';
 import { POETRY_FORM_OPTIONS } from '../../../data/poetry-forms.data';
 import { PoetryAnalyzerService, ToastService, StateService } from '../../../services';
@@ -44,25 +44,19 @@ export class PoemEditorComponent {
     return expected > 0 ? (total / expected) * 100 : 0;
   });
 
-  readonly editorHeight = signal('100%');
-
   constructor() {
     effect(() => {
       const formId = this.selectedForm();
-      console.log('🟢 PoemEditor effect - selectedForm:', formId);
       this.analyzer.selectedForm.set(formId);
-      this.adjustEditorHeight();
     });
 
     effect(() => {
       const text = this.poemText();
-      console.log('🟢 PoemEditor effect - poemText length:', text.length);
       this.analyzer.poemText.set(text);
     });
   }
 
   onFormChange(formId: string): void {
-    console.log('🟢 PoemEditor.onFormChange:', formId);
     this.stateService.setSelectedForm(formId);
   }
 
@@ -75,10 +69,6 @@ export class PoemEditorComponent {
   loadExample(): void {
     this.stateService.loadExample();
     this.toastService.success('Example Loaded', `Loaded ${this.selectedForm()} example`);
-
-    setTimeout(() => {
-      this.adjustEditorHeight();
-    }, 100);
   }
 
   clear(): void {
@@ -90,10 +80,6 @@ export class PoemEditorComponent {
     if (hadContent) {
       this.toastService.info('Editor Cleared', 'All content has been removed');
     }
-
-    setTimeout(() => {
-      this.adjustEditorHeight();
-    }, 50);
   }
 
   analyze(): void {
@@ -134,14 +120,6 @@ export class PoemEditorComponent {
 
   isReadyForAnalysis(): boolean {
     return this.lineCount() > 0;
-  }
-
-  private adjustEditorHeight(): void {
-    const lines = this.expectedLines();
-    const baseHeight = 52;
-    const calculatedHeight = Math.max(240, lines * baseHeight);
-
-    this.editorHeight.set(`${calculatedHeight}px`);
   }
 
   getResponsiveFontClass(): string {

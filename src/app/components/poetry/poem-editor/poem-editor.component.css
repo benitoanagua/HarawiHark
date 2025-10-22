@@ -7,7 +7,7 @@
 }
 
 .editor-container {
-  @apply flex flex-col h-full w-full grid-rows-[auto_auto_1fr_auto] gap-4;
+  @apply flex flex-col h-full w-full gap-4;
   @apply min-h-0; /* Permite que los hijos se ajusten correctamente */
 }
 
@@ -46,10 +46,9 @@
   @apply sm:text-sm;
 }
 
-/* Editor section - Altura dinámica y 100% ancho */
+/* Editor section - Usa flex-1 para ocupar el espacio disponible */
 .editor-section {
-  @apply flex-1 min-h-0 w-full; /* Permite que crezca pero con mínimo 0 y 100% ancho */
-  @apply transition-all duration-300 ease-in-out; /* Transición suave */
+  @apply flex-1 min-h-0 w-full; /* flex-1 hace que crezca, min-h-0 permite scroll */
 }
 
 /* Clase para fuentes responsivas */
