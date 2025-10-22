@@ -5,9 +5,7 @@ export interface PoetryFormTestData {
   pattern: number[];
 }
 
-export interface MockPoetryData {
-  [key: string]: string[];
-}
+export type MockPoetryData = Record<string, string[]>;
 
 export const getPoetryFormTestData = (): Record<string, PoetryFormTestData> => {
   return Object.entries(POETRY_FORMS).reduce((acc, [id, form]) => {
@@ -45,28 +43,4 @@ export const TEST_EXAMPLES = {
     'A small green frog jumps',
     'Big splash sound and then quiet',
   ] as string[],
-};
-
-export const getFormPatternAsString = (formId: string): string => {
-  const form = POETRY_FORMS[formId];
-  return form ? form.pattern.join('-') : '';
-};
-
-export const getExpectedLineCount = (formId: string): number => {
-  return POETRY_FORMS[formId]?.lines || 0;
-};
-
-export const getFormExample = (formId: string): string[] => {
-  return POETRY_EXAMPLES[formId] || [];
-};
-
-export const validatePoemStructure = (lines: string[], formId: string): boolean => {
-  const form = POETRY_FORMS[formId];
-  if (!form) return false;
-
-  return lines.length === form.lines;
-};
-
-export const getSyllableTargets = (formId: string): number[] => {
-  return POETRY_FORMS[formId]?.pattern || [];
 };

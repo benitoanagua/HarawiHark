@@ -1,4 +1,4 @@
-import { chromium, Browser, BrowserContext, Page } from 'playwright';
+import { chromium, Browser, BrowserContext, Page, LaunchOptions } from 'playwright';
 import { BROWSER_CONFIG } from '../../../playwright.config';
 
 export interface BrowserLaunchOptions {
@@ -23,17 +23,17 @@ export class BrowserManager {
 
     const browserConfig = BROWSER_CONFIG[browserType];
 
-    const launchOptions: any = {
+    const launchOptions: LaunchOptions = {
       headless,
     };
 
-    // Safe property access
-    const channel = (browserConfig as any).channel;
+    const channel = (browserConfig as unknown as { channel?: string }).channel;
     if (channel) {
-      launchOptions.channel = channel;
+      (launchOptions as { channel?: string }).channel = channel;
     }
 
-    const executablePath = (browserConfig.launchOptions as any).executablePath;
+    const executablePath = (browserConfig.launchOptions as { executablePath?: string })
+      .executablePath;
     if (executablePath) {
       launchOptions.executablePath = executablePath;
     }
@@ -44,19 +44,18 @@ export class BrowserManager {
 
     const browser = await chromium.launch(launchOptions);
 
-    const contextOptions: any = {
+    const contextOptions = {
       viewport,
       baseURL: 'http://localhost:4200',
-      trace: 'on-first-retry',
-      screenshot: 'only-on-failure',
+      trace: 'on-first-retry' as const,
+      screenshot: 'only-on-failure' as const,
+      ...(recordVideo && {
+        recordVideo: {
+          dir: 'angular-captures/videos',
+          size: videoSize,
+        },
+      }),
     };
-
-    if (recordVideo) {
-      contextOptions.recordVideo = {
-        dir: 'angular-captures/videos',
-        size: videoSize,
-      };
-    }
 
     const context = await browser.newContext(contextOptions);
     const page = await context.newPage();

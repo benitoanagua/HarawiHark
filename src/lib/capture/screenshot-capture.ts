@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import type { CaptureOptions, CaptureResult } from './types';
 import { BrowserManager } from './browser-utils';
+import { Browser, BrowserContext, Page } from 'playwright';
 
 interface ScreenshotCaptureOptions extends CaptureOptions {
   multiple?: boolean;
@@ -37,9 +38,9 @@ export class ScreenshotCapture {
     console.log(`🌐 URL: ${this.options.url}`);
     console.log(`🌐 Browser: ${this.options.browserType}`);
 
-    let browser: any = null;
-    let context: any = null;
-    let page: any = null;
+    let browser: Browser | undefined;
+    let context: BrowserContext | undefined;
+    let page: Page | undefined;
 
     try {
       const browserSetup = await BrowserManager.launchBrowser({
@@ -82,6 +83,7 @@ export class ScreenshotCapture {
         timestamp: new Date().toISOString(),
         url: this.options.url,
         mode: this.options.mode,
+        sections: screenshotResults,
       };
     } catch (error) {
       await BrowserManager.cleanup(browser, context);
@@ -98,7 +100,7 @@ export class ScreenshotCapture {
   }
 
   private async captureMultipleSections(
-    page: any,
+    page: Page,
     outputDir: string,
     results: { name: string; path: string }[]
   ): Promise<void> {
@@ -132,7 +134,7 @@ export class ScreenshotCapture {
   }
 
   private async captureFullPage(
-    page: any,
+    page: Page,
     outputDir: string,
     results: { name: string; path: string }[]
   ): Promise<void> {

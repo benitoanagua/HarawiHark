@@ -2,18 +2,15 @@ import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import type { CaptureOptions, CaptureResult } from './types';
 import { BrowserManager } from './browser-utils';
+import { Browser, BrowserContext, Page } from 'playwright';
 
 interface VideoCaptureOptions extends Omit<CaptureOptions, 'multiple'> {
   duration?: number;
   browserType?: 'brave' | 'chrome' | 'firefox';
 }
 
-type VideoCaptureConfig = Required<Omit<VideoCaptureOptions, 'multiple'>> & {
-  multiple?: never;
-};
-
 export class VideoCapture {
-  private options: VideoCaptureConfig;
+  private options: Required<Omit<VideoCaptureOptions, 'multiple'>>;
 
   constructor(options: VideoCaptureOptions = {}) {
     this.options = {
@@ -41,9 +38,9 @@ export class VideoCapture {
     console.log(`⏱️ Duration: ${this.options.duration}ms`);
     console.log(`🌐 Browser: ${this.options.browserType}`);
 
-    let browser: any = null;
-    let context: any = null;
-    let page: any = null;
+    let browser: Browser | undefined;
+    let context: BrowserContext | undefined;
+    let page: Page | undefined;
 
     try {
       const browserSetup = await BrowserManager.launchBrowser({
@@ -98,7 +95,7 @@ export class VideoCapture {
     }
   }
 
-  private async performDemoInteractions(page: any): Promise<void> {
+  private async performDemoInteractions(page: Page): Promise<void> {
     console.log('🔄 Performing demo interactions...');
 
     try {
