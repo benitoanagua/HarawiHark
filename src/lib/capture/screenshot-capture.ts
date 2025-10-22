@@ -1,5 +1,4 @@
-// src/lib/capture/screenshot-capture.ts
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, statSync } from 'fs';
 import { join } from 'path';
 import type { CaptureOptions, CaptureResult } from './types';
 import { BrowserManager } from './browser-utils';
@@ -9,7 +8,7 @@ interface ScreenshotCaptureOptions extends CaptureOptions {
   multiple?: boolean;
   browserType?: 'brave' | 'chrome' | 'firefox';
   screenshotType?: 'png' | 'jpeg';
-  quality?: number; // For JPEG only
+  quality?: number;
   fullPage?: boolean;
 }
 
@@ -22,7 +21,7 @@ export class ScreenshotCapture {
       outputDir: options.outputDir || 'angular-captures/screenshots',
       viewport: options.viewport || { width: 1200, height: 800 },
       delay: options.delay || 2000,
-      format: options.format || 'mp4', // Kept for interface compatibility
+      format: options.format || 'mp4',
       multiple: options.multiple || false,
       browserType: options.browserType || 'brave',
       mode: options.mode || 'basic',
@@ -130,7 +129,6 @@ export class ScreenshotCapture {
         );
 
         if (section.fullPage) {
-          // Full page screenshot
           await page.screenshot({
             path: screenshotPath,
             fullPage: true,
@@ -138,7 +136,6 @@ export class ScreenshotCapture {
             ...(this.options.screenshotType === 'jpeg' && { quality: this.options.quality }),
           });
         } else {
-          // Element screenshot
           const element = page.locator(section.selector);
           if (await element.isVisible({ timeout: 2000 })) {
             await element.screenshot({
@@ -158,7 +155,6 @@ export class ScreenshotCapture {
         });
         console.log(`✅ ${section.name} captured: ${screenshotPath}`);
 
-        // Small delay between screenshots
         await BrowserManager.wait(500);
       } catch (error) {
         console.log(
@@ -219,7 +215,7 @@ export class ScreenshotCapture {
 
   private getFileSize(filePath: string): string {
     try {
-      const stats = require('fs').statSync(filePath);
+      const stats = statSync(filePath);
       const sizeInKB = Math.round(stats.size / 1024);
       return `${sizeInKB} KB`;
     } catch {
@@ -227,7 +223,6 @@ export class ScreenshotCapture {
     }
   }
 
-  // Utility method for quick single screenshots
   static async quickScreenshot(
     url: string,
     options: Partial<ScreenshotCaptureOptions> = {}
@@ -236,7 +231,6 @@ export class ScreenshotCapture {
     return await capture.capture();
   }
 
-  // Method for capturing specific elements only
   static async captureElements(
     url: string,
     selectors: string[],

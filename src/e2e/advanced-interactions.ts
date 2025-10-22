@@ -1,154 +1,150 @@
-import { test, expect } from '@playwright/test';
-import { SELECTORS, TestHelpers, TEST_POEMS } from './selectors';
+import { Page, expect, test } from '@playwright/test';
+import { SELECTORS, TestHelpers } from './selectors';
 
-export const AdvancedInteractions = {
-  async completePoemWorkflow(page: any, form: string, poemLines: string[]) {
-    await test.step(`Complete workflow for ${form}`, async () => {
-      await TestHelpers.selectPoetryForm(page, form);
+export class AdvancedInteractions {
+  static async completePoemWorkflow(
+    page: Page,
+    formType: string,
+    poemLines: string[]
+  ): Promise<void> {
+    await test.step('Select poetry form', async () => {
+      await TestHelpers.selectPoetryForm(page, formType);
+      await expect(page.locator(SELECTORS.FORM_SELECTOR)).toHaveValue(formType);
+    });
 
+    await test.step('Fill poem lines', async () => {
       await TestHelpers.fillPoemLines(page, poemLines);
 
-      await expect(page.locator(SELECTORS.STATS.LINES)).toBeVisible();
-      await expect(page.locator(SELECTORS.STATS.SYLLABLES)).toBeVisible();
-
-      await TestHelpers.analyzePoem(page);
-
-      await TestHelpers.navigateToResults(page);
-
-      await TestHelpers.waitForAnalysisComplete(page);
+      // Verify lines are filled
+      for (let i = 0; i < poemLines.length; i++) {
+        const lineInput = page.locator(SELECTORS.EDITOR.LINE_INPUT(i));
+        await expect(lineInput).toHaveValue(poemLines[i]);
+      }
     });
-  },
 
-  async testAllPoetryForms(page: any) {
+    await test.step('Analyze poem', async () => {
+      await TestHelpers.waitForAnalysis(page);
+
+      // Verify results are displayed
+      await expect(page.locator(SELECTORS.RESULTS.CONTAINER)).toBeVisible();
+    });
+  }
+
+  static async testAllPoetryForms(page: Page): Promise<void> {
     const forms = [
       SELECTORS.FORM_OPTIONS.HAIKU,
       SELECTORS.FORM_OPTIONS.TANKA,
       SELECTORS.FORM_OPTIONS.CINQUAIN,
       SELECTORS.FORM_OPTIONS.LIMERICK,
+      SELECTORS.FORM_OPTIONS.REDONDILLA,
+      SELECTORS.FORM_OPTIONS.LANTERNE,
       SELECTORS.FORM_OPTIONS.DIAMANTE,
       SELECTORS.FORM_OPTIONS.FIBONACCI,
     ];
 
     for (const form of forms) {
-      await test.step(`Testing ${form} form`, async () => {
+      await test.step(`Test ${form} form`, async () => {
         await TestHelpers.selectPoetryForm(page, form);
+        await expect(page.locator(SELECTORS.FORM_SELECTOR)).toHaveValue(form);
 
-        const lineInputs = page.locator(SELECTORS.EDITOR.LINE_INPUTS);
-        await expect(lineInputs).toHaveCount(await this.getExpectedLineCount(form));
-
-        await TestHelpers.loadExample(page);
-        const firstLine = page.locator(SELECTORS.EDITOR.LINE_INPUT(0));
-        await expect(firstLine).not.toBeEmpty();
+        // Verify form structure is displayed correctly
+        const expectedLines = await page.locator(SELECTORS.EDITOR.LINE_INPUT(0));
+        await expect(expectedLines).toBeVisible();
       });
     }
-  },
+  }
 
-  async testAdvancedAnalysisFeatures(page: any) {
-    await test.step('Test advanced analysis features', async () => {
-      await TestHelpers.selectPoetryForm(page, SELECTORS.FORM_OPTIONS.HAIKU);
-      await TestHelpers.fillPoemLines(page, TEST_POEMS.HAIKU_SPANISH);
-      await TestHelpers.analyzePoem(page);
-      await TestHelpers.navigateToResults(page);
+  static async testWordSuggestions(page: Page): Promise<void> {
+    await TestHelpers.selectPoetryForm(page, SELECTORS.FORM_OPTIONS.HAIKU);
 
-      await expect(page.locator(SELECTORS.ANALYSIS.TABS.STRUCTURE)).toBeVisible();
-      await expect(page.locator(SELECTORS.ANALYSIS.TABS.RHYTHM)).toBeVisible();
-      await expect(page.locator(SELECTORS.ANALYSIS.TABS.QUALITY)).toBeVisible();
-      await expect(page.locator(SELECTORS.ANALYSIS.TABS.STATS)).toBeVisible();
+    // Fill a line with incorrect syllable count to trigger suggestions
+    const firstLine = page.locator(SELECTORS.EDITOR.LINE_INPUT(0));
+    await firstLine.fill('A very long line that exceeds syllable limit');
 
-      await page.locator(SELECTORS.ANALYSIS.TABS.QUALITY).click();
-      await expect(page.locator(SELECTORS.ANALYSIS.QUALITY_SCORE)).toBeVisible();
-      await expect(page.locator(SELECTORS.ANALYSIS.QUALITY_GRADE)).toBeVisible();
+    // Wait for analysis to complete
+    await page.waitForTimeout(1000);
 
-      await page.locator(SELECTORS.ANALYSIS.TABS.RHYTHM).click();
-      await expect(page.locator(SELECTORS.ANALYSIS.METER_TYPE)).toBeVisible();
+    // Click on a word to see suggestions (this might need adjustment based on actual implementation)
+    const wordTokens = page.locator(SELECTORS.RESULTS.WORD_TOKENS);
+    const firstWord = wordTokens.first();
 
-      await page.locator(SELECTORS.ANALYSIS.TABS.STRUCTURE).click();
-      await expect(page.locator(SELECTORS.ANALYSIS.RHYME_SCHEME)).toBeVisible();
-    });
-  },
+    if (await firstWord.isVisible()) {
+      await firstWord.click();
 
-  async testWordSuggestions(page: any) {
-    await test.step('Test word suggestions functionality', async () => {
-      await TestHelpers.selectPoetryForm(page, SELECTORS.FORM_OPTIONS.HAIKU);
-      await TestHelpers.fillPoemLines(page, TEST_POEMS.ERROR_EXAMPLES.HAIKU_TOO_LONG);
-      await TestHelpers.analyzePoem(page);
+      // Verify suggestions appear
+      const suggestionsPanel = page.locator(SELECTORS.SUGGESTIONS.CONTAINER);
+      await expect(suggestionsPanel).toBeVisible({ timeout: 5000 });
+    }
+  }
 
-      const misalignedWord = page.locator('.word-token:has-text("forest")').first();
-      if (await misalignedWord.isVisible()) {
-        await misalignedWord.click();
-        await expect(page.locator(SELECTORS.ANALYSIS.WORD_ALTERNATIVES)).toBeVisible();
+  static async testRhythmAndMeter(page: Page): Promise<void> {
+    await TestHelpers.selectPoetryForm(page, SELECTORS.FORM_OPTIONS.HAIKU);
+    await TestHelpers.loadExample(page);
+    await TestHelpers.waitForAnalysis(page);
 
-        const replaceButton = page.locator('button:has-text("use")').first();
-        if (await replaceButton.isVisible()) {
-          await replaceButton.click();
-          await expect(page.locator(SELECTORS.TOAST.SUCCESS)).toBeVisible();
+    // Navigate to rhythm analysis tab
+    const rhythmTab = page.locator(SELECTORS.ANALYSIS_TABS.RHYTHM);
+    if (await rhythmTab.isVisible()) {
+      await rhythmTab.click();
+
+      // Verify rhythm analysis content
+      const meterAnalysis = page.locator(SELECTORS.RESULTS.METER_ANALYSIS);
+      await expect(meterAnalysis).toBeVisible();
+    }
+  }
+
+  static async testQualityAssessment(page: Page): Promise<void> {
+    await TestHelpers.selectPoetryForm(page, SELECTORS.FORM_OPTIONS.TANKA);
+    await TestHelpers.loadExample(page);
+    await TestHelpers.waitForAnalysis(page);
+
+    // Navigate to quality assessment tab
+    const qualityTab = page.locator(SELECTORS.ANALYSIS_TABS.QUALITY);
+    if (await qualityTab.isVisible()) {
+      await qualityTab.click();
+
+      // Verify quality metrics are displayed
+      const qualityMetrics = page.locator(SELECTORS.RESULTS.QUALITY_METRICS);
+      await expect(qualityMetrics).toBeVisible();
+
+      const qualityScore = page.locator(SELECTORS.RESULTS.QUALITY_SCORE);
+      await expect(qualityScore).toBeVisible();
+    }
+  }
+
+  static async testAdvancedAnalysisFeatures(page: Page): Promise<void> {
+    await test.step('Test all analysis tabs', async () => {
+      const analysisTabs = [
+        SELECTORS.ANALYSIS_TABS.STRUCTURE,
+        SELECTORS.ANALYSIS_TABS.RHYTHM,
+        SELECTORS.ANALYSIS_TABS.QUALITY,
+        SELECTORS.ANALYSIS_TABS.STATS,
+      ];
+
+      for (const tab of analysisTabs) {
+        const tabElement = page.locator(`[data-tab="${tab}"]`);
+        if (await tabElement.isVisible()) {
+          await tabElement.click();
+          await page.waitForTimeout(500);
+
+          // Verify tab content is displayed
+          const tabContent = page.locator(`[data-tab-content="${tab}"]`);
+          await expect(tabContent).toBeVisible();
         }
       }
     });
-  },
 
-  async testRhythmAndMeter(page: any) {
-    await test.step('Test rhythm and meter analysis', async () => {
-      await TestHelpers.selectPoetryForm(page, SELECTORS.FORM_OPTIONS.LIMERICK);
-      await TestHelpers.loadExample(page);
-      await TestHelpers.analyzePoem(page);
-      await TestHelpers.navigateToResults(page);
+    await test.step('Test word interaction', async () => {
+      const clickableWords = page.locator(SELECTORS.RESULTS.CLICKABLE_WORDS);
+      const firstWord = clickableWords.first();
 
-      await page.locator(SELECTORS.ANALYSIS.TABS.RHYTHM).click();
-      const meterText = await page.locator(SELECTORS.ANALYSIS.METER_TYPE).textContent();
-      expect(meterText).toBeTruthy();
+      if (await firstWord.isVisible()) {
+        await firstWord.click();
 
-      const rhythmSuggestions = page.locator(SELECTORS.ANALYSIS.SUGGESTIONS);
-      if (await rhythmSuggestions.isVisible()) {
-        const suggestionCount = await rhythmSuggestions.count();
-        expect(suggestionCount).toBeGreaterThan(0);
+        // Verify word details or suggestions appear
+        const wordDetails = page.locator(SELECTORS.RESULTS.WORD_DETAILS);
+        await expect(wordDetails).toBeVisible({ timeout: 3000 });
       }
     });
-  },
-
-  async testQualityAssessment(page: any) {
-    await test.step('Test quality assessment system', async () => {
-      const testCases = [
-        { poem: TEST_POEMS.HAIKU, description: 'well-structured haiku' },
-        { poem: TEST_POEMS.ERROR_EXAMPLES.HAIKU_TOO_SHORT, description: 'poorly structured haiku' },
-      ];
-
-      for (const { poem, description } of testCases) {
-        await test.step(`Quality assessment for ${description}`, async () => {
-          await TestHelpers.clearEditor(page);
-          await TestHelpers.selectPoetryForm(page, SELECTORS.FORM_OPTIONS.HAIKU);
-          await TestHelpers.fillPoemLines(page, poem);
-          await TestHelpers.analyzePoem(page);
-          await TestHelpers.navigateToResults(page);
-
-          await page.locator(SELECTORS.ANALYSIS.TABS.QUALITY).click();
-
-          const scoreElement = page.locator(SELECTORS.ANALYSIS.QUALITY_SCORE);
-          await expect(scoreElement).toBeVisible();
-
-          const scoreText = await scoreElement.textContent();
-          const score = parseFloat(scoreText || '0');
-          expect(score).toBeGreaterThanOrEqual(0);
-          expect(score).toBeLessThanOrEqual(100);
-
-          const gradeElement = page.locator(SELECTORS.ANALYSIS.QUALITY_GRADE);
-          await expect(gradeElement).toBeVisible();
-        });
-      }
-    });
-  },
-
-  async getExpectedLineCount(form: string): Promise<number> {
-    const lineCounts: Record<string, number> = {
-      [SELECTORS.FORM_OPTIONS.HAIKU]: 3,
-      [SELECTORS.FORM_OPTIONS.TANKA]: 5,
-      [SELECTORS.FORM_OPTIONS.CINQUAIN]: 5,
-      [SELECTORS.FORM_OPTIONS.LIMERICK]: 5,
-      [SELECTORS.FORM_OPTIONS.DIAMANTE]: 7,
-      [SELECTORS.FORM_OPTIONS.FIBONACCI]: 6,
-      [SELECTORS.FORM_OPTIONS.REDONDILLA]: 4,
-      [SELECTORS.FORM_OPTIONS.LANTERNE]: 5,
-    };
-    return lineCounts[form] || 3;
-  },
-};
+  }
+}

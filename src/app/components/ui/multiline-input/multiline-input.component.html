@@ -18,7 +18,7 @@
               [placeholder]="index === 0 ? placeholder : 'Continue writing...'"
               [value]="line.text"
               [disabled]="disabled"
-              (input)="onLineInput(index, $any($event.target).value)"
+              (input)="handleLineInput($event, index)"
               (focus)="onLineFocus(index)"
               (blur)="onLineBlur()"
               autocomplete="off"

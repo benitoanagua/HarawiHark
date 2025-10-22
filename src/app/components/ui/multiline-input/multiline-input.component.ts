@@ -332,4 +332,9 @@ export class MultilineInputComponent implements ControlValueAccessor {
     this.initializeLines(text);
     this.emitChanges();
   }
+
+  handleLineInput(event: Event, index: number): void {
+    const target = event.target as HTMLInputElement;
+    this.onLineInput(index, target.value);
+  }
 }

@@ -1,4 +1,3 @@
-// src/lib/capture/video-capture.ts
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import type { CaptureOptions, CaptureResult } from './types';
@@ -56,10 +55,8 @@ export class VideoCapture {
       context = browserSetup.context;
       page = browserSetup.page;
 
-      // Configure video recording
       if (context) {
         await context.route('**/*', (route) => {
-          // Optimize video capture by blocking unnecessary resources
           const resourceType = route.request().resourceType();
           if (['image', 'font', 'media'].includes(resourceType)) {
             route.abort();
@@ -76,13 +73,10 @@ export class VideoCapture {
 
       await BrowserManager.wait(this.options.delay);
 
-      // Perform demo interactions
       await this.performDemoInteractions(page);
 
-      // Wait for the specified duration
       await BrowserManager.wait(this.options.duration);
 
-      // Close browser to finalize video
       await BrowserManager.cleanup(browser, context);
 
       const duration = Date.now() - startTime;
@@ -98,9 +92,9 @@ export class VideoCapture {
         url: this.options.url,
         mode: this.options.mode,
       };
-    } catch (error) {
+    } catch {
       await BrowserManager.cleanup(browser, context);
-      console.error('❌ Error during video capture:', error);
+      console.error('❌ Error during video capture');
 
       return {
         success: false,
@@ -116,7 +110,6 @@ export class VideoCapture {
     console.log('🔄 Performing demo interactions...');
 
     try {
-      // Navigation between sections
       const quickNavButtons = [
         '.nav-pill:has-text("editor")',
         '.nav-pill:has-text("results")',
@@ -136,7 +129,6 @@ export class VideoCapture {
         }
       }
 
-      // Poetry form interactions
       const formSelect = page.locator('#poetry-form-selector');
       if (await formSelect.isVisible()) {
         const forms = ['tanka', 'limerick', 'haiku'];
@@ -146,7 +138,6 @@ export class VideoCapture {
         }
       }
 
-      // Editor interactions
       const firstLineInput = page.locator('#poem-editor-line-0');
       if (await firstLineInput.isVisible()) {
         const sampleLines = [
@@ -162,7 +153,6 @@ export class VideoCapture {
         await firstLineInput.fill('');
       }
 
-      // Button interactions
       const buttons = ['example', 'analyze', 'clear'];
       for (const buttonText of buttons) {
         const button = page.locator(`button:has-text("${buttonText}")`).first();
@@ -172,7 +162,6 @@ export class VideoCapture {
         }
       }
 
-      // Scroll to showcase different sections
       await page.evaluate(() => window.scrollTo(0, 300));
       await BrowserManager.wait(800);
 
@@ -183,7 +172,7 @@ export class VideoCapture {
       await BrowserManager.wait(800);
 
       console.log('✅ Demo interactions completed');
-    } catch (error) {
+    } catch {
       console.log('⚠️ Some interactions failed, but capture continues...');
     }
   }
@@ -193,7 +182,6 @@ export class VideoCapture {
       const fs = await import('fs/promises');
       const files = await fs.readdir(outputDir);
 
-      // Look for video files (Playwright typically uses .webm)
       const videoFiles = files
         .filter((f) => f.endsWith('.webm') || f.endsWith('.mp4') || f.endsWith('.mkv'))
         .sort();
@@ -201,12 +189,12 @@ export class VideoCapture {
       const latestFile = videoFiles.pop();
       return latestFile ? join(outputDir, latestFile) : '';
     } catch {
+      console.warn('Error finding video file');
       return '';
     }
   }
 
-  // Utility method for quick captures
-  static async quickCapture(url: string, duration: number = 10000): Promise<CaptureResult> {
+  static async quickCapture(url: string, duration = 10000): Promise<CaptureResult> {
     const capture = new VideoCapture({ url, duration });
     return await capture.capture();
   }
