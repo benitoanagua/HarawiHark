@@ -7,7 +7,6 @@ test.describe('State Management Integration', () => {
   });
 
   test('form selection should update application state correctly', async ({ page }) => {
-    // Monitorear cambios de estado mediante el comportamiento observable
     const formSelector = page.locator('#poetry-form-selector');
 
     await test.step('Initial state should be haiku', async () => {
@@ -22,7 +21,6 @@ test.describe('State Management Integration', () => {
     });
 
     await test.step('State should persist during navigation', async () => {
-      // Recargar página y verificar que el estado se mantiene
       await page.reload();
       await page.waitForSelector('#poetry-form-selector', { state: 'visible' });
       await expect(formSelector).toHaveValue('tanka');
@@ -38,24 +36,18 @@ test.describe('State Management Integration', () => {
 
   test('text input should synchronize with state in real-time', async ({ page }) => {
     const firstLine = page.locator('#poem-editor-line-0');
-    const testText = 'Probando sincronización en tiempo real';
+    const testText = 'Testing real-time synchronization';
 
-    // Escribir texto
     await firstLine.fill(testText);
     await expect(firstLine).toHaveValue(testText);
 
-    // Verificar que se mantiene después de interacciones simples
     await page.click('button:has-text("example")');
-    // Después de hacer click en example, el texto debería preservarse o cambiar
-    // Depende del comportamiento esperado de la aplicación
 
     const currentValue = await firstLine.inputValue();
     expect(currentValue.length).toBeGreaterThan(0);
 
-    // Cambiar formulario y verificar comportamiento
     await page.selectOption('#poetry-form-selector', 'fibonacci');
 
-    // El texto podría preservarse o resetearse dependiendo del diseño
     const valueAfterFormChange = await firstLine.inputValue();
     expect(valueAfterFormChange).toBeDefined();
   });
@@ -64,9 +56,8 @@ test.describe('State Management Integration', () => {
     const formSelector = page.locator('#poetry-form-selector');
     const firstLine = page.locator('#poem-editor-line-0');
 
-    // Secuencia compleja de interacciones
     await test.step('Write text and change form', async () => {
-      await firstLine.fill('Texto inicial');
+      await firstLine.fill('Initial text');
       await formSelector.selectOption('tanka');
       await expect(formSelector).toHaveValue('tanka');
     });
@@ -75,7 +66,6 @@ test.describe('State Management Integration', () => {
       await page.click('button:has-text("example")');
       await page.waitForTimeout(1000);
 
-      // Después de cargar ejemplo, el formulario debería mantenerse
       await expect(formSelector).toHaveValue('tanka');
       await expect(page.locator('#poem-editor input.line-input')).toHaveCount(5);
     });
@@ -83,7 +73,6 @@ test.describe('State Management Integration', () => {
     await test.step('Clear and verify empty state', async () => {
       await page.click('button:has-text("clear")');
 
-      // Después de limpiar, el formulario debería mantenerse
       await expect(formSelector).toHaveValue('tanka');
       await expect(firstLine).toBeEmpty();
     });
@@ -99,26 +88,23 @@ test.describe('State Management Integration', () => {
     const firstLine = page.locator('#poem-editor-line-0');
     const syllableCounter = page.locator('.syllable-count').first();
 
-    // Probar con diferentes textos
     const testCases = [
-      { text: 'Hello', description: 'palabra simple' },
-      { text: 'Beautiful sunset', description: 'dos palabras' },
-      { text: 'The quick brown fox jumps', description: 'múltiples palabras' },
-      { text: '', description: 'texto vacío' },
+      { text: 'Hello', description: 'simple word' },
+      { text: 'Beautiful sunset', description: 'two words' },
+      { text: 'The quick brown fox jumps', description: 'multiple words' },
+      { text: '', description: 'empty text' },
     ];
 
     for (const { text, description } of testCases) {
       await test.step(`Test syllable counting for: ${description}`, async () => {
         await firstLine.fill(text);
-        await page.waitForTimeout(300); // Esperar actualización
+        await page.waitForTimeout(300);
 
         const counterText = await syllableCounter.textContent();
 
         if (text === '') {
-          // Texto vacío debería mostrar 0 sílabas
           expect(counterText).toContain('0/');
         } else {
-          // Texto con contenido debería mostrar algún número de sílabas
           expect(counterText).toMatch(/\d+\/\d+/);
         }
       });

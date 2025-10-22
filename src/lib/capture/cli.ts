@@ -6,60 +6,47 @@ const program = new Command();
 
 program
   .name('angular-capture')
-  .description('CLI to capture videos and screenshots of the Angular application')
+  .description('Capture videos and screenshots of the Angular application')
   .version('1.0.0');
 
-// Command for video
-// En src/lib/capture/cli.ts - actualiza el comando video
+// Video command
 program
   .command('video')
-  .description('Capture video of the application')
+  .description('Capture application video')
   .option('-u, --url <url>', 'Application URL', 'http://localhost:4200')
   .option('-o, --output-dir <dir>', 'Output directory', 'angular-captures/videos')
   .option('-d, --delay <ms>', 'Delay before capture', '3000')
-  .option('-f, --format <format>', 'Video format', 'mp4')
   .option('-t, --duration <seconds>', 'Video duration', '10')
-  .option('-b, --browser <browser>', 'Browser to use: brave, chrome, firefox', 'brave')
-  .action(
-    async (options: {
-      url: string;
-      outputDir: string;
-      delay: string;
-      format: string;
-      duration: string;
-      browser: string;
-    }) => {
-      console.log('🎬 Starting video capture...');
+  .option('-b, --browser <browser>', 'Browser: brave, chrome, firefox', 'brave')
+  .action(async (options) => {
+    console.log('🎬 Starting video capture...');
 
-      const result = await captureVideo({
-        url: options.url,
-        outputDir: options.outputDir,
-        delay: parseInt(options.delay),
-        format: options.format as 'mp4' | 'gif' | 'webm',
-        duration: parseInt(options.duration) * 1000,
-        browserType: options.browser as 'brave' | 'chrome' | 'firefox',
-      });
+    const result = await captureVideo({
+      url: options.url,
+      outputDir: options.outputDir,
+      delay: parseInt(options.delay),
+      duration: parseInt(options.duration) * 1000,
+      browserType: options.browser,
+    });
 
-      if (result.success) {
-        console.log(`✅ Video saved at: ${result.outputPath}`);
-        console.log(`⏱️ Duration: ${result.duration}ms`);
-        console.log(`🌐 URL: ${result.url}`);
-      } else {
-        console.error('❌ Error in video capture');
-        process.exit(1);
-      }
+    if (result.success) {
+      console.log(`✅ Video saved: ${result.outputPath}`);
+    } else {
+      console.error('❌ Video capture failed');
+      process.exit(1);
     }
-  );
+  });
 
-// Command for screenshots
+// Screenshots command
 program
   .command('screenshots')
-  .description('Capture screenshots of the application')
+  .description('Capture application screenshots')
   .option('-u, --url <url>', 'Application URL', 'http://localhost:4200')
   .option('-o, --output-dir <dir>', 'Output directory', 'angular-captures/screenshots')
   .option('-d, --delay <ms>', 'Delay before capture', '2000')
   .option('-m, --multiple', 'Capture multiple sections', false)
-  .action(async (options: { url: string; outputDir: string; delay: string; multiple: boolean }) => {
+  .option('-b, --browser <browser>', 'Browser: brave, chrome, firefox', 'brave')
+  .action(async (options) => {
     console.log('📸 Starting screenshot capture...');
 
     const result = await captureScreenshots({
@@ -67,13 +54,13 @@ program
       outputDir: options.outputDir,
       delay: parseInt(options.delay),
       multiple: options.multiple,
+      browserType: options.browser,
     });
 
     if (result.success) {
-      console.log(`✅ Screenshots saved in: ${result.outputPath}`);
-      console.log(`🌐 URL: ${result.url}`);
+      console.log(`✅ Screenshots saved: ${result.outputPath}`);
     } else {
-      console.error('❌ Error in screenshot capture');
+      console.error('❌ Screenshot capture failed');
       process.exit(1);
     }
   });
@@ -81,7 +68,7 @@ program
 // Interactive command
 program
   .command('interactive')
-  .description('Interactive mode for captures')
+  .description('Interactive capture mode')
   .action(async () => {
     const inquirer = await import('inquirer');
 
@@ -89,10 +76,10 @@ program
       {
         type: 'list',
         name: 'captureType',
-        message: 'What type of capture do you want?',
+        message: 'Select capture type:',
         choices: [
-          { name: '🎬 Application video', value: 'video' },
-          { name: '📸 Application screenshots', value: 'screenshots' },
+          { name: '🎬 Video', value: 'video' },
+          { name: '📸 Screenshots', value: 'screenshots' },
         ],
       },
     ]);
@@ -101,15 +88,25 @@ program
       {
         type: 'input',
         name: 'url',
-        message: 'Angular application URL:',
+        message: 'Application URL:',
         default: 'http://localhost:4200',
       },
     ]);
 
+    const { browser } = await inquirer.default.prompt([
+      {
+        type: 'list',
+        name: 'browser',
+        message: 'Select browser:',
+        choices: ['brave', 'chrome', 'firefox'],
+        default: 'brave',
+      },
+    ]);
+
     if (captureType === 'video') {
-      await captureVideo({ url });
+      await captureVideo({ url, browserType: browser });
     } else {
-      await captureScreenshots({ url });
+      await captureScreenshots({ url, browserType: browser, multiple: true });
     }
   });
 

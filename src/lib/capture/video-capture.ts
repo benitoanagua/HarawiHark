@@ -1,22 +1,16 @@
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import type { CaptureOptions, CaptureResult } from './types';
-import { BrowserManager, BrowserLaunchOptions } from './browser-utils';
+import { BrowserManager } from './browser-utils';
 
-interface VideoCaptureOptions extends CaptureOptions {
+interface VideoCaptureOptions extends Omit<CaptureOptions, 'multiple'> {
   duration?: number;
   browserType?: 'brave' | 'chrome' | 'firefox';
 }
 
-interface VideoCaptureConfig {
-  url: string;
-  outputDir: string;
-  viewport: { width: number; height: number };
-  delay: number;
-  format: 'mp4' | 'gif' | 'webm';
-  duration: number;
-  browserType: 'brave' | 'chrome' | 'firefox';
-}
+type VideoCaptureConfig = Required<Omit<VideoCaptureOptions, 'multiple'>> & {
+  multiple?: never;
+};
 
 export class VideoCapture {
   private options: VideoCaptureConfig;
@@ -30,6 +24,7 @@ export class VideoCapture {
       format: options.format || 'mp4',
       duration: options.duration || 10000,
       browserType: options.browserType || 'brave',
+      mode: options.mode || 'basic',
     };
   }
 
@@ -63,19 +58,15 @@ export class VideoCapture {
       context = browserSetup.context;
       page = browserSetup.page;
 
-      // Navigate to the application
       const navigationSuccess = await BrowserManager.safeNavigate(page, this.options.url);
       if (!navigationSuccess) {
         throw new Error('Failed to navigate to application');
       }
 
-      // Wait for initial delay
       await BrowserManager.wait(this.options.delay);
 
-      // Perform demo interactions
       await this.performDemoInteractions(page);
 
-      // Wait for the total video duration
       await BrowserManager.wait(this.options.duration);
 
       await BrowserManager.cleanup(browser, context);
@@ -91,6 +82,7 @@ export class VideoCapture {
         duration,
         timestamp: new Date().toISOString(),
         url: this.options.url,
+        mode: this.options.mode,
       };
     } catch (error) {
       await BrowserManager.cleanup(browser, context);
@@ -110,7 +102,6 @@ export class VideoCapture {
     console.log('🔄 Performing demo interactions...');
 
     try {
-      // 1. Switch between editor/results tabs
       await BrowserManager.robustClick(page, ['button:has-text("editor")']);
       await BrowserManager.wait(1000);
 
@@ -120,8 +111,7 @@ export class VideoCapture {
       await BrowserManager.robustClick(page, ['button:has-text("editor")']);
       await BrowserManager.wait(1500);
 
-      // 2. Change poetic forms
-      const formSelect = page.locator('select[id="poetry-form"]');
+      const formSelect = page.locator('select[id="poetry-form-selector"]');
       if (await formSelect.isVisible()) {
         await formSelect.selectOption({ value: 'tanka' });
         await BrowserManager.wait(1200);
@@ -129,15 +119,13 @@ export class VideoCapture {
         await BrowserManager.wait(1200);
       }
 
-      // 3. Type in the editor
-      const textInput = page.locator('input[type="text"]').first();
+      const textInput = page.locator('#poem-editor-line-0').first();
       if (await textInput.isVisible()) {
-        await textInput.fill('Beautiful poetry');
+        await textInput.fill('Beautiful poetry flows like a river');
         await BrowserManager.wait(1000);
         await textInput.fill('');
       }
 
-      // 4. Scroll to show different sections
       await page.evaluate(() => {
         window.scrollTo(0, 300);
       });

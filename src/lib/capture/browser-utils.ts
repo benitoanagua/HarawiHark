@@ -1,5 +1,5 @@
 import { chromium, Browser, BrowserContext, Page } from 'playwright';
-import { execSync } from 'child_process';
+import { BROWSER_CONFIG } from '../../../playwright.config';
 
 export interface BrowserLaunchOptions {
   headless?: boolean;
@@ -21,39 +21,34 @@ export class BrowserManager {
       browserType = 'brave',
     } = options;
 
-    // Configuración específica para Brave
+    const browserConfig = BROWSER_CONFIG[browserType];
+
     const launchOptions: any = {
       headless,
-      args: [
-        '--no-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-web-security',
-        '--disable-features=VizDisplayCompositor',
-        '--disable-background-timer-throttling',
-        '--disable-backgrounding-occluded-windows',
-        '--disable-renderer-backgrounding',
-        '--disable-component-extensions-with-background-pages',
-      ],
     };
 
-    // Configurar según el tipo de navegador
-    if (browserType === 'brave') {
-      const bravePath = this.findBravePath();
-      if (bravePath) {
-        launchOptions.executablePath = bravePath;
-        console.log(`🚀 Using Brave browser at: ${bravePath}`);
-      } else {
-        console.warn('⚠️ Brave not found, falling back to system Chrome');
-        launchOptions.channel = 'chrome';
-      }
-    } else if (browserType === 'chrome') {
-      launchOptions.channel = 'chrome';
+    // Safe property access
+    const channel = (browserConfig as any).channel;
+    if (channel) {
+      launchOptions.channel = channel;
+    }
+
+    const executablePath = (browserConfig.launchOptions as any).executablePath;
+    if (executablePath) {
+      launchOptions.executablePath = executablePath;
+    }
+
+    if (browserConfig.launchOptions.args) {
+      launchOptions.args = [...browserConfig.launchOptions.args];
     }
 
     const browser = await chromium.launch(launchOptions);
 
     const contextOptions: any = {
       viewport,
+      baseURL: 'http://localhost:4200',
+      trace: 'on-first-retry',
+      screenshot: 'only-on-failure',
     };
 
     if (recordVideo) {
@@ -67,46 +62,6 @@ export class BrowserManager {
     const page = await context.newPage();
 
     return { browser, context, page };
-  }
-
-  private static findBravePath(): string | null {
-    try {
-      // Buscar Brave en ubicaciones comunes
-      const possiblePaths = [
-        '/usr/bin/brave',
-        '/usr/bin/brave-browser',
-        '/usr/bin/brave-browser-stable',
-        '/opt/brave.com/brave/brave',
-        '/snap/bin/brave',
-        '/usr/lib/brave/brave',
-      ];
-
-      for (const path of possiblePaths) {
-        try {
-          execSync(`which ${path}`, { stdio: 'ignore' });
-          return path;
-        } catch {
-          continue;
-        }
-      }
-
-      // Intentar encontrar con which/whereis
-      try {
-        const whichResult = execSync('which brave', { encoding: 'utf-8' }).trim();
-        if (whichResult) return whichResult;
-      } catch {}
-
-      try {
-        const whereisResult = execSync('whereis brave', { encoding: 'utf-8' }).trim();
-        const paths = whereisResult.split(' ').slice(1);
-        if (paths.length > 0) return paths[0];
-      } catch {}
-
-      return null;
-    } catch (error) {
-      console.warn('⚠️ Error finding Brave path:', error);
-      return null;
-    }
   }
 
   static async safeNavigate(page: Page, url: string, timeout = 30000): Promise<boolean> {
@@ -145,7 +100,6 @@ export class BrowserManager {
       }
     }
 
-    // If all normal clicks fail, try force clicks
     for (const selector of selectors) {
       try {
         const element = page.locator(selector);

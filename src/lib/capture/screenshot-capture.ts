@@ -1,25 +1,15 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import type { CaptureOptions, CaptureResult } from './types';
-import { BrowserManager, BrowserLaunchOptions } from './browser-utils';
+import { BrowserManager } from './browser-utils';
 
 interface ScreenshotCaptureOptions extends CaptureOptions {
   multiple?: boolean;
   browserType?: 'brave' | 'chrome' | 'firefox';
 }
 
-interface ScreenshotCaptureConfig {
-  url: string;
-  outputDir: string;
-  viewport: { width: number; height: number };
-  delay: number;
-  format: 'mp4' | 'gif' | 'webm';
-  multiple: boolean;
-  browserType: 'brave' | 'chrome' | 'firefox';
-}
-
 export class ScreenshotCapture {
-  private options: ScreenshotCaptureConfig;
+  private options: Required<ScreenshotCaptureOptions>;
 
   constructor(options: ScreenshotCaptureOptions = {}) {
     this.options = {
@@ -30,6 +20,8 @@ export class ScreenshotCapture {
       format: options.format || 'mp4',
       multiple: options.multiple || false,
       browserType: options.browserType || 'brave',
+      mode: options.mode || 'basic',
+      duration: options.duration || 0,
     };
   }
 
@@ -61,13 +53,11 @@ export class ScreenshotCapture {
       context = browserSetup.context;
       page = browserSetup.page;
 
-      // Navigate to the application
       const navigationSuccess = await BrowserManager.safeNavigate(page, this.options.url);
       if (!navigationSuccess) {
         throw new Error('Failed to navigate to application');
       }
 
-      // Wait for initial delay
       await BrowserManager.wait(this.options.delay);
 
       const screenshotResults: { name: string; path: string }[] = [];
@@ -91,6 +81,7 @@ export class ScreenshotCapture {
         duration,
         timestamp: new Date().toISOString(),
         url: this.options.url,
+        mode: this.options.mode,
       };
     } catch (error) {
       await BrowserManager.cleanup(browser, context);
@@ -137,7 +128,6 @@ export class ScreenshotCapture {
       }
     }
 
-    // Full page capture as well
     await this.captureFullPage(page, outputDir, results);
   }
 
