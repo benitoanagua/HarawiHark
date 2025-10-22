@@ -109,8 +109,6 @@ export class MultilineInputComponent implements ControlValueAccessor {
 
         if (!this.isInternalUpdate && sharedText !== this.poemText()) {
           this.initializeLines(sharedText);
-        } else {
-          this.initializeLines(this.poemText());
         }
       }
     });

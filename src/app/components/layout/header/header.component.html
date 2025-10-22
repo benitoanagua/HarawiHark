@@ -1,16 +1,17 @@
 <header class="metro-header">
   <div class="header-content">
-    <!-- Logo y nombre del sitio -->
     <div class="logo-section">
-      <div class="logo-wrapper">
+      <a 
+        routerLink="/" 
+        class="logo-wrapper"
+        aria-label="Go to homepage"
+      >
         <span class="icon-[iconoir--flower] text-2xl text-primary"></span>
         <h1 class="logo-title">harawihark</h1>
-      </div>
+      </a>
     </div>
 
-    <!-- Navegación -->
     <div class="nav-section">
-      <!-- Enlace GitHub -->
       <a 
         href="https://github.com/benitoanagua/HarawiHark" 
         target="_blank" 
@@ -21,7 +22,6 @@
         <span class="icon-[iconoir--github] text-xl"></span>
       </a>
       
-      <!-- Theme Toggle -->
       <app-theme-toggle />
     </div>
   </div>

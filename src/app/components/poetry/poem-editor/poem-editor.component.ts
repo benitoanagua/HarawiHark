@@ -72,13 +72,17 @@ export class PoemEditorComponent {
   }
 
   clear(): void {
-    const hadContent = this.poemText().length > 0;
+    const hasContent = this.poemText().length > 0 || this.analyzer.result() !== null;
 
-    this.stateService.clear();
-    this.analyzer.clear();
+    if (hasContent) {
+      if (this.confirmClear()) {
+        this.stateService.clear();
+        this.analyzer.clear();
 
-    if (hadContent) {
-      this.toastService.info('Editor Cleared', 'All content has been removed');
+        this.toastService.info('Editor Cleared', 'All content has been removed');
+      }
+    } else {
+      this.toastService.info('Already Empty', 'Nothing to clear');
     }
   }
 
@@ -129,5 +133,10 @@ export class PoemEditorComponent {
   getCurrentPlaceholder(): string {
     const form = this.currentForm();
     return form ? `Write your ${form.name} here...` : 'Write your poem here...';
+  }
+
+  private confirmClear(): boolean {
+    if (typeof window === 'undefined') return false;
+    return window.confirm('Clear all content? This cannot be undone.');
   }
 }

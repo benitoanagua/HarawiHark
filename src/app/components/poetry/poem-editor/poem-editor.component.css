@@ -7,29 +7,25 @@
 }
 
 .editor-container {
-  @apply flex flex-col h-full w-full gap-4;
-  @apply min-h-0; /* Permite que los hijos se ajusten correctamente */
+  @apply flex flex-col h-full w-full gap-4 min-h-0;
 }
 
-/* Header minimalista */
 .editor-header {
-  @apply flex items-center justify-between pb-4 border-b border-outlineVariant w-full;
-  @apply flex-shrink-0; /* Evita que crezca */
+  @apply flex items-center justify-between pb-4 border-b border-outlineVariant w-full flex-shrink-0;
+  @apply sm:flex-row sm:items-center;
+  @apply flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-0;
 }
 
 .editor-title {
-  @apply text-xl font-semibold tracking-tight text-onSurface;
-  @apply sm:text-2xl;
+  @apply text-xl font-semibold tracking-tight text-onSurface sm:text-2xl;
 }
 
 .form-selector {
   @apply min-w-2xs;
 }
 
-/* Stats panel minimalista */
 .stats-panel-minimal {
-  @apply flex justify-center gap-6 py-2 w-full;
-  @apply flex-shrink-0; /* Evita que crezca */
+  @apply flex justify-center gap-6 py-2 w-full flex-shrink-0;
 }
 
 .stat-minimal {
@@ -37,60 +33,30 @@
 }
 
 .stat-minimal-value {
-  @apply text-sm font-semibold text-onSurface;
-  @apply sm:text-base;
+  @apply text-sm font-semibold text-onSurface sm:text-base;
 }
 
 .stat-minimal-label {
-  @apply text-xs text-onSurfaceVariant uppercase tracking-wider;
-  @apply sm:text-sm;
+  @apply text-xs text-onSurfaceVariant uppercase tracking-wider sm:text-sm;
 }
 
-/* Editor section - Usa flex-1 para ocupar el espacio disponible */
 .editor-section {
-  @apply flex-1 min-h-0 w-full; /* flex-1 hace que crezca, min-h-0 permite scroll */
+  @apply flex-1 min-h-0 w-full;
 }
 
-/* Clase para fuentes responsivas */
 .responsive-font {
-  @apply text-base; /* Tamaño base para mobile */
-
-  @media (min-width: 768px) {
-    @apply text-lg; /* Tamaño aumentado para desktop */
-  }
-
-  @media (min-width: 1024px) {
-    @apply text-xl; /* Tamaño aún mayor para pantallas grandes */
-  }
+  @apply text-base sm:text-lg lg:text-xl;
 }
 
-/* Actions footer - Siempre visible y sincronizado */
 .editor-actions {
-  @apply flex justify-end gap-2 pt-4 border-t border-outlineVariant w-full;
-  @apply sm:gap-3;
-  @apply flex-shrink-0; /* Evita que crezca - crucial para sincronización */
+  @apply pt-4 border-t border-outlineVariant w-full;
+  @apply flex flex-wrap md:justify-end flex-shrink-0 gap-2 sm:gap-3 sm:justify-end;
 }
 
-/* Responsive */
-@media (max-width: 640px) {
-  .editor-header {
-    @apply flex-col items-start gap-3;
-  }
-
-  .form-selector {
-    @apply w-full;
-  }
-
-  .stats-panel-minimal {
-    @apply gap-4;
-  }
-
-  .editor-actions {
-    @apply justify-center;
-  }
+.form-selector {
+  @apply w-full sm:w-auto;
 }
 
-/* Asegurar que el contenedor principal ocupe el 100% del espacio disponible */
-:host {
-  @apply block w-full h-full;
+.stats-panel-minimal {
+  @apply gap-4 sm:gap-6;
 }

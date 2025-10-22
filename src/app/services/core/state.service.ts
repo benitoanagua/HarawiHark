@@ -22,6 +22,7 @@ export class StateService {
   });
 
   private isUpdatingFromInternal = false;
+  private lastLoadedForm: string | null = null;
 
   readonly selectedForm = computed(() => this.state().selectedForm);
   readonly poemText = computed(() => this.state().poemText);
@@ -49,11 +50,15 @@ export class StateService {
     const currentText = this.state().poemText.trim();
     const hasContent = currentText.length > 0;
 
+    const shouldLoadNewExample = !hasContent || this.lastLoadedForm !== formId;
+
     this.state.update((state) => ({
       ...state,
       selectedForm: formId,
-      shouldLoadExample: !hasContent,
+      shouldLoadExample: shouldLoadNewExample,
     }));
+
+    this.lastLoadedForm = null;
 
     setTimeout(() => {
       this.isUpdatingFromInternal = false;
@@ -85,7 +90,12 @@ export class StateService {
     const example = POETRY_EXAMPLES[formId];
     if (example) {
       this.setPoemText(example.join('\n'));
-      this.state.update((state) => ({ ...state, shouldLoadExample: false }));
+      this.state.update((state) => ({
+        ...state,
+        shouldLoadExample: false,
+      }));
+
+      this.lastLoadedForm = formId;
     }
   }
 
@@ -97,6 +107,8 @@ export class StateService {
       hasResults: false,
       shouldLoadExample: false,
     }));
+
+    this.lastLoadedForm = null;
     setTimeout(() => {
       this.isUpdatingFromInternal = false;
     }, 0);
@@ -108,6 +120,9 @@ export class StateService {
   }
 
   consumeLoadExample(): void {
-    this.state.update((state) => ({ ...state, shouldLoadExample: false }));
+    this.state.update((state) => ({
+      ...state,
+      shouldLoadExample: false,
+    }));
   }
 }
