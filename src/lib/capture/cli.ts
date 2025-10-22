@@ -6,20 +6,20 @@ const program = new Command();
 
 program
   .name('angular-capture')
-  .description('Capture videos and screenshots of the Angular application')
+  .description('Capture videos and screenshots of the HarawiHark Angular application')
   .version('1.0.0');
 
-// Video command
 program
   .command('video')
-  .description('Capture application video')
+  .description('Capture application video demonstration')
   .option('-u, --url <url>', 'Application URL', 'http://localhost:4200')
   .option('-o, --output-dir <dir>', 'Output directory', 'angular-captures/videos')
   .option('-d, --delay <ms>', 'Delay before capture', '3000')
-  .option('-t, --duration <seconds>', 'Video duration', '10')
+  .option('-t, --duration <seconds>', 'Video duration', '15')
   .option('-b, --browser <browser>', 'Browser: brave, chrome, firefox', 'brave')
+  .option('--no-interactions', 'Skip demo interactions', false)
   .action(async (options) => {
-    console.log('🎬 Starting video capture...');
+    console.log('🎬 Starting poetry editor video capture...');
 
     const result = await captureVideo({
       url: options.url,
@@ -27,27 +27,30 @@ program
       delay: parseInt(options.delay),
       duration: parseInt(options.duration) * 1000,
       browserType: options.browser,
+      showInteractions: options.interactions,
     });
 
     if (result.success) {
       console.log(`✅ Video saved: ${result.outputPath}`);
+      console.log(`⏱️ Duration: ${result.duration}ms`);
     } else {
-      console.error('❌ Video capture failed');
+      console.error('❌ Video capture failed:', result.error);
       process.exit(1);
     }
   });
 
-// Screenshots command
 program
   .command('screenshots')
   .description('Capture application screenshots')
   .option('-u, --url <url>', 'Application URL', 'http://localhost:4200')
   .option('-o, --output-dir <dir>', 'Output directory', 'angular-captures/screenshots')
   .option('-d, --delay <ms>', 'Delay before capture', '2000')
-  .option('-m, --multiple', 'Capture multiple sections', false)
+  .option('-m, --multiple', 'Capture multiple sections and states', true)
   .option('-b, --browser <browser>', 'Browser: brave, chrome, firefox', 'brave')
+  .option('--no-interactions', 'Skip interaction states', false)
+  .option('-f, --format <format>', 'Image format: png, jpeg', 'png')
   .action(async (options) => {
-    console.log('📸 Starting screenshot capture...');
+    console.log('📸 Starting poetry editor screenshot capture...');
 
     const result = await captureScreenshots({
       url: options.url,
@@ -55,58 +58,76 @@ program
       delay: parseInt(options.delay),
       multiple: options.multiple,
       browserType: options.browser,
+      captureInteractions: options.interactions,
+      screenshotType: options.format as 'png' | 'jpeg',
     });
 
     if (result.success) {
       console.log(`✅ Screenshots saved: ${result.outputPath}`);
+      console.log(`📊 Total screenshots: ${result.sections?.length || 0}`);
     } else {
-      console.error('❌ Screenshot capture failed');
+      console.error('❌ Screenshot capture failed:', result.error);
       process.exit(1);
     }
   });
 
-// Interactive command
 program
-  .command('interactive')
-  .description('Interactive capture mode')
-  .action(async () => {
-    const inquirer = await import('inquirer');
+  .command('demo')
+  .description('Capture complete application demo (video + screenshots)')
+  .option('-u, --url <url>', 'Application URL', 'http://localhost:4200')
+  .option('-o, --output-dir <dir>', 'Output directory', 'angular-captures/demo')
+  .option('-b, --browser <browser>', 'Browser: brave, chrome, firefox', 'brave')
+  .action(async (options) => {
+    console.log('🚀 Starting complete application demo capture...');
 
-    const { captureType } = await inquirer.default.prompt([
-      {
-        type: 'list',
-        name: 'captureType',
-        message: 'Select capture type:',
-        choices: [
-          { name: '🎬 Video', value: 'video' },
-          { name: '📸 Screenshots', value: 'screenshots' },
-        ],
-      },
-    ]);
+    console.log('\n🎬 Capturing video demo...');
+    const videoResult = await captureVideo({
+      url: options.url,
+      outputDir: `${options.outputDir}/videos`,
+      browserType: options.browser,
+      duration: 20000,
+      showInteractions: true,
+    });
 
-    const { url } = await inquirer.default.prompt([
-      {
-        type: 'input',
-        name: 'url',
-        message: 'Application URL:',
-        default: 'http://localhost:4200',
-      },
-    ]);
+    console.log('\n📸 Capturing comprehensive screenshots...');
+    const screenshotResult = await captureScreenshots({
+      url: options.url,
+      outputDir: `${options.outputDir}/screenshots`,
+      browserType: options.browser,
+      multiple: true,
+      captureInteractions: true,
+    });
 
-    const { browser } = await inquirer.default.prompt([
-      {
-        type: 'list',
-        name: 'browser',
-        message: 'Select browser:',
-        choices: ['brave', 'chrome', 'firefox'],
-        default: 'brave',
-      },
-    ]);
+    console.log('\n📊 Demo Capture Summary:');
+    console.log(`✅ Video: ${videoResult.success ? 'Saved' : 'Failed'}`);
+    console.log(`✅ Screenshots: ${screenshotResult.success ? 'Saved' : 'Failed'}`);
 
-    if (captureType === 'video') {
-      await captureVideo({ url, browserType: browser });
+    if (videoResult.success && screenshotResult.success) {
+      console.log('🎉 Complete demo captured successfully!');
     } else {
-      await captureScreenshots({ url, browserType: browser, multiple: true });
+      console.log('❌ Demo capture completed with errors');
+      process.exit(1);
+    }
+  });
+
+program
+  .command('quick')
+  .description('Quick capture of application overview')
+  .action(async () => {
+    console.log('⚡ Quick capturing application overview...');
+
+    const result = await captureScreenshots({
+      url: 'http://localhost:4200',
+      multiple: true,
+      captureInteractions: true,
+      browserType: 'brave',
+    });
+
+    if (result.success) {
+      console.log(`✅ Quick capture completed: ${result.sections?.length} screenshots`);
+    } else {
+      console.error('❌ Quick capture failed:', result.error);
+      process.exit(1);
     }
   });
 

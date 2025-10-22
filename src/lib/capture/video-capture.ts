@@ -3,10 +3,12 @@ import { join } from 'path';
 import type { CaptureOptions, CaptureResult } from './types';
 import { BrowserManager } from './browser-utils';
 import { Browser, BrowserContext, Page } from 'playwright';
+import { SHARED_CONFIG } from '../../../playwright.config';
 
 interface VideoCaptureOptions extends Omit<CaptureOptions, 'multiple'> {
   duration?: number;
   browserType?: 'brave' | 'chrome' | 'firefox';
+  showInteractions?: boolean;
 }
 
 export class VideoCapture {
@@ -14,14 +16,15 @@ export class VideoCapture {
 
   constructor(options: VideoCaptureOptions = {}) {
     this.options = {
-      url: options.url || 'http://localhost:4200',
+      url: options.url || SHARED_CONFIG.baseURL,
       outputDir: options.outputDir || 'angular-captures/videos',
       viewport: options.viewport || { width: 1200, height: 800 },
       delay: options.delay || 3000,
       format: options.format || 'mp4',
-      duration: options.duration || 10000,
+      duration: options.duration || 15000,
       browserType: options.browserType || 'brave',
-      mode: options.mode || 'basic',
+      mode: options.mode || 'full',
+      showInteractions: options.showInteractions ?? true,
     };
   }
 
@@ -37,6 +40,7 @@ export class VideoCapture {
     console.log(`🌐 URL: ${this.options.url}`);
     console.log(`⏱️ Duration: ${this.options.duration}ms`);
     console.log(`🌐 Browser: ${this.options.browserType}`);
+    console.log(`🖥️ Viewport: ${this.options.viewport.width}x${this.options.viewport.height}`);
 
     let browser: Browser | undefined;
     let context: BrowserContext | undefined;
@@ -49,6 +53,7 @@ export class VideoCapture {
         recordVideo: true,
         videoSize: this.options.viewport,
         browserType: this.options.browserType,
+        timeout: this.options.duration + 10000,
       });
 
       browser = browserSetup.browser;
@@ -56,14 +61,7 @@ export class VideoCapture {
       page = browserSetup.page;
 
       if (context) {
-        await context.route('**/*', (route) => {
-          const resourceType = route.request().resourceType();
-          if (['image', 'font', 'media'].includes(resourceType)) {
-            route.abort();
-          } else {
-            route.continue();
-          }
-        });
+        await context.route('**/*.{png,jpg,jpeg,svg,gif,webp}', (route) => route.abort());
       }
 
       const navigationSuccess = await BrowserManager.safeNavigate(page, this.options.url);
@@ -71,11 +69,17 @@ export class VideoCapture {
         throw new Error('Failed to navigate to application');
       }
 
+      await BrowserManager.waitForAppReady(page);
       await BrowserManager.wait(this.options.delay);
 
-      await this.performDemoInteractions(page);
+      if (this.options.showInteractions) {
+        await BrowserManager.performEditorActions(page);
+      }
 
-      await BrowserManager.wait(this.options.duration);
+      const remainingTime = this.options.duration - (Date.now() - startTime);
+      if (remainingTime > 0) {
+        await BrowserManager.wait(remainingTime);
+      }
 
       await BrowserManager.cleanup(browser, context);
 
@@ -83,6 +87,8 @@ export class VideoCapture {
       const outputPath = await this.findLatestVideoFile(outputDir);
 
       console.log('✅ Video recorded successfully');
+      console.log(`📊 Capture duration: ${duration}ms`);
+      console.log(`💾 Output: ${outputPath}`);
 
       return {
         success: true,
@@ -92,9 +98,9 @@ export class VideoCapture {
         url: this.options.url,
         mode: this.options.mode,
       };
-    } catch {
+    } catch (error) {
       await BrowserManager.cleanup(browser, context);
-      console.error('❌ Error during video capture');
+      console.error('❌ Error during video capture:', error);
 
       return {
         success: false,
@@ -102,101 +108,67 @@ export class VideoCapture {
         duration: Date.now() - startTime,
         timestamp: new Date().toISOString(),
         url: this.options.url,
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
-    }
-  }
-
-  private async performDemoInteractions(page: Page): Promise<void> {
-    console.log('🔄 Performing demo interactions...');
-
-    try {
-      const quickNavButtons = [
-        '.nav-pill:has-text("editor")',
-        '.nav-pill:has-text("results")',
-        'button:has-text("editor")',
-        'button:has-text("results")',
-      ];
-
-      for (const selector of quickNavButtons) {
-        try {
-          const element = page.locator(selector);
-          if (await element.isVisible({ timeout: 2000 })) {
-            await element.click();
-            await BrowserManager.wait(1000);
-          }
-        } catch {
-          continue;
-        }
-      }
-
-      const formSelect = page.locator('#poetry-form-selector');
-      if (await formSelect.isVisible()) {
-        const forms = ['tanka', 'limerick', 'haiku'];
-        for (const form of forms) {
-          await formSelect.selectOption({ value: form });
-          await BrowserManager.wait(1200);
-        }
-      }
-
-      const firstLineInput = page.locator('#poem-editor-line-0');
-      if (await firstLineInput.isVisible()) {
-        const sampleLines = [
-          'Moonlight shines on water',
-          'Soft breeze through the trees',
-          'Nature speaks in whispers',
-        ];
-
-        for (const line of sampleLines) {
-          await firstLineInput.fill(line);
-          await BrowserManager.wait(800);
-        }
-        await firstLineInput.fill('');
-      }
-
-      const buttons = ['example', 'analyze', 'clear'];
-      for (const buttonText of buttons) {
-        const button = page.locator(`button:has-text("${buttonText}")`).first();
-        if ((await button.isVisible()) && (await button.isEnabled())) {
-          await button.click();
-          await BrowserManager.wait(1500);
-        }
-      }
-
-      await page.evaluate(() => window.scrollTo(0, 300));
-      await BrowserManager.wait(800);
-
-      await page.evaluate(() => window.scrollTo(0, 600));
-      await BrowserManager.wait(800);
-
-      await page.evaluate(() => window.scrollTo(0, 0));
-      await BrowserManager.wait(800);
-
-      console.log('✅ Demo interactions completed');
-    } catch {
-      console.log('⚠️ Some interactions failed, but capture continues...');
     }
   }
 
   private async findLatestVideoFile(outputDir: string): Promise<string> {
     try {
       const fs = await import('fs/promises');
+
+      if (!existsSync(outputDir)) {
+        return '';
+      }
+
       const files = await fs.readdir(outputDir);
 
       const videoFiles = files
         .filter((f) => f.endsWith('.webm') || f.endsWith('.mp4') || f.endsWith('.mkv'))
-        .sort();
+        .map((f) => ({
+          name: f,
+          path: join(outputDir, f),
+          time: fs.stat(join(outputDir, f)).then((stat) => stat.mtime),
+        }));
 
-      const latestFile = videoFiles.pop();
-      return latestFile ? join(outputDir, latestFile) : '';
-    } catch {
-      console.warn('Error finding video file');
+      if (videoFiles.length === 0) {
+        console.log('❌ No video files found in directory');
+        return '';
+      }
+
+      const filesWithStats = await Promise.all(
+        videoFiles.map(async (file) => ({
+          ...file,
+          time: await file.time,
+        }))
+      );
+
+      filesWithStats.sort((a, b) => b.time.getTime() - a.time.getTime());
+
+      const latestFile = filesWithStats[0]?.path || '';
+      console.log(`📹 Latest video file: ${latestFile}`);
+      return latestFile;
+    } catch (error) {
+      console.warn('❌ Error finding video file:', error);
       return '';
     }
   }
 
-  static async quickCapture(url: string, duration = 10000): Promise<CaptureResult> {
-    const capture = new VideoCapture({ url, duration });
+  static async quickCapture(
+    url: string = SHARED_CONFIG.baseURL,
+    duration = 15000
+  ): Promise<CaptureResult> {
+    const capture = new VideoCapture({
+      url,
+      duration,
+      browserType: 'brave',
+      showInteractions: true,
+    });
     return await capture.capture();
+  }
+
+  static async captureDemo(): Promise<CaptureResult> {
+    return await this.quickCapture(SHARED_CONFIG.baseURL, 20000);
   }
 }
 

@@ -136,7 +136,9 @@ export class TestHelpers {
       );
       await page.click('button:has-text("OK"), button:has-text("Confirm"), button:has-text("Yes")');
       await page.waitForTimeout(500);
-    } catch {}
+    } catch {
+      //Nothing
+    }
 
     await page.waitForTimeout(500);
 
@@ -201,7 +203,7 @@ export class TestHelpers {
       await page.waitForSelector(SELECTORS.RESULTS.CONTAINER, { timeout });
       console.log('Main results container found');
     } catch (error) {
-      console.log('Main results container not found, trying alternative strategies...');
+      console.log('Main results container not found, trying alternative strategies...', error);
 
       const resultComponents = [
         'app-poem-results',

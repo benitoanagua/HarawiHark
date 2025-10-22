@@ -7,6 +7,7 @@ export interface CaptureOptions {
   duration?: number;
   mode?: 'basic' | 'advanced' | 'full' | 'overview' | 'detailed' | 'all';
   multiple?: boolean;
+  browserType?: 'brave' | 'chrome' | 'firefox';
 }
 
 export interface CaptureResult {
@@ -17,4 +18,14 @@ export interface CaptureResult {
   url: string;
   mode?: string;
   sections?: { name: string; path: string }[];
+  error?: string;
+}
+
+export interface BrowserLaunchOptions {
+  headless?: boolean;
+  viewport?: { width: number; height: number };
+  recordVideo?: boolean;
+  videoSize?: { width: number; height: number };
+  browserType?: 'brave' | 'chrome' | 'firefox';
+  timeout?: number;
 }

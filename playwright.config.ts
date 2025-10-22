@@ -1,6 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// Argumentos comunes para todos los navegadores
 export const COMMON_BROWSER_ARGS = [
   '--no-sandbox',
   '--disable-setuid-sandbox',
@@ -13,14 +12,12 @@ export const COMMON_BROWSER_ARGS = [
   '--disable-component-extensions-with-background-pages',
 ];
 
-// Acceso seguro a variables de entorno
 const isCI = process.env['CI'] === 'true';
 const videoSetting = isCI ? 'off' : 'retain-on-failure';
 const retries = isCI ? 2 : 0;
 const workers = isCI ? 1 : undefined;
 const reuseExistingServer = !isCI;
 
-// Configuración compartida
 export const SHARED_CONFIG = {
   baseURL: 'http://localhost:4200',
   trace: 'on-first-retry',
@@ -28,17 +25,30 @@ export const SHARED_CONFIG = {
   video: videoSetting,
 } as const;
 
-// Configuración específica para cada navegador - SOLO propiedades válidas para 'use'
-export const BROWSER_CONFIG = {
+export interface BrowserConfig {
+  channel?: 'chrome' | 'chromium';
+  launchOptions: {
+    executablePath?: string;
+    args: string[];
+  };
+}
+
+export interface BrowserConfigs {
+  brave: BrowserConfig;
+  chrome: BrowserConfig;
+  firefox: BrowserConfig;
+}
+
+export const BROWSER_CONFIG: BrowserConfigs = {
   brave: {
-    channel: 'chrome' as const,
+    channel: 'chrome',
     launchOptions: {
       executablePath: '/usr/bin/brave',
       args: [...COMMON_BROWSER_ARGS],
     },
   },
   chrome: {
-    channel: 'chrome' as const,
+    channel: 'chrome',
     launchOptions: {
       args: [...COMMON_BROWSER_ARGS],
     },

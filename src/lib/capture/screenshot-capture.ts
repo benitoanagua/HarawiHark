@@ -3,6 +3,7 @@ import { join } from 'path';
 import type { CaptureOptions, CaptureResult } from './types';
 import { BrowserManager } from './browser-utils';
 import { Browser, BrowserContext, Page } from 'playwright';
+import { SHARED_CONFIG } from '../../../playwright.config';
 
 interface ScreenshotCaptureOptions extends CaptureOptions {
   multiple?: boolean;
@@ -10,6 +11,7 @@ interface ScreenshotCaptureOptions extends CaptureOptions {
   screenshotType?: 'png' | 'jpeg';
   quality?: number;
   fullPage?: boolean;
+  captureInteractions?: boolean;
 }
 
 export class ScreenshotCapture {
@@ -17,18 +19,19 @@ export class ScreenshotCapture {
 
   constructor(options: ScreenshotCaptureOptions = {}) {
     this.options = {
-      url: options.url || 'http://localhost:4200',
+      url: options.url || SHARED_CONFIG.baseURL,
       outputDir: options.outputDir || 'angular-captures/screenshots',
       viewport: options.viewport || { width: 1200, height: 800 },
       delay: options.delay || 2000,
       format: options.format || 'mp4',
       multiple: options.multiple || false,
       browserType: options.browserType || 'brave',
-      mode: options.mode || 'basic',
+      mode: options.mode || 'detailed',
       duration: options.duration || 0,
       screenshotType: options.screenshotType || 'png',
       quality: options.quality || 80,
       fullPage: options.fullPage ?? true,
+      captureInteractions: options.captureInteractions ?? true,
     };
   }
 
@@ -44,6 +47,7 @@ export class ScreenshotCapture {
     console.log(`🌐 URL: ${this.options.url}`);
     console.log(`🌐 Browser: ${this.options.browserType}`);
     console.log(`🖼️ Type: ${this.options.screenshotType.toUpperCase()}`);
+    console.log(`📁 Output: ${outputDir}`);
 
     let browser: Browser | undefined;
     let context: BrowserContext | undefined;
@@ -66,6 +70,7 @@ export class ScreenshotCapture {
         throw new Error('Failed to navigate to application');
       }
 
+      await BrowserManager.waitForAppReady(page);
       await BrowserManager.wait(this.options.delay);
 
       const screenshotResults: { name: string; path: string }[] = [];
@@ -76,6 +81,10 @@ export class ScreenshotCapture {
         await this.captureFullPage(page, outputDir, screenshotResults);
       }
 
+      if (this.options.captureInteractions) {
+        await this.captureInteractionStates(page, outputDir, screenshotResults);
+      }
+
       await this.generateReport(screenshotResults, outputDir);
       await BrowserManager.cleanup(browser, context);
 
@@ -83,6 +92,7 @@ export class ScreenshotCapture {
 
       console.log('✅ Screenshot capture completed');
       console.log(`📊 Total screenshots: ${screenshotResults.length}`);
+      console.log(`⏱️ Duration: ${duration}ms`);
 
       return {
         success: true,
@@ -103,6 +113,7 @@ export class ScreenshotCapture {
         duration: Date.now() - startTime,
         timestamp: new Date().toISOString(),
         url: this.options.url,
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
@@ -117,6 +128,9 @@ export class ScreenshotCapture {
       { name: 'header', selector: 'app-header', fullPage: false },
       { name: 'editor', selector: 'app-poem-editor', fullPage: false },
       { name: 'results', selector: 'app-poem-results', fullPage: false },
+      { name: 'analysis-tabs', selector: '.metro-pivot', fullPage: false },
+      { name: 'analysis-tabs-alt', selector: '[role="tablist"]', fullPage: false },
+      { name: 'quick-nav', selector: '.quick-nav-buttons', fullPage: false },
       { name: 'footer', selector: 'app-footer', fullPage: false },
     ];
 
@@ -165,6 +179,138 @@ export class ScreenshotCapture {
     }
   }
 
+  private async captureInteractionStates(
+    page: Page,
+    outputDir: string,
+    results: { name: string; path: string }[]
+  ): Promise<void> {
+    console.log('🔄 Capturing interaction states...');
+
+    try {
+      const formSelect = page.locator('#poetry-form-selector');
+      if (await formSelect.isVisible()) {
+        const forms = ['tanka', 'limerick', 'cinquain'];
+        for (const form of forms) {
+          await formSelect.selectOption({ value: form });
+          await BrowserManager.wait(1500);
+
+          const screenshotPath = join(
+            outputDir,
+            `form-${form}-${Date.now()}.${this.options.screenshotType}`
+          );
+
+          await page.screenshot({
+            path: screenshotPath,
+            fullPage: this.options.fullPage,
+          });
+
+          results.push({ name: `form-${form}`, path: screenshotPath });
+          console.log(`✅ Form ${form} captured`);
+        }
+
+        await formSelect.selectOption({ value: 'haiku' });
+        await BrowserManager.wait(1000);
+      }
+
+      const exampleButtonSelectors = [
+        '.editor-actions button:has-text("example")',
+        'button:has-text("example"):not(.metro-command-button)',
+        'button:has-text("example")',
+      ];
+
+      let exampleLoaded = false;
+      for (const selector of exampleButtonSelectors) {
+        const exampleButton = page.locator(selector).first();
+        if (
+          (await exampleButton.isVisible({ timeout: 2000 })) &&
+          (await exampleButton.isEnabled())
+        ) {
+          await exampleButton.click();
+          await BrowserManager.wait(3000);
+
+          const screenshotPath = join(
+            outputDir,
+            `with-example-${Date.now()}.${this.options.screenshotType}`
+          );
+
+          await page.screenshot({
+            path: screenshotPath,
+            fullPage: this.options.fullPage,
+          });
+
+          results.push({ name: 'with-example', path: screenshotPath });
+          console.log('✅ Example loaded state captured');
+          exampleLoaded = true;
+          break;
+        }
+      }
+
+      if (!exampleLoaded) {
+        console.log('⚠️ Could not load example for screenshot');
+      }
+
+      const resultsNavSelectors = [
+        '.nav-pill:has-text("results")',
+        '.quick-nav-buttons button:has-text("results")',
+        'button:has-text("results")',
+      ];
+
+      let resultsNavigated = false;
+      for (const selector of resultsNavSelectors) {
+        const resultsNav = page.locator(selector);
+        if (await resultsNav.isVisible({ timeout: 2000 })) {
+          await resultsNav.click();
+          await BrowserManager.wait(2000);
+
+          await page
+            .waitForSelector('app-poem-results, [class*="result"], [class*="analysis"]', {
+              timeout: 5000,
+            })
+            .catch(() => console.log('Results not loaded after navigation'));
+
+          const screenshotPath = join(
+            outputDir,
+            `results-section-${Date.now()}.${this.options.screenshotType}`
+          );
+
+          await page.screenshot({
+            path: screenshotPath,
+            fullPage: this.options.fullPage,
+          });
+
+          results.push({ name: 'results-section', path: screenshotPath });
+          console.log('✅ Results section captured');
+          resultsNavigated = true;
+
+          const editorNavSelectors = [
+            '.nav-pill:has-text("editor")',
+            '.quick-nav-buttons button:has-text("editor")',
+            'button:has-text("editor")',
+          ];
+
+          for (const editorSelector of editorNavSelectors) {
+            const editorNav = page.locator(editorSelector);
+            if (await editorNav.isVisible({ timeout: 2000 })) {
+              await editorNav.click();
+              await BrowserManager.wait(1000);
+              break;
+            }
+          }
+          break;
+        }
+      }
+
+      if (!resultsNavigated) {
+        console.log('⚠️ Could not navigate to results section');
+      }
+    } catch (error) {
+      console.log(
+        '⚠️ Some interaction captures failed:',
+        error instanceof Error ? error.message : error
+      );
+    }
+  }
+
   private async captureFullPage(
     page: Page,
     outputDir: string,
@@ -199,6 +345,7 @@ export class ScreenshotCapture {
         quality: this.options.quality,
         fullPage: this.options.fullPage,
         multiple: this.options.multiple,
+        browserType: this.options.browserType,
       },
       screenshots: screenshots.map((s) => ({
         name: s.name,
@@ -224,25 +371,23 @@ export class ScreenshotCapture {
   }
 
   static async quickScreenshot(
-    url: string,
+    url: string = SHARED_CONFIG.baseURL,
     options: Partial<ScreenshotCaptureOptions> = {}
-  ): Promise<CaptureResult> {
-    const capture = new ScreenshotCapture({ url, ...options });
-    return await capture.capture();
-  }
-
-  static async captureElements(
-    url: string,
-    selectors: string[],
-    outputDir?: string
   ): Promise<CaptureResult> {
     const capture = new ScreenshotCapture({
       url,
-      multiple: true,
-      outputDir,
-      fullPage: false,
+      ...options,
+      browserType: 'brave',
     });
     return await capture.capture();
+  }
+
+  static async captureApplicationOverview(): Promise<CaptureResult> {
+    return await this.quickScreenshot(SHARED_CONFIG.baseURL, {
+      multiple: true,
+      captureInteractions: true,
+      mode: 'overview',
+    });
   }
 }
 
