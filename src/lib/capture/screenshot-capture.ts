@@ -1,3 +1,4 @@
+// src/lib/capture/screenshot-capture.ts
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import type { CaptureOptions, CaptureResult } from './types';
@@ -7,6 +8,9 @@ import { Browser, BrowserContext, Page } from 'playwright';
 interface ScreenshotCaptureOptions extends CaptureOptions {
   multiple?: boolean;
   browserType?: 'brave' | 'chrome' | 'firefox';
+  screenshotType?: 'png' | 'jpeg';
+  quality?: number; // For JPEG only
+  fullPage?: boolean;
 }
 
 export class ScreenshotCapture {
@@ -18,11 +22,14 @@ export class ScreenshotCapture {
       outputDir: options.outputDir || 'angular-captures/screenshots',
       viewport: options.viewport || { width: 1200, height: 800 },
       delay: options.delay || 2000,
-      format: options.format || 'mp4',
+      format: options.format || 'mp4', // Kept for interface compatibility
       multiple: options.multiple || false,
       browserType: options.browserType || 'brave',
       mode: options.mode || 'basic',
       duration: options.duration || 0,
+      screenshotType: options.screenshotType || 'png',
+      quality: options.quality || 80,
+      fullPage: options.fullPage ?? true,
     };
   }
 
@@ -37,6 +44,7 @@ export class ScreenshotCapture {
     console.log('📸 Starting screenshot capture...');
     console.log(`🌐 URL: ${this.options.url}`);
     console.log(`🌐 Browser: ${this.options.browserType}`);
+    console.log(`🖼️ Type: ${this.options.screenshotType.toUpperCase()}`);
 
     let browser: Browser | undefined;
     let context: BrowserContext | undefined;
@@ -75,6 +83,7 @@ export class ScreenshotCapture {
       const duration = Date.now() - startTime;
 
       console.log('✅ Screenshot capture completed');
+      console.log(`📊 Total screenshots: ${screenshotResults.length}`);
 
       return {
         success: true,
@@ -105,32 +114,59 @@ export class ScreenshotCapture {
     results: { name: string; path: string }[]
   ): Promise<void> {
     const sections = [
-      { name: 'header', selector: 'app-header' },
-      { name: 'editor', selector: 'app-poem-editor' },
-      { name: 'results', selector: 'app-poem-results' },
-      { name: 'footer', selector: 'app-footer' },
+      { name: 'fullpage', selector: 'body', fullPage: true },
+      { name: 'header', selector: 'app-header', fullPage: false },
+      { name: 'editor', selector: 'app-poem-editor', fullPage: false },
+      { name: 'results', selector: 'app-poem-results', fullPage: false },
+      { name: 'footer', selector: 'app-footer', fullPage: false },
     ];
 
     for (const section of sections) {
       try {
-        const element = page.locator(section.selector);
-        if (await element.isVisible()) {
-          const screenshotPath = join(outputDir, `${section.name}-${Date.now()}.png`);
-          await element.screenshot({
+        const timestamp = Date.now();
+        const screenshotPath = join(
+          outputDir,
+          `${section.name}-${timestamp}.${this.options.screenshotType}`
+        );
+
+        if (section.fullPage) {
+          // Full page screenshot
+          await page.screenshot({
             path: screenshotPath,
+            fullPage: true,
+            type: this.options.screenshotType as 'png' | 'jpeg',
+            ...(this.options.screenshotType === 'jpeg' && { quality: this.options.quality }),
           });
-          results.push({
-            name: section.name,
-            path: screenshotPath,
-          });
-          console.log(`✅ ${section.name} captured: ${screenshotPath}`);
+        } else {
+          // Element screenshot
+          const element = page.locator(section.selector);
+          if (await element.isVisible({ timeout: 2000 })) {
+            await element.screenshot({
+              path: screenshotPath,
+              type: this.options.screenshotType as 'png' | 'jpeg',
+              ...(this.options.screenshotType === 'jpeg' && { quality: this.options.quality }),
+            });
+          } else {
+            console.log(`⚠️ Element not visible: ${section.selector}`);
+            continue;
+          }
         }
-      } catch {
-        console.log(`⚠️ Could not capture ${section.name}`);
+
+        results.push({
+          name: section.name,
+          path: screenshotPath,
+        });
+        console.log(`✅ ${section.name} captured: ${screenshotPath}`);
+
+        // Small delay between screenshots
+        await BrowserManager.wait(500);
+      } catch (error) {
+        console.log(
+          `⚠️ Could not capture ${section.name}:`,
+          error instanceof Error ? error.message : 'Unknown error'
+        );
       }
     }
-
-    await this.captureFullPage(page, outputDir, results);
   }
 
   private async captureFullPage(
@@ -138,11 +174,16 @@ export class ScreenshotCapture {
     outputDir: string,
     results: { name: string; path: string }[]
   ): Promise<void> {
-    const fullPagePath = join(outputDir, `fullpage-${Date.now()}.png`);
+    const timestamp = Date.now();
+    const fullPagePath = join(outputDir, `fullpage-${timestamp}.${this.options.screenshotType}`);
+
     await page.screenshot({
       path: fullPagePath,
-      fullPage: true,
+      fullPage: this.options.fullPage,
+      type: this.options.screenshotType as 'png' | 'jpeg',
+      ...(this.options.screenshotType === 'jpeg' && { quality: this.options.quality }),
     });
+
     results.push({
       name: 'fullpage',
       path: fullPagePath,
@@ -157,16 +198,57 @@ export class ScreenshotCapture {
       generatedAt: new Date().toISOString(),
       totalScreenshots: screenshots.length,
       viewport: this.options.viewport,
+      settings: {
+        screenshotType: this.options.screenshotType,
+        quality: this.options.quality,
+        fullPage: this.options.fullPage,
+        multiple: this.options.multiple,
+      },
       screenshots: screenshots.map((s) => ({
         name: s.name,
         path: s.path,
         filename: s.path.split('/').pop(),
+        size: this.getFileSize(s.path),
       })),
     };
 
     const reportPath = join(outputDir, 'screenshots-report.json');
     writeFileSync(reportPath, JSON.stringify(report, null, 2));
     console.log(`📊 Report generated: ${reportPath}`);
+  }
+
+  private getFileSize(filePath: string): string {
+    try {
+      const stats = require('fs').statSync(filePath);
+      const sizeInKB = Math.round(stats.size / 1024);
+      return `${sizeInKB} KB`;
+    } catch {
+      return 'Unknown';
+    }
+  }
+
+  // Utility method for quick single screenshots
+  static async quickScreenshot(
+    url: string,
+    options: Partial<ScreenshotCaptureOptions> = {}
+  ): Promise<CaptureResult> {
+    const capture = new ScreenshotCapture({ url, ...options });
+    return await capture.capture();
+  }
+
+  // Method for capturing specific elements only
+  static async captureElements(
+    url: string,
+    selectors: string[],
+    outputDir?: string
+  ): Promise<CaptureResult> {
+    const capture = new ScreenshotCapture({
+      url,
+      multiple: true,
+      outputDir,
+      fullPage: false,
+    });
+    return await capture.capture();
   }
 }
 

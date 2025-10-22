@@ -1,109 +1,53 @@
 import { test, expect } from '@playwright/test';
+import { SELECTORS, TestHelpers, TEST_POEMS } from '../src/e2e/selectors';
+import { AdvancedInteractions } from '../src/e2e/advanced-interactions';
 
-test.describe('Poetry Editor - Complete Workflow', () => {
+test.describe('Poetry Editor - Advanced Workflows', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('app-poem-editor')).toBeVisible();
   });
 
-  test('complete poetry creation and analysis workflow', async ({ page }) => {
-    await page.selectOption('#poetry-form-selector', 'haiku');
+  test('complete poetry creation with advanced analysis', async ({ page }) => {
+    await AdvancedInteractions.completePoemWorkflow(
+      page,
+      SELECTORS.FORM_OPTIONS.HAIKU,
+      TEST_POEMS.HAIKU_SPANISH
+    );
 
-    await page.locator('#poem-editor-line-0').fill('Moonlight shines bright');
-    await page.locator('#poem-editor-line-1').fill('On the quiet peaceful pond');
-    await page.locator('#poem-editor-line-2').fill('Night serenity');
+    // Verificar características avanzadas de análisis
+    await AdvancedInteractions.testAdvancedAnalysisFeatures(page);
+  });
 
-    await expect(page.locator('text=lines')).toBeVisible();
-    await expect(page.locator('text=syllables')).toBeVisible();
+  test('word suggestions and replacement functionality', async ({ page }) => {
+    await AdvancedInteractions.testWordSuggestions(page);
+  });
 
-    const analyzeButton = page.locator('button:has-text("analyze")');
-    await expect(analyzeButton).toBeEnabled();
-    await analyzeButton.click();
+  test('rhythm and meter analysis', async ({ page }) => {
+    await AdvancedInteractions.testRhythmAndMeter(page);
+  });
 
-    await page.waitForTimeout(2000);
+  test('quality assessment system', async ({ page }) => {
+    await AdvancedInteractions.testQualityAssessment(page);
+  });
 
-    const analysisIndicator = page
-      .locator('text=Analyzing')
-      .or(page.locator('.metro-toast'))
-      .first();
+  test('copy functionality with content summary', async ({ page }) => {
+    await TestHelpers.selectPoetryForm(page, SELECTORS.FORM_OPTIONS.HAIKU);
+    await TestHelpers.fillPoemLines(page, TEST_POEMS.HAIKU);
 
-    try {
-      await expect(analysisIndicator).toBeVisible({ timeout: 5000 });
-    } catch {
-      console.log('No visible analysis indicator found');
-    }
-
-    const copyButton = page.locator('button:has-text("copy")');
+    const copyButton = page.locator(SELECTORS.BUTTONS.COPY);
     await expect(copyButton).toBeEnabled();
+
+    // Configurar permiso de clipboard para tests
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+
     await copyButton.click();
 
+    // Verificar notificación de éxito
     try {
-      await expect(
-        page.locator('text=Poem Copied').or(page.locator('.metro-toast-success'))
-      ).toBeVisible({ timeout: 3000 });
+      await expect(page.locator(SELECTORS.TOAST.SUCCESS)).toBeVisible({ timeout: 3000 });
     } catch {
-      console.log('No copy notification found');
+      console.log('Copy notification not visible, but continuing test');
     }
-  });
-
-  test('example loading functionality', async ({ page }) => {
-    const clearButton = page.locator('button:has-text("clear")');
-    if (await clearButton.isEnabled()) {
-      await clearButton.click();
-    }
-
-    const exampleButton = page.locator('button:has-text("example")');
-    await expect(exampleButton).toBeEnabled();
-    await exampleButton.click();
-
-    const firstLine = page.locator('#poem-editor-line-0');
-    await expect(firstLine).not.toBeEmpty({ timeout: 3000 });
-
-    const analyzeButton = page.locator('button:has-text("analyze")');
-    await expect(analyzeButton).toBeEnabled();
-
-    const lineInputs = page.locator('#poem-editor input.line-input');
-    const lineCount = await lineInputs.count();
-
-    for (let i = 0; i < Math.min(lineCount, 3); i++) {
-      const line = lineInputs.nth(i);
-      const content = await line.inputValue();
-      expect(content.length).toBeGreaterThan(0);
-    }
-  });
-
-  test('clear functionality should reset editor', async ({ page }) => {
-    await page.locator('#poem-editor-line-0').fill('First test line');
-    await page.locator('#poem-editor-line-1').fill('Second line with more text');
-
-    const firstLine = page.locator('#poem-editor-line-0');
-    await expect(firstLine).not.toBeEmpty();
-
-    const clearButton = page.locator('button:has-text("clear")');
-    await expect(clearButton).toBeEnabled();
-    await clearButton.click();
-
-    await expect(firstLine).toBeEmpty();
-
-    const secondLine = page.locator('#poem-editor-line-1');
-    await expect(secondLine).toBeEmpty();
-
-    await page.selectOption('#poetry-form-selector', 'tanka');
-    await page.click('button:has-text("example")');
-    await page.waitForTimeout(1000);
-
-    await expect(firstLine).not.toBeEmpty();
-  });
-
-  test('should handle analysis with incomplete poems', async ({ page }) => {
-    await page.locator('#poem-editor-line-0').fill('Only one line');
-
-    const analyzeButton = page.locator('button:has-text("analyze")');
-    await expect(analyzeButton).toBeEnabled();
-    await analyzeButton.click();
-
-    await page.waitForTimeout(3000);
-
-    await expect(page.locator('app-poem-editor')).toBeVisible();
   });
 });

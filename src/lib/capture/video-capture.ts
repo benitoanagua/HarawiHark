@@ -1,3 +1,4 @@
+// src/lib/capture/video-capture.ts
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import type { CaptureOptions, CaptureResult } from './types';
@@ -55,6 +56,19 @@ export class VideoCapture {
       context = browserSetup.context;
       page = browserSetup.page;
 
+      // Configure video recording
+      if (context) {
+        await context.route('**/*', (route) => {
+          // Optimize video capture by blocking unnecessary resources
+          const resourceType = route.request().resourceType();
+          if (['image', 'font', 'media'].includes(resourceType)) {
+            route.abort();
+          } else {
+            route.continue();
+          }
+        });
+      }
+
       const navigationSuccess = await BrowserManager.safeNavigate(page, this.options.url);
       if (!navigationSuccess) {
         throw new Error('Failed to navigate to application');
@@ -62,10 +76,13 @@ export class VideoCapture {
 
       await BrowserManager.wait(this.options.delay);
 
+      // Perform demo interactions
       await this.performDemoInteractions(page);
 
+      // Wait for the specified duration
       await BrowserManager.wait(this.options.duration);
 
+      // Close browser to finalize video
       await BrowserManager.cleanup(browser, context);
 
       const duration = Date.now() - startTime;
@@ -99,57 +116,99 @@ export class VideoCapture {
     console.log('🔄 Performing demo interactions...');
 
     try {
-      await BrowserManager.robustClick(page, ['button:has-text("editor")']);
-      await BrowserManager.wait(1000);
+      // Navigation between sections
+      const quickNavButtons = [
+        '.nav-pill:has-text("editor")',
+        '.nav-pill:has-text("results")',
+        'button:has-text("editor")',
+        'button:has-text("results")',
+      ];
 
-      await BrowserManager.robustClick(page, ['button:has-text("results")']);
-      await BrowserManager.wait(1000);
+      for (const selector of quickNavButtons) {
+        try {
+          const element = page.locator(selector);
+          if (await element.isVisible({ timeout: 2000 })) {
+            await element.click();
+            await BrowserManager.wait(1000);
+          }
+        } catch {
+          continue;
+        }
+      }
 
-      await BrowserManager.robustClick(page, ['button:has-text("editor")']);
-      await BrowserManager.wait(1500);
-
-      const formSelect = page.locator('select[id="poetry-form-selector"]');
+      // Poetry form interactions
+      const formSelect = page.locator('#poetry-form-selector');
       if (await formSelect.isVisible()) {
-        await formSelect.selectOption({ value: 'tanka' });
-        await BrowserManager.wait(1200);
-        await formSelect.selectOption({ value: 'haiku' });
-        await BrowserManager.wait(1200);
+        const forms = ['tanka', 'limerick', 'haiku'];
+        for (const form of forms) {
+          await formSelect.selectOption({ value: form });
+          await BrowserManager.wait(1200);
+        }
       }
 
-      const textInput = page.locator('#poem-editor-line-0').first();
-      if (await textInput.isVisible()) {
-        await textInput.fill('Beautiful poetry flows like a river');
-        await BrowserManager.wait(1000);
-        await textInput.fill('');
+      // Editor interactions
+      const firstLineInput = page.locator('#poem-editor-line-0');
+      if (await firstLineInput.isVisible()) {
+        const sampleLines = [
+          'Moonlight shines on water',
+          'Soft breeze through the trees',
+          'Nature speaks in whispers',
+        ];
+
+        for (const line of sampleLines) {
+          await firstLineInput.fill(line);
+          await BrowserManager.wait(800);
+        }
+        await firstLineInput.fill('');
       }
 
-      await page.evaluate(() => {
-        window.scrollTo(0, 300);
-      });
-      await BrowserManager.wait(1000);
+      // Button interactions
+      const buttons = ['example', 'analyze', 'clear'];
+      for (const buttonText of buttons) {
+        const button = page.locator(`button:has-text("${buttonText}")`).first();
+        if ((await button.isVisible()) && (await button.isEnabled())) {
+          await button.click();
+          await BrowserManager.wait(1500);
+        }
+      }
 
-      await page.evaluate(() => {
-        window.scrollTo(0, 0);
-      });
-      await BrowserManager.wait(1000);
-    } catch {
-      console.log('⚠️ Some interactions failed, continuing...');
+      // Scroll to showcase different sections
+      await page.evaluate(() => window.scrollTo(0, 300));
+      await BrowserManager.wait(800);
+
+      await page.evaluate(() => window.scrollTo(0, 600));
+      await BrowserManager.wait(800);
+
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await BrowserManager.wait(800);
+
+      console.log('✅ Demo interactions completed');
+    } catch (error) {
+      console.log('⚠️ Some interactions failed, but capture continues...');
     }
   }
 
   private async findLatestVideoFile(outputDir: string): Promise<string> {
     try {
-      const videoFiles = await import('fs/promises');
-      const files = await videoFiles.readdir(outputDir);
-      const videoFile = files
-        .filter((f) => f.endsWith('.webm'))
-        .sort()
-        .pop();
+      const fs = await import('fs/promises');
+      const files = await fs.readdir(outputDir);
 
-      return videoFile ? join(outputDir, videoFile) : '';
+      // Look for video files (Playwright typically uses .webm)
+      const videoFiles = files
+        .filter((f) => f.endsWith('.webm') || f.endsWith('.mp4') || f.endsWith('.mkv'))
+        .sort();
+
+      const latestFile = videoFiles.pop();
+      return latestFile ? join(outputDir, latestFile) : '';
     } catch {
       return '';
     }
+  }
+
+  // Utility method for quick captures
+  static async quickCapture(url: string, duration: number = 10000): Promise<CaptureResult> {
+    const capture = new VideoCapture({ url, duration });
+    return await capture.capture();
   }
 }
 
