@@ -1,55 +1,148 @@
 # HarawiHark
 
-A lightweight syllable-meter checker for poetic forms.
+A sophisticated poetry analysis application built with modern web technologies featuring a custom Metro UI design system.
 
-## Features
+![HarawiHark Screenshot](https://i.ibb.co/ZR4Mphc2/harawihark.png)
 
-- **Accurate syllable counting** for English
-- **Phonetic precision**, beyond simple vowel counting
-- **8 essential poetic forms** with precise pattern matching
-- **Real-time feedback** with visual indicators and examples
-- **Offline-capable** – usable as a static site or app
+**Live Demo**: [https://harawihark.onrender.com](https://harawihark.onrender.com)  
+**Source Code**: [https://github.com/benitoanagua/HarawiHark](https://github.com/benitoanagua/HarawiHark)
 
-## What it does
+## Technology Stack
 
-- **Pick a form** – choose from 8 carefully selected syllable patterns
-- **Paste your poem** – line-by-line with live preview
-- **Instant feedback** – exact syllable count per line plus ✅ / ❌ against the expected pattern
-- **Zero install** – works directly in any browser
+### Frontend Architecture
 
-## Supported Forms
+- **Angular 17+** - Modern framework with standalone components and signals
+- **TypeScript** - Full type safety with strict mode enforcement
+- **Metro UI Design System** - Custom component library built with Tailwind CSS
 
-| Name           | Syllable pattern | Lines | Origin            |
-| -------------- | ---------------- | ----- | ----------------- |
-| **Haiku**      | 5-7-5            | 3     | Japanese          |
-| **Tanka**      | 5-7-5-7-7        | 5     | Japanese          |
-| **Cinquain**   | 2-4-6-8-2        | 5     | American          |
-| **Limerick**   | 8-8-5-5-8        | 5     | English           |
-| **Redondilla** | 8-8-8-8          | 4     | Spanish           |
-| **Lanterne**   | 1-2-3-4-1        | 5     | Japanese-inspired |
-| **Diamante**   | 1-2-3-4-3-2-1    | 7     | Modern            |
-| **Fibonacci**  | 1-1-2-3-5-8      | 6     | Mathematical      |
+### Styling & Design
 
-## How it Works
+- **Tailwind CSS 4.0** - Utility-first CSS framework with PostCSS
+- **Material Design 3** - Dynamic color system with HCT color space
+- **Custom Metro Components** - Cohesive design system with 27+ components
 
-- Enter your poem line by line
-- Select the poetic form
-- Get immediate feedback per line: number of syllables and whether it matches the expected pattern
-- Works offline and provides real-time visual feedback
+### Poetry Analysis
 
-## User Experience
+- **RiTa.js** - Advanced NLP for phonetic analysis and syllable counting
+- **Custom Analysis Services** - Real-time pattern validation and meter detection
 
-- **Live preview** of syllable counts while typing
-- **Example loader** for each poetic form
-- **Line-by-line counters** with pattern matching
-- **Responsive interface**, optimized for mobile and desktop
+### Development Tools
 
-## Contribution Guidelines
+- **Playwright** - Multi-browser end-to-end testing
+- **Storybook** - Component documentation and development
+- **ESLint** - Code quality and consistency
 
-- Add new poetic forms or examples
-- Improve syllable counting rules and accuracy
-- Enhance documentation
+## Metro UI Design System
+
+### Core Components
+
+- **AppBar** - Top navigation with command buttons
+- **Panorama** - Full-width layout container
+- **Pivot** - Tab navigation system
+- **ListItem** - Detailed list items with icons and metadata
+- **Toggle** - Custom switch controls
+- **Progress** - Linear and circular progress indicators
+- **Toast** - Notification system with multiple variants
+- **Card** - Content containers with elevation variants
+
+### Form Controls
+
+- **Button** - Multiple variants (primary, secondary, outline)
+- **Input** - Text and textarea inputs with validation
+- **Select** - Custom dropdown with options
+- **MultilineInput** - Poetry-specific line-by-line editor
+- **Badge** - Status indicators and labels
+
+### Layout Components
+
+- **Header** - Application header with theme toggle
+- **Footer** - Application footer with branding
+- **PoetryPage** - Main application layout
+- **AnalysisPanel** - Data visualization components
+
+## Design Principles
+
+### Material Design Integration
+
+- Dynamic theming with 72 CSS variables (36 Material + 36 Terminal)
+- HCT color space for perceptual uniformity
+- Fidelity color scheme with harmonic blending
+- Automatic light/dark theme variations
+
+### Tailwind CSS Foundation
+
+- Utility-first styling approach
+- Responsive design system
+- Custom component variants
+- Consistent spacing and typography
+
+### Angular Architecture
+
+- Standalone components without NgModules
+- Reactive state management with signals
+- Service-based dependency injection
+- Component composition patterns
+
+## Core Features
+
+### Poetry Form Support
+
+- **Haiku** - 5-7-5 syllable structure
+- **Tanka** - 5-7-5-7-7 extended form
+- **Cinquain** - 2-4-6-8-2 pattern
+- **Limerick** - 8-8-5-5-8 with AABBA rhyme
+- **Redondilla** - 8-8-8-8 Spanish quatrain
+- **Lanterne** - 1-2-3-4-1 lantern shape
+- **Diamante** - 1-2-3-4-3-2-1 diamond poem
+- **Fibonacci** - 1-1-2-3-5-8 mathematical sequence
+
+### Advanced Analysis
+
+- Real-time syllable counting with RiTa.js
+- Pattern validation against expected structures
+- Rhyme scheme detection and analysis
+- Meter pattern identification (iambic, trochaic, etc.)
+- Alliteration and sound repetition detection
+- Vocabulary richness scoring
+- Quality assessment with detailed metrics
+
+### User Experience
+
+- Responsive Metro UI design
+- Dynamic theme switching (light/dark)
+- Live editing with instant feedback
+- Example poems for each form
+- Word suggestions and alternatives
+- Copy to clipboard functionality
+- Toast notifications for user feedback
+
+## Development
+
+### Quick Start
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build for production
+ng build
+
+# Serve built application locally
+python -m http.server 8080 --directory dist/harawihark/browser
+
+# Component development and documentation
+pnpm storybook
+```
+
+### Metro UI Components
+
+The application features 27+ custom components organized in:
+
+- `components/metro/` - Core design system components
+- `components/ui/` - Form controls and inputs
+- `components/poetry/` - Poetry-specific components
+- `components/layout/` - Structural components
 
 ## License
 
-MIT © 2025 HarawiHark contributors
+MIT License
